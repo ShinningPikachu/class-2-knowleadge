@@ -1,0 +1,35 @@
+# Python caches and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environments and secrets
+.venv/
+.env
+.env.*
+!.env.example
+
+# Streamlit local configuration
+.streamlit/secrets.toml
+
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Runtime and local data
+runs/
+audio/*
+!audio/.gitkeep
+pdf/*
+!pdf/.gitkeep
+database/*
+!database/.gitkeep
+models/*
+!models/.gitkeep
