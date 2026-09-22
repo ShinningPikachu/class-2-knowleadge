@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Any
+from contextlib import nullcontext
+from typing import Any, ContextManager
 
 from .config import PipelineConfig
 from .rag import LocalRAG
@@ -38,9 +39,15 @@ with "Professor explanation:". If the audio provides no useful addition, say
 but explanatory. Treat OCR text as potentially imperfect and do not infer a
 diagram's meaning unless the slide text or transcript supports it."""
 
-    def __init__(self, config: PipelineConfig, rag: LocalRAG) -> None:
+    def __init__(
+        self,
+        config: PipelineConfig,
+        rag: LocalRAG,
+        chat_guard: Callable[[], ContextManager[Any]] | None = None,
+    ) -> None:
         self.config = config
         self.rag = rag
+        self._chat_guard = chat_guard
         try:
             import ollama
         except ImportError as exc:
@@ -95,12 +102,19 @@ VERIFIED LECTURE DIGEST:
         slide_number = int(slide["slide"])
         aligned_paragraphs = aligned.get("paragraphs", [])
         transcript_lines = [
-            f"[{item.get('start_time', 'unknown time')}–{item.get('end_time', 'unknown time')}] {item.get('text', '')}"
+            f"[{item.get('start_time', 'unknown time')}–"
+            f"{item.get('end_time', 'unknown time')}] {item.get('text', '')}"
             for item in aligned_paragraphs
         ]
         transcript = self._bounded_transcript_evidence(slide_number, transcript_lines)
         query = " ".join(
-            part for part in [str(slide.get("title", "")), str(slide.get("content", "")), str(slide.get("notes", ""))] if part
+            part
+            for part in [
+                str(slide.get("title", "")),
+                str(slide.get("content", "")),
+                str(slide.get("notes", "")),
+            ]
+            if part
         )
         search_query = query or f"slide {slide_number}"
         # Strict slide filters prevent semantically similar material from another
@@ -316,19 +330,21 @@ BATCH MATERIAL:
 
     def _chat(self, user_prompt: str) -> str:
         try:
-            result = self._client.chat(
-                model=self.config.llm_model,
-                messages=[
-                    {"role": "system", "content": self.SYSTEM_PROMPT},
-                    {"role": "user", "content": user_prompt},
-                ],
-                options={
-                    "temperature": self.config.llm_temperature,
-                    "num_ctx": self.config.ollama_num_ctx,
-                },
-                think=self.config.ollama_thinking,
-                keep_alive=self.config.ollama_keep_alive,
-            )
+            guard = self._chat_guard() if self._chat_guard else nullcontext()
+            with guard:
+                result = self._client.chat(
+                    model=self.config.llm_model,
+                    messages=[
+                        {"role": "system", "content": self.SYSTEM_PROMPT},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    options={
+                        "temperature": self.config.llm_temperature,
+                        "num_ctx": self.config.ollama_num_ctx,
+                    },
+                    think=self.config.ollama_thinking,
+                    keep_alive=self.config.ollama_keep_alive,
+                )
             message = result.get("message") if isinstance(result, dict) else getattr(result, "message", None)
             content = message.get("content") if isinstance(message, dict) else getattr(message, "content", None)
             if not content or not str(content).strip():

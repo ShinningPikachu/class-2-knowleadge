@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 import shutil
-from typing import Any
+from typing import Any, ContextManager
 from uuid import uuid4
 
 from .agent import LectureAgent
@@ -44,10 +44,16 @@ class PipelineResult:
 class LecturePipeline:
     """Compose all modules in the requested extraction → alignment → RAG flow."""
 
-    def __init__(self, config: PipelineConfig, project_root: str | Path | None = None) -> None:
+    def __init__(
+        self,
+        config: PipelineConfig,
+        project_root: str | Path | None = None,
+        qwen_guard: Callable[[], ContextManager[Any]] | None = None,
+    ) -> None:
         config.validate()
         self.config = config
         self.project_root = Path(project_root) if project_root else project_path()
+        self.qwen_guard = qwen_guard
 
     def run(
         self,
@@ -123,12 +129,16 @@ class LecturePipeline:
         embedder.verify_local_models()
 
         transcript_path = run_dir / "transcript.json"
+
         def transcription_progress(event: dict[str, object]) -> None:
             completed = event.get("completed_chunks", 0)
             total = event.get("total_chunks", 0)
             if event.get("event") == "started":
                 active = ", ".join(str(index) for index in event.get("active_chunks", []))
-                notify("recording", f"Transcription progress: {completed}/{total} chunks complete; active chunks: {active}")
+                notify(
+                    "recording",
+                    f"Transcription progress: {completed}/{total} chunks complete; active chunks: {active}",
+                )
                 return
             preview = str(event.get("preview", "")).strip()
             message = (
@@ -187,7 +197,7 @@ class LecturePipeline:
         indexed_chunks = rag.index(documents)
 
         notify("notes", "Generating grounded study notes with the local Ollama model")
-        agent = LectureAgent(self.config, rag)
+        agent = LectureAgent(self.config, rag, chat_guard=self.qwen_guard)
 
         def note_progress(index: int, total: int, message: str) -> None:
             notify("notes", f"{message} ({index}/{total})")
@@ -219,7 +229,9 @@ class LecturePipeline:
         """Create neutral timestamped note sections when no slide deck exists."""
         paragraphs = transcript.get("paragraphs", [])
         if not paragraphs:
-            raise RuntimeError("The recording did not produce usable speech, so recording-only notes cannot be created.")
+            raise RuntimeError(
+                "The recording did not produce usable speech, so recording-only notes cannot be created."
+            )
         duration = max(float(paragraph.get("end", 0.0)) for paragraph in paragraphs)
         sections: list[dict[str, Any]] = []
         start = 0.0
@@ -280,7 +292,11 @@ class LecturePipeline:
             assignments.append(record)
             grouped[int(section["slide"])].append({**paragraph, "alignment": record})
         payload: dict[str, Any] = {
-            "metadata": {"mode": "recording_only", "paragraph_count": len(assignments), "method_counts": {"recording_section": len(assignments)}},
+            "metadata": {
+                "mode": "recording_only",
+                "paragraph_count": len(assignments),
+                "method_counts": {"recording_section": len(assignments)},
+            },
             "paragraph_alignment": assignments,
             "slides": [
                 {

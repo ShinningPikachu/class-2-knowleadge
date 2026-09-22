@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 import sys
 import tempfile
 import unittest
@@ -19,7 +20,7 @@ from src.audio_processor import AudioProcessor  # noqa: E402
 from src.config import PipelineConfig  # noqa: E402
 from src.embeddings import OllamaEmbedder, build_source_documents, chunk_text  # noqa: E402
 from src.pipeline import LecturePipeline  # noqa: E402
-from src.utils import seconds_to_timestamp  # noqa: E402
+from src.utils import safe_filename, seconds_to_timestamp  # noqa: E402
 from src.quality import QualityGateError, validate_evidence_quality, validate_final_notes  # noqa: E402
 
 
@@ -174,9 +175,34 @@ class CoreHelpersTest(unittest.TestCase):
     def test_timestamp_format(self) -> None:
         self.assertEqual(seconds_to_timestamp(3750), "01:02:30")
 
+    def test_safe_filename_preserves_unicode_names(self) -> None:
+        self.assertEqual(safe_filename("算法 lecture 1.pdf"), "算法_lecture_1.pdf")
+
     def test_hierarchical_batches_never_split_slide_blocks(self) -> None:
         blocks = ["a" * 60, "b" * 60, "c" * 60]
         self.assertEqual(LectureAgent._pack_blocks(blocks, 125), [blocks[0] + "\n\n" + blocks[1], blocks[2]])
+
+    def test_lecture_agent_holds_qwen_guard_for_each_chat_call(self) -> None:
+        class FakeClient:
+            def chat(self, **_kwargs: object) -> dict[str, dict[str, str]]:
+                events.append("chat")
+                return {"message": {"content": "Grounded notes"}}
+
+        @contextmanager
+        def guard():
+            events.append("enter")
+            try:
+                yield
+            finally:
+                events.append("exit")
+
+        events: list[str] = []
+        agent = LectureAgent.__new__(LectureAgent)
+        agent.config = PipelineConfig()
+        agent._client = FakeClient()
+        agent._chat_guard = guard
+        self.assertEqual(agent._chat("Write notes"), "Grounded notes")
+        self.assertEqual(events, ["enter", "chat", "exit"])
 
     def test_quality_gate_rejects_mostly_temporal_alignment(self) -> None:
         slides = [{"slide": 1, "content": "Topic", "notes": "", "visual_text": []}]

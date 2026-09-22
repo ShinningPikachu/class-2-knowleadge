@@ -23,8 +23,8 @@ def clean_text(text: str) -> str:
 def safe_filename(name: str, fallback: str = "upload") -> str:
     """Return a filename safe to place inside a run directory."""
     candidate = Path(name or fallback).name
-    candidate = re.sub(r"[^A-Za-z0-9._-]+", "_", candidate)
-    return candidate or fallback
+    candidate = re.sub(r"[^\w.\-]+", "_", candidate, flags=re.UNICODE).strip(" .")
+    return candidate if candidate and candidate not in {".", ".."} else fallback
 
 
 def dump_json(path: Path, payload: Any) -> None:

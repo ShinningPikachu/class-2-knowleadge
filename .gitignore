@@ -25,6 +25,8 @@ htmlcov/
 
 # Runtime and local data
 runs/
+jobs/
+library/
 audio/*
 !audio/.gitkeep
 pdf/*

@@ -1,6 +1,17 @@
-# class-2-knowleadge
+# Class Knowledge Library
 
-An offline-first lecture-note generator tuned for a 32 GB local machine. Provide a university lecture recording (audio or video), a slide deck (`.pdf`, `.pptx`, or `.ppt`), or both and receive structured, source-grounded Markdown and PDF study notes. Two-hour recordings are split into overlapping chunks and transcribed by up to two bounded local workers; Whisper is still released before the writing model loads.
+An offline-first subject library, document assistant, lecture-note generator, and background job queue tuned for a 32 GB local machine. The Streamlit application has four workspaces:
+
+- **Library** — create persistent subject folders, upload multiple documents, inspect processing state, and search extracted text.
+- **Agent** — explicitly activate a local assistant to ask grounded questions across every subject or within one selected subject, with document/page/slide citations. It can list, rename, and move documents or create a subject; every write action is previewed and requires confirmation. A controlled document-insertion panel is also available.
+- **Lecture Notes** — queue a university lecture recording, slide deck (`.pdf`, `.pptx`, or `.ppt`), or both for background processing. The original sources plus both final note formats can be saved into a subject automatically.
+- **Job Queue** — see what is planned, running, waiting, completed, failed, or cancelled; change planned-task priority; request cancellation; and download completed outputs.
+
+Lecture tasks are selected by priority (`High`, `Normal`, then `Low`) and creation time. Whisper transcription can run while the interactive Qwen agent is active. When a lecture reaches Qwen note generation, it waits between model calls while the agent remains activated, then resumes automatically after the agent is deactivated. An in-flight model call is allowed to finish safely rather than being terminated mid-response.
+
+Subject metadata and extracted text are stored in `library/library.sqlite3`; original files live under stable subject IDs in `library/subjects/`. PDF pages, PowerPoint slides, Markdown, text, CSV, JSON, and related text formats are searchable immediately. Other file types are preserved and marked as stored until a suitable processor is available.
+
+Two-hour recordings are split into overlapping chunks and transcribed by up to two bounded local workers; Whisper is released before the writing model loads.
 
 It reconstructs the class from both sources: the slide text/structure and the professor's timestamped explanation. No cloud API keys are used and the application only contacts the local Ollama endpoint (`127.0.0.1` by default).
 
@@ -37,6 +48,8 @@ The pipeline is deliberately simple and inspectable:
 class-2-knowleadge/
 ├── app.py
 ├── requirements.txt
+├── library/                # created at runtime; subject catalog and original files
+├── jobs/                   # created at runtime; persistent queue and staged inputs
 ├── models/                 # optional local model files
 ├── audio/                  # reserved local audio workspace
 ├── pdf/                    # reserved local slide workspace
@@ -52,6 +65,11 @@ class-2-knowleadge/
     ├── exporter.py
     ├── pipeline.py
     ├── quality.py
+    ├── library.py          # subject/document catalog, extraction, and local search
+    ├── library_agent.py    # source-grounded library Q&A
+    ├── jobs.py             # priority queue, worker, cancellation, and Qwen coordination
+    ├── lecture_library.py  # completed-run handoff to a subject
+    ├── ui/                 # focused Library, Agent, and Lecture page modules
     └── config.py
 ```
 
@@ -107,7 +125,9 @@ source .venv/bin/activate
 streamlit run app.py
 ```
 
-Then open the local URL Streamlit prints, provide one or both inputs, optionally adjust the local model settings, and select **Generate Lecture Notes**. With a deck only, the result contains slide-grounded notes. With a recording only, it contains timestamped 15-minute recording sections grounded in professor speech. With both, it aligns professor speech to slides.
+Then open the local URL Streamlit prints. The server is explicitly bound to `127.0.0.1` so the local-file controls are not exposed to other machines by default.
+
+Start in **Library** to create a subject and add documents. Use **Agent** to search or ask cited questions. In **Lecture Notes**, provide one or both lecture inputs, choose a priority and optional destination subject, and select **Queue Lecture Task**. Follow progress and retrieve completed outputs from **Job Queue**. With a deck only, the result contains slide-grounded notes. With a recording only, it contains timestamped 15-minute recording sections grounded in professor speech. With both, it aligns professor speech to slides.
 
 ## Output format
 
