@@ -6,7 +6,9 @@ from pathlib import Path
 
 import streamlit as st
 
+from ..config import PipelineConfig
 from ..jobs import FINAL_STATUSES, PRIORITIES, JobError, JobManager, JobRecord
+from ..ollama_runtime import OllamaUnloadReport
 
 
 STATUS_ICONS = {
@@ -17,6 +19,82 @@ STATUS_ICONS = {
     "failed": "❌",
     "cancelled": "🚫",
 }
+
+
+def _format_model_size(size_bytes: int) -> str:
+    size = float(size_bytes)
+    for unit in ("B", "KB", "MB", "GB"):
+        if size < 1024 or unit == "GB":
+            return f"{size:.0f} {unit}" if unit == "B" else f"{size:.1f} {unit}"
+        size /= 1024
+    return f"{size_bytes} B"
+
+
+def _show_unload_result(report: OllamaUnloadReport) -> None:
+    if report.stopped:
+        st.success("Unloaded: " + ", ".join(report.stopped))
+    if report.retained:
+        st.info("Kept loaded for upcoming work: " + ", ".join(report.retained))
+    if report.failures:
+        st.warning(
+            "Could not unload: "
+            + "; ".join(f"{model} ({error})" for model, error in report.failures.items())
+        )
+
+
+def _render_ollama_controls(manager: JobManager) -> None:
+    with st.expander("Ollama model memory", expanded=False):
+        st.caption(
+            "Unload model weights from memory without stopping the Ollama server. "
+            "Automatic cleanup keeps models warm for activated or queued work and "
+            "unloads them only after the final consumer finishes."
+        )
+        configured_auto_unload = manager.is_auto_unload_enabled()
+        auto_unload = st.toggle(
+            "Automatically unload models after each task",
+            value=configured_auto_unload,
+            key="auto_unload_ollama_toggle",
+        )
+        if auto_unload != configured_auto_unload:
+            manager.set_auto_unload_enabled(auto_unload)
+
+        host = st.text_input(
+            "Ollama URL",
+            value=PipelineConfig().ollama_host,
+            key="ollama_memory_host",
+        ).strip()
+        try:
+            models = manager.list_loaded_ollama_models(host)
+        except JobError as exc:
+            models = []
+            st.caption(str(exc))
+
+        if not models:
+            st.info("No loaded models were reported by this Ollama server.")
+        for model in models:
+            details = _format_model_size(model.size_bytes)
+            if model.vram_bytes:
+                details += f" · {_format_model_size(model.vram_bytes)} in VRAM"
+            model_column, stop_column = st.columns([3, 1])
+            model_column.markdown(f"**{model.name}**")
+            model_column.caption(details)
+            if stop_column.button("Unload", key=f"unload_ollama_{model.name}", use_container_width=True):
+                try:
+                    _show_unload_result(manager.stop_loaded_ollama_models(host, [model.name]))
+                    st.rerun()
+                except JobError as exc:
+                    st.error(str(exc))
+
+        if len(models) > 1 and st.button("Unload all models", use_container_width=True):
+            try:
+                _show_unload_result(manager.stop_loaded_ollama_models(host))
+                st.rerun()
+            except JobError as exc:
+                st.error(str(exc))
+
+        last_cleanup = manager.last_ollama_cleanup()
+        if last_cleanup:
+            st.caption(last_cleanup)
 
 
 def _render_job(job: JobRecord, manager: JobManager, editable: bool = False) -> None:
@@ -99,6 +177,7 @@ def render_jobs(manager: JobManager) -> None:
     first.metric("Planned", planned_count)
     second.metric("Active", active_count)
     third.metric("Completed", completed_count)
+    _render_ollama_controls(manager)
 
     agent_active = manager.is_agent_active()
     if agent_active:

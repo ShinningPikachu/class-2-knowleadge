@@ -2,6 +2,18 @@
 
 from __future__ import annotations
 
+import warnings
+
+# The macOS system Python is linked to LibreSSL. urllib3 emits a compatibility
+# warning when imported indirectly by local-only clients, although this app only
+# contacts Ollama over loopback HTTP. Future installs also pin urllib3 1.26 on
+# Python 3.9; this exact filter keeps existing environments quiet until rebuilt.
+warnings.filterwarnings(
+    "ignore",
+    message=r"urllib3 v2 only supports OpenSSL 1\.1\.1\+.*",
+    module=r"urllib3(?:\.__init__)?",
+)
+
 import streamlit as st
 
 from src.config import project_path

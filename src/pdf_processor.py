@@ -10,6 +10,7 @@ import subprocess
 from typing import Any
 
 from .config import PipelineConfig
+from .pdf_runtime import muted_mupdf_errors
 from .utils import clean_text, dump_json
 
 
@@ -91,31 +92,27 @@ class PDFProcessor:
             raise SlideProcessingError("PyMuPDF is not installed. Run: pip install -r requirements.txt") from exc
 
         image_dir.mkdir(parents=True, exist_ok=True)
-        try:
-            document = fitz.open(path)
-        except Exception as exc:
-            raise SlideProcessingError(f"Could not open PDF: {exc}") from exc
-
         slides: list[dict[str, Any]] = []
         try:
-            for number, page in enumerate(document, start=1):
-                raw_text = page.get_text("text")
-                lines = [clean_text(line) for line in raw_text.splitlines() if clean_text(line)]
-                title = self._infer_title(lines, number)
-                content = clean_text("\n".join(lines))
-                images, visual_text = self._extract_pdf_images(page, number, image_dir)
-                # Scanned slides often have no extractable page text; local OCR is a useful fallback.
-                if not content and self.config.enable_ocr:
-                    rendered = page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False)
-                    visual_text.append(self._ocr_bytes(rendered.tobytes("png")))
-                    visual_text = [item for item in visual_text if item]
-                    content = " ".join(visual_text)
-                    title = self._infer_title(content.splitlines(), number)
-                slides.append(
-                    self._slide_record(number, title, content, notes="", images=images, visual_text=visual_text)
-                )
-        finally:
-            document.close()
+            with muted_mupdf_errors(fitz), fitz.open(path) as document:
+                for number, page in enumerate(document, start=1):
+                    raw_text = page.get_text("text")
+                    lines = [clean_text(line) for line in raw_text.splitlines() if clean_text(line)]
+                    title = self._infer_title(lines, number)
+                    content = clean_text("\n".join(lines))
+                    images, visual_text = self._extract_pdf_images(page, number, image_dir)
+                    # Scanned slides often have no extractable page text; local OCR is a useful fallback.
+                    if not content and self.config.enable_ocr:
+                        rendered = page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False)
+                        visual_text.append(self._ocr_bytes(rendered.tobytes("png")))
+                        visual_text = [item for item in visual_text if item]
+                        content = " ".join(visual_text)
+                        title = self._infer_title(content.splitlines(), number)
+                    slides.append(
+                        self._slide_record(number, title, content, notes="", images=images, visual_text=visual_text)
+                    )
+        except Exception as exc:
+            raise SlideProcessingError(f"Could not process PDF: {exc}") from exc
         return slides
 
     def _process_pptx(self, path: Path, image_dir: Path) -> list[dict[str, Any]]:

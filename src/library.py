@@ -14,6 +14,7 @@ from typing import Any
 from uuid import uuid4
 
 from .embeddings import chunk_text
+from .pdf_runtime import muted_mupdf_errors
 from .utils import clean_text, safe_filename
 
 
@@ -565,7 +566,7 @@ class LibraryStore:
                 raise LibraryError("PyMuPDF is required to index PDF documents.") from exc
             sections: list[tuple[str, str]] = []
             try:
-                with fitz.open(path) as document:
+                with muted_mupdf_errors(fitz), fitz.open(path) as document:
                     for page_number, page in enumerate(document, start=1):
                         text = page.get_text("text")
                         if clean_text(text):

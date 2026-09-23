@@ -140,7 +140,7 @@ def _handle_prompt(
     manager: JobManager,
 ) -> tuple[str, list[dict[str, str]]]:
     config.validate()
-    agent = LibraryAgent(config, chat_guard=manager.agent_qwen_slot)
+    agent = LibraryAgent(config, chat_guard=lambda: manager.agent_qwen_slot(config))
     if agent.should_plan_action(prompt):
         plan = agent.plan(prompt, subjects, documents)
         if plan.action in {"rename_document", "move_document", "create_subject"}:
@@ -177,7 +177,7 @@ def render_agent(library: LibraryStore, config: PipelineConfig, manager: JobMana
         help="The local model is contacted only after activation and when you submit a request.",
     )
     if active != scheduler_active:
-        manager.set_agent_active(active)
+        manager.set_agent_active(active, config if active else None)
     if not active:
         st.info("The agent is off. Your library remains available, but no local model is running for this screen.")
         return

@@ -5,9 +5,9 @@ An offline-first subject library, document assistant, lecture-note generator, an
 - **Library** — create persistent subject folders, upload multiple documents, inspect processing state, and search extracted text.
 - **Agent** — explicitly activate a local assistant to ask grounded questions across every subject or within one selected subject, with document/page/slide citations. It can list, rename, and move documents or create a subject; every write action is previewed and requires confirmation. A controlled document-insertion panel is also available.
 - **Lecture Notes** — queue a university lecture recording, slide deck (`.pdf`, `.pptx`, or `.ppt`), or both for background processing. The original sources plus both final note formats can be saved into a subject automatically.
-- **Job Queue** — see what is planned, running, waiting, completed, failed, or cancelled; change planned-task priority; request cancellation; and download completed outputs.
+- **Job Queue** — see what is planned, running, waiting, completed, failed, or cancelled; change planned-task priority; request cancellation; download completed outputs; and inspect or unload Ollama models.
 
-Lecture tasks are selected by priority (`High`, `Normal`, then `Low`) and creation time. Whisper transcription can run while the interactive Qwen agent is active. When a lecture reaches Qwen note generation, it waits between model calls while the agent remains activated, then resumes automatically after the agent is deactivated. An in-flight model call is allowed to finish safely rather than being terminated mid-response.
+Lecture tasks are selected by priority (`High`, `Normal`, then `Low`) and creation time. Whisper transcription can run while the interactive Qwen agent is active. When a lecture reaches Qwen note generation, it waits between model calls while the agent remains activated, then resumes automatically after the agent is deactivated. An in-flight model call is allowed to finish safely rather than being terminated mid-response. Automatic model cleanup is enabled by default. Qwen stays warm while the interactive agent is activated, and lecture jobs hand resident models directly to queued work that uses the same Ollama host and model. Models are unloaded after completion, failure, cancellation, agent deactivation, or restart recovery only when no active or queued consumer still needs them. This releases unused model memory without causing avoidable unload/reload cycles or terminating the Ollama server.
 
 Subject metadata and extracted text are stored in `library/library.sqlite3`; original files live under stable subject IDs in `library/subjects/`. PDF pages, PowerPoint slides, Markdown, text, CSV, JSON, and related text formats are searchable immediately. Other file types are preserved and marked as stored until a suitable processor is available.
 
@@ -85,7 +85,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Python 3.9 or newer is supported by the pinned dependency range currently used by the project; Python 3.11 is recommended for the smoothest installation and performance.
+Python 3.9 or newer is supported by the pinned dependency range currently used by the project; Python 3.11 is recommended for the smoothest installation and performance. Python 3.9 installs urllib3 1.26 because Apple's system build uses LibreSSL, which urllib3 2 does not support.
 
 For OCR of text embedded in diagrams and screenshots, install the optional local Tesseract binary (`brew install tesseract` or `sudo apt install tesseract-ocr`). The application still works without it; only visual-text hints are skipped.
 
@@ -128,6 +128,8 @@ streamlit run app.py
 Then open the local URL Streamlit prints. The server is explicitly bound to `127.0.0.1` so the local-file controls are not exposed to other machines by default.
 
 Start in **Library** to create a subject and add documents. Use **Agent** to search or ask cited questions. In **Lecture Notes**, provide one or both lecture inputs, choose a priority and optional destination subject, and select **Queue Lecture Task**. Follow progress and retrieve completed outputs from **Job Queue**. With a deck only, the result contains slide-grounded notes. With a recording only, it contains timestamped 15-minute recording sections grounded in professor speech. With both, it aligns professor speech to slides.
+
+Open **Job Queue → Ollama model memory** to disable automatic unloading, inspect resident models, or unload an idle model manually. Manual unloading is blocked while a lecture or model call is active and for models required by queued work, so it cannot interrupt a task or force the next task to reload the same model.
 
 ## Output format
 
@@ -178,6 +180,7 @@ The application has no cloud client and no API-key configuration. It disables Ch
 
 - **“Could not generate notes” / “Could not use local Ollama”**: start Ollama and ensure both configured models appear in `ollama list`.
 - **Recording transcription fails**: check the media audio track and confirm that the configured Whisper model is cached or the configured local model path exists.
+- **Warnings remain after updating**: reinstall the pinned dependencies with `pip install -r requirements.txt`. The app suppresses MuPDF's harmless `Screen`-annotation diagnostics and a known Apple-silicon NumPy matrix-warning false positive only inside the affected processing paths; genuine PDF and audio failures still appear as job errors.
 - **Quality gate stops the run**: inspect `quality_report.json`. A mostly temporal alignment is not considered reliable enough to produce notes; confirm the correct deck/recording pair and spoken language.
 - **No text from a scanned PDF**: install Tesseract and keep OCR enabled; very visual diagrams may still need manual interpretation because the system intentionally will not invent diagram meaning.
 - **PPT conversion fails**: save the file as PPTX/PDF, or install LibreOffice for legacy `.ppt` conversion.

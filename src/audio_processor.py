@@ -5,6 +5,8 @@ from __future__ import annotations
 import gc
 import json
 import os
+import platform
+import warnings
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -79,6 +81,7 @@ class AudioProcessor:
             decoded_audio = decode_audio(str(audio_path), sampling_rate=16_000)
         except Exception as exc:
             raise AudioProcessingError(f"Could not decode the recording's audio track locally: {exc}") from exc
+        decoded_audio = self._validate_decoded_audio(decoded_audio)
         duration = len(decoded_audio) / 16_000
         chunk_plan = self._build_chunk_plan(
             duration,
@@ -260,6 +263,44 @@ class AudioProcessor:
         return records
 
     @staticmethod
+    def _validate_decoded_audio(decoded_audio: Any) -> Any:
+        """Reject invalid decoder output before it reaches Whisper workers."""
+        try:
+            import numpy as np
+        except ImportError:
+            return decoded_audio
+
+        # faster-whisper's decoder contract is a one-dimensional NumPy array.
+        # Lightweight stand-ins used by callers and tests can retain their own
+        # sequence implementation without forcing a multi-gigabyte allocation.
+        if not isinstance(decoded_audio, np.ndarray):
+            return decoded_audio
+        if decoded_audio.ndim != 1 or decoded_audio.size == 0:
+            raise AudioProcessingError("The recording decoded to an empty or invalid audio track.")
+        if not bool(np.isfinite(decoded_audio).all()):
+            raise AudioProcessingError(
+                "The recording decoded to non-finite audio samples. Convert it to PCM WAV and try again."
+            )
+        peak = float(np.max(np.abs(decoded_audio)))
+        if peak > 1.5:
+            raise AudioProcessingError(
+                "The recording decoded outside the expected audio range. Convert it to PCM WAV and try again."
+            )
+        return np.ascontiguousarray(decoded_audio, dtype=np.float32)
+
+    @staticmethod
+    def _configure_whisper_warning_filter() -> None:
+        """Hide a known false-positive NumPy/Accelerate warning on Apple silicon."""
+        if platform.system() != "Darwin" or platform.machine() != "arm64":
+            return
+        warnings.filterwarnings(
+            "ignore",
+            message=r"(?:divide by zero|overflow|invalid value) encountered in matmul",
+            category=RuntimeWarning,
+            module=r"faster_whisper\.feature_extractor",
+        )
+
+    @staticmethod
     def _transcribe_plan(
         model: Any,
         plan: MediaChunkPlan,
@@ -272,6 +313,7 @@ class AudioProcessor:
         sample_start = int(plan.extract_start * 16_000)
         sample_end = min(len(decoded_audio), int(plan.extract_end * 16_000))
         media_input = decoded_audio[sample_start:sample_end]
+        AudioProcessor._configure_whisper_warning_filter()
         segments_iter, info = model.transcribe(
             media_input,
             language=language or None,

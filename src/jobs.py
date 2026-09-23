@@ -12,11 +12,19 @@ import shutil
 import sqlite3
 import threading
 from typing import Any, Iterator
+from urllib.parse import urlparse
 from uuid import uuid4
 
 from .config import PipelineConfig
 from .lecture_library import save_lecture_result
 from .library import LibraryStore
+from .ollama_runtime import (
+    OllamaRuntime,
+    OllamaRuntimeError,
+    OllamaUnloadReport,
+    RunningOllamaModel,
+    model_names_match,
+)
 from .pipeline import LecturePipeline
 from .utils import safe_filename
 
@@ -69,10 +77,16 @@ class JobManager:
         self._database_lock = threading.RLock()
         self._condition = threading.Condition(threading.RLock())
         self._qwen_owner: str | None = None
+        self._ollama_maintenance = False
+        self._last_ollama_cleanup = ""
         self._stop_requested = False
         self._worker: threading.Thread | None = None
-        self._initialize_schema()
-        self._agent_active = self._load_agent_active()
+        interrupted_configs = self._initialize_schema()
+        self._agent_active = self._load_state_flag("agent_active", default=False)
+        self._auto_unload_ollama = self._load_state_flag("auto_unload_ollama", default=True)
+        self._last_agent_config = self._load_config_state("agent_last_config")
+        if self._auto_unload_ollama and interrupted_configs:
+            self._recover_interrupted_ollama(interrupted_configs)
         if autostart:
             self.start()
 
@@ -82,7 +96,8 @@ class JobManager:
         connection.execute("PRAGMA journal_mode = WAL")
         return connection
 
-    def _initialize_schema(self) -> None:
+    def _initialize_schema(self) -> list[PipelineConfig]:
+        interrupted_payloads: list[str] = []
         with self._database_lock, self._connect() as connection:
             connection.executescript(
                 """
@@ -113,6 +128,22 @@ class JobManager:
                 );
                 """
             )
+            interrupted_payloads.extend(
+                str(row["payload_json"])
+                for row in connection.execute(
+                    "SELECT payload_json FROM jobs WHERE status IN ('running', 'waiting')"
+                ).fetchall()
+            )
+            agent_session = connection.execute(
+                "SELECT value FROM scheduler_state WHERE key = 'agent_ollama_session'"
+            ).fetchone()
+            if agent_session:
+                try:
+                    session_config = json.loads(str(agent_session["value"]))
+                    interrupted_payloads.append(json.dumps({"config": session_config}))
+                except (TypeError, json.JSONDecodeError):
+                    pass
+                connection.execute("DELETE FROM scheduler_state WHERE key = 'agent_ollama_session'")
             now = self._timestamp()
             connection.execute(
                 """
@@ -127,6 +158,14 @@ class JobManager:
                     now,
                 ),
             )
+        configs: list[PipelineConfig] = []
+        for raw_payload in interrupted_payloads:
+            try:
+                payload = json.loads(raw_payload)
+                configs.append(PipelineConfig(**payload["config"]))
+            except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+                continue
+        return configs
 
     def start(self) -> None:
         if self._worker and self._worker.is_alive():
@@ -175,25 +214,27 @@ class JobManager:
             "resume_run_directory": resume_run_directory,
         }
         now = self._timestamp()
-        with self._database_lock, self._connect() as connection:
-            connection.execute(
-                """
-                INSERT INTO jobs(
-                    id, kind, title, status, priority, stage, progress, message,
-                    payload_json, created_at, updated_at
-                ) VALUES (?, 'lecture', ?, 'queued', ?, 'planned', 0, ?, ?, ?, ?)
-                """,
-                (
-                    job_id,
-                    title,
-                    priority,
-                    "Waiting for its turn",
-                    json.dumps(payload),
-                    now,
-                    now,
-                ),
-            )
         with self._condition:
+            while self._ollama_maintenance:
+                self._condition.wait(timeout=0.5)
+            with self._database_lock, self._connect() as connection:
+                connection.execute(
+                    """
+                    INSERT INTO jobs(
+                        id, kind, title, status, priority, stage, progress, message,
+                        payload_json, created_at, updated_at
+                    ) VALUES (?, 'lecture', ?, 'queued', ?, 'planned', 0, ?, ?, ?, ?)
+                    """,
+                    (
+                        job_id,
+                        title,
+                        priority,
+                        "Waiting for its turn",
+                        json.dumps(payload),
+                        now,
+                        now,
+                    ),
+                )
             self._condition.notify_all()
         return self.get_job(job_id)
 
@@ -291,31 +332,130 @@ class JobManager:
         with self._condition:
             return self._agent_active
 
-    def set_agent_active(self, active: bool) -> None:
+    def is_auto_unload_enabled(self) -> bool:
         with self._condition:
-            self._agent_active = bool(active)
-            with self._database_lock, self._connect() as connection:
-                connection.execute(
-                    """
-                    INSERT INTO scheduler_state(key, value) VALUES ('agent_active', ?)
-                    ON CONFLICT(key) DO UPDATE SET value = excluded.value
-                    """,
-                    ("1" if active else "0",),
-                )
+            return self._auto_unload_ollama
+
+    def set_auto_unload_enabled(self, enabled: bool) -> None:
+        with self._condition:
+            self._auto_unload_ollama = bool(enabled)
+            self._set_state("auto_unload_ollama", "1" if enabled else "0")
             self._condition.notify_all()
 
-    @contextmanager
-    def agent_qwen_slot(self) -> Iterator[None]:
-        """Give an interactive agent call exclusive access to the Qwen model."""
+    def last_ollama_cleanup(self) -> str:
         with self._condition:
-            while self._qwen_owner is not None and not self._stop_requested:
+            return self._last_ollama_cleanup
+
+    def list_loaded_ollama_models(self, host: str) -> list[RunningOllamaModel]:
+        """Inspect the configured local Ollama server without changing it."""
+        self._validate_ollama_host(host)
+        runtime: OllamaRuntime | None = None
+        try:
+            runtime = OllamaRuntime(host, timeout=1.5)
+            return runtime.running_models()
+        except OllamaRuntimeError as exc:
+            raise JobError(str(exc)) from exc
+        finally:
+            self._close_runtime(runtime)
+
+    def stop_loaded_ollama_models(
+        self,
+        host: str,
+        models: list[str] | None = None,
+    ) -> OllamaUnloadReport:
+        """Manually unload idle models without terminating the Ollama server."""
+        self._validate_ollama_host(host)
+        with self._condition:
+            if self._ollama_maintenance or self._qwen_owner is not None:
+                raise JobError(
+                    "An Ollama operation is currently active. Wait for it to finish before unloading models."
+                )
+            self._ollama_maintenance = True
+            if self._has_active_jobs():
+                self._ollama_maintenance = False
+                self._condition.notify_all()
+                raise JobError("Models cannot be unloaded manually while a lecture task is active.")
+        runtime: OllamaRuntime | None = None
+        try:
+            runtime = OllamaRuntime(host, timeout=3.0)
+            targets = models
+            if targets is None:
+                targets = [model.name for model in runtime.running_models()]
+            required = self._models_needed_by_pending_work(host, targets)
+            if required:
+                raise JobError(
+                    "Models needed by activated or queued work cannot be unloaded: "
+                    + ", ".join(required)
+                )
+            report = runtime.unload_models(targets)
+            self._remember_cleanup(report)
+            return report
+        except OllamaRuntimeError as exc:
+            raise JobError(str(exc)) from exc
+        finally:
+            self._close_runtime(runtime)
+            with self._condition:
+                self._ollama_maintenance = False
+                self._condition.notify_all()
+
+    def set_agent_active(self, active: bool, config: PipelineConfig | None = None) -> None:
+        cleanup_config: PipelineConfig | None = None
+        with self._condition:
+            if active:
+                while self._ollama_maintenance:
+                    self._condition.wait(timeout=0.5)
+            was_active = self._agent_active
+            self._agent_active = bool(active)
+            self._set_state("agent_active", "1" if active else "0")
+            if active and config is not None:
+                self._last_agent_config = config
+                self._set_state("agent_last_config", json.dumps(asdict(config)))
+            if (
+                was_active
+                and not active
+                and self._auto_unload_ollama
+                and self._last_agent_config is not None
+                and self._qwen_owner is None
+            ):
+                while self._ollama_maintenance:
+                    self._condition.wait(timeout=0.5)
+                self._ollama_maintenance = True
+                cleanup_config = self._last_agent_config
+            self._condition.notify_all()
+        if cleanup_config is not None:
+            try:
+                report = self._cleanup_unused_configured_models(
+                    cleanup_config,
+                    [cleanup_config.llm_model],
+                )
+                self._remember_cleanup(report, prefix="Agent deactivation")
+            finally:
+                with self._condition:
+                    self._ollama_maintenance = False
+                    self._condition.notify_all()
+
+    @contextmanager
+    def agent_qwen_slot(self, config: PipelineConfig | None = None) -> Iterator[None]:
+        """Give an interactive call exclusive Qwen access and release it afterward."""
+        with self._condition:
+            while (self._qwen_owner is not None or self._ollama_maintenance) and not self._stop_requested:
                 self._condition.wait(timeout=0.5)
             if self._stop_requested:
                 raise JobCancelled("The job manager is stopping.")
             self._qwen_owner = "agent"
+            if config is not None:
+                self._last_agent_config = config
+                self._set_state("agent_last_config", json.dumps(asdict(config)))
+                self._set_state("agent_ollama_session", json.dumps(asdict(config)))
         try:
             yield
         finally:
+            if config is not None and self.is_auto_unload_enabled():
+                self._remember_cleanup(
+                    self._cleanup_unused_configured_models(config, [config.llm_model])
+                )
+            if config is not None:
+                self._delete_state("agent_ollama_session")
             with self._condition:
                 if self._qwen_owner == "agent":
                     self._qwen_owner = None
@@ -326,7 +466,9 @@ class JobManager:
         """Pause lecture Qwen work while the interactive agent remains active."""
         waiting_marked = False
         with self._condition:
-            while (self._agent_active or self._qwen_owner is not None) and not self._stop_requested:
+            while (
+                self._agent_active or self._qwen_owner is not None or self._ollama_maintenance
+            ) and not self._stop_requested:
                 self._raise_if_cancelled(job_id)
                 if not waiting_marked:
                     self._update_job(
@@ -356,16 +498,49 @@ class JobManager:
                     self._qwen_owner = None
                 self._condition.notify_all()
 
-    def _load_agent_active(self) -> bool:
+    def _load_state_flag(self, key: str, default: bool) -> bool:
         with self._database_lock, self._connect() as connection:
             row = connection.execute(
-                "SELECT value FROM scheduler_state WHERE key = 'agent_active'"
+                "SELECT value FROM scheduler_state WHERE key = ?",
+                (key,),
             ).fetchone()
-        return bool(row and row["value"] == "1")
+        return default if row is None else str(row["value"]) == "1"
+
+    def _load_config_state(self, key: str) -> PipelineConfig | None:
+        with self._database_lock, self._connect() as connection:
+            row = connection.execute(
+                "SELECT value FROM scheduler_state WHERE key = ?",
+                (key,),
+            ).fetchone()
+        if row is None:
+            return None
+        try:
+            return PipelineConfig(**json.loads(str(row["value"])))
+        except (TypeError, ValueError, json.JSONDecodeError):
+            return None
+
+    def _set_state(self, key: str, value: str) -> None:
+        with self._database_lock, self._connect() as connection:
+            connection.execute(
+                """
+                INSERT INTO scheduler_state(key, value) VALUES (?, ?)
+                ON CONFLICT(key) DO UPDATE SET value = excluded.value
+                """,
+                (key, value),
+            )
+
+    def _delete_state(self, key: str) -> None:
+        with self._database_lock, self._connect() as connection:
+            connection.execute("DELETE FROM scheduler_state WHERE key = ?", (key,))
 
     def _worker_loop(self) -> None:
         while not self._stop_requested:
-            job = self._claim_next_job()
+            with self._condition:
+                while self._ollama_maintenance and not self._stop_requested:
+                    self._condition.wait(timeout=0.5)
+                if self._stop_requested:
+                    return
+                job = self._claim_next_job()
             if job is None:
                 with self._condition:
                     self._condition.wait(timeout=1.0)
@@ -376,6 +551,8 @@ class JobManager:
                 self._finish_job(job.id, "cancelled", str(exc), error="")
             except Exception as exc:
                 self._finish_job(job.id, "failed", "Task failed", error=str(exc))
+            finally:
+                self._cleanup_after_job(job)
 
     def _claim_next_job(self) -> JobRecord | None:
         with self._database_lock, self._connect() as connection:
@@ -498,6 +675,196 @@ class JobManager:
                 """,
                 (status, message, error[:4000], now, now, job_id),
             )
+
+    def _cleanup_after_job(self, job: JobRecord) -> None:
+        """Release this job's Ollama models after every terminal outcome."""
+        if not self.is_auto_unload_enabled():
+            return
+        try:
+            config = PipelineConfig(**job.payload["config"])
+        except (KeyError, TypeError, ValueError):
+            return
+
+        with self._condition:
+            while self._qwen_owner is not None or self._ollama_maintenance:
+                self._condition.wait(timeout=0.5)
+            self._ollama_maintenance = True
+        try:
+            report = self._cleanup_unused_configured_models(
+                config,
+                [config.llm_model, config.embedding_model],
+            )
+            self._remember_cleanup(report)
+            self._annotate_job_cleanup(job.id, report)
+        finally:
+            with self._condition:
+                self._ollama_maintenance = False
+                self._condition.notify_all()
+
+    def _cleanup_unused_configured_models(
+        self,
+        config: PipelineConfig,
+        models: list[str],
+    ) -> OllamaUnloadReport:
+        required = self._models_needed_by_pending_work(config.ollama_host, models)
+        to_unload = [model for model in models if model not in required]
+        report = (
+            self._unload_configured_models(config, to_unload)
+            if to_unload
+            else OllamaUnloadReport()
+        )
+        report.retained.extend(required)
+        return report
+
+    @staticmethod
+    def _unload_configured_models(config: PipelineConfig, models: list[str]) -> OllamaUnloadReport:
+        runtime: OllamaRuntime | None = None
+        try:
+            runtime = OllamaRuntime(config.ollama_host, timeout=3.0)
+            return runtime.unload_if_running(models)
+        except OllamaRuntimeError as exc:
+            return OllamaUnloadReport(failures={model: str(exc) for model in models})
+        finally:
+            JobManager._close_runtime(runtime)
+
+    def _annotate_job_cleanup(self, job_id: str, report: OllamaUnloadReport) -> None:
+        try:
+            job = self.get_job(job_id)
+        except JobError:
+            return
+        if report.failures:
+            suffix = "Ollama cleanup could not be confirmed"
+        elif report.retained and report.stopped:
+            suffix = "Unused Ollama models unloaded; shared models kept warm"
+        elif report.retained:
+            suffix = "Ollama models kept warm for upcoming tasks"
+        elif report.stopped:
+            suffix = "Ollama models unloaded"
+        else:
+            suffix = "No Ollama models were loaded"
+        base = job.message.rstrip(" .")
+        self._update_job(job_id, message=f"{base} · {suffix}")
+
+    def _recover_interrupted_ollama(self, configs: list[PipelineConfig]) -> None:
+        """Clean model memory left by work interrupted before its finally block."""
+        grouped: dict[str, list[str]] = {}
+        for config in configs:
+            grouped.setdefault(config.ollama_host, []).extend([config.llm_model, config.embedding_model])
+        reports: list[OllamaUnloadReport] = []
+        for host, models in grouped.items():
+            deduplicated = list(dict.fromkeys(models))
+            required = self._models_needed_by_pending_work(host, deduplicated)
+            to_unload = [model for model in deduplicated if model not in required]
+            if not to_unload:
+                reports.append(OllamaUnloadReport(retained=required))
+                continue
+            runtime: OllamaRuntime | None = None
+            try:
+                runtime = OllamaRuntime(host, timeout=2.0)
+                report = runtime.unload_if_running(to_unload)
+                report.retained.extend(required)
+                reports.append(report)
+            except OllamaRuntimeError as exc:
+                reports.append(
+                    OllamaUnloadReport(
+                        retained=required,
+                        failures={model: str(exc) for model in to_unload},
+                    )
+                )
+            finally:
+                self._close_runtime(runtime)
+        if reports:
+            combined = OllamaUnloadReport(
+                stopped=[model for report in reports for model in report.stopped],
+                retained=[model for report in reports for model in report.retained],
+                failures={model: error for report in reports for model, error in report.failures.items()},
+            )
+            self._remember_cleanup(combined, prefix="Restart recovery")
+
+    def _remember_cleanup(self, report: OllamaUnloadReport, prefix: str = "Model cleanup") -> None:
+        parts: list[str] = []
+        if report.stopped:
+            parts.append("unloaded " + ", ".join(report.stopped))
+        if report.retained:
+            parts.append("kept warm for upcoming work: " + ", ".join(report.retained))
+        if report.failures:
+            parts.append("could not unload " + ", ".join(report.failures))
+        if not parts:
+            parts.append("no loaded models found")
+        with self._condition:
+            self._last_ollama_cleanup = f"{prefix}: {'; '.join(parts)}."
+
+    def _models_needed_by_pending_work(self, host: str, models: list[str]) -> list[str]:
+        requirements = self._pending_model_requirements()
+        return [
+            model
+            for model in dict.fromkeys(models)
+            if any(
+                self._same_ollama_host(host, required_host)
+                and model_names_match(model, required_model)
+                for required_host, required_model in requirements
+            )
+        ]
+
+    def _pending_model_requirements(self) -> list[tuple[str, str]]:
+        requirements: list[tuple[str, str]] = []
+        with self._database_lock, self._connect() as connection:
+            rows = connection.execute(
+                "SELECT payload_json FROM jobs WHERE status IN ('queued', 'running', 'waiting')"
+            ).fetchall()
+        for row in rows:
+            try:
+                payload = json.loads(str(row["payload_json"]))
+                config = PipelineConfig(**payload["config"])
+            except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+                continue
+            requirements.extend(
+                [
+                    (config.ollama_host, config.llm_model),
+                    (config.ollama_host, config.embedding_model),
+                ]
+            )
+        with self._condition:
+            if self._agent_active and self._last_agent_config is not None:
+                requirements.append(
+                    (self._last_agent_config.ollama_host, self._last_agent_config.llm_model)
+                )
+        return requirements
+
+    @staticmethod
+    def _same_ollama_host(left: str, right: str) -> bool:
+        def key(value: str) -> tuple[str, str, int]:
+            parsed = urlparse(value)
+            hostname = (parsed.hostname or "").lower()
+            if hostname in {"localhost", "127.0.0.1", "::1"}:
+                hostname = "loopback"
+            port = parsed.port or (443 if parsed.scheme == "https" else 11_434)
+            return parsed.scheme.lower(), hostname, port
+
+        return key(left) == key(right)
+
+    def _has_active_jobs(self) -> bool:
+        with self._database_lock, self._connect() as connection:
+            count = connection.execute(
+                "SELECT COUNT(*) FROM jobs WHERE status IN ('running', 'waiting')"
+            ).fetchone()[0]
+        return bool(count)
+
+    @staticmethod
+    def _close_runtime(runtime: Any | None) -> None:
+        close = getattr(runtime, "close", None)
+        if callable(close):
+            try:
+                close()
+            except Exception:
+                pass
+
+    @staticmethod
+    def _validate_ollama_host(host: str) -> None:
+        try:
+            PipelineConfig(ollama_host=host).validate()
+        except ValueError as exc:
+            raise JobError(str(exc)) from exc
 
     @staticmethod
     def _stage_progress(stage: str, message: str) -> int:

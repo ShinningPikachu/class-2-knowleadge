@@ -6,6 +6,7 @@ from contextlib import contextmanager
 import sys
 import tempfile
 import unittest
+import warnings
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -16,7 +17,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.alignment import SlideAligner  # noqa: E402
 from src.agent import LectureAgent  # noqa: E402
-from src.audio_processor import AudioProcessor  # noqa: E402
+from src.audio_processor import AudioProcessingError, AudioProcessor  # noqa: E402
 from src.config import PipelineConfig  # noqa: E402
 from src.embeddings import OllamaEmbedder, build_source_documents, chunk_text  # noqa: E402
 from src.pipeline import LecturePipeline  # noqa: E402
@@ -25,6 +26,34 @@ from src.quality import QualityGateError, validate_evidence_quality, validate_fi
 
 
 class CoreHelpersTest(unittest.TestCase):
+    def test_audio_validation_rejects_non_finite_decoder_output(self) -> None:
+        import numpy as np
+
+        with self.assertRaisesRegex(AudioProcessingError, "non-finite"):
+            AudioProcessor._validate_decoded_audio(np.array([0.0, np.nan], dtype=np.float32))
+
+        validated = AudioProcessor._validate_decoded_audio(np.array([0.25, -0.5], dtype=np.float64))
+        self.assertEqual(validated.dtype, np.float32)
+        self.assertTrue(validated.flags.c_contiguous)
+
+    def test_apple_whisper_filter_is_narrowly_scoped(self) -> None:
+        with warnings.catch_warnings():
+            with patch("src.audio_processor.platform.system", return_value="Darwin"), patch(
+                "src.audio_processor.platform.machine", return_value="arm64"
+            ):
+                AudioProcessor._configure_whisper_warning_filter()
+            matching_filters = [
+                item
+                for item in warnings.filters
+                if item[0] == "ignore"
+                and item[2] is RuntimeWarning
+                and item[1] is not None
+                and item[1].match("overflow encountered in matmul")
+                and item[3] is not None
+                and item[3].match("faster_whisper.feature_extractor")
+            ]
+            self.assertEqual(len(matching_filters), 1)
+
     def test_overlapping_transcription_chunks_do_not_duplicate_boundary_speech(self) -> None:
         class FakeAudio:
             def __len__(self) -> int:
