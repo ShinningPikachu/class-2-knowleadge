@@ -26,6 +26,10 @@ class PipelineConfig:
     ollama_keep_alive: str = "45m"
     ollama_thinking: str | bool = "high"
     quality_review: bool = True
+    # Fast baseline notes use one bounded, non-thinking call per slide. Deep
+    # mode is intentionally opt-in because it adds thinking and a second audit.
+    note_generation_profile: str = "fast"
+    note_max_output_tokens: int = 1_200
 
     # A local path may be used instead of the model name after downloading it.
     whisper_model: str = "large-v3"
@@ -75,6 +79,10 @@ class PipelineConfig:
             raise ValueError("ollama_num_ctx must be at least 4096 for grounded lecture notes.")
         if not isinstance(self.ollama_thinking, bool) and self.ollama_thinking not in {"low", "medium", "high"}:
             raise ValueError("ollama_thinking must be a boolean or one of: low, medium, high.")
+        if self.note_generation_profile not in {"fast", "deep"}:
+            raise ValueError("note_generation_profile must be 'fast' or 'deep'.")
+        if not 512 <= self.note_max_output_tokens <= 8_192:
+            raise ValueError("note_max_output_tokens must be between 512 and 8192.")
         if self.media_chunk_seconds < 300:
             raise ValueError("media_chunk_seconds must be at least 300 seconds.")
         if not 0 <= self.media_overlap_seconds < self.media_chunk_seconds / 4:

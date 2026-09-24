@@ -233,14 +233,25 @@ class LecturePipeline:
         rag = LocalRAG(run_dir / "database", embedder)
         indexed_chunks = rag.index(documents)
 
-        notify("notes", "Generating grounded study notes with the local Ollama model")
+        if self.config.note_generation_profile == "fast":
+            note_mode = "fast baseline mode (one bounded, non-thinking call per slide)"
+        else:
+            note_mode = "deep reviewed mode (high reasoning plus a second factual audit per slide)"
+        notify("notes", f"Generating grounded study notes in {note_mode}")
         agent = LectureAgent(self.config, rag, chat_guard=self.qwen_guard)
 
         def note_progress(index: int, total: int, message: str) -> None:
             notify("notes", f"{message} ({index}/{total})")
 
         effective_title = lecture_title or (stored_audio.stem if stored_audio and not stored_presentation else None)
-        notes = agent.generate_lecture_notes(slides, alignment, effective_title, progress=note_progress)
+        notes = agent.generate_lecture_notes(
+            slides,
+            alignment,
+            effective_title,
+            progress=note_progress,
+            checkpoint_dir=run_dir / "notes_checkpoints",
+            partial_output_path=run_dir / "lecture_notes.partial.md",
+        )
         section_label = "Recording section" if slides and slides[0].get("section_kind") == "recording" else "Slide"
         validate_final_notes(notes, len(slides), section_label=section_label)
         markdown_path = export_markdown(notes, run_dir / "lecture_notes.md")

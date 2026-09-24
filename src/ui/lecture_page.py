@@ -79,7 +79,7 @@ def render_lecture_processor(
         resume_run_directory = st.text_input(
             "Run folder",
             placeholder="/path/to/class-2-knowleadge/runs/lecture_...",
-            help="The background task reuses completed transcription checkpoints.",
+            help="The background task reuses completed transcription, cleanup, and per-slide note checkpoints.",
         )
 
     st.subheader("2. Destination and priority")

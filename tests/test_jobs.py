@@ -548,6 +548,119 @@ class JobManagerTest(unittest.TestCase):
         self.assertTrue(Path(completed.result["markdown_path"]).is_file())
         self.assertTrue(Path(completed.result["pdf_path"]).is_file())
 
+    def test_completed_lecture_can_queue_a_deep_review_for_one_slide(self) -> None:
+        self.manager.set_auto_unload_enabled(False)
+        source_job = self._enqueue("Baseline lecture", PRIORITIES["Normal"])
+        self.manager._claim_next_job()
+        run_directory = self.root / "runs" / "baseline-lecture"
+        run_directory.mkdir(parents=True)
+        (run_directory / "slides.json").write_text(
+            json.dumps(
+                {
+                    "slides": [
+                        {
+                            "slide": 1,
+                            "title": "Agents",
+                            "content": "An agent perceives and acts.",
+                            "notes": "",
+                            "visual_text": [],
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        (run_directory / "alignment.json").write_text(
+            json.dumps({"slides": [{"slide": 1, "paragraphs": []}]}),
+            encoding="utf-8",
+        )
+        self.manager._merge_job_result(
+            source_job.id,
+            {
+                "run_dir": str(run_directory),
+                "slides_path": str(run_directory / "slides.json"),
+                "alignment_path": str(run_directory / "alignment.json"),
+            },
+        )
+        self.manager._finish_job(source_job.id, "completed", "Lecture notes are ready", "")
+
+        review_job = self.manager.enqueue_slide_review(
+            source_job.id,
+            1,
+            priority=PRIORITIES["High"],
+        )
+        self.assertEqual(review_job.kind, "slide_review")
+        self.assertEqual(review_job.payload["slide_number"], 1)
+        self.assertEqual(review_job.payload["config"]["note_generation_profile"], "deep")
+        self.assertEqual(review_job.payload["config"]["ollama_thinking"], "high")
+        self.assertTrue(review_job.payload["config"]["quality_review"])
+        self.assertEqual(
+            self.manager._pending_model_requirements(),
+            [
+                (PipelineConfig().ollama_host, PipelineConfig().llm_model),
+                (PipelineConfig().ollama_host, PipelineConfig().embedding_model),
+            ],
+        )
+
+        profiles: list[str] = []
+
+        class FakeEmbedder:
+            def __init__(self, config: PipelineConfig) -> None:
+                self.config = config
+
+            def verify_local_models(self) -> None:
+                pass
+
+        class FakeRag:
+            def __init__(self, *_args: object, **_kwargs: object) -> None:
+                pass
+
+        class FakeAgent:
+            def __init__(self, config: PipelineConfig, *_args: object, **_kwargs: object) -> None:
+                profiles.append(config.note_generation_profile)
+
+            def generate_slide_note(
+                self,
+                _slide: dict[str, object],
+                _aligned: dict[str, object],
+                checkpoint_path: Path,
+            ) -> str:
+                checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+                checkpoint_path.write_text("saved deep checkpoint", encoding="utf-8")
+                return """## Slide content
+Deep grounded content.
+
+## Professor explanation
+No additional professor explanation was aligned with this slide.
+
+## Important concepts
+- Agent.
+
+## Exam points
+- Review the definition."""
+
+        def fake_export_pdf(_markdown: str, output: Path) -> Path:
+            output.write_bytes(b"deep review pdf")
+            return output
+
+        claimed = self.manager._claim_next_job()
+        self.assertEqual(claimed.id, review_job.id)  # type: ignore[union-attr]
+        with patch("src.jobs.OllamaEmbedder", FakeEmbedder), patch(
+            "src.jobs.LocalRAG", FakeRag
+        ), patch("src.jobs.LectureAgent", FakeAgent), patch("src.jobs.export_pdf", fake_export_pdf):
+            self.manager._execute_job(claimed)  # type: ignore[arg-type]
+
+        completed = self.manager.get_job(review_job.id)
+        self.assertEqual(completed.status, "completed", completed.error)
+        self.assertEqual(profiles, ["deep"])
+        self.assertEqual(completed.result["slide_number"], 1)
+        self.assertTrue(Path(completed.result["markdown_path"]).is_file())
+        self.assertTrue(Path(completed.result["pdf_path"]).is_file())
+        self.assertIn(
+            "baseline lecture notes are unchanged",
+            Path(completed.result["markdown_path"]).read_text(encoding="utf-8").lower(),
+        )
+
     def test_restart_moves_an_interrupted_job_to_later_and_recovers_models(self) -> None:
         cleanup_calls: list[tuple[str, ...]] = []
 

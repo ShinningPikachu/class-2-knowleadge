@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -15,8 +15,10 @@ from typing import Any, Iterator
 from urllib.parse import urlparse
 from uuid import uuid4
 
+from .agent import LectureAgent
 from .config import PipelineConfig
-from .exporter import ExportError, export_pdf
+from .embeddings import OllamaEmbedder
+from .exporter import ExportError, export_markdown, export_pdf
 from .lecture_library import save_lecture_result
 from .library import LibraryStore
 from .ollama_runtime import (
@@ -27,6 +29,7 @@ from .ollama_runtime import (
     model_names_match,
 )
 from .pipeline import LecturePipeline
+from .rag import LocalRAG
 from .task_control import TaskControlSignal
 from .translator import MarkdownTranslator, TranslationError
 from .utils import safe_filename
@@ -393,6 +396,89 @@ class JobManager:
                         "source_job_id": source_job.id,
                         "target_language": target_language,
                     },
+                    connection=connection,
+                )
+            self._condition.notify_all()
+        return self.get_job(job_id)
+
+    def enqueue_slide_review(
+        self,
+        source_job_id: str,
+        slide_number: int,
+        priority: int = PRIORITIES["Normal"],
+    ) -> JobRecord:
+        """Queue an expensive, source-grounded deep review for one completed slide."""
+        if priority not in PRIORITY_LABELS:
+            raise JobError("Priority must be High, Normal, or Low.")
+        source_job = self.get_job(source_job_id)
+        if source_job.kind != "lecture" or source_job.status != "completed":
+            raise JobError("A slide can be deep-reviewed only after its lecture notes are completed.")
+        run_dir = Path(str(source_job.result.get("run_dir", ""))).expanduser().resolve()
+        allowed_roots = [self.project_root]
+        resume_value = str(source_job.payload.get("resume_run_directory", "") or "").strip()
+        if resume_value:
+            allowed_roots.append(Path(resume_value).expanduser().resolve())
+        if not any(self._is_relative_to(run_dir, root) for root in allowed_roots) or not run_dir.is_dir():
+            raise JobError("The source lecture run folder could not be found safely.")
+        try:
+            slide_payload = json.loads((run_dir / "slides.json").read_text(encoding="utf-8"))
+            slides = slide_payload["slides"]
+            selected = next(item for item in slides if int(item["slide"]) == int(slide_number))
+        except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError, ValueError, StopIteration) as exc:
+            raise JobError(f"Slide {slide_number} is not available in the completed lecture run.") from exc
+
+        try:
+            source_config = PipelineConfig(**source_job.payload["config"])
+            deep_config = replace(
+                source_config,
+                note_generation_profile="deep",
+                ollama_thinking="high",
+                quality_review=True,
+                note_max_output_tokens=max(4_096, source_config.note_max_output_tokens),
+            )
+            deep_config.validate()
+        except (KeyError, TypeError, ValueError) as exc:
+            raise JobError(f"The source lecture model configuration is invalid: {exc}") from exc
+
+        number = int(selected["slide"])
+        slide_title = str(selected.get("title", f"Slide {number}")).strip() or f"Slide {number}"
+        job_id = uuid4().hex
+        (self.root / job_id).mkdir(parents=True, exist_ok=False)
+        payload = {
+            "config": asdict(deep_config),
+            "source_job_id": source_job.id,
+            "run_dir": str(run_dir),
+            "slide_number": number,
+            "slide_title": slide_title,
+        }
+        now = self._timestamp()
+        with self._condition:
+            while self._ollama_maintenance:
+                self._condition.wait(timeout=0.5)
+            with self._database_lock, self._connect() as connection:
+                connection.execute(
+                    """
+                    INSERT INTO jobs(
+                        id, kind, title, status, priority, stage, progress, message,
+                        payload_json, created_at, updated_at
+                    ) VALUES (?, 'slide_review', ?, 'queued', ?, 'planned', 0, ?, ?, ?, ?)
+                    """,
+                    (
+                        job_id,
+                        f"Deep review · slide {number}: {slide_title}",
+                        priority,
+                        "Waiting for its turn; baseline lecture notes remain unchanged",
+                        json.dumps(payload),
+                        now,
+                        now,
+                    ),
+                )
+                self._append_event(
+                    job_id,
+                    f"Deep review for slide {number} queued with {PRIORITY_LABELS[priority]} priority",
+                    stage="planned",
+                    progress=0,
+                    data={"source_job_id": source_job.id, "slide_number": number},
                     connection=connection,
                 )
             self._condition.notify_all()
@@ -960,6 +1046,9 @@ class JobManager:
         if job.kind == "lecture":
             self._execute_lecture_job(job)
             return
+        if job.kind == "slide_review":
+            self._execute_slide_review_job(job)
+            return
         if job.kind == "translation":
             self._execute_translation_job(job)
             return
@@ -989,6 +1078,8 @@ class JobManager:
                             Path(run_dir) / "transcript.cleanup.partial.json"
                         ),
                         "partial_transcript_path": str(Path(run_dir) / "transcript.partial.json"),
+                        "partial_notes_path": str(Path(run_dir) / "lecture_notes.partial.md"),
+                        "notes_checkpoint_dir": str(Path(run_dir) / "notes_checkpoints"),
                     },
                 )
                 run_registered = True
@@ -1070,6 +1161,140 @@ class JobManager:
         if not completed:
             self._raise_if_interrupted(job.id)
             raise JobError("The task could not be finalized because its state changed.")
+
+    def _execute_slide_review_job(self, job: JobRecord) -> None:
+        """Use the expensive profile for one selected slide without changing baseline notes."""
+        payload = job.payload
+        config = PipelineConfig(**payload["config"])
+        config.validate()
+        source_job = self.get_job(str(payload["source_job_id"]))
+        if source_job.kind != "lecture" or source_job.status != "completed":
+            raise JobError("The source lecture must remain completed while its slide is reviewed.")
+        run_dir = Path(str(payload["run_dir"])).expanduser().resolve()
+        allowed_roots = [self.project_root]
+        resume_value = str(source_job.payload.get("resume_run_directory", "") or "").strip()
+        if resume_value:
+            allowed_roots.append(Path(resume_value).expanduser().resolve())
+        if not any(self._is_relative_to(run_dir, root) for root in allowed_roots) or not run_dir.is_dir():
+            raise JobError("The source lecture run folder is missing or outside the project.")
+        try:
+            slide_payload = json.loads((run_dir / "slides.json").read_text(encoding="utf-8"))
+            alignment_payload = json.loads((run_dir / "alignment.json").read_text(encoding="utf-8"))
+            number = int(payload["slide_number"])
+            slide = next(item for item in slide_payload["slides"] if int(item["slide"]) == number)
+            aligned = next(
+                (item for item in alignment_payload.get("slides", []) if int(item["slide"]) == number),
+                {"slide": number, "paragraphs": []},
+            )
+        except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError, ValueError, StopIteration) as exc:
+            raise JobError(f"The stored evidence for slide {payload.get('slide_number', '?')} is unavailable.") from exc
+
+        review_dir = run_dir / "slide_reviews"
+        checkpoint_path = review_dir / "checkpoints" / f"{job.id}.json"
+        markdown_path = review_dir / f"slide_{number:04d}_{job.id[:8]}.deep.md"
+        pdf_path: Path | None = markdown_path.with_suffix(".pdf")
+        self._merge_job_result(
+            job.id,
+            {
+                "source_job_id": source_job.id,
+                "slide_number": number,
+                "run_dir": str(run_dir),
+                "checkpoint_path": str(checkpoint_path),
+                "markdown_path": str(markdown_path),
+                "pdf_path": str(pdf_path),
+            },
+        )
+        self._raise_if_interrupted(job.id)
+        self._update_job(
+            job.id,
+            status="running",
+            stage="preflight",
+            progress=2,
+            message=f"Checking local models for the deep review of slide {number}",
+        )
+        embedder = OllamaEmbedder(config)
+        embedder.verify_local_models()
+        rag = LocalRAG(run_dir / "database", embedder)
+        agent = LectureAgent(
+            config,
+            rag,
+            chat_guard=lambda: self.lecture_qwen_slot(job.id),
+        )
+        self._raise_if_interrupted(job.id)
+        self._update_job(
+            job.id,
+            status="running",
+            stage="notes",
+            progress=84,
+            message=f"Deep reasoning and factual audit for slide {number} (1/1)",
+        )
+        body = agent.generate_slide_note(slide, aligned, checkpoint_path=checkpoint_path)
+        self._raise_if_interrupted(job.id)
+
+        title = str(slide.get("title", f"Slide {number}")).strip() or f"Slide {number}"
+        markdown = "\n".join(
+            [
+                f"# Deep Review — Slide {number}: {title}",
+                "",
+                "> Generated on demand from the stored slide and its aligned professor transcript. "
+                "The baseline lecture notes are unchanged.",
+                "",
+                body,
+                "",
+            ]
+        )
+        self._update_job(
+            job.id,
+            status="running",
+            stage="export",
+            progress=97,
+            message=f"Exporting the deep review for slide {number}",
+        )
+        export_markdown(markdown, markdown_path)
+        pdf_warning = ""
+        try:
+            export_pdf(markdown, pdf_path)
+        except ExportError as exc:
+            pdf_warning = str(exc)
+            pdf_path = None
+        self._raise_if_interrupted(job.id)
+
+        result_payload = {
+            "source_job_id": source_job.id,
+            "slide_number": number,
+            "run_dir": str(run_dir),
+            "checkpoint_path": str(checkpoint_path),
+            "markdown_path": str(markdown_path),
+            "pdf_path": str(pdf_path) if pdf_path is not None else "",
+            "pdf_warning": pdf_warning,
+            "generation_profile": "deep",
+        }
+        now = self._timestamp()
+        message = f"Deep review for slide {number} is ready"
+        if pdf_warning:
+            message += " as Markdown; PDF rendering was unavailable"
+        with self._database_lock, self._connect() as connection:
+            cursor = connection.execute(
+                """
+                UPDATE jobs SET status = 'completed', stage = 'complete', progress = 100,
+                                message = ?, result_json = ?, defer_requested = 0,
+                                updated_at = ?, completed_at = ?
+                WHERE id = ? AND cancel_requested = 0 AND defer_requested = 0
+                """,
+                (message, json.dumps(result_payload), now, now, job.id),
+            )
+            if cursor.rowcount == 1:
+                self._append_event(
+                    job.id,
+                    message,
+                    stage="complete",
+                    progress=100,
+                    data={"source_job_id": source_job.id, "slide_number": number},
+                    connection=connection,
+                )
+                return
+        self._raise_if_interrupted(job.id)
+        raise JobError("The deep slide review could not be finalized because its state changed.")
 
     def _execute_translation_job(self, job: JobRecord) -> None:
         """Translate completed Markdown only after the user has queued this job."""

@@ -305,8 +305,9 @@ class CoreHelpersTest(unittest.TestCase):
 
     def test_lecture_agent_holds_qwen_guard_for_each_chat_call(self) -> None:
         class FakeClient:
-            def chat(self, **_kwargs: object) -> dict[str, dict[str, str]]:
+            def chat(self, **kwargs: object) -> dict[str, dict[str, str]]:
                 events.append("chat")
+                calls.append(kwargs)
                 return {"message": {"content": "Grounded notes"}}
 
         @contextmanager
@@ -318,12 +319,50 @@ class CoreHelpersTest(unittest.TestCase):
                 events.append("exit")
 
         events: list[str] = []
+        calls: list[dict[str, object]] = []
         agent = LectureAgent.__new__(LectureAgent)
         agent.config = PipelineConfig()
         agent._client = FakeClient()
         agent._chat_guard = guard
         self.assertEqual(agent._chat("Write notes"), "Grounded notes")
         self.assertEqual(events, ["enter", "chat", "exit"])
+        self.assertFalse(calls[0]["think"])
+        self.assertEqual(calls[0]["options"]["num_predict"], 1_200)  # type: ignore[index]
+
+    def test_fast_slide_notes_skip_the_deep_second_review_call(self) -> None:
+        note = """## Slide content
+Grounded content.
+
+## Professor explanation
+No additional professor explanation was aligned with this slide.
+
+## Important concepts
+- Grounded concept.
+
+## Exam points
+- No exam-specific emphasis stated in the material."""
+
+        class FakeRag:
+            def search(self, *_args: object, **_kwargs: object) -> list[dict[str, object]]:
+                return []
+
+        slide = {"slide": 1, "title": "Topic", "content": "Evidence", "notes": "", "visual_text": []}
+        aligned = {"slide": 1, "paragraphs": []}
+        fast_calls: list[str] = []
+        fast = LectureAgent.__new__(LectureAgent)
+        fast.config = PipelineConfig(note_generation_profile="fast")
+        fast.rag = FakeRag()
+        fast._chat = lambda prompt: fast_calls.append(prompt) or note  # type: ignore[method-assign]
+        self.assertEqual(fast._generate_slide(slide, aligned, "Slide"), note)
+        self.assertEqual(len(fast_calls), 1)
+
+        deep_calls: list[str] = []
+        deep = LectureAgent.__new__(LectureAgent)
+        deep.config = PipelineConfig(note_generation_profile="deep")
+        deep.rag = FakeRag()
+        deep._chat = lambda prompt: deep_calls.append(prompt) or note  # type: ignore[method-assign]
+        self.assertEqual(deep._generate_slide(slide, aligned, "Slide"), note)
+        self.assertEqual(len(deep_calls), 2)
 
     def test_lecture_agent_does_not_wrap_a_safe_stop_as_an_ollama_failure(self) -> None:
         class StopForLater(TaskControlSignal):
@@ -340,6 +379,100 @@ class CoreHelpersTest(unittest.TestCase):
         agent._chat_guard = guard
         with self.assertRaisesRegex(StopForLater, "pause summary"):
             agent._chat("Write notes")
+
+    def test_lecture_notes_resume_after_the_last_completed_slide_checkpoint(self) -> None:
+        class StopForLater(TaskControlSignal):
+            pass
+
+        slides = [
+            {"slide": 1, "title": "First", "content": "Alpha", "notes": "", "visual_text": []},
+            {"slide": 2, "title": "Second", "content": "Beta", "notes": "", "visual_text": []},
+        ]
+        alignment = {
+            "slides": [
+                {"slide": 1, "paragraphs": []},
+                {"slide": 2, "paragraphs": []},
+            ]
+        }
+        slide_note = """## Slide content
+Grounded content.
+
+## Professor explanation
+No additional professor explanation was aligned with this slide.
+
+## Important concepts
+- Grounded concept.
+
+## Exam points
+- No exam-specific emphasis stated in the material."""
+        final_sections = """# Complete Lecture Summary
+Summary.
+
+# Key Definitions
+- No explicit definitions were provided.
+
+# Important Formulas
+- No formulas were provided in the lecture material.
+
+# Possible Exam Questions
+- Review the key concepts."""
+
+        def make_agent(generated: list[int]) -> LectureAgent:
+            agent = LectureAgent.__new__(LectureAgent)
+            agent.config = PipelineConfig()
+            agent.rag = object()
+            agent._chat_guard = None
+
+            def generate_slide(slide: dict[str, object], *_args: object) -> str:
+                generated.append(int(slide["slide"]))
+                return slide_note
+
+            agent._generate_slide = generate_slide  # type: ignore[method-assign]
+            agent._hierarchical_digest = lambda _sections: "Digest"  # type: ignore[method-assign]
+            agent._generate_overview = lambda _title, _digest: "Overview"  # type: ignore[method-assign]
+            agent._generate_final_sections = lambda _title, _digest: final_sections  # type: ignore[method-assign]
+            return agent
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            checkpoints = root / "notes_checkpoints"
+            partial = root / "lecture_notes.partial.md"
+            first_generated: list[int] = []
+
+            def stop_before_second(index: int, _total: int, _message: str) -> None:
+                if index == 2:
+                    raise StopForLater("stop after slide one")
+
+            with self.assertRaisesRegex(StopForLater, "stop after slide one"):
+                make_agent(first_generated).generate_lecture_notes(
+                    slides,
+                    alignment,
+                    progress=stop_before_second,
+                    checkpoint_dir=checkpoints,
+                    partial_output_path=partial,
+                )
+
+            self.assertEqual(first_generated, [1])
+            self.assertTrue((checkpoints / "slide_0001.json").is_file())
+            self.assertFalse((checkpoints / "slide_0002.json").exists())
+            self.assertIn("1 of 2 slides completed", partial.read_text(encoding="utf-8"))
+
+            resumed_generated: list[int] = []
+            messages: list[str] = []
+            notes = make_agent(resumed_generated).generate_lecture_notes(
+                slides,
+                alignment,
+                progress=lambda _index, _total, message: messages.append(message),
+                checkpoint_dir=checkpoints,
+                partial_output_path=partial,
+            )
+
+            self.assertEqual(resumed_generated, [2])
+            self.assertTrue(any("Reusing 1 completed slide note checkpoints" in item for item in messages))
+            self.assertTrue(any("slide 2 of 2" in item for item in messages))
+            self.assertEqual(notes.count("# Slide 1: First"), 1)
+            self.assertEqual(notes.count("# Slide 2: Second"), 1)
+            self.assertIn("2 of 2 slides completed", partial.read_text(encoding="utf-8"))
 
     def test_quality_gate_rejects_mostly_temporal_alignment(self) -> None:
         slides = [{"slide": 1, "content": "Topic", "notes": "", "visual_text": []}]

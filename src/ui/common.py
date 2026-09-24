@@ -109,6 +109,17 @@ def render_model_settings(workspace: str) -> PipelineConfig:
         }
         if workspace == "Lecture Notes":
             values["whisper_model"] = st.text_input("faster-whisper model or local path", value="large-v3").strip()
+            note_profile = st.selectbox(
+                "Lecture note depth",
+                ["Fast baseline", "Deep reviewed"],
+                help=(
+                    "Fast baseline uses one bounded, non-thinking call per slide. Deep reviewed uses high "
+                    "reasoning plus a second factual audit and can take much longer. Individual baseline "
+                    "slides can be deep-reviewed later from the completed job."
+                ),
+            )
+            values["note_generation_profile"] = "fast" if note_profile == "Fast baseline" else "deep"
+            values["note_max_output_tokens"] = 1_200 if note_profile == "Fast baseline" else 4_096
             language = st.text_input(
                 "Spoken language (ISO code)",
                 value="en",

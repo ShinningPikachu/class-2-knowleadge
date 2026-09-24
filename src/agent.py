@@ -4,12 +4,16 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from contextlib import nullcontext
+from hashlib import sha256
+import json
+from pathlib import Path
+from time import monotonic
 from typing import Any, ContextManager
 
 from .config import PipelineConfig
 from .rag import LocalRAG
 from .task_control import TaskControlSignal
-from .utils import clean_text
+from .utils import clean_text, dump_json
 
 
 class AgentError(RuntimeError):
@@ -21,6 +25,10 @@ ProgressCallback = Callable[[int, int, str], None]
 
 class LectureAgent:
     """Generate grounded, per-slide study notes with a local Ollama model."""
+
+    CHECKPOINT_SCHEMA_VERSION = 1
+    SLIDE_PROMPT_VERSION = "lecture-slide-notes-v1"
+    SYNTHESIS_PROMPT_VERSION = "lecture-synthesis-v1"
 
     SYSTEM_PROMPT = """You are a university lecture assistant.
 Your task is to transform raw lecture material into professional study notes.
@@ -63,34 +71,304 @@ translation is a separate operation requested by the user after completion."""
         alignment: dict[str, Any],
         lecture_title: str | None = None,
         progress: ProgressCallback | None = None,
+        checkpoint_dir: str | Path | None = None,
+        partial_output_path: str | Path | None = None,
     ) -> str:
-        """Generate the requested complete Markdown document, section by section."""
+        """Generate a complete Markdown document with durable model-call checkpoints."""
         if not slides:
             raise AgentError("Cannot generate notes because no usable lecture sections were available.")
         title = clean_text(lecture_title or slides[0].get("title", "") or "Lecture Notes")
         section_label = "Recording section" if slides[0].get("section_kind") == "recording" else "Slide"
         aligned_by_slide = {int(item["slide"]): item for item in alignment.get("slides", [])}
+        checkpoint_root = Path(checkpoint_dir) if checkpoint_dir is not None else None
+        partial_path = Path(partial_output_path) if partial_output_path is not None else None
+        if checkpoint_root is not None:
+            checkpoint_root.mkdir(parents=True, exist_ok=True)
 
         total = len(slides)
-        slide_sections: list[tuple[int, str, str]] = []
-        for index, slide in enumerate(slides, start=1):
+        prepared: list[tuple[dict[str, Any], dict[str, Any], int, str, str, str | None]] = []
+        reused = 0
+        for slide in slides:
             number = int(slide["slide"])
-            if progress:
-                progress(index, total, f"Writing study notes for {section_label.lower()} {number} of {total}")
+            slide_title = str(slide.get("title", f"Slide {number}"))
             aligned = aligned_by_slide.get(number, {"paragraphs": []})
-            response = self._generate_slide(slide, aligned, section_label)
-            slide_sections.append((number, str(slide.get("title", f"Slide {number}")), response))
+            signature = self._slide_checkpoint_signature(slide, aligned, section_label)
+            cached = self._load_slide_checkpoint(
+                checkpoint_root / f"slide_{number:04d}.json" if checkpoint_root else None,
+                signature,
+                number,
+            )
+            if cached is not None:
+                reused += 1
+            prepared.append((slide, aligned, number, slide_title, signature, cached))
 
-        if progress:
-            progress(total, total, "Building a complete hierarchical lecture digest")
-        digest = self._hierarchical_digest(slide_sections)
-        overview = self._generate_overview(title, digest)
+        if reused and progress:
+            progress(reused, total, f"Reusing {reused} completed {section_label.lower()} note checkpoints")
+
+        slide_sections: list[tuple[int, str, str]] = []
+        for index, (slide, aligned, number, slide_title, signature, cached) in enumerate(prepared, start=1):
+            started_at = monotonic()
+            if cached is None and progress:
+                progress(index, total, f"Writing study notes for {section_label.lower()} {number} of {total}")
+            response = cached if cached is not None else self._generate_slide(slide, aligned, section_label)
+            slide_sections.append((number, slide_title, response))
+            if cached is None:
+                self._save_checkpoint(
+                    checkpoint_root / f"slide_{number:04d}.json" if checkpoint_root else None,
+                    "slide",
+                    signature,
+                    response,
+                    {"slide": number, "title": slide_title},
+                )
+                self._write_partial_notes(partial_path, title, section_label, slide_sections, total)
+                if progress:
+                    elapsed = max(0, round(monotonic() - started_at))
+                    duration = f"{elapsed}s" if elapsed < 60 else f"{elapsed // 60}m {elapsed % 60}s"
+                    progress(
+                        index,
+                        total,
+                        f"Completed {section_label.lower()} {number} and saved its checkpoint in {duration}",
+                    )
+        self._write_partial_notes(partial_path, title, section_label, slide_sections, total)
+
+        synthesis_source = [
+            {"slide": number, "title": slide_title, "notes": response}
+            for number, slide_title, response in slide_sections
+        ]
+        digest_signature = self._checkpoint_signature(
+            "digest",
+            {"prompt_version": self.SYNTHESIS_PROMPT_VERSION, "sections": synthesis_source},
+        )
+        digest = self._load_checkpoint(
+            checkpoint_root / "digest.json" if checkpoint_root else None,
+            "digest",
+            digest_signature,
+        )
+        if digest is None:
+            if progress:
+                progress(total, total, "Building a complete hierarchical lecture digest")
+            digest = self._hierarchical_digest(slide_sections)
+            self._save_checkpoint(
+                checkpoint_root / "digest.json" if checkpoint_root else None,
+                "digest",
+                digest_signature,
+                digest,
+            )
+
+        overview_signature = self._checkpoint_signature(
+            "overview",
+            {"prompt_version": self.SYNTHESIS_PROMPT_VERSION, "title": title, "digest": digest},
+        )
+        overview = self._load_checkpoint(
+            checkpoint_root / "overview.json" if checkpoint_root else None,
+            "overview",
+            overview_signature,
+        )
+        if overview is None:
+            if progress:
+                progress(total, total, "Writing the overall lecture summary")
+            overview = self._generate_overview(title, digest)
+            self._save_checkpoint(
+                checkpoint_root / "overview.json" if checkpoint_root else None,
+                "overview",
+                overview_signature,
+                overview,
+            )
+
         sections = [f"# {title}", "", "## Overall Summary", "", overview]
         for number, slide_title, response in slide_sections:
             sections.extend(["", f"# {section_label} {number}: {slide_title}", "", response])
-        final_sections = self._generate_final_sections(title, digest)
+        final_signature = self._checkpoint_signature(
+            "final_sections",
+            {"prompt_version": self.SYNTHESIS_PROMPT_VERSION, "title": title, "digest": digest},
+        )
+        final_sections = self._load_checkpoint(
+            checkpoint_root / "final_sections.json" if checkpoint_root else None,
+            "final_sections",
+            final_signature,
+        )
+        if final_sections is not None:
+            try:
+                self._require_headings(
+                    final_sections,
+                    [
+                        "# Complete Lecture Summary",
+                        "# Key Definitions",
+                        "# Important Formulas",
+                        "# Possible Exam Questions",
+                    ],
+                    "final lecture summary checkpoint",
+                )
+            except AgentError:
+                final_sections = None
+        if final_sections is None:
+            if progress:
+                progress(total, total, "Writing the final revision sections")
+            final_sections = self._generate_final_sections(title, digest)
+            self._save_checkpoint(
+                checkpoint_root / "final_sections.json" if checkpoint_root else None,
+                "final_sections",
+                final_signature,
+                final_sections,
+            )
         sections.extend(["", final_sections.strip(), ""])
         return "\n".join(sections)
+
+    def generate_slide_note(
+        self,
+        slide: dict[str, Any],
+        aligned: dict[str, Any],
+        checkpoint_path: str | Path | None = None,
+    ) -> str:
+        """Generate or reuse one independently checkpointed slide-note body."""
+        number = int(slide["slide"])
+        section_label = "Recording section" if slide.get("section_kind") == "recording" else "Slide"
+        path = Path(checkpoint_path) if checkpoint_path is not None else None
+        signature = self._slide_checkpoint_signature(slide, aligned, section_label)
+        cached = self._load_slide_checkpoint(path, signature, number)
+        if cached is not None:
+            return cached
+        response = self._generate_slide(slide, aligned, section_label)
+        self._save_checkpoint(
+            path,
+            "slide",
+            signature,
+            response,
+            {"slide": number, "title": str(slide.get("title", f"Slide {number}"))},
+        )
+        return response
+
+    def _slide_checkpoint_signature(
+        self,
+        slide: dict[str, Any],
+        aligned: dict[str, Any],
+        section_label: str,
+    ) -> str:
+        number = int(slide["slide"])
+        return self._checkpoint_signature(
+            "slide",
+            {
+                "prompt_version": self.SLIDE_PROMPT_VERSION,
+                "section_label": section_label,
+                "slide": {
+                    "slide": number,
+                    "title": slide.get("title", ""),
+                    "content": slide.get("content", ""),
+                    "notes": slide.get("notes", ""),
+                    "visual_text": slide.get("visual_text", []),
+                    "section_kind": slide.get("section_kind", ""),
+                },
+                "aligned_paragraphs": aligned.get("paragraphs", []),
+            },
+        )
+
+    @classmethod
+    def _load_slide_checkpoint(
+        cls,
+        path: Path | None,
+        signature: str,
+        number: int,
+    ) -> str | None:
+        cached = cls._load_checkpoint(path, "slide", signature)
+        if cached is None:
+            return None
+        try:
+            cls._require_headings(
+                cached,
+                ["## Slide content", "## Professor explanation", "## Important concepts", "## Exam points"],
+                f"slide {number} checkpoint",
+            )
+        except AgentError:
+            return None
+        return cached
+
+    def _checkpoint_signature(self, kind: str, payload: dict[str, Any]) -> str:
+        """Bind a checkpoint to its exact evidence, prompts, and model settings."""
+        signature_payload = {
+            "schema_version": self.CHECKPOINT_SCHEMA_VERSION,
+            "kind": kind,
+            "model": self.config.llm_model,
+            "temperature": self.config.llm_temperature,
+            "num_ctx": self.config.ollama_num_ctx,
+            "thinking": self.config.ollama_thinking,
+            "quality_review": self.config.quality_review,
+            "note_generation_profile": self.config.note_generation_profile,
+            "note_max_output_tokens": self.config.note_max_output_tokens,
+            "max_slide_context_chars": self.config.max_slide_context_chars,
+            "embedding_model": self.config.embedding_model,
+            "chunk_size": self.config.chunk_size,
+            "chunk_overlap": self.config.chunk_overlap,
+            "system_prompt": self.SYSTEM_PROMPT,
+            "payload": payload,
+        }
+        serialized = json.dumps(
+            signature_payload,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        return sha256(serialized.encode("utf-8")).hexdigest()
+
+    @classmethod
+    def _load_checkpoint(cls, path: Path | None, kind: str, signature: str) -> str | None:
+        if path is None or not path.is_file():
+            return None
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            return None
+        if not isinstance(payload, dict):
+            return None
+        if payload.get("schema_version") != cls.CHECKPOINT_SCHEMA_VERSION:
+            return None
+        if payload.get("kind") != kind or payload.get("signature") != signature:
+            return None
+        content = payload.get("content")
+        return content.strip() if isinstance(content, str) and content.strip() else None
+
+    @classmethod
+    def _save_checkpoint(
+        cls,
+        path: Path | None,
+        kind: str,
+        signature: str,
+        content: str,
+        metadata: dict[str, Any] | None = None,
+    ) -> None:
+        if path is None:
+            return
+        dump_json(
+            path,
+            {
+                "schema_version": cls.CHECKPOINT_SCHEMA_VERSION,
+                "kind": kind,
+                "signature": signature,
+                "content": content,
+                **(metadata or {}),
+            },
+        )
+
+    @staticmethod
+    def _write_partial_notes(
+        path: Path | None,
+        title: str,
+        section_label: str,
+        slide_sections: list[tuple[int, str, str]],
+        total: int,
+    ) -> None:
+        if path is None:
+            return
+        sections = [
+            f"# {title}",
+            "",
+            f"> Partial notes checkpoint: {len(slide_sections)} of {total} {section_label.lower()}s completed.",
+        ]
+        for number, slide_title, response in slide_sections:
+            sections.extend(["", f"# {section_label} {number}: {slide_title}", "", response])
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary_path = path.with_name(f".{path.name}.tmp")
+        temporary_path.write_text("\n".join([*sections, ""]), encoding="utf-8")
+        temporary_path.replace(path)
 
     def _generate_overview(self, title: str, digest: str) -> str:
         prompt = f"""Create a short, source-grounded overall summary for the lecture titled
@@ -174,7 +452,8 @@ claim with "Professor explanation:". Do not repeat the slide verbatim.
 SOURCES:
 {context}"""
         draft = self._chat(prompt)
-        result = self._review_slide(slide_number, context, draft) if self.config.quality_review else draft
+        should_review = self.config.note_generation_profile == "deep" and self.config.quality_review
+        result = self._review_slide(slide_number, context, draft) if should_review else draft
         self._require_headings(
             result,
             ["## Slide content", "## Professor explanation", "## Important concepts", "## Exam points"],
@@ -344,8 +623,13 @@ BATCH MATERIAL:
                     options={
                         "temperature": self.config.llm_temperature,
                         "num_ctx": self.config.ollama_num_ctx,
+                        "num_predict": self.config.note_max_output_tokens,
                     },
-                    think=self.config.ollama_thinking,
+                    think=(
+                        False
+                        if self.config.note_generation_profile == "fast"
+                        else self.config.ollama_thinking
+                    ),
                     keep_alive=self.config.ollama_keep_alive,
                 )
             message = result.get("message") if isinstance(result, dict) else getattr(result, "message", None)

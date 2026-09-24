@@ -68,7 +68,7 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
             "Stop safely · do later",
             key=f"{key_prefix}_defer_{job.id}",
             disabled=job.defer_requested or job.cancel_requested,
-            help="Finishes the current safe checkpoint, preserves the transcript, then moves the task to Later.",
+            help="Finishes the current safe checkpoint, preserves transcript and completed slide notes, then moves the task to Later.",
             use_container_width=True,
         ):
             try:
@@ -194,28 +194,29 @@ def _render_completed_files(job: JobRecord, key_prefix: str, *, preview: bool = 
     markdown_path = Path(str(job.result.get("markdown_path", "")))
     pdf_path = Path(str(job.result.get("pdf_path", "")))
     translated = job.kind == "translation"
+    slide_review = job.kind == "slide_review"
     if translated:
         target = str(job.result.get("target_language", job.payload.get("target_language", "translation")))
         st.caption(f"Requested translation: English → {target}")
-    if preview and translated and markdown_path.is_file():
+    if preview and (translated or slide_review) and markdown_path.is_file():
         try:
-            translated_text = markdown_path.read_text(encoding="utf-8")
-            visible_text = translated_text[:40_000]
-            if len(translated_text) > 40_000:
-                visible_text += "\n\n… remaining translation omitted from preview …"
+            result_text = markdown_path.read_text(encoding="utf-8")
+            visible_text = result_text[:40_000]
+            if len(result_text) > 40_000:
+                visible_text += "\n\n… remaining content omitted from preview …"
             st.text_area(
-                "Translated notes preview",
+                "Translated notes preview" if translated else "Deep slide review preview",
                 value=visible_text,
                 height=420,
                 disabled=True,
-                key=f"{key_prefix}_translated_preview_{job.id}",
+                key=f"{key_prefix}_result_preview_{job.id}",
             )
         except (OSError, UnicodeDecodeError) as exc:
-            st.warning(f"The translated notes exist but could not be previewed: {exc}")
+            st.warning(f"The generated notes exist but could not be previewed: {exc}")
     left, right = st.columns(2)
     if markdown_path.is_file():
         left.download_button(
-            "Download translated Markdown" if translated else "Download Markdown",
+            "Download translated Markdown" if translated else "Download deep review" if slide_review else "Download Markdown",
             data=markdown_path.read_bytes(),
             file_name=markdown_path.name,
             mime="text/markdown",
@@ -224,14 +225,14 @@ def _render_completed_files(job: JobRecord, key_prefix: str, *, preview: bool = 
         )
     if pdf_path.is_file():
         right.download_button(
-            "Download translated PDF" if translated else "Download PDF",
+            "Download translated PDF" if translated else "Download deep-review PDF" if slide_review else "Download PDF",
             data=pdf_path.read_bytes(),
             file_name=pdf_path.name,
             mime="application/pdf",
             key=f"{key_prefix}_pdf_{job.id}",
             use_container_width=True,
         )
-    if translated and job.result.get("pdf_warning"):
+    if (translated or slide_review) and job.result.get("pdf_warning"):
         st.warning(str(job.result["pdf_warning"]))
 
 
@@ -289,6 +290,57 @@ def _render_translation_request(job: JobRecord, manager: JobManager, key_prefix:
                 st.error(str(exc))
 
 
+def _render_slide_review_request(job: JobRecord, manager: JobManager, key_prefix: str) -> None:
+    if job.kind != "lecture" or job.status != "completed":
+        return
+    slides_path = Path(str(job.result.get("slides_path", "")))
+    try:
+        payload = json.loads(slides_path.read_text(encoding="utf-8"))
+        choices = [
+            (int(slide["slide"]), str(slide.get("title", "")).strip())
+            for slide in payload.get("slides", [])
+        ]
+    except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+        choices = []
+    if not choices:
+        return
+    with st.expander("Deep-review one slide on demand", expanded=False):
+        st.caption(
+            "Uses high reasoning and a second factual audit only for the selected slide. "
+            "The fast baseline notes remain unchanged."
+        )
+        with st.form(f"{key_prefix}_slide_review_form_{job.id}"):
+            selected = st.selectbox(
+                "Slide",
+                choices,
+                format_func=lambda item: f"Slide {item[0]}: {item[1]}" if item[1] else f"Slide {item[0]}",
+            )
+            priority_label = st.selectbox(
+                "Deep-review priority",
+                list(PRIORITIES),
+                index=list(PRIORITIES).index("Normal"),
+            )
+            submitted = st.form_submit_button(
+                "Queue deep review",
+                type="primary",
+                use_container_width=True,
+            )
+        if submitted:
+            try:
+                review_job = manager.enqueue_slide_review(
+                    job.id,
+                    selected[0],
+                    priority=PRIORITIES[priority_label],
+                )
+                st.session_state["job_log_id"] = review_job.id
+                st.session_state["job_log_notice"] = (
+                    f"Queued a deep review of slide {selected[0]}. The baseline notes are unchanged."
+                )
+                st.rerun()
+            except JobError as exc:
+                st.error(str(exc))
+
+
 def _render_job(job: JobRecord, manager: JobManager, editable: bool = False) -> None:
     icon = STATUS_ICONS.get(job.status, "•")
     with st.container(border=True):
@@ -309,6 +361,7 @@ def _render_job(job: JobRecord, manager: JobManager, editable: bool = False) -> 
                     st.write(f"- {message}")
         if job.status == "completed":
             _render_completed_files(job, "job")
+            _render_slide_review_request(job, manager, "card")
             _render_translation_request(job, manager, "card")
 
         if editable:
@@ -348,7 +401,10 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
         st.session_state.pop("job_log_id", None)
         return
 
-    log_title = "Translation Processing Log" if job.kind == "translation" else "Lecture Processing Log"
+    log_title = {
+        "translation": "Translation Processing Log",
+        "slide_review": "Deep Slide Review Log",
+    }.get(job.kind, "Lecture Processing Log")
     st.title(f"📋 {log_title}")
     notice = st.session_state.pop("job_log_notice", "")
     if notice:
@@ -364,8 +420,8 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
         st.error(job.error)
     _render_job_actions(job, manager, "log")
 
-    if job.kind == "translation" and job.status == "completed":
-        st.subheader("Translated result")
+    if job.kind in {"translation", "slide_review"} and job.status == "completed":
+        st.subheader("Translated result" if job.kind == "translation" else "Deep slide review")
         _render_completed_files(job, "log", preview=True)
 
     if job.kind == "lecture":
@@ -431,6 +487,7 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
             except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
                 st.warning(f"The transcript exists but could not be opened yet: {exc}")
         _render_translation_request(job, manager, "log")
+        _render_slide_review_request(job, manager, "log")
 
     st.subheader("Processing timeline")
     events = manager.list_job_events(job.id)
@@ -487,7 +544,7 @@ def render_jobs(manager: JobManager) -> None:
     st.title("🗂️ Job Queue")
     st.caption(
         "Tasks run in priority order. Active lecture work can stop at a safe checkpoint, move to Later, "
-        "and resume from its saved transcript."
+        "and resume from its saved transcript and completed slide notes."
     )
     counts = manager.counts()
     planned_count = counts["queued"]
