@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+import json
 import sys
 import tempfile
 import unittest
@@ -21,6 +22,7 @@ from src.audio_processor import AudioProcessingError, AudioProcessor  # noqa: E4
 from src.config import PipelineConfig  # noqa: E402
 from src.embeddings import OllamaEmbedder, build_source_documents, chunk_text  # noqa: E402
 from src.pipeline import LecturePipeline  # noqa: E402
+from src.task_control import TaskControlSignal  # noqa: E402
 from src.utils import safe_filename, seconds_to_timestamp  # noqa: E402
 from src.quality import QualityGateError, validate_evidence_quality, validate_final_notes  # noqa: E402
 
@@ -92,6 +94,96 @@ class CoreHelpersTest(unittest.TestCase):
             self.assertEqual([item["text"] for item in payload["segments"]], ["boundary sentence", "new core speech"])
             self.assertEqual(payload["metadata"]["chunk_count"], 2)
             self.assertEqual(len(list((Path(directory) / "transcript_chunks").glob("*.json"))), 2)
+            partial = json.loads((Path(directory) / "transcript.partial.json").read_text(encoding="utf-8"))
+            self.assertFalse(partial["metadata"]["is_partial"])
+            self.assertEqual(partial["metadata"]["completed_chunks"], 2)
+            self.assertEqual(
+                [item["text"] for item in partial["segments"]],
+                ["boundary sentence", "new core speech"],
+            )
+
+    def test_failed_transcription_keeps_a_readable_partial_transcript(self) -> None:
+        class FakeAudio:
+            def __len__(self) -> int:
+                return 3_600 * 16_000
+
+            def __getitem__(self, _key: object) -> "FakeAudio":
+                return self
+
+        class FakeModel:
+            calls = 0
+
+            def __init__(self, *_args: object, **_kwargs: object) -> None:
+                pass
+
+            def transcribe(self, *_args: object, **_kwargs: object) -> tuple[list[object], object]:
+                FakeModel.calls += 1
+                if FakeModel.calls == 2:
+                    raise RuntimeError("simulated decoder failure")
+                return [SimpleNamespace(start=4.0, end=9.0, text="stored before failure")], SimpleNamespace(
+                    language="en", language_probability=0.99
+                )
+
+        config = PipelineConfig(
+            media_chunk_seconds=1_800,
+            media_overlap_seconds=15,
+            whisper_parallel_workers=1,
+            language="en",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "lecture.wav"
+            source.touch()
+            output = Path(directory) / "transcript.json"
+            with patch("faster_whisper.WhisperModel", FakeModel), patch(
+                "faster_whisper.audio.decode_audio", return_value=FakeAudio()
+            ):
+                with self.assertRaisesRegex(AudioProcessingError, "simulated decoder failure"):
+                    AudioProcessor(config).transcribe(source, output)
+
+            partial = json.loads((Path(directory) / "transcript.partial.json").read_text(encoding="utf-8"))
+            self.assertTrue(partial["metadata"]["is_partial"])
+            self.assertEqual(partial["metadata"]["completed_chunks"], 1)
+            self.assertEqual(partial["metadata"]["total_chunks"], 2)
+            self.assertEqual(partial["paragraphs"][0]["text"], "stored before failure")
+
+    def test_transcription_safe_stop_is_not_wrapped_as_an_audio_failure(self) -> None:
+        class StopForLater(TaskControlSignal):
+            pass
+
+        class FakeAudio:
+            def __len__(self) -> int:
+                return 60 * 16_000
+
+            def __getitem__(self, _key: object) -> "FakeAudio":
+                return self
+
+        class FakeModel:
+            def __init__(self, *_args: object, **_kwargs: object) -> None:
+                pass
+
+            def transcribe(self, *_args: object, **_kwargs: object) -> tuple[list[object], object]:
+                return [SimpleNamespace(start=1.0, end=3.0, text="checkpointed speech")], SimpleNamespace(
+                    language="en", language_probability=0.99
+                )
+
+        def stop_after_checkpoint(event: dict[str, object]) -> None:
+            if event.get("event") == "completed":
+                raise StopForLater("save this task for later")
+
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "lecture.wav"
+            source.touch()
+            with patch("faster_whisper.WhisperModel", FakeModel), patch(
+                "faster_whisper.audio.decode_audio", return_value=FakeAudio()
+            ):
+                with self.assertRaisesRegex(StopForLater, "save this task for later"):
+                    AudioProcessor(PipelineConfig(language="en")).transcribe(
+                        source,
+                        Path(directory) / "transcript.json",
+                        progress=stop_after_checkpoint,
+                    )
+            partial = json.loads((Path(directory) / "transcript.partial.json").read_text(encoding="utf-8"))
+            self.assertEqual(partial["paragraphs"][0]["text"], "checkpointed speech")
 
     def test_two_hour_recording_chunk_plan_has_overlap_without_core_gaps(self) -> None:
         plans = AudioProcessor._build_chunk_plan(7_200, 1_800, 15)
@@ -232,6 +324,22 @@ class CoreHelpersTest(unittest.TestCase):
         agent._chat_guard = guard
         self.assertEqual(agent._chat("Write notes"), "Grounded notes")
         self.assertEqual(events, ["enter", "chat", "exit"])
+
+    def test_lecture_agent_does_not_wrap_a_safe_stop_as_an_ollama_failure(self) -> None:
+        class StopForLater(TaskControlSignal):
+            pass
+
+        @contextmanager
+        def guard():
+            raise StopForLater("pause summary")
+            yield
+
+        agent = LectureAgent.__new__(LectureAgent)
+        agent.config = PipelineConfig()
+        agent._client = object()
+        agent._chat_guard = guard
+        with self.assertRaisesRegex(StopForLater, "pause summary"):
+            agent._chat("Write notes")
 
     def test_quality_gate_rejects_mostly_temporal_alignment(self) -> None:
         slides = [{"slide": 1, "content": "Topic", "notes": "", "visual_text": []}]

@@ -34,9 +34,13 @@ class PipelineConfig:
     # Two CTranslate2 workers process independent long-recording chunks in
     # parallel. This is a safe quality-first ceiling for a 32 GB CPU machine.
     whisper_parallel_workers: int = 2
-    language: str | None = None
+    # Lectures are English by default. Translation is an explicit post-processing
+    # job and never changes the source transcript or canonical notes.
+    language: str | None = "en"
     media_chunk_seconds: int = 1_800
     media_overlap_seconds: int = 15
+    enable_transcript_cleanup: bool = True
+    transcript_cleanup_batch_chars: int = 12_000
 
     chunk_size: int = 900
     chunk_overlap: int = 140
@@ -77,6 +81,8 @@ class PipelineConfig:
             raise ValueError("media_overlap_seconds must be non-negative and smaller than one quarter of a chunk.")
         if self.whisper_parallel_workers not in {1, 2}:
             raise ValueError("whisper_parallel_workers must be 1 or 2.")
+        if not 2_000 <= self.transcript_cleanup_batch_chars <= 24_000:
+            raise ValueError("transcript_cleanup_batch_chars must be between 2000 and 24000.")
 
 
 def project_path(*parts: str) -> Path:

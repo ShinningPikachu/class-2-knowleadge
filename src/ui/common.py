@@ -109,7 +109,11 @@ def render_model_settings(workspace: str) -> PipelineConfig:
         }
         if workspace == "Lecture Notes":
             values["whisper_model"] = st.text_input("faster-whisper model or local path", value="large-v3").strip()
-            language = st.text_input("Spoken language (optional ISO code)", value="")
+            language = st.text_input(
+                "Spoken language (ISO code)",
+                value="en",
+                help="English is the default. This controls speech recognition only; translation is requested after completion.",
+            )
             values["language"] = language.strip() or None
             with st.expander("Advanced processing settings"):
                 values["llm_temperature"] = st.slider("LLM temperature", 0.0, 1.0, 0.10, 0.05)
@@ -122,6 +126,17 @@ def render_model_settings(workspace: str) -> PipelineConfig:
                 )
                 values["whisper_parallel_workers"] = int(
                     st.selectbox("Parallel transcription workers", [1, 2], index=1)
+                )
+                values["enable_transcript_cleanup"] = st.checkbox(
+                    "Repair noisy transcript with local Qwen",
+                    value=True,
+                    help=(
+                        "Preserves the raw transcript and creates a grounded, punctuated, human-readable copy "
+                        "before alignment and note generation."
+                    ),
+                )
+                values["transcript_cleanup_batch_chars"] = int(
+                    st.number_input("Transcript cleanup batch size", 2000, 24000, 12000, 1000)
                 )
                 values["enable_ocr"] = st.checkbox("Use local Tesseract OCR", value=True)
                 values["semantic_alignment_threshold"] = st.slider(

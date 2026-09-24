@@ -16,6 +16,7 @@ from urllib.parse import urlparse
 from uuid import uuid4
 
 from .config import PipelineConfig
+from .exporter import ExportError, export_pdf
 from .lecture_library import save_lecture_result
 from .library import LibraryStore
 from .ollama_runtime import (
@@ -26,6 +27,8 @@ from .ollama_runtime import (
     model_names_match,
 )
 from .pipeline import LecturePipeline
+from .task_control import TaskControlSignal
+from .translator import MarkdownTranslator, TranslationError
 from .utils import safe_filename
 
 
@@ -38,8 +41,12 @@ class JobError(RuntimeError):
     """Raised when a background job cannot be queued or managed."""
 
 
-class JobCancelled(RuntimeError):
+class JobCancelled(TaskControlSignal):
     """Raised cooperatively when the user cancels a running job."""
+
+
+class JobDeferred(TaskControlSignal):
+    """Raised cooperatively when work should stop safely and continue later."""
 
 
 @dataclass(frozen=True)
@@ -56,6 +63,7 @@ class JobRecord:
     result: dict[str, Any]
     error: str
     cancel_requested: bool
+    defer_requested: bool
     created_at: str
     updated_at: str
     started_at: str
@@ -64,6 +72,20 @@ class JobRecord:
     @property
     def priority_label(self) -> str:
         return PRIORITY_LABELS.get(self.priority, str(self.priority))
+
+
+@dataclass(frozen=True)
+class JobEvent:
+    """One durable, timestamped update in a job's processing history."""
+
+    id: int
+    job_id: str
+    created_at: str
+    level: str
+    stage: str
+    progress: int
+    message: str
+    data: dict[str, Any]
 
 
 class JobManager:
@@ -114,6 +136,7 @@ class JobManager:
                     result_json TEXT NOT NULL DEFAULT '{}',
                     error TEXT NOT NULL DEFAULT '',
                     cancel_requested INTEGER NOT NULL DEFAULT 0,
+                    defer_requested INTEGER NOT NULL DEFAULT 0,
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL,
                     started_at TEXT NOT NULL DEFAULT '',
@@ -122,18 +145,61 @@ class JobManager:
                 CREATE INDEX IF NOT EXISTS idx_jobs_queue
                 ON jobs(status, priority, created_at);
 
+                CREATE TABLE IF NOT EXISTS job_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    job_id TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    level TEXT NOT NULL DEFAULT 'info',
+                    stage TEXT NOT NULL DEFAULT '',
+                    progress INTEGER NOT NULL DEFAULT 0,
+                    message TEXT NOT NULL,
+                    data_json TEXT NOT NULL DEFAULT '{}'
+                );
+                CREATE INDEX IF NOT EXISTS idx_job_events_job
+                ON job_events(job_id, id);
+
                 CREATE TABLE IF NOT EXISTS scheduler_state (
                     key TEXT PRIMARY KEY,
                     value TEXT NOT NULL
                 );
                 """
             )
-            interrupted_payloads.extend(
-                str(row["payload_json"])
-                for row in connection.execute(
-                    "SELECT payload_json FROM jobs WHERE status IN ('running', 'waiting')"
-                ).fetchall()
+            job_columns = {
+                str(row["name"])
+                for row in connection.execute("PRAGMA table_info(jobs)").fetchall()
+            }
+            if "defer_requested" not in job_columns:
+                connection.execute(
+                    "ALTER TABLE jobs ADD COLUMN defer_requested INTEGER NOT NULL DEFAULT 0"
+                )
+            connection.execute(
+                """
+                INSERT INTO job_events(job_id, created_at, level, stage, progress, message, data_json)
+                SELECT jobs.id,
+                       jobs.updated_at,
+                       CASE jobs.status
+                           WHEN 'failed' THEN 'error'
+                           WHEN 'cancelled' THEN 'warning'
+                           ELSE 'info'
+                       END,
+                       jobs.stage,
+                       jobs.progress,
+                       CASE WHEN jobs.message = '' THEN 'Existing task added to the processing log'
+                            ELSE jobs.message END,
+                       '{}'
+                FROM jobs
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM job_events WHERE job_events.job_id = jobs.id
+                )
+                """
             )
+            interrupted_rows = connection.execute(
+                """
+                SELECT id, payload_json, stage, progress, defer_requested
+                FROM jobs WHERE status IN ('running', 'waiting')
+                """
+            ).fetchall()
+            interrupted_payloads.extend(str(row["payload_json"]) for row in interrupted_rows)
             agent_session = connection.execute(
                 "SELECT value FROM scheduler_state WHERE key = 'agent_ollama_session'"
             ).fetchone()
@@ -148,16 +214,30 @@ class JobManager:
             connection.execute(
                 """
                 UPDATE jobs
-                SET status = 'failed', error = ?, message = ?, updated_at = ?, completed_at = ?
+                SET status = 'deferred', defer_requested = 0,
+                    message = CASE
+                        WHEN defer_requested = 1
+                            THEN 'Stopped safely for later after application restart'
+                        ELSE 'Application restarted; task moved to Later with saved checkpoints'
+                    END,
+                    error = '', updated_at = ?, completed_at = ''
                 WHERE status IN ('running', 'waiting')
                 """,
-                (
-                    "The application stopped before this task completed.",
-                    "Interrupted by application restart",
-                    now,
-                    now,
-                ),
+                (now,),
             )
+            for row in interrupted_rows:
+                was_deferred = bool(row["defer_requested"])
+                self._append_event(
+                    str(row["id"]),
+                    "Task stopped safely for later during application restart"
+                    if was_deferred
+                    else "Application restarted; task moved to Later for checkpoint recovery",
+                    level="warning",
+                    stage=str(row["stage"]),
+                    progress=int(row["progress"]),
+                    data={"status": "deferred", "restart_recovery": True},
+                    connection=connection,
+                )
         configs: list[PipelineConfig] = []
         for raw_payload in interrupted_payloads:
             try:
@@ -235,6 +315,86 @@ class JobManager:
                         now,
                     ),
                 )
+                self._append_event(
+                    job_id,
+                    f"Task queued with {PRIORITY_LABELS[priority]} priority",
+                    stage="planned",
+                    progress=0,
+                    data={"priority": PRIORITY_LABELS[priority]},
+                    connection=connection,
+                )
+            self._condition.notify_all()
+        return self.get_job(job_id)
+
+    def enqueue_translation(
+        self,
+        source_job_id: str,
+        target_language: str,
+        priority: int = PRIORITIES["Normal"],
+    ) -> JobRecord:
+        """Queue an explicit translation of already-completed English notes."""
+        if priority not in PRIORITY_LABELS:
+            raise JobError("Priority must be High, Normal, or Low.")
+        try:
+            target_language = MarkdownTranslator.validate_target_language(target_language)
+        except TranslationError as exc:
+            raise JobError(str(exc)) from exc
+        source_job = self.get_job(source_job_id)
+        if source_job.kind != "lecture" or source_job.status != "completed":
+            raise JobError("Only completed lecture notes can be translated.")
+        source_path = Path(str(source_job.result.get("markdown_path", ""))).expanduser().resolve()
+        if not self._is_relative_to(source_path, self.project_root) or not source_path.is_file():
+            raise JobError("The completed English Markdown notes could not be found safely.")
+        try:
+            config = PipelineConfig(**source_job.payload["config"])
+            config.validate()
+        except (KeyError, TypeError, ValueError) as exc:
+            raise JobError(f"The source lecture model configuration is invalid: {exc}") from exc
+
+        job_id = uuid4().hex
+        (self.root / job_id).mkdir(parents=True, exist_ok=False)
+        payload = {
+            "config": asdict(config),
+            "source_job_id": source_job.id,
+            "source_markdown_path": str(source_path),
+            "source_language": "English",
+            "target_language": target_language,
+        }
+        title = f"Translate {source_job.title} → {target_language}"
+        now = self._timestamp()
+        with self._condition:
+            while self._ollama_maintenance:
+                self._condition.wait(timeout=0.5)
+            with self._database_lock, self._connect() as connection:
+                connection.execute(
+                    """
+                    INSERT INTO jobs(
+                        id, kind, title, status, priority, stage, progress, message,
+                        payload_json, created_at, updated_at
+                    ) VALUES (?, 'translation', ?, 'queued', ?, 'planned', 0, ?, ?, ?, ?)
+                    """,
+                    (
+                        job_id,
+                        title,
+                        priority,
+                        "Waiting for its turn; no translation has been generated yet",
+                        json.dumps(payload),
+                        now,
+                        now,
+                    ),
+                )
+                self._append_event(
+                    job_id,
+                    f"On-demand {target_language} translation queued with {PRIORITY_LABELS[priority]} priority",
+                    stage="planned",
+                    progress=0,
+                    data={
+                        "priority": PRIORITY_LABELS[priority],
+                        "source_job_id": source_job.id,
+                        "target_language": target_language,
+                    },
+                    connection=connection,
+                )
             self._condition.notify_all()
         return self.get_job(job_id)
 
@@ -261,7 +421,8 @@ class JobManager:
                         WHEN 'running' THEN 0
                         WHEN 'waiting' THEN 1
                         WHEN 'queued' THEN 2
-                        ELSE 3
+                        WHEN 'deferred' THEN 3
+                        ELSE 4
                     END,
                     priority ASC,
                     created_at DESC
@@ -278,6 +439,73 @@ class JobManager:
             raise JobError("The selected job no longer exists.")
         return self._job_from_row(row)
 
+    def list_job_events(self, job_id: str, limit: int | None = None) -> list[JobEvent]:
+        """Return durable events in chronological order, without truncation by default."""
+        with self._database_lock, self._connect() as connection:
+            if limit is None:
+                rows = connection.execute(
+                    "SELECT * FROM job_events WHERE job_id = ? ORDER BY id ASC",
+                    (job_id,),
+                ).fetchall()
+            else:
+                bounded_limit = max(1, min(limit, 10_000))
+                rows = connection.execute(
+                    """
+                    SELECT * FROM (
+                        SELECT * FROM job_events WHERE job_id = ? ORDER BY id DESC LIMIT ?
+                    ) ORDER BY id ASC
+                    """,
+                    (job_id, bounded_limit),
+                ).fetchall()
+        return [self._event_from_row(row) for row in rows]
+
+    def get_transcript_path(self, job_id: str) -> Path | None:
+        """Find a completed or partial transcript belonging to a lecture job."""
+        job = self.get_job(job_id)
+        run_value = str(job.result.get("run_dir", "")).strip()
+        candidates = [str(job.result.get("transcript_path", "")).strip()]
+        if run_value:
+            candidates.append(str(Path(run_value) / "transcript.json"))
+        candidates.append(str(job.result.get("cleaned_partial_transcript_path", "")).strip())
+        if run_value:
+            candidates.append(str(Path(run_value) / "transcript.cleanup.partial.json"))
+        candidates.append(str(job.result.get("partial_transcript_path", "")).strip())
+        if run_value:
+            candidates.append(str(Path(run_value) / "transcript.partial.json"))
+
+        allowed_roots = [self.project_root]
+        resume_value = str(job.payload.get("resume_run_directory", "") or "").strip()
+        if resume_value:
+            allowed_roots.append(Path(resume_value).expanduser().resolve())
+        for raw_candidate in candidates:
+            if not raw_candidate:
+                continue
+            candidate = Path(raw_candidate).expanduser().resolve()
+            if not any(self._is_relative_to(candidate, root) for root in allowed_roots):
+                continue
+            if candidate.is_file():
+                return candidate
+        return None
+
+    def get_raw_transcript_path(self, job_id: str) -> Path | None:
+        """Find the untouched Whisper transcript retained for audit and comparison."""
+        job = self.get_job(job_id)
+        run_value = str(job.result.get("run_dir", "")).strip()
+        candidates = [str(job.result.get("raw_transcript_path", "")).strip()]
+        if run_value:
+            candidates.append(str(Path(run_value) / "transcript.raw.json"))
+        allowed_roots = [self.project_root]
+        resume_value = str(job.payload.get("resume_run_directory", "") or "").strip()
+        if resume_value:
+            allowed_roots.append(Path(resume_value).expanduser().resolve())
+        for raw_candidate in candidates:
+            if not raw_candidate:
+                continue
+            candidate = Path(raw_candidate).expanduser().resolve()
+            if any(self._is_relative_to(candidate, root) for root in allowed_roots) and candidate.is_file():
+                return candidate
+        return None
+
     def update_priority(self, job_id: str, priority: int) -> JobRecord:
         if priority not in PRIORITY_LABELS:
             raise JobError("Priority must be High, Normal, or Low.")
@@ -286,6 +514,15 @@ class JobManager:
                 "UPDATE jobs SET priority = ?, updated_at = ? WHERE id = ? AND status = 'queued'",
                 (priority, self._timestamp(), job_id),
             )
+            if cursor.rowcount == 1:
+                self._append_event(
+                    job_id,
+                    f"Priority changed to {PRIORITY_LABELS[priority]}",
+                    stage="planned",
+                    progress=0,
+                    data={"priority": PRIORITY_LABELS[priority]},
+                    connection=connection,
+                )
         if cursor.rowcount != 1:
             raise JobError("Only planned jobs can have their priority changed.")
         with self._condition:
@@ -293,21 +530,42 @@ class JobManager:
         return self.get_job(job_id)
 
     def cancel_job(self, job_id: str) -> JobRecord:
-        job = self.get_job(job_id)
-        if job.status in FINAL_STATUSES:
-            return job
         now = self._timestamp()
+        changed = False
         with self._database_lock, self._connect() as connection:
-            if job.status == "queued":
+            connection.execute("BEGIN IMMEDIATE")
+            row = connection.execute(
+                "SELECT status, stage, progress FROM jobs WHERE id = ?",
+                (job_id,),
+            ).fetchone()
+            if row is None:
+                raise JobError("The selected job no longer exists.")
+            status = str(row["status"])
+            if status in {"queued", "deferred"}:
+                cancel_message = (
+                    "Cancelled without further processing"
+                    if status == "deferred"
+                    else "Cancelled before start"
+                )
                 connection.execute(
                     """
-                    UPDATE jobs SET status = 'cancelled', message = 'Cancelled before start',
-                                    cancel_requested = 1, updated_at = ?, completed_at = ?
+                    UPDATE jobs SET status = 'cancelled', message = ?,
+                                    cancel_requested = 1, defer_requested = 0,
+                                    updated_at = ?, completed_at = ?
                     WHERE id = ?
                     """,
-                    (now, now, job_id),
+                    (cancel_message, now, now, job_id),
                 )
-            else:
+                self._append_event(
+                    job_id,
+                    cancel_message,
+                    level="warning",
+                    stage=str(row["stage"]),
+                    progress=int(row["progress"]),
+                    connection=connection,
+                )
+                changed = True
+            elif status not in FINAL_STATUSES:
                 connection.execute(
                     """
                     UPDATE jobs
@@ -316,12 +574,123 @@ class JobManager:
                     """,
                     (now, job_id),
                 )
+                self._append_event(
+                    job_id,
+                    "Cancellation requested; the current safe step will finish first",
+                    level="warning",
+                    stage=str(row["stage"]),
+                    progress=int(row["progress"]),
+                    connection=connection,
+                )
+                changed = True
+        if changed:
+            with self._condition:
+                self._condition.notify_all()
+        return self.get_job(job_id)
+
+    def defer_job(self, job_id: str) -> JobRecord:
+        """Stop a planned or active task safely and retain it for future work."""
+        now = self._timestamp()
+        with self._database_lock, self._connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            row = connection.execute(
+                "SELECT status, stage, progress FROM jobs WHERE id = ?",
+                (job_id,),
+            ).fetchone()
+            if row is None:
+                raise JobError("The selected job no longer exists.")
+            status = str(row["status"])
+            if status in FINAL_STATUSES:
+                raise JobError("Completed, failed, or cancelled tasks cannot be moved to later.")
+            event_message = ""
+            if status == "queued":
+                connection.execute(
+                    """
+                    UPDATE jobs
+                    SET status = 'deferred', message = 'Saved for future processing',
+                        defer_requested = 0, updated_at = ?, completed_at = ''
+                    WHERE id = ?
+                    """,
+                    (now, job_id),
+                )
+                event_message = "Planned task moved to Later"
+            elif status != "deferred":
+                connection.execute(
+                    """
+                    UPDATE jobs
+                    SET defer_requested = 1,
+                        message = 'Safe stop requested; finishing the current checkpoint',
+                        updated_at = ?
+                    WHERE id = ?
+                    """,
+                    (now, job_id),
+                )
+                event_message = "Safe stop requested; current checkpoint will finish before deferring"
+            if event_message:
+                self._append_event(
+                    job_id,
+                    event_message,
+                    level="warning",
+                    stage=str(row["stage"]),
+                    progress=int(row["progress"]),
+                    data={"requested_status": "deferred"},
+                    connection=connection,
+                )
         with self._condition:
             self._condition.notify_all()
         return self.get_job(job_id)
 
+    def resume_job(self, job_id: str, priority: int | None = None) -> JobRecord:
+        """Return a deferred task to the priority queue using its saved checkpoints."""
+        if priority is not None and priority not in PRIORITY_LABELS:
+            raise JobError("Priority must be High, Normal, or Low.")
+        with self._condition:
+            while self._ollama_maintenance:
+                self._condition.wait(timeout=0.5)
+            with self._database_lock, self._connect() as connection:
+                connection.execute("BEGIN IMMEDIATE")
+                row = connection.execute(
+                    "SELECT status, priority FROM jobs WHERE id = ?",
+                    (job_id,),
+                ).fetchone()
+                if row is None:
+                    raise JobError("The selected job no longer exists.")
+                if str(row["status"]) != "deferred":
+                    raise JobError("Only tasks in Later can be resumed.")
+                selected_priority = int(row["priority"]) if priority is None else priority
+                now = self._timestamp()
+                connection.execute(
+                    """
+                    UPDATE jobs
+                    SET status = 'queued', priority = ?, stage = 'planned', progress = 0,
+                        message = 'Queued to continue from saved checkpoints',
+                        error = '', cancel_requested = 0, defer_requested = 0,
+                        started_at = '', completed_at = '', updated_at = ?
+                    WHERE id = ?
+                    """,
+                    (selected_priority, now, job_id),
+                )
+                self._append_event(
+                    job_id,
+                    f"Task returned to the queue with {PRIORITY_LABELS[selected_priority]} priority",
+                    stage="planned",
+                    progress=0,
+                    data={"priority": PRIORITY_LABELS[selected_priority], "resuming": True},
+                    connection=connection,
+                )
+            self._condition.notify_all()
+        return self.get_job(job_id)
+
     def counts(self) -> dict[str, int]:
-        values = {"queued": 0, "running": 0, "waiting": 0, "completed": 0, "failed": 0, "cancelled": 0}
+        values = {
+            "queued": 0,
+            "running": 0,
+            "waiting": 0,
+            "deferred": 0,
+            "completed": 0,
+            "failed": 0,
+            "cancelled": 0,
+        }
         with self._database_lock, self._connect() as connection:
             rows = connection.execute("SELECT status, COUNT(*) AS count FROM jobs GROUP BY status").fetchall()
         for row in rows:
@@ -463,32 +832,37 @@ class JobManager:
 
     @contextmanager
     def lecture_qwen_slot(self, job_id: str) -> Iterator[None]:
-        """Pause lecture Qwen work while the interactive agent remains active."""
+        """Pause queued Qwen work while the interactive agent remains active."""
         waiting_marked = False
+        current_stage = self.get_job(job_id).stage
+        qwen_stage = current_stage if current_stage in {"cleanup", "notes", "translation"} else "notes"
+        activity = {
+            "cleanup": "transcript cleanup",
+            "notes": "lecture summarization",
+            "translation": "on-demand translation",
+        }[qwen_stage]
         with self._condition:
             while (
                 self._agent_active or self._qwen_owner is not None or self._ollama_maintenance
             ) and not self._stop_requested:
-                self._raise_if_cancelled(job_id)
+                self._raise_if_interrupted(job_id)
                 if not waiting_marked:
                     self._update_job(
                         job_id,
                         status="waiting",
-                        stage="notes",
-                        message="Paused before the next Qwen call while the local agent is active",
+                        stage=qwen_stage,
+                        message=f"Paused {activity} before the next Qwen call while the local agent is active",
                     )
                     waiting_marked = True
                 self._condition.wait(timeout=0.5)
-            self._raise_if_cancelled(job_id)
-            if self._stop_requested:
-                raise JobCancelled("The job manager is stopping.")
+            self._raise_if_interrupted(job_id)
             self._qwen_owner = f"lecture:{job_id}"
             if waiting_marked:
                 self._update_job(
                     job_id,
                     status="running",
-                    stage="notes",
-                    message="Local agent released Qwen; lecture generation resumed",
+                    stage=qwen_stage,
+                    message=f"Local agent released Qwen; {activity} resumed",
                 )
         try:
             yield
@@ -547,6 +921,8 @@ class JobManager:
                 continue
             try:
                 self._execute_job(job)
+            except JobDeferred as exc:
+                self._mark_job_deferred(job.id, str(exc))
             except JobCancelled as exc:
                 self._finish_job(job.id, "cancelled", str(exc), error="")
             except Exception as exc:
@@ -571,11 +947,25 @@ class JobManager:
                 """,
                 (now, now, row["id"]),
             )
+            self._append_event(
+                str(row["id"]),
+                "Worker claimed the task and started processing",
+                stage="starting",
+                progress=1,
+                connection=connection,
+            )
         return self.get_job(str(row["id"]))
 
     def _execute_job(self, job: JobRecord) -> None:
-        if job.kind != "lecture":
-            raise JobError(f"Unsupported job type: {job.kind}")
+        if job.kind == "lecture":
+            self._execute_lecture_job(job)
+            return
+        if job.kind == "translation":
+            self._execute_translation_job(job)
+            return
+        raise JobError(f"Unsupported job type: {job.kind}")
+
+    def _execute_lecture_job(self, job: JobRecord) -> None:
         payload = job.payload
         config = PipelineConfig(**payload["config"])
         pipeline = LecturePipeline(
@@ -583,9 +973,26 @@ class JobManager:
             self.project_root,
             qwen_guard=lambda: self.lecture_qwen_slot(job.id),
         )
+        run_registered = False
 
         def on_stage(stage: str, message: str) -> None:
-            self._raise_if_cancelled(job.id)
+            nonlocal run_registered
+            run_dir = getattr(pipeline, "current_run_dir", None)
+            if run_dir is not None and not run_registered:
+                self._merge_job_result(
+                    job.id,
+                    {
+                        "run_dir": str(run_dir),
+                        "transcript_path": str(Path(run_dir) / "transcript.json"),
+                        "raw_transcript_path": str(Path(run_dir) / "transcript.raw.json"),
+                        "cleaned_partial_transcript_path": str(
+                            Path(run_dir) / "transcript.cleanup.partial.json"
+                        ),
+                        "partial_transcript_path": str(Path(run_dir) / "transcript.partial.json"),
+                    },
+                )
+                run_registered = True
+            self._raise_if_interrupted(job.id)
             self._update_job(
                 job.id,
                 status="running",
@@ -595,6 +1002,10 @@ class JobManager:
             )
 
         resume_directory = payload.get("resume_run_directory")
+        if not resume_directory:
+            saved_run_directory = str(job.result.get("run_dir", "")).strip()
+            if saved_run_directory and Path(saved_run_directory).is_dir():
+                resume_directory = saved_run_directory
         if resume_directory:
             result = pipeline.resume(
                 resume_directory,
@@ -608,7 +1019,7 @@ class JobManager:
                 payload.get("lecture_title"),
                 on_stage=on_stage,
             )
-        self._raise_if_cancelled(job.id)
+        self._raise_if_interrupted(job.id)
 
         library_messages: list[str] = []
         if payload.get("subject_id"):
@@ -625,32 +1036,161 @@ class JobManager:
             "markdown_path": str(result.markdown_path),
             "pdf_path": str(result.pdf_path),
             "transcript_path": str(result.transcript_path),
+            "raw_transcript_path": str(result.raw_transcript_path),
+            "cleaned_partial_transcript_path": str(result.run_dir / "transcript.cleanup.partial.json"),
+            "partial_transcript_path": str(result.run_dir / "transcript.partial.json"),
             "slides_path": str(result.slides_path),
             "alignment_path": str(result.alignment_path),
             "quality_report_path": str(result.quality_report_path),
             "indexed_chunks": result.indexed_chunks,
+            "output_language": "English",
             "library_messages": library_messages,
         }
         now = self._timestamp()
+        completed = False
         with self._database_lock, self._connect() as connection:
-            connection.execute(
+            cursor = connection.execute(
                 """
                 UPDATE jobs SET status = 'completed', stage = 'complete', progress = 100,
                                 message = 'Lecture notes are ready', result_json = ?,
-                                updated_at = ?, completed_at = ?
-                WHERE id = ?
+                                defer_requested = 0, updated_at = ?, completed_at = ?
+                WHERE id = ? AND cancel_requested = 0 AND defer_requested = 0
                 """,
                 (json.dumps(result_payload), now, now, job.id),
             )
+            completed = cursor.rowcount == 1
+            if completed:
+                self._append_event(
+                    job.id,
+                    "Lecture notes and transcript are ready",
+                    stage="complete",
+                    progress=100,
+                    connection=connection,
+                )
+        if not completed:
+            self._raise_if_interrupted(job.id)
+            raise JobError("The task could not be finalized because its state changed.")
 
-    def _raise_if_cancelled(self, job_id: str) -> None:
+    def _execute_translation_job(self, job: JobRecord) -> None:
+        """Translate completed Markdown only after the user has queued this job."""
+        payload = job.payload
+        config = PipelineConfig(**payload["config"])
+        config.validate()
+        target_language = MarkdownTranslator.validate_target_language(str(payload["target_language"]))
+        source_path = Path(str(payload["source_markdown_path"])).expanduser().resolve()
+        if not self._is_relative_to(source_path, self.project_root) or not source_path.is_file():
+            raise JobError("The completed English Markdown notes are missing or outside the project.")
+        source_job = self.get_job(str(payload["source_job_id"]))
+        if source_job.kind != "lecture" or source_job.status != "completed":
+            raise JobError("The source lecture must remain completed before translation can run.")
+
+        language_slug = safe_filename(target_language.casefold().replace(" ", "_"), "translation")
+        translation_dir = source_path.parent / "translations"
+        markdown_path = translation_dir / f"{source_path.stem}.{language_slug}.md"
+        pdf_path: Path | None = markdown_path.with_suffix(".pdf")
+        self._merge_job_result(
+            job.id,
+            {
+                "source_job_id": source_job.id,
+                "source_markdown_path": str(source_path),
+                "target_language": target_language,
+                "markdown_path": str(markdown_path),
+                "pdf_path": str(pdf_path),
+            },
+        )
+        self._raise_if_interrupted(job.id)
+        self._update_job(
+            job.id,
+            status="running",
+            stage="translation",
+            progress=5,
+            message=f"Translating the finished English notes into {target_language}",
+        )
+
+        def translation_progress(index: int, total: int, message: str) -> None:
+            self._raise_if_interrupted(job.id)
+            self._update_job(
+                job.id,
+                status="running",
+                stage="translation",
+                progress=self._stage_progress("translation", f"{message} ({index}/{total})"),
+                message=f"{message} ({index}/{total})",
+            )
+
+        source_markdown = source_path.read_text(encoding="utf-8")
+        translated = MarkdownTranslator(
+            config,
+            chat_guard=lambda: self.lecture_qwen_slot(job.id),
+        ).translate(
+            source_markdown,
+            target_language,
+            markdown_path,
+            progress=translation_progress,
+        )
+        self._raise_if_interrupted(job.id)
+        self._update_job(
+            job.id,
+            status="running",
+            stage="export",
+            progress=97,
+            message=f"Rendering the requested {target_language} translation",
+        )
+        pdf_warning = ""
+        try:
+            export_pdf(translated, pdf_path)
+        except ExportError as exc:
+            pdf_warning = str(exc)
+            pdf_path = None
+        self._raise_if_interrupted(job.id)
+
+        result_payload = {
+            "source_job_id": source_job.id,
+            "source_markdown_path": str(source_path),
+            "source_language": "English",
+            "target_language": target_language,
+            "markdown_path": str(markdown_path),
+            "pdf_path": str(pdf_path) if pdf_path is not None else "",
+            "pdf_warning": pdf_warning,
+        }
+        now = self._timestamp()
+        message = f"{target_language} translation is ready"
+        if pdf_warning:
+            message += " as Markdown; PDF rendering was unavailable"
+        with self._database_lock, self._connect() as connection:
+            cursor = connection.execute(
+                """
+                UPDATE jobs SET status = 'completed', stage = 'complete', progress = 100,
+                                message = ?, result_json = ?, defer_requested = 0,
+                                updated_at = ?, completed_at = ?
+                WHERE id = ? AND cancel_requested = 0 AND defer_requested = 0
+                """,
+                (message, json.dumps(result_payload), now, now, job.id),
+            )
+            if cursor.rowcount == 1:
+                self._append_event(
+                    job.id,
+                    message,
+                    stage="complete",
+                    progress=100,
+                    data={"target_language": target_language},
+                    connection=connection,
+                )
+                return
+        self._raise_if_interrupted(job.id)
+        raise JobError("The translation could not be finalized because its state changed.")
+
+    def _raise_if_interrupted(self, job_id: str) -> None:
         with self._database_lock, self._connect() as connection:
             row = connection.execute(
-                "SELECT cancel_requested FROM jobs WHERE id = ?",
+                "SELECT cancel_requested, defer_requested FROM jobs WHERE id = ?",
                 (job_id,),
             ).fetchone()
         if row and bool(row["cancel_requested"]):
             raise JobCancelled("Cancelled by the user.")
+        if row and bool(row["defer_requested"]):
+            raise JobDeferred("Stopped safely and saved for future processing.")
+        if self._stop_requested:
+            raise JobDeferred("Application stopped; task saved for future processing.")
 
     def _update_job(self, job_id: str, **values: Any) -> None:
         allowed = {"status", "stage", "progress", "message"}
@@ -664,17 +1204,92 @@ class JobManager:
                 f"UPDATE jobs SET {assignments} WHERE id = ?",
                 (*updates.values(), job_id),
             )
+            row = connection.execute(
+                "SELECT stage, progress, message FROM jobs WHERE id = ?",
+                (job_id,),
+            ).fetchone()
+            if row is not None:
+                self._append_event(
+                    job_id,
+                    str(row["message"]),
+                    stage=str(row["stage"]),
+                    progress=int(row["progress"]),
+                    connection=connection,
+                )
+
+    def _merge_job_result(self, job_id: str, values: dict[str, Any]) -> None:
+        """Persist artifact locations before a task reaches its terminal state."""
+        with self._database_lock, self._connect() as connection:
+            row = connection.execute(
+                "SELECT result_json FROM jobs WHERE id = ?",
+                (job_id,),
+            ).fetchone()
+            if row is None:
+                return
+            try:
+                result = json.loads(str(row["result_json"]))
+            except (TypeError, json.JSONDecodeError):
+                result = {}
+            result.update(values)
+            connection.execute(
+                "UPDATE jobs SET result_json = ?, updated_at = ? WHERE id = ?",
+                (json.dumps(result), self._timestamp(), job_id),
+            )
 
     def _finish_job(self, job_id: str, status: str, message: str, error: str) -> None:
         now = self._timestamp()
         with self._database_lock, self._connect() as connection:
             connection.execute(
                 """
-                UPDATE jobs SET status = ?, message = ?, error = ?, updated_at = ?, completed_at = ?
+                UPDATE jobs SET status = ?, message = ?, error = ?, defer_requested = 0,
+                                updated_at = ?, completed_at = ?
                 WHERE id = ?
                 """,
                 (status, message, error[:4000], now, now, job_id),
             )
+            row = connection.execute(
+                "SELECT stage, progress FROM jobs WHERE id = ?",
+                (job_id,),
+            ).fetchone()
+            if row is not None:
+                self._append_event(
+                    job_id,
+                    error or message,
+                    level="error" if status == "failed" else "warning" if status == "cancelled" else "info",
+                    stage=str(row["stage"]),
+                    progress=int(row["progress"]),
+                    data={"status": status},
+                    connection=connection,
+                )
+
+    def _mark_job_deferred(self, job_id: str, message: str) -> None:
+        """Finish a cooperative safe-stop without treating it as a failure."""
+        now = self._timestamp()
+        with self._database_lock, self._connect() as connection:
+            connection.execute(
+                """
+                UPDATE jobs
+                SET status = 'deferred', message = ?, error = '',
+                    cancel_requested = 0, defer_requested = 0,
+                    updated_at = ?, completed_at = ''
+                WHERE id = ?
+                """,
+                (message, now, job_id),
+            )
+            row = connection.execute(
+                "SELECT stage, progress FROM jobs WHERE id = ?",
+                (job_id,),
+            ).fetchone()
+            if row is not None:
+                self._append_event(
+                    job_id,
+                    message,
+                    level="warning",
+                    stage=str(row["stage"]),
+                    progress=int(row["progress"]),
+                    data={"status": "deferred", "checkpoint_preserved": True},
+                    connection=connection,
+                )
 
     def _cleanup_after_job(self, job: JobRecord) -> None:
         """Release this job's Ollama models after every terminal outcome."""
@@ -690,10 +1305,8 @@ class JobManager:
                 self._condition.wait(timeout=0.5)
             self._ollama_maintenance = True
         try:
-            report = self._cleanup_unused_configured_models(
-                config,
-                [config.llm_model, config.embedding_model],
-            )
+            models = [config.llm_model] if job.kind == "translation" else [config.llm_model, config.embedding_model]
+            report = self._cleanup_unused_configured_models(config, models)
             self._remember_cleanup(report)
             self._annotate_job_cleanup(job.id, report)
         finally:
@@ -810,7 +1423,7 @@ class JobManager:
         requirements: list[tuple[str, str]] = []
         with self._database_lock, self._connect() as connection:
             rows = connection.execute(
-                "SELECT payload_json FROM jobs WHERE status IN ('queued', 'running', 'waiting')"
+                "SELECT kind, payload_json FROM jobs WHERE status IN ('queued', 'running', 'waiting')"
             ).fetchall()
         for row in rows:
             try:
@@ -818,12 +1431,9 @@ class JobManager:
                 config = PipelineConfig(**payload["config"])
             except (KeyError, TypeError, ValueError, json.JSONDecodeError):
                 continue
-            requirements.extend(
-                [
-                    (config.ollama_host, config.llm_model),
-                    (config.ollama_host, config.embedding_model),
-                ]
-            )
+            requirements.append((config.ollama_host, config.llm_model))
+            if str(row["kind"]) != "translation":
+                requirements.append((config.ollama_host, config.embedding_model))
         with self._condition:
             if self._agent_active and self._last_agent_config is not None:
                 requirements.append(
@@ -850,6 +1460,46 @@ class JobManager:
             ).fetchone()[0]
         return bool(count)
 
+    def _append_event(
+        self,
+        job_id: str,
+        message: str,
+        *,
+        level: str = "info",
+        stage: str = "",
+        progress: int = 0,
+        data: dict[str, Any] | None = None,
+        connection: sqlite3.Connection | None = None,
+    ) -> None:
+        """Store an event in the caller's transaction or in a short new one."""
+        values = (
+            job_id,
+            self._timestamp(),
+            level,
+            stage,
+            max(0, min(int(progress), 100)),
+            message,
+            json.dumps(data or {}, ensure_ascii=False),
+        )
+        statement = """
+            INSERT INTO job_events(job_id, created_at, level, stage, progress, message, data_json)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """
+        if connection is not None:
+            connection.execute(statement, values)
+            return
+        with self._database_lock, self._connect() as event_connection:
+            event_connection.execute(statement, values)
+
+    @staticmethod
+    def _is_relative_to(path: Path, root: Path) -> bool:
+        """Python 3.9-compatible containment check for artifact paths."""
+        try:
+            path.relative_to(root.resolve())
+            return True
+        except ValueError:
+            return False
+
     @staticmethod
     def _close_runtime(runtime: Any | None) -> None:
         close = getattr(runtime, "close", None)
@@ -870,11 +1520,13 @@ class JobManager:
     def _stage_progress(stage: str, message: str) -> int:
         base = {
             "preflight": 2,
-            "slides": 64,
-            "alignment": 70,
-            "quality": 76,
+            "cleanup": 62,
+            "slides": 70,
+            "alignment": 74,
+            "quality": 78,
             "rag": 82,
             "notes": 84,
+            "translation": 5,
             "export": 98,
             "complete": 100,
         }
@@ -883,10 +1535,18 @@ class JobManager:
             if match:
                 return min(60, 5 + round(55 * int(match.group(1)) / max(1, int(match.group(2)))))
             return 5
+        if stage == "cleanup":
+            match = re.search(r"\((\d+)/(\d+)\)", message)
+            if match:
+                return min(68, 60 + round(8 * int(match.group(1)) / max(1, int(match.group(2)))))
         if stage == "notes":
             match = re.search(r"\((\d+)/(\d+)\)", message)
             if match:
                 return min(96, 84 + round(12 * int(match.group(1)) / max(1, int(match.group(2)))))
+        if stage == "translation":
+            match = re.search(r"\((\d+)/(\d+)\)", message)
+            if match:
+                return min(95, 5 + round(90 * int(match.group(1)) / max(1, int(match.group(2)))))
         return base.get(stage, 1)
 
     @staticmethod
@@ -904,10 +1564,28 @@ class JobManager:
             result=json.loads(str(row["result_json"])),
             error=str(row["error"]),
             cancel_requested=bool(row["cancel_requested"]),
+            defer_requested=bool(row["defer_requested"]),
             created_at=str(row["created_at"]),
             updated_at=str(row["updated_at"]),
             started_at=str(row["started_at"]),
             completed_at=str(row["completed_at"]),
+        )
+
+    @staticmethod
+    def _event_from_row(row: sqlite3.Row) -> JobEvent:
+        try:
+            data = json.loads(str(row["data_json"]))
+        except (TypeError, json.JSONDecodeError):
+            data = {}
+        return JobEvent(
+            id=int(row["id"]),
+            job_id=str(row["job_id"]),
+            created_at=str(row["created_at"]),
+            level=str(row["level"]),
+            stage=str(row["stage"]),
+            progress=int(row["progress"]),
+            message=str(row["message"]),
+            data=data,
         )
 
     @staticmethod

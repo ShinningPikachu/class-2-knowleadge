@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+import sqlite3
 import tempfile
 import threading
 import time
@@ -11,7 +13,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from src.config import PipelineConfig
-from src.jobs import PRIORITIES, JobError, JobManager
+from src.jobs import PRIORITIES, JobDeferred, JobError, JobManager
 from src.ollama_runtime import OllamaUnloadReport, RunningOllamaModel
 
 
@@ -35,6 +37,44 @@ class JobManagerTest(unittest.TestCase):
             priority=priority,
         )
 
+    def test_existing_queue_database_is_migrated_for_safe_defer(self) -> None:
+        legacy_root = self.root / "legacy-project"
+        legacy_jobs = legacy_root / "jobs"
+        legacy_jobs.mkdir(parents=True)
+        database_path = legacy_jobs / "jobs.sqlite3"
+        now = "2026-01-01T00:00:00+00:00"
+        with sqlite3.connect(database_path) as connection:
+            connection.execute(
+                """
+                CREATE TABLE jobs (
+                    id TEXT PRIMARY KEY, kind TEXT NOT NULL, title TEXT NOT NULL,
+                    status TEXT NOT NULL, priority INTEGER NOT NULL,
+                    stage TEXT NOT NULL DEFAULT '', progress INTEGER NOT NULL DEFAULT 0,
+                    message TEXT NOT NULL DEFAULT '', payload_json TEXT NOT NULL,
+                    result_json TEXT NOT NULL DEFAULT '{}', error TEXT NOT NULL DEFAULT '',
+                    cancel_requested INTEGER NOT NULL DEFAULT 0,
+                    created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+                    started_at TEXT NOT NULL DEFAULT '', completed_at TEXT NOT NULL DEFAULT ''
+                )
+                """
+            )
+            connection.execute(
+                """
+                INSERT INTO jobs(
+                    id, kind, title, status, priority, stage, progress, message,
+                    payload_json, created_at, updated_at
+                ) VALUES ('legacy', 'lecture', 'Legacy task', 'queued', 50, 'planned', 0,
+                          'Waiting', ?, ?, ?)
+                """,
+                (json.dumps({"config": PipelineConfig().__dict__}), now, now),
+            )
+
+        migrated = JobManager(legacy_root, autostart=False)
+        self.addCleanup(migrated.stop)
+        job = migrated.get_job("legacy")
+        self.assertFalse(job.defer_requested)
+        self.assertEqual(migrated.defer_job(job.id).status, "deferred")
+
     def test_jobs_are_claimed_by_priority_then_creation_order(self) -> None:
         low = self._enqueue("Low", PRIORITIES["Low"])
         high_first = self._enqueue("High first", PRIORITIES["High"])
@@ -56,6 +96,178 @@ class JobManagerTest(unittest.TestCase):
         self.assertEqual(updated.priority_label, "High")
         cancelled = self.manager.cancel_job(job.id)
         self.assertEqual(cancelled.status, "cancelled")
+
+    def test_planned_job_can_move_to_later_and_return_to_priority_queue(self) -> None:
+        job = self._enqueue("Future lecture", PRIORITIES["Low"])
+
+        deferred = self.manager.defer_job(job.id)
+        self.assertEqual(deferred.status, "deferred")
+        self.assertEqual(self.manager.counts()["deferred"], 1)
+        self.assertIsNone(self.manager._claim_next_job())
+
+        resumed = self.manager.resume_job(job.id, PRIORITIES["High"])
+        self.assertEqual(resumed.status, "queued")
+        self.assertEqual(resumed.priority_label, "High")
+        claimed = self.manager._claim_next_job()
+        self.assertEqual(claimed.id, job.id)  # type: ignore[union-attr]
+        messages = [event.message for event in self.manager.list_job_events(job.id)]
+        self.assertTrue(any("moved to Later" in message for message in messages))
+        self.assertTrue(any("returned to the queue" in message for message in messages))
+
+    def test_running_job_defers_cooperatively_and_preserves_partial_transcript(self) -> None:
+        job = self._enqueue("Long recording", PRIORITIES["Normal"])
+        self.manager._claim_next_job()
+        run_directory = self.root / "runs" / "long-recording"
+        run_directory.mkdir(parents=True)
+        partial_path = run_directory / "transcript.partial.json"
+        partial_path.write_text('{"paragraphs": [{"text": "Saved speech"}]}', encoding="utf-8")
+        self.manager._merge_job_result(
+            job.id,
+            {"run_dir": str(run_directory), "partial_transcript_path": str(partial_path)},
+        )
+
+        stopping = self.manager.defer_job(job.id)
+        self.assertEqual(stopping.status, "running")
+        self.assertTrue(stopping.defer_requested)
+        with self.assertRaises(JobDeferred):
+            self.manager._raise_if_interrupted(job.id)
+        self.manager._mark_job_deferred(job.id, "Stopped safely and saved for future processing.")
+
+        deferred = self.manager.get_job(job.id)
+        self.assertEqual(deferred.status, "deferred")
+        self.assertFalse(deferred.defer_requested)
+        self.assertEqual(self.manager.get_transcript_path(job.id), partial_path.resolve())
+
+    def test_resumed_job_uses_saved_run_instead_of_starting_over(self) -> None:
+        job = self._enqueue("Resume recording summary", PRIORITIES["Normal"])
+        self.manager._claim_next_job()
+        run_directory = self.root / "runs" / "resume-recording"
+        run_directory.mkdir(parents=True)
+        self.manager._merge_job_result(job.id, {"run_dir": str(run_directory)})
+        self.manager._mark_job_deferred(job.id, "Saved for later")
+        self.manager.resume_job(job.id)
+        resumed_job = self.manager._claim_next_job()
+        calls: list[Path] = []
+
+        for name in (
+            "lecture_notes.md",
+            "lecture_notes.pdf",
+            "transcript.json",
+            "transcript.raw.json",
+            "slides.json",
+            "alignment.json",
+            "quality.json",
+        ):
+            (run_directory / name).write_text("test", encoding="utf-8")
+
+        class FakePipeline:
+            def __init__(self, *_args: object, **_kwargs: object) -> None:
+                self.current_run_dir = None
+
+            def run(self, *_args: object, **_kwargs: object):
+                raise AssertionError("A resumed job must not start a new run")
+
+            def resume(self, saved_run: str, *_args: object, on_stage=None, **_kwargs: object):
+                self.current_run_dir = Path(saved_run)
+                calls.append(self.current_run_dir)
+                on_stage("recording", "Transcription progress: 1/1 chunks complete")
+                on_stage("notes", "Writing study notes (1/1)")
+                return SimpleNamespace(
+                    run_id=run_directory.name,
+                    run_dir=run_directory,
+                    markdown_path=run_directory / "lecture_notes.md",
+                    pdf_path=run_directory / "lecture_notes.pdf",
+                    transcript_path=run_directory / "transcript.json",
+                    raw_transcript_path=run_directory / "transcript.raw.json",
+                    slides_path=run_directory / "slides.json",
+                    alignment_path=run_directory / "alignment.json",
+                    quality_report_path=run_directory / "quality.json",
+                    indexed_chunks=2,
+                )
+
+        with patch("src.jobs.LecturePipeline", FakePipeline):
+            self.manager._execute_job(resumed_job)  # type: ignore[arg-type]
+
+        self.assertEqual(calls, [run_directory])
+        self.assertEqual(self.manager.get_job(job.id).status, "completed")
+
+    def test_worker_moves_a_safe_stop_signal_to_later_instead_of_failed(self) -> None:
+        self.manager.set_auto_unload_enabled(False)
+        run_directory = self.root / "runs" / "worker-safe-stop"
+        run_directory.mkdir(parents=True)
+        entered_processing = threading.Event()
+        continue_processing = threading.Event()
+
+        class FakePipeline:
+            def __init__(self, *_args: object, **_kwargs: object) -> None:
+                self.current_run_dir = run_directory
+
+            def run(self, *_args: object, on_stage=None, **_kwargs: object):
+                on_stage("recording", "Transcription started")
+                entered_processing.set()
+                continue_processing.wait(timeout=2)
+                on_stage("recording", "Transcription progress: 1/2 chunks complete")
+                raise AssertionError("The safe-stop callback should interrupt the pipeline")
+
+        job = self._enqueue("Worker safe stop", PRIORITIES["Normal"])
+        with patch("src.jobs.LecturePipeline", FakePipeline):
+            self.manager.start()
+            self.assertTrue(entered_processing.wait(timeout=2))
+            stopping = self.manager.defer_job(job.id)
+            self.assertTrue(stopping.defer_requested)
+            continue_processing.set()
+            deadline = time.monotonic() + 2
+            while time.monotonic() < deadline and self.manager.get_job(job.id).status != "deferred":
+                time.sleep(0.02)
+
+        deferred = self.manager.get_job(job.id)
+        self.assertEqual(deferred.status, "deferred", deferred.error)
+        self.assertEqual(deferred.error, "")
+        self.assertIn("saved for future", deferred.message)
+
+    def test_processing_log_and_partial_transcript_survive_a_failed_job(self) -> None:
+        job = self._enqueue("Interrupted recording", PRIORITIES["Normal"])
+        self.manager._claim_next_job()
+        run_directory = self.root / "runs" / "interrupted-recording"
+        run_directory.mkdir(parents=True)
+        partial_path = run_directory / "transcript.partial.json"
+        partial_path.write_text(
+            json.dumps(
+                {
+                    "metadata": {"is_partial": True, "completed_chunks": 1, "total_chunks": 3},
+                    "segments": [],
+                    "paragraphs": [{"text": "Durable partial lecture transcript."}],
+                }
+            ),
+            encoding="utf-8",
+        )
+        self.manager._merge_job_result(
+            job.id,
+            {
+                "run_dir": str(run_directory),
+                "partial_transcript_path": str(partial_path),
+            },
+        )
+        self.manager._update_job(
+            job.id,
+            status="running",
+            stage="recording",
+            progress=23,
+            message="Transcription progress: 1/3 chunks complete",
+        )
+        self.manager._finish_job(job.id, "failed", "Task failed", "simulated failure")
+
+        self.assertEqual(self.manager.get_transcript_path(job.id), partial_path.resolve())
+        events = self.manager.list_job_events(job.id)
+        self.assertEqual(events[0].stage, "planned")
+        self.assertTrue(any(event.stage == "recording" and event.progress == 23 for event in events))
+        self.assertEqual(events[-1].level, "error")
+        self.assertIn("simulated failure", events[-1].message)
+
+        reopened = JobManager(self.root, autostart=False)
+        self.addCleanup(reopened.stop)
+        self.assertEqual(reopened.get_transcript_path(job.id), partial_path.resolve())
+        self.assertEqual([event.id for event in reopened.list_job_events(job.id)], [event.id for event in events])
 
     def test_agent_activation_pauses_lecture_qwen_slot(self) -> None:
         job = self._enqueue("Lecture", PRIORITIES["Normal"])
@@ -278,7 +490,65 @@ class JobManagerTest(unittest.TestCase):
         self.assertEqual(cleanup_calls, [(PipelineConfig().llm_model,)])
         self.assertIn(PipelineConfig().embedding_model, self.manager.last_ollama_cleanup())
 
-    def test_restart_recovers_models_from_an_interrupted_job(self) -> None:
+    def test_translation_is_an_explicit_qwen_only_queue_job(self) -> None:
+        self.manager.set_auto_unload_enabled(False)
+        source_job = self._enqueue("English lecture", PRIORITIES["Normal"])
+        claimed = self.manager._claim_next_job()
+        self.assertEqual(claimed.id, source_job.id)  # type: ignore[union-attr]
+        run_directory = self.root / "runs" / "english-lecture"
+        run_directory.mkdir(parents=True)
+        source_markdown = run_directory / "lecture_notes.md"
+        source_markdown.write_text("# English lecture\n\nOriginal English notes.\n", encoding="utf-8")
+        self.manager._merge_job_result(source_job.id, {"markdown_path": str(source_markdown)})
+        self.manager._finish_job(source_job.id, "completed", "Lecture notes are ready", "")
+
+        translation_job = self.manager.enqueue_translation(
+            source_job.id,
+            "Chinese (Simplified)",
+            priority=PRIORITIES["High"],
+        )
+
+        self.assertEqual(translation_job.kind, "translation")
+        self.assertEqual(translation_job.payload["source_language"], "English")
+        self.assertEqual(translation_job.payload["target_language"], "Chinese (Simplified)")
+        self.assertFalse((run_directory / "translations").exists())
+        self.assertEqual(
+            self.manager._pending_model_requirements(),
+            [(PipelineConfig().ollama_host, PipelineConfig().llm_model)],
+        )
+
+        class FakeTranslator:
+            def __init__(self, *_args: object, **_kwargs: object) -> None:
+                pass
+
+            @staticmethod
+            def validate_target_language(value: str) -> str:
+                return value
+
+            def translate(self, _source: str, _target: str, output: Path, progress=None) -> str:
+                translated = "# 英语讲座\n\n中文笔记。\n"
+                output.parent.mkdir(parents=True, exist_ok=True)
+                output.write_text(translated, encoding="utf-8")
+                progress(1, 1, "Translated translation batch 1/1")
+                return translated
+
+        def fake_export(_markdown: str, output: Path) -> Path:
+            output.write_bytes(b"translated pdf")
+            return output
+
+        claimed_translation = self.manager._claim_next_job()
+        self.assertEqual(claimed_translation.id, translation_job.id)  # type: ignore[union-attr]
+        with patch("src.jobs.MarkdownTranslator", FakeTranslator), patch("src.jobs.export_pdf", fake_export):
+            self.manager._execute_job(claimed_translation)  # type: ignore[arg-type]
+
+        completed = self.manager.get_job(translation_job.id)
+        self.assertEqual(completed.status, "completed", completed.error)
+        self.assertEqual(completed.result["source_language"], "English")
+        self.assertEqual(completed.result["target_language"], "Chinese (Simplified)")
+        self.assertTrue(Path(completed.result["markdown_path"]).is_file())
+        self.assertTrue(Path(completed.result["pdf_path"]).is_file())
+
+    def test_restart_moves_an_interrupted_job_to_later_and_recovers_models(self) -> None:
         cleanup_calls: list[tuple[str, ...]] = []
 
         class FakeRuntime:
@@ -296,13 +566,29 @@ class JobManagerTest(unittest.TestCase):
         self.addCleanup(reopened.stop)
 
         recovered = reopened.get_job(job.id)
-        self.assertEqual(recovered.status, "failed")
-        self.assertIn("application stopped", recovered.error)
+        self.assertEqual(recovered.status, "deferred")
+        self.assertEqual(recovered.error, "")
+        self.assertIn("moved to Later", recovered.message)
         self.assertEqual(
             cleanup_calls,
             [(PipelineConfig().llm_model, PipelineConfig().embedding_model)],
         )
         self.assertIn("Restart recovery", reopened.last_ollama_cleanup())
+
+    def test_restart_keeps_a_requested_safe_stop_in_later(self) -> None:
+        self.manager.set_auto_unload_enabled(False)
+        job = self._enqueue("Stop during shutdown", PRIORITIES["Normal"])
+        self.manager._claim_next_job()
+        self.manager.defer_job(job.id)
+
+        reopened = JobManager(self.root, autostart=False)
+        self.addCleanup(reopened.stop)
+
+        recovered = reopened.get_job(job.id)
+        self.assertEqual(recovered.status, "deferred")
+        self.assertFalse(recovered.defer_requested)
+        self.assertIn("later", recovered.message.lower())
+        self.assertEqual(reopened.list_job_events(job.id)[-1].data["status"], "deferred")
 
     def test_background_worker_completes_a_lecture_job(self) -> None:
         output_root = self.root / "fake-run"
@@ -311,6 +597,7 @@ class JobManagerTest(unittest.TestCase):
             "lecture_notes.md",
             "lecture_notes.pdf",
             "transcript.json",
+            "transcript.raw.json",
             "slides.json",
             "alignment.json",
             "quality.json",
@@ -320,6 +607,7 @@ class JobManagerTest(unittest.TestCase):
         class FakePipeline:
             def __init__(self, *_args: object, qwen_guard=None, **_kwargs: object) -> None:
                 self.qwen_guard = qwen_guard
+                self.current_run_dir = output_root
 
             def run(self, *_args: object, on_stage=None, **_kwargs: object):
                 on_stage("recording", "Transcription progress: 1/1 chunks complete")
@@ -332,6 +620,7 @@ class JobManagerTest(unittest.TestCase):
                     markdown_path=output_root / "lecture_notes.md",
                     pdf_path=output_root / "lecture_notes.pdf",
                     transcript_path=output_root / "transcript.json",
+                    raw_transcript_path=output_root / "transcript.raw.json",
                     slides_path=output_root / "slides.json",
                     alignment_path=output_root / "alignment.json",
                     quality_report_path=output_root / "quality.json",
@@ -361,6 +650,12 @@ class JobManagerTest(unittest.TestCase):
         self.assertEqual(current.status, "completed", current.error)
         self.assertEqual(current.progress, 100)
         self.assertEqual(current.result["indexed_chunks"], 3)
+        self.assertEqual(self.manager.get_transcript_path(job.id), (output_root / "transcript.json").resolve())
+        self.assertEqual(
+            self.manager.get_raw_transcript_path(job.id),
+            (output_root / "transcript.raw.json").resolve(),
+        )
+        self.assertEqual(self.manager.list_job_events(job.id)[-2].stage, "complete")
         self.assertEqual(
             cleanup_calls,
             [(PipelineConfig().llm_model, PipelineConfig().embedding_model)],

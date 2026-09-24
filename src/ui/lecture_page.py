@@ -28,11 +28,16 @@ def _render_recent_jobs(manager: JobManager) -> None:
         return
     with st.expander("Recent lecture tasks"):
         for job in jobs:
-            st.markdown(
+            details, action = st.columns([4, 1])
+            details.markdown(
                 f"**{job.title}** — {job.status.title()} · {job.progress}% · "
                 f"{job.stage.replace('_', ' ').title()}"
             )
-            st.caption(job.message)
+            details.caption(job.message)
+            if action.button("Open log", key=f"recent_lecture_log_{job.id}", use_container_width=True):
+                st.session_state["job_log_id"] = job.id
+                st.session_state["requested_workspace"] = "Job Queue"
+                st.rerun()
 
 
 def render_lecture_processor(
@@ -81,7 +86,7 @@ def render_lecture_processor(
     subjects = library.list_subjects()
     lookup = subject_lookup(subjects)
     save_subject = st.selectbox(
-        "Save sources, Markdown notes, and PDF notes to",
+        "Save sources, transcript, Markdown notes, and PDF notes to",
         ["none"] + [subject.id for subject in subjects],
         format_func=lambda value: "Do not add to library" if value == "none" else lookup[value].name,
         disabled=not subjects,
@@ -128,10 +133,12 @@ def render_lecture_processor(
                         priority=PRIORITIES[priority_label],
                         resume_run_directory=resume_run_directory.strip() or None,
                     )
-                st.success(
-                    f"Queued '{job.title}' with {job.priority_label} priority. "
-                    "Open Job Queue to follow what is planned and what is running."
+                st.session_state["job_log_id"] = job.id
+                st.session_state["job_log_notice"] = (
+                    f"Queued '{job.title}' with {job.priority_label} priority."
                 )
+                st.session_state["requested_workspace"] = "Job Queue"
+                st.rerun()
             except (JobError, ValueError) as exc:
                 st.error(str(exc))
     _render_recent_jobs(manager)

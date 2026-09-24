@@ -8,6 +8,7 @@ from typing import Any, ContextManager
 
 from .config import PipelineConfig
 from .rag import LocalRAG
+from .task_control import TaskControlSignal
 from .utils import clean_text
 
 
@@ -37,7 +38,9 @@ place it in the Professor explanation section and begin the relevant sentence
 with "Professor explanation:". If the audio provides no useful addition, say
 "No additional professor explanation was aligned with this slide." Be concise
 but explanatory. Treat OCR text as potentially imperfect and do not infer a
-diagram's meaning unless the slide text or transcript supports it."""
+diagram's meaning unless the slide text or transcript supports it. Write the
+canonical lecture notes in English only. Never translate them during generation;
+translation is a separate operation requested by the user after completion."""
 
     def __init__(
         self,
@@ -350,7 +353,7 @@ BATCH MATERIAL:
             if not content or not str(content).strip():
                 raise AgentError("Ollama returned an empty response.")
             return str(content).strip()
-        except AgentError:
+        except (AgentError, TaskControlSignal):
             raise
         except Exception as exc:
             raise AgentError(

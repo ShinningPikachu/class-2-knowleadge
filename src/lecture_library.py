@@ -15,7 +15,7 @@ def save_lecture_result(
     result: Any,
     lecture_title: str | None,
 ) -> list[str]:
-    """Store source files plus both final note formats in the chosen subject."""
+    """Store source files, the transcript, and both note formats in a subject."""
     subject = library.get_subject(subject_id)
     messages: list[str] = []
     source_files = sorted((result.run_dir / "input").iterdir())
@@ -23,6 +23,7 @@ def save_lecture_result(
     candidates: list[tuple[Path, str | None]] = [(path, None) for path in source_files]
     candidates.extend(
         [
+            (result.transcript_path, f"{base_name}_transcript.json"),
             (result.markdown_path, f"{base_name}_notes.md"),
             (result.pdf_path, f"{base_name}_notes.pdf"),
         ]

@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import PipelineConfig
+from .task_control import TaskControlSignal
 from .utils import clean_text, dump_json, seconds_to_timestamp
 
 
@@ -90,6 +91,7 @@ class AudioProcessor:
         )
         checkpoint_dir = output_path.parent / "transcript_chunks"
         checkpoint_dir.mkdir(parents=True, exist_ok=True)
+        partial_output_path = output_path.with_name("transcript.partial.json")
         if output_path.is_file():
             try:
                 completed_transcript = json.loads(output_path.read_text(encoding="utf-8"))
@@ -106,9 +108,21 @@ class AudioProcessor:
         plans_to_process = [plan for plan in chunk_plan if plan.index not in completed_indices]
         report = progress or (lambda _event: None)
 
+        def persist_chunk(record: dict[str, Any]) -> None:
+            """Persist one chunk and atomically rebuild the readable partial transcript."""
+            dump_json(checkpoint_dir / f"chunk_{record['chunk']:04d}.json", record)
+            self._write_partial_transcript(
+                audio_path=audio_path,
+                output_path=partial_output_path,
+                checkpoint_dir=checkpoint_dir,
+                chunk_plan=chunk_plan,
+                duration=duration,
+                language=detected_language,
+            )
+
         def report_chunk(record: dict[str, Any], state: str) -> None:
             """Persist a usable checkpoint and provide a UI-safe main-thread update."""
-            dump_json(checkpoint_dir / f"chunk_{record['chunk']:04d}.json", record)
+            persist_chunk(record)
             preview = " ".join(segment.get("text", "") for segment in record["segments"][:2])[:280]
             report(
                 {
@@ -161,9 +175,9 @@ class AudioProcessor:
                 assert model is not None
                 result = self._transcribe_plan(model, plan, decoded_audio, duration, len(chunk_plan), detected_language)
                 completed.append(result)
-                report_chunk(result[0], "completed")
                 if result[1] and result[2] >= 0.65:
                     detected_language, language_probability = result[1], result[2]
+                report_chunk(result[0], "completed")
 
             initial_indices = {plan.index for plan in initial_plans}
             remaining_plans = [plan for plan in plans_to_process if plan.index not in initial_indices]
@@ -175,17 +189,42 @@ class AudioProcessor:
                     )
                     report_chunk(completed[-1][0], "completed")
             else:
-                with ThreadPoolExecutor(max_workers=self.config.whisper_parallel_workers) as executor:
-                    futures = [
-                        executor.submit(
-                            self._transcribe_plan, model, plan, decoded_audio, duration, len(chunk_plan), detected_language
-                        )
-                        for plan in remaining_plans
-                    ]
+                executor = ThreadPoolExecutor(max_workers=self.config.whisper_parallel_workers)
+                futures = [
+                    executor.submit(
+                        self._transcribe_plan, model, plan, decoded_audio, duration, len(chunk_plan), detected_language
+                    )
+                    for plan in remaining_plans
+                ]
+                try:
                     for future in as_completed(futures):
                         result = future.result()
                         completed.append(result)
                         report_chunk(result[0], "completed")
+                except Exception as exc:
+                    # A pause/cancel signal is raised only after report_chunk has
+                    # durably saved the finished chunk. Do not start queued chunks;
+                    # allow only currently running Whisper calls to finish safely.
+                    for future in futures:
+                        future.cancel()
+                    executor.shutdown(wait=True, cancel_futures=True)
+                    if isinstance(exc, TaskControlSignal):
+                        recorded_chunks = {item[0]["chunk"] for item in completed}
+                        for future in futures:
+                            if future.cancelled() or not future.done():
+                                continue
+                            try:
+                                finished = future.result()
+                            except Exception:
+                                continue
+                            if finished[0]["chunk"] in recorded_chunks:
+                                continue
+                            completed.append(finished)
+                            recorded_chunks.add(finished[0]["chunk"])
+                            persist_chunk(finished[0])
+                    raise
+                else:
+                    executor.shutdown(wait=True)
 
             chunk_records = checkpoint_records + [item[0] for item in completed]
             chunk_records.sort(key=lambda record: record["chunk"])
@@ -195,7 +234,7 @@ class AudioProcessor:
                     segments.append(record)
                 chunk_record["segment_count"] = len(chunk_record["segments"])
                 dump_json(checkpoint_dir / f"chunk_{chunk_record['chunk']:04d}.json", chunk_record)
-        except AudioProcessingError:
+        except (AudioProcessingError, TaskControlSignal):
             raise
         except Exception as exc:  # library errors include invalid codec/model files
             raise AudioProcessingError(
@@ -218,6 +257,7 @@ class AudioProcessor:
 
         payload: dict[str, Any] = {
             "metadata": {
+                "transcript_kind": "raw",
                 "source_file": audio_path.name,
                 "source_type": "video" if audio_path.suffix.lower() in SUPPORTED_VIDEO_SUFFIXES else "audio",
                 "created_at": datetime.now(timezone.utc).isoformat(),
@@ -238,6 +278,50 @@ class AudioProcessor:
         }
         dump_json(output_path, payload)
         return payload
+
+    def _write_partial_transcript(
+        self,
+        audio_path: Path,
+        output_path: Path,
+        checkpoint_dir: Path,
+        chunk_plan: list[MediaChunkPlan],
+        duration: float,
+        language: str | None,
+    ) -> None:
+        """Assemble completed chunks into a readable transcript after every checkpoint."""
+        chunk_records = self._load_checkpoint_records(checkpoint_dir, chunk_plan)
+        chunk_records.sort(key=lambda record: int(record["chunk"]))
+        segments: list[dict[str, Any]] = []
+        for chunk_record in chunk_records:
+            for raw_segment in chunk_record["segments"]:
+                segment = dict(raw_segment)
+                segment["id"] = len(segments) + 1
+                segments.append(segment)
+        payload = {
+            "metadata": {
+                "transcript_kind": "raw",
+                "source_file": audio_path.name,
+                "source_type": "video"
+                if audio_path.suffix.lower() in SUPPORTED_VIDEO_SUFFIXES
+                else "audio",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "model": self.config.whisper_model,
+                "language": language,
+                "duration_seconds": round(duration, 3),
+                "is_partial": len(chunk_records) < len(chunk_plan),
+                "completed_chunks": len(chunk_records),
+                "total_chunks": len(chunk_plan),
+                "chunk_seconds": self.config.media_chunk_seconds,
+                "overlap_seconds": self.config.media_overlap_seconds,
+                "chunks": [
+                    {key: value for key, value in record.items() if key != "segments"}
+                    for record in chunk_records
+                ],
+            },
+            "segments": segments,
+            "paragraphs": self._make_paragraphs(segments),
+        }
+        dump_json(output_path, payload)
 
     @staticmethod
     def _load_checkpoint_records(

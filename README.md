@@ -4,43 +4,49 @@ An offline-first subject library, document assistant, lecture-note generator, an
 
 - **Library** — create persistent subject folders, upload multiple documents, inspect processing state, and search extracted text.
 - **Agent** — explicitly activate a local assistant to ask grounded questions across every subject or within one selected subject, with document/page/slide citations. It can list, rename, and move documents or create a subject; every write action is previewed and requires confirmation. A controlled document-insertion panel is also available.
-- **Lecture Notes** — queue a university lecture recording, slide deck (`.pdf`, `.pptx`, or `.ppt`), or both for background processing. The original sources plus both final note formats can be saved into a subject automatically.
-- **Job Queue** — see what is planned, running, waiting, completed, failed, or cancelled; change planned-task priority; request cancellation; download completed outputs; and inspect or unload Ollama models.
+- **Lecture Notes** — queue a university lecture recording, slide deck (`.pdf`, `.pptx`, or `.ppt`), or both for background processing. The original sources, stored transcript, and both final note formats can be saved into a subject automatically.
+- **Job Queue** — see what is planned, running, waiting, saved for later, completed, failed, or cancelled; stop active work safely; resume it from checkpoints with a new priority; open a live processing log; preview or download stored transcripts; request an on-demand translation of finished notes; and inspect or unload Ollama models.
 
-Lecture tasks are selected by priority (`High`, `Normal`, then `Low`) and creation time. Whisper transcription can run while the interactive Qwen agent is active. When a lecture reaches Qwen note generation, it waits between model calls while the agent remains activated, then resumes automatically after the agent is deactivated. An in-flight model call is allowed to finish safely rather than being terminated mid-response. Automatic model cleanup is enabled by default. Qwen stays warm while the interactive agent is activated, and lecture jobs hand resident models directly to queued work that uses the same Ollama host and model. Models are unloaded after completion, failure, cancellation, agent deactivation, or restart recovery only when no active or queued consumer still needs them. This releases unused model memory without causing avoidable unload/reload cycles or terminating the Ollama server.
+Lecture tasks are selected by priority (`High`, `Normal`, then `Low`) and creation time. **Stop safely · do later** is distinct from permanent cancellation: Whisper finishes its current chunk and stores the partial transcript, while an in-flight Qwen response finishes before the task moves to **Later**. **Resume from checkpoints** returns it to the priority queue and reuses the same run folder, completed transcript chunks, cleanup batches, and final transcript if transcription had already finished. If the application itself restarts during a task, that task is also recovered into **Later** instead of being marked failed. Whisper transcription can run while the interactive Qwen agent is active. Transcript cleanup and lecture-note generation use Qwen, so they wait between model calls while the interactive agent remains activated, then resume automatically after the agent is deactivated. Automatic model cleanup is enabled by default. Qwen stays warm while the interactive agent is activated, and lecture jobs hand resident models directly to queued work that uses the same Ollama host and model. Models are unloaded after completion, deferral, failure, cancellation, agent deactivation, or restart recovery only when no active or queued consumer still needs them. This releases unused model memory without causing avoidable unload/reload cycles or terminating the Ollama server.
 
-Subject metadata and extracted text are stored in `library/library.sqlite3`; original files live under stable subject IDs in `library/subjects/`. PDF pages, PowerPoint slides, Markdown, text, CSV, JSON, and related text formats are searchable immediately. Other file types are preserved and marked as stored until a suitable processor is available.
+English is the default recording and canonical-output language. Transcript repair and lecture-note generation explicitly remain in English; they never translate automatically. After a lecture finishes, expand **Translate finished notes on demand**, choose Chinese or another target language, and queue a separate translation task. Only that explicit action creates translated Markdown/PDF files. The English transcript and notes remain unchanged, and translation batches support the same safe stop and checkpoint-resume workflow.
 
-Two-hour recordings are split into overlapping chunks and transcribed by up to two bounded local workers; Whisper is released before the writing model loads.
+Subject metadata and extracted text are stored in `library/library.sqlite3`; original files live under stable subject IDs in `library/subjects/`. Queue state and the complete timestamped processing timeline for each task are persisted in `jobs/jobs.sqlite3`. PDF pages, PowerPoint slides, Markdown, text, CSV, JSON, and related text formats are searchable immediately. Other file types are preserved and marked as stored until a suitable processor is available.
+
+Two-hour recordings are split into overlapping chunks and transcribed by up to two bounded local workers. Every completed chunk updates an atomic `transcript.partial.json`, so an interrupted or failed task retains readable timestamped text in addition to its individual chunk checkpoints. Whisper is released before the writing model loads.
 
 It reconstructs the class from both sources: the slide text/structure and the professor's timestamped explanation. No cloud API keys are used and the application only contacts the local Ollama endpoint (`127.0.0.1` by default).
 
 ## Architecture
 
 ```text
-Audio/video ──> bundled PyAV decoder ─> 30-minute overlapping chunks ─> faster-whisper large-v3 ─┐
-                                                                                 ├─> transcript.json
-                                                                                 └─> per-chunk checkpoints
+Audio/video ──> bundled PyAV decoder ─> overlapping chunks ─> faster-whisper large-v3
+                                                              ├─> transcript.raw.json
+                                                              └─> per-chunk checkpoints
+                                                                         │
+                                              grounded local Qwen cleanup ─> transcript.json
+                                                                         └─> cleanup checkpoints
                                                        │
 Slides PDF/PPTX ──> PyMuPDF/python-pptx ─> slides.json ├─> local semantic alignment
                          │                             │       │
                          └─> local Tesseract OCR        │       └─> alignment.json
                                                              
-slides + transcript chunks ──> Ollama embeddings ──> ChromaDB (per-run, on disk)
+slides + cleaned transcript ──> Ollama embeddings ──> ChromaDB (per-run, on disk)
                                                            │
 strictly filtered evidence ──> Ollama qwen3.5:27b draft + factual review ──> hierarchical final notes + PDF
 ```
 
 The pipeline is deliberately simple and inspectable:
 
-1. `src/audio_processor.py` uses faster-whisper's bundled **PyAV** decoder and **large-v3** model to produce timestamped speech segments and readable paragraphs in `transcript.json`. The default 30-minute cores have 15 seconds of overlap; midpoint filtering prevents duplicated text while preserving boundary context. Up to two chunks run concurrently by default and are checkpointed in chronological order. The UI reports completed and active chunks with a confirmed transcript preview, and continues safely from valid checkpoints after interruption. MP3, WAV, M4A, AAC, FLAC, OGG, OPUS, MP4, MOV, MKV, WebM, and M4V are supported. For video, the audio track is transcribed; visual-only information must also appear in the supplied deck.
-2. `src/pdf_processor.py` uses **PyMuPDF** for PDFs and **python-pptx** for PPTX. It preserves slide number, inferred title, text, PowerPoint speaker notes, embedded image paths, and best-effort local OCR text. Legacy PPT is converted locally through LibreOffice when available.
-3. `src/alignment.py` maps each transcript paragraph to a slide. Spoken references such as “slide 8” have priority. Otherwise it selects a slide through local Ollama embedding cosine similarity. Any weak match is marked `temporal_fallback` in `alignment.json` rather than being disguised as a reliable mapping.
-4. `src/embeddings.py` chunks both sources and `src/rag.py` uses **LangChain's Chroma integration** to store their **local Ollama vectors** in a persistent **ChromaDB** directory. Metadata keeps `source`, `slide_number`, aligned slide, transcript paragraph ID, and timestamps.
-5. `src/agent.py` retrieves evidence restricted to the current slide, uses the 27B model's thinking mode to write a draft, and runs a second factual audit for every slide. Long per-slide transcripts and the final lecture synthesis use hierarchical map-reduce, so later material is not silently truncated. Its prompt forbids invented information and requires spoken-only claims to start with `Professor explanation:`.
-6. `src/quality.py` measures alignment reliability and structural completeness. If more than 70% of speech requires low-confidence temporal alignment, the run stops instead of exporting potentially misleading notes.
-7. `src/exporter.py` writes canonical Markdown and renders a local PDF with ReportLab—no online conversion service or browser dependency.
-8. `app.py` is the Streamlit interface. It supports browser uploads and direct local paths for multi-gigabyte recordings, displays live stages, and exposes every intermediate artifact.
+1. `src/audio_processor.py` uses faster-whisper's bundled **PyAV** decoder and **large-v3** model to produce timestamped speech in `transcript.raw.json`. The default 30-minute cores have 15 seconds of overlap; midpoint filtering prevents duplicated text while preserving boundary context. Up to two chunks run concurrently by default and are checkpointed in chronological order. Each checkpoint also rebuilds `transcript.partial.json`; the Job Queue log screen previews and downloads that file while processing and retains it after interruption. MP3, WAV, M4A, AAC, FLAC, OGG, OPUS, MP4, MOV, MKV, WebM, and M4V are supported.
+2. `src/transcript_cleaner.py` sends timestamped paragraph batches to the configured local Qwen model. It repairs punctuation, sentence boundaries, repetitions, fragments, and only strongly supported recognition mistakes. The prompt forbids new facts and requires `[unclear]` instead of guesses; structural, length, and source-word-retention checks reject unsafe responses. The raw transcript is never overwritten. Resumable batch checkpoints build the human-readable `transcript.json`, which is the version used for alignment, retrieval, summaries, and subject-library storage.
+3. `src/pdf_processor.py` uses **PyMuPDF** for PDFs and **python-pptx** for PPTX. It preserves slide number, inferred title, text, PowerPoint speaker notes, embedded image paths, and best-effort local OCR text. Legacy PPT is converted locally through LibreOffice when available.
+4. `src/alignment.py` maps each cleaned transcript paragraph to a slide. Spoken references such as “slide 8” have priority. Otherwise it selects a slide through local Ollama embedding cosine similarity. Any weak match is marked `temporal_fallback` in `alignment.json` rather than being disguised as a reliable mapping.
+5. `src/embeddings.py` chunks both sources and `src/rag.py` uses **LangChain's Chroma integration** to store their **local Ollama vectors** in a persistent **ChromaDB** directory. Metadata keeps `source`, `slide_number`, aligned slide, transcript paragraph ID, and timestamps.
+6. `src/agent.py` retrieves evidence restricted to the current slide, uses the 27B model's thinking mode to write a draft, and runs a second factual audit for every slide. Long per-slide transcripts and the final lecture synthesis use hierarchical map-reduce, so later material is not silently truncated. Its prompt forbids invented information and requires spoken-only claims to start with `Professor explanation:`.
+7. `src/quality.py` measures alignment reliability and structural completeness. If more than 70% of speech requires low-confidence temporal alignment, the run stops instead of exporting potentially misleading notes.
+8. `src/exporter.py` writes canonical Markdown and renders a local PDF with ReportLab—no online conversion service or browser dependency.
+9. `app.py` is the Streamlit interface. It supports browser uploads and direct local paths for multi-gigabyte recordings, displays live stages, and exposes every intermediate artifact.
 
 ## Project layout
 
@@ -57,6 +63,8 @@ class-2-knowleadge/
 ├── runs/                   # created at runtime; one auditable folder per lecture
 └── src/
     ├── audio_processor.py
+    ├── transcript_cleaner.py
+    ├── translator.py
     ├── pdf_processor.py
     ├── alignment.py
     ├── embeddings.py
@@ -67,7 +75,7 @@ class-2-knowleadge/
     ├── quality.py
     ├── library.py          # subject/document catalog, extraction, and local search
     ├── library_agent.py    # source-grounded library Q&A
-    ├── jobs.py             # priority queue, worker, cancellation, and Qwen coordination
+    ├── jobs.py             # priority queue, safe defer/resume, cancellation, and Qwen coordination
     ├── lecture_library.py  # completed-run handoff to a subject
     ├── ui/                 # focused Library, Agent, and Lecture page modules
     └── config.py
@@ -127,7 +135,7 @@ streamlit run app.py
 
 Then open the local URL Streamlit prints. The server is explicitly bound to `127.0.0.1` so the local-file controls are not exposed to other machines by default.
 
-Start in **Library** to create a subject and add documents. Use **Agent** to search or ask cited questions. In **Lecture Notes**, provide one or both lecture inputs, choose a priority and optional destination subject, and select **Queue Lecture Task**. Follow progress and retrieve completed outputs from **Job Queue**. With a deck only, the result contains slide-grounded notes. With a recording only, it contains timestamped 15-minute recording sections grounded in professor speech. With both, it aligns professor speech to slides.
+Start in **Library** to create a subject and add documents. Use **Agent** to search or ask cited questions. In **Lecture Notes**, provide one or both lecture inputs, choose a priority and optional destination subject, and select **Queue Lecture Task**. The app opens that task's live log automatically. Its durable timeline shows queued, claimed, transcription, summarization, safe-stop, resume, Qwen wait/resume, export, completion, cancellation, or failure events. Use the **Later** tab to resume deferred work or cancel it permanently. With a deck only, the result contains slide-grounded notes. With a recording only, it contains timestamped 15-minute recording sections grounded in professor speech. With both, it aligns professor speech to slides.
 
 Open **Job Queue → Ollama model memory** to disable automatic unloading, inspect resident models, or unload an idle model manually. Manual unloading is blocked while a lecture or model call is active and for models required by queued work, so it cannot interrupt a task or force the next task to reload the same model.
 
@@ -157,21 +165,25 @@ The generated Markdown follows this structure:
 Every run is stored under `runs/<run-id>/`:
 
 - `input/` — immutable copies of the uploaded recording and deck
-- `transcript.json` — timestamps, segments, and paragraphs
+- `transcript.partial.json` — atomically refreshed raw transcript of all completed recording chunks
+- `transcript.raw.json` — untouched Whisper segments and paragraphs for audit/comparison
+- `transcript_cleanup/` and `transcript.cleanup.partial.json` — resumable Qwen cleanup checkpoints
+- `transcript.json` — cleaned, timestamped human-readable paragraphs used downstream
 - `transcript_chunks/` — completed chunk checkpoints for inspecting long transcriptions
 - `slides.json` — slide text, titles, notes, image paths, and OCR hints
 - `alignment.json` — each transcript paragraph’s assigned slide, timestamp, confidence, and method
 - `quality_report.json` — evidence coverage, low-confidence ratio, warnings, and failures
 - `database/` — local ChromaDB vectors for that lecture only
-- `lecture_notes.md` and `lecture_notes.pdf` — final exports
+- `lecture_notes.md` and `lecture_notes.pdf` — canonical English exports
+- `translations/` — created only after an explicit translation request
 
 ## Configuration and privacy
 
 All runtime model settings live in `PipelineConfig` and are exposed in the Streamlit sidebar:
 
 - Ollama host, LLM model, embedding model, and generation temperature
-- faster-whisper model/path, device, compute type, and language
-- recording chunk duration/overlap, Ollama context, OCR, and alignment threshold (model thinking and factual review remain enabled)
+- faster-whisper model/path, device, compute type, and spoken language (`en` by default)
+- recording chunk duration/overlap, grounded transcript cleanup and its batch size, Ollama context, OCR, and alignment threshold (model thinking and factual review remain enabled)
 - chunk size/overlap and source-context limit (available in `src/config.py` for programmatic use)
 
 The application has no cloud client and no API-key configuration. It disables Chroma anonymized telemetry and Streamlit usage statistics, and rejects non-loopback Ollama URLs and cloud-tagged model names. Ollama calls use `http://127.0.0.1:11434` by default.

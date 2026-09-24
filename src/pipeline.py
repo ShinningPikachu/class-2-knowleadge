@@ -19,6 +19,7 @@ from .exporter import export_markdown, export_pdf
 from .pdf_processor import PDFProcessor
 from .quality import validate_evidence_quality, validate_final_notes
 from .rag import LocalRAG
+from .transcript_cleaner import TranscriptCleaner
 from .utils import dump_json, safe_filename, seconds_to_timestamp
 
 
@@ -35,6 +36,7 @@ class PipelineResult:
     markdown_path: Path
     pdf_path: Path
     transcript_path: Path
+    raw_transcript_path: Path
     slides_path: Path
     alignment_path: Path
     quality_report_path: Path
@@ -54,6 +56,7 @@ class LecturePipeline:
         self.config = config
         self.project_root = Path(project_root) if project_root else project_path()
         self.qwen_guard = qwen_guard
+        self.current_run_dir: Path | None = None
 
     def run(
         self,
@@ -70,6 +73,7 @@ class LecturePipeline:
         run_id = f"lecture_{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}_{uuid4().hex[:8]}"
         run_dir = self.project_root / "runs" / run_id
         run_dir.mkdir(parents=True, exist_ok=False)
+        self.current_run_dir = run_dir
         if audio_path is None and presentation_path is None:
             raise ValueError("Provide at least one source: a recording or a PDF/PPT/PPTX deck.")
         # Preserve immutable input copies beside the output for later auditing.
@@ -97,6 +101,7 @@ class LecturePipeline:
     ) -> PipelineResult:
         """Continue an interrupted run without discarding its checkpoints."""
         run_dir = Path(run_dir).expanduser().resolve()
+        self.current_run_dir = run_dir
         input_dir = run_dir / "input"
         if not input_dir.is_dir():
             raise RuntimeError(f"Cannot resume: input directory not found in {run_dir}")
@@ -129,6 +134,7 @@ class LecturePipeline:
         embedder.verify_local_models()
 
         transcript_path = run_dir / "transcript.json"
+        raw_transcript_path = run_dir / "transcript.raw.json"
 
         def transcription_progress(event: dict[str, object]) -> None:
             completed = event.get("completed_chunks", 0)
@@ -153,15 +159,46 @@ class LecturePipeline:
 
         slides_path = run_dir / "slides.json"
         if stored_audio:
+            # Runs created before transcript cleanup used transcript.json for the
+            # raw Whisper output. Preserve that evidence when resuming them.
+            if transcript_path.is_file() and not raw_transcript_path.is_file():
+                shutil.copy2(transcript_path, raw_transcript_path)
             notify(
                 "recording",
                 f"Transcribing locally with faster-whisper (up to {self.config.whisper_parallel_workers} CPU workers)",
             )
-            transcript = AudioProcessor(self.config).transcribe(
-                stored_audio, transcript_path, progress=transcription_progress
+            raw_transcript = AudioProcessor(self.config).transcribe(
+                stored_audio, raw_transcript_path, progress=transcription_progress
             )
+            if self.config.enable_transcript_cleanup:
+                notify(
+                    "cleanup",
+                    "Repairing noisy speech recognition while preserving timestamps and raw evidence",
+                )
+
+                def cleanup_progress(index: int, total: int, message: str) -> None:
+                    notify("cleanup", f"{message} ({index}/{total})")
+
+                transcript = TranscriptCleaner(self.config, chat_guard=self.qwen_guard).clean(
+                    raw_transcript,
+                    transcript_path,
+                    progress=cleanup_progress,
+                )
+            else:
+                transcript = {
+                    "metadata": {
+                        **dict(raw_transcript.get("metadata", {})),
+                        "transcript_kind": "raw",
+                        "cleanup_enabled": False,
+                        "raw_transcript_file": raw_transcript_path.name,
+                    },
+                    "segments": raw_transcript.get("segments", []),
+                    "paragraphs": raw_transcript.get("paragraphs", []),
+                }
+                dump_json(transcript_path, transcript)
         else:
             transcript = {"metadata": {"source_type": "none"}, "segments": [], "paragraphs": []}
+            dump_json(raw_transcript_path, transcript)
             dump_json(transcript_path, transcript)
 
         if stored_presentation:
@@ -169,7 +206,7 @@ class LecturePipeline:
             slide_payload = PDFProcessor(self.config).process(stored_presentation, slides_path)
             slides = slide_payload["slides"]
         else:
-            notify("recording", "Creating timestamped recording sections from the professor transcript")
+            notify("alignment", "Creating timestamped recording sections from the cleaned professor transcript")
             slides = self._recording_sections(transcript)
             dump_json(
                 slides_path,
@@ -218,6 +255,7 @@ class LecturePipeline:
             markdown_path=markdown_path,
             pdf_path=pdf_path,
             transcript_path=transcript_path,
+            raw_transcript_path=raw_transcript_path,
             slides_path=slides_path,
             alignment_path=alignment_path,
             quality_report_path=quality_report_path,

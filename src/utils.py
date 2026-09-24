@@ -28,8 +28,10 @@ def safe_filename(name: str, fallback: str = "upload") -> str:
 
 
 def dump_json(path: Path, payload: Any) -> None:
-    """Write UTF-8 JSON consistently throughout the project."""
+    """Atomically write UTF-8 JSON so live readers never see a half-written file."""
     import json
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    temporary_path = path.with_name(f".{path.name}.tmp")
+    temporary_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    temporary_path.replace(path)

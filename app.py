@@ -36,13 +36,18 @@ def _job_manager() -> JobManager:
 
 library = LibraryStore(project_path("library"))
 job_manager = _job_manager()
+workspace_options = ["Library", "Agent", "Lecture Notes", "Job Queue"]
+requested_workspace = st.session_state.pop("requested_workspace", "")
+if requested_workspace in workspace_options:
+    st.session_state["workspace_selector"] = requested_workspace
 with st.sidebar:
     st.title("Class Knowledge")
-    workspace = st.radio("Workspace", ["Library", "Agent", "Lecture Notes", "Job Queue"])
+    workspace = st.radio("Workspace", workspace_options, key="workspace_selector")
     job_counts = job_manager.counts()
     st.caption(
         f"Queue: {job_counts['queued']} planned · "
-        f"{job_counts['running'] + job_counts['waiting']} active"
+        f"{job_counts['running'] + job_counts['waiting']} active · "
+        f"{job_counts['deferred']} later"
     )
 
 if workspace == "Library":
