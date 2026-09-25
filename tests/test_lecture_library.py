@@ -24,33 +24,68 @@ class LectureLibraryHandoffTest(unittest.TestCase):
             markdown = run_dir / "lecture_notes.md"
             pdf = run_dir / "lecture_notes.pdf"
             transcript = run_dir / "transcript.json"
+            raw_transcript = run_dir / "transcript.raw.json"
+            transcript_text = run_dir / "transcript.txt"
+            slides_json = run_dir / "slides.json"
+            summaries = run_dir / "slide_summaries.json"
+            alignment = run_dir / "alignment.json"
+            quality = run_dir / "quality_report.json"
+            manifest = run_dir / "lecture_manifest.json"
             markdown.write_text("# Search\nBreadth-first search uses a queue.", encoding="utf-8")
             pdf.write_bytes(b"generated-notes-pdf")
             transcript.write_text(
                 '{"paragraphs": [{"start_time": "00:00:01", "text": "Professor explanation."}]}',
                 encoding="utf-8",
             )
+            raw_transcript.write_text('{"paragraphs": [{"text": "raw"}]}', encoding="utf-8")
+            transcript_text.write_text("[00:00:01] Professor explanation.\n", encoding="utf-8")
+            slides_json.write_text('{"slides": [{"slide": 1}]}', encoding="utf-8")
+            summaries.write_text('{"slides": [{"slide": 1, "summary": "Search."}]}', encoding="utf-8")
+            alignment.write_text('{"slides": [{"slide": 1, "paragraph_ids": [1]}]}', encoding="utf-8")
+            quality.write_text('{"status": "passed"}', encoding="utf-8")
+            manifest.write_text('{"lecture_name": "Lecture_01_Introduction_to_AI"}', encoding="utf-8")
             result = SimpleNamespace(
                 run_id="lecture_123",
                 run_dir=run_dir,
                 transcript_path=transcript,
+                raw_transcript_path=raw_transcript,
+                transcript_text_path=transcript_text,
+                slides_path=slides_json,
+                slide_summaries_path=summaries,
+                alignment_path=alignment,
+                quality_report_path=quality,
+                manifest_path=manifest,
                 markdown_path=markdown,
                 pdf_path=pdf,
             )
 
             messages = save_lecture_result(store, subject.id, result, "Introduction to AI")
-            names = {document.original_name for document in store.list_documents(subject.id)}
+            documents = store.list_documents(subject.id)
+            names = {document.original_name for document in documents}
+            folder_counts = [folder.document_count for folder in store.list_folders(subject.id)]
 
         self.assertEqual(
             names,
             {
-                "slides.pdf",
-                "Introduction_to_AI_transcript.json",
-                "Introduction_to_AI_notes.md",
-                "Introduction_to_AI_notes.pdf",
+                "Lecture_01_Introduction_to_AI_Slides.pdf",
+                "Lecture_01_Introduction_to_AI_Transcript_Raw.json",
+                "Lecture_01_Introduction_to_AI_Transcript_Cleaned.json",
+                "Lecture_01_Introduction_to_AI_Transcript_Cleaned.txt",
+                "Lecture_01_Introduction_to_AI_Slides_Extracted.json",
+                "Lecture_01_Introduction_to_AI_Slide_Summaries.json",
+                "Lecture_01_Introduction_to_AI_Alignment.json",
+                "Lecture_01_Introduction_to_AI_Quality_Report.json",
+                "Lecture_01_Introduction_to_AI_Manifest.json",
+                "Lecture_01_Introduction_to_AI_Notes.md",
+                "Lecture_01_Introduction_to_AI_Notes.pdf",
             },
         )
-        self.assertEqual(len(messages), 4)
+        self.assertEqual(len(messages), 11)
+        self.assertEqual(
+            {document.folder_name for document in documents},
+            {"Lecture 01 — Introduction to AI"},
+        )
+        self.assertEqual(folder_counts, [11])
 
 
 if __name__ == "__main__":

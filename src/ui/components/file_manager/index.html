@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --text: #31333f;
+      --muted: #687083;
+      --surface: #ffffff;
+      --soft: #f7f8fb;
+      --border: #d9dde7;
+      --accent: #ff4b4b;
+      --accent-soft: rgba(255, 75, 75, 0.10);
+      --shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button { color: inherit; font: inherit; }
+    .explorer {
+      min-height: 430px;
+      display: grid;
+      grid-template-columns: 176px minmax(0, 1fr);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .sidebar {
+      padding: 12px 9px;
+      border-right: 1px solid var(--border);
+      background: var(--soft);
+    }
+    .sidebar-title {
+      padding: 0 8px 8px;
+      color: var(--muted);
+      font-size: 0.70rem;
+      font-weight: 750;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .location {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 2px 0;
+      padding: 8px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      transition: background 100ms ease, border-color 100ms ease;
+    }
+    .location:hover { background: var(--surface); }
+    .location.active {
+      border-color: var(--border);
+      background: var(--surface);
+      font-weight: 650;
+    }
+    .location.drag-over {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .location-icon { flex: none; font-size: 1.05rem; }
+    .location-copy { min-width: 0; flex: 1; }
+    .location-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.80rem;
+    }
+    .location-count { margin-top: 1px; color: var(--muted); font-size: 0.66rem; }
+    .content { min-width: 0; padding: 13px 15px 16px; }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 34px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .breadcrumb {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.87rem;
+      font-weight: 650;
+    }
+    .toolbar-hint { flex: none; color: var(--muted); font-size: 0.70rem; }
+    .section-label {
+      margin: 12px 0 7px;
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 750;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .item-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+      gap: 9px;
+    }
+    .item {
+      min-width: 0;
+      min-height: 108px;
+      padding: 11px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      user-select: none;
+      transition: border-color 100ms ease, background 100ms ease, transform 100ms ease;
+    }
+    .item:hover {
+      border-color: var(--border);
+      background: var(--soft);
+    }
+    .item.selected {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .item.drag-over {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      transform: translateY(-1px);
+    }
+    .item.dragging { opacity: 0.42; cursor: grabbing; }
+    .item-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 7px;
+    }
+    .item-icon { font-size: 2rem; line-height: 1; }
+    .extension {
+      padding: 2px 5px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: 0.60rem;
+      font-weight: 750;
+      letter-spacing: 0.04em;
+    }
+    .item-name {
+      display: -webkit-box;
+      margin-top: 9px;
+      overflow: hidden;
+      font-size: 0.76rem;
+      font-weight: 620;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+    .folder-item .item-icon { font-size: 2.2rem; }
+    .empty {
+      display: grid;
+      min-height: 260px;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.84rem;
+      text-align: center;
+    }
+    .status {
+      min-height: 18px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.71rem;
+    }
+    @media (max-width: 620px) {
+      .explorer { grid-template-columns: 1fr; }
+      .sidebar {
+        display: flex;
+        gap: 4px;
+        overflow-x: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .sidebar-title { display: none; }
+      .location { min-width: 130px; }
+      .toolbar-hint { display: none; }
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #fafafa;
+        --muted: #a7adba;
+        --surface: #15171c;
+        --soft: #20232b;
+        --border: #3a3f4b;
+        --shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main id="app"></main>
+  <script>
+    const app = document.getElementById("app");
+    let currentArgs = { folders: [], documents: [], current_folder_id: "", selected_document_id: "" };
+    let didDrag = false;
+
+    function send(type, payload = {}) {
+      window.parent.postMessage({ isStreamlitMessage: true, type, ...payload }, "*");
+    }
+
+    function setHeight() {
+      window.requestAnimationFrame(() => {
+        send("streamlit:setFrameHeight", { height: app.scrollHeight + 4 });
+      });
+    }
+
+    function setValue(value) {
+      send("streamlit:setComponentValue", { value, dataType: "json" });
+    }
+
+    function event(action, values = {}) {
+      setValue({
+        action,
+        ...values,
+        event_id: `${Date.now()}-${Math.random().toString(16).slice(2)}`
+      });
+    }
+
+    function applyTheme(theme) {
+      if (!theme) return;
+      const root = document.documentElement.style;
+      if (theme.textColor) root.setProperty("--text", theme.textColor);
+      if (theme.secondaryBackgroundColor) root.setProperty("--soft", theme.secondaryBackgroundColor);
+      if (theme.backgroundColor) root.setProperty("--surface", theme.backgroundColor);
+      if (theme.primaryColor) {
+        root.setProperty("--accent", theme.primaryColor);
+        root.setProperty("--accent-soft", `${theme.primaryColor}1a`);
+      }
+      if (theme.font) document.body.style.fontFamily = theme.font;
+    }
+
+    function element(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    function dropFile(eventObject, targetFolder, status) {
+      eventObject.preventDefault();
+      const documentId = eventObject.dataTransfer && eventObject.dataTransfer.getData("text/plain");
+      const file = (currentArgs.documents || []).find((item) => item.id === documentId);
+      if (!file) return;
+      const targetId = targetFolder.id || "";
+      if ((file.folder_id || "") === targetId) {
+        status.textContent = `${file.name} is already in ${targetFolder.name}.`;
+        return;
+      }
+      status.textContent = `Moving ${file.name} to ${targetFolder.name}…`;
+      event("move", { document_id: file.id, folder_id: targetId });
+    }
+
+    function makeDropTarget(node, folder, status) {
+      node.addEventListener("dragover", (eventObject) => {
+        eventObject.preventDefault();
+        if (eventObject.dataTransfer) eventObject.dataTransfer.dropEffect = "move";
+        node.classList.add("drag-over");
+      });
+      node.addEventListener("dragleave", () => node.classList.remove("drag-over"));
+      node.addEventListener("drop", (eventObject) => {
+        node.classList.remove("drag-over");
+        dropFile(eventObject, folder, status);
+      });
+    }
+
+    function render(args, theme) {
+      currentArgs = args || currentArgs;
+      applyTheme(theme);
+      app.replaceChildren();
+
+      const folders = currentArgs.folders || [];
+      const documents = currentArgs.documents || [];
+      const currentId = currentArgs.current_folder_id || "";
+      const currentFolder = folders.find((folder) => (folder.id || "") === currentId) || folders[0];
+      const visibleFiles = documents.filter((file) => (file.folder_id || "") === currentId);
+
+      const explorer = element("div", "explorer");
+      const sidebar = element("aside", "sidebar");
+      sidebar.appendChild(element("div", "sidebar-title", "Locations"));
+      const content = element("section", "content");
+      const status = element("div", "status", "Click a file once to preview it. Drag it onto any folder to move it.");
+
+      folders.forEach((folder) => {
+        const location = element("button", "location");
+        location.type = "button";
+        if ((folder.id || "") === currentId) location.classList.add("active");
+        location.appendChild(element("span", "location-icon", folder.icon || "📁"));
+        const copy = element("span", "location-copy");
+        copy.appendChild(element("div", "location-name", folder.name));
+        const count = Number(folder.document_count || 0);
+        copy.appendChild(element("div", "location-count", `${count} file${count === 1 ? "" : "s"}`));
+        location.appendChild(copy);
+        location.addEventListener("click", () => {
+          event("browse", { folder_id: folder.id || "" });
+        });
+        makeDropTarget(location, folder, status);
+        sidebar.appendChild(location);
+      });
+
+      const toolbar = element("div", "toolbar");
+      toolbar.appendChild(
+        element("div", "breadcrumb", `Subject / ${currentFolder ? currentFolder.name : "Subject root"}`)
+      );
+      toolbar.appendChild(element("div", "toolbar-hint", "Click to preview · Drag to move"));
+      content.appendChild(toolbar);
+
+      if (!currentId && folders.length > 1) {
+        content.appendChild(element("div", "section-label", "Folders"));
+        const folderGrid = element("div", "item-grid");
+        folders.slice(1).forEach((folder) => {
+          const tile = element("button", "item folder-item");
+          tile.type = "button";
+          tile.appendChild(element("div", "item-icon", folder.icon || "📁"));
+          tile.appendChild(element("div", "item-name", folder.name));
+          tile.addEventListener("click", () => {
+            if (!didDrag) event("browse", { folder_id: folder.id || "" });
+          });
+          makeDropTarget(tile, folder, status);
+          folderGrid.appendChild(tile);
+        });
+        content.appendChild(folderGrid);
+      }
+
+      if (visibleFiles.length) {
+        content.appendChild(element("div", "section-label", "Files"));
+        const fileGrid = element("div", "item-grid");
+        visibleFiles.forEach((file) => {
+          const tile = element("button", "item file-item");
+          tile.type = "button";
+          tile.draggable = true;
+          tile.title = `Click to preview ${file.name}; drag to move it`;
+          if (file.id === currentArgs.selected_document_id) tile.classList.add("selected");
+          const top = element("div", "item-top");
+          top.appendChild(element("div", "item-icon", file.icon || "📎"));
+          top.appendChild(element("span", "extension", file.extension || "FILE"));
+          tile.appendChild(top);
+          tile.appendChild(element("div", "item-name", file.name));
+          tile.addEventListener("click", () => {
+            if (!didDrag) event("open", { document_id: file.id });
+          });
+          tile.addEventListener("dragstart", (eventObject) => {
+            didDrag = true;
+            tile.classList.add("dragging");
+            if (eventObject.dataTransfer) {
+              eventObject.dataTransfer.effectAllowed = "move";
+              eventObject.dataTransfer.setData("text/plain", file.id);
+            }
+          });
+          tile.addEventListener("dragend", () => {
+            tile.classList.remove("dragging");
+            window.setTimeout(() => { didDrag = false; }, 0);
+          });
+          fileGrid.appendChild(tile);
+        });
+        content.appendChild(fileGrid);
+      } else if (currentId || folders.length <= 1) {
+        content.appendChild(
+          element("div", "empty", "This folder is empty. Add files or drag them here from another location.")
+        );
+      }
+
+      content.appendChild(status);
+      explorer.appendChild(sidebar);
+      explorer.appendChild(content);
+      app.appendChild(explorer);
+      setHeight();
+    }
+
+    window.addEventListener("message", (message) => {
+      if (message.data && message.data.type === "streamlit:render") {
+        render(message.data.args || {}, message.data.theme || {});
+      }
+    });
+    send("streamlit:componentReady", { apiVersion: 1 });
+    setHeight();
+  </script>
+</body>
+</html>

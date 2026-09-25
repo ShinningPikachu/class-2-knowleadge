@@ -20,7 +20,8 @@ from .config import PipelineConfig
 from .embeddings import OllamaEmbedder
 from .exporter import ExportError, export_markdown, export_pdf
 from .lecture_library import save_lecture_result
-from .library import LibraryStore
+from .lecture_naming import infer_lecture_identity
+from .library import DuplicateDocumentError, LibraryError, LibraryStore
 from .ollama_runtime import (
     OllamaRuntime,
     OllamaRuntimeError,
@@ -287,12 +288,21 @@ class JobManager:
         input_root.mkdir(parents=True, exist_ok=False)
         stored_audio = self._copy_job_input(audio_path, input_root, "recording")
         stored_presentation = self._copy_job_input(presentation_path, input_root, "slides")
-        title = (lecture_title or "Lecture notes").strip() or "Lecture notes"
+        existing_lectures = sum(1 for item in self.list_jobs(limit=500) if item.kind == "lecture")
+        identity = infer_lecture_identity(
+            lecture_title,
+            stored_audio,
+            stored_presentation,
+            default_number=existing_lectures + 1,
+        )
+        title = identity.display_title
         payload = {
             "config": asdict(config),
             "audio_path": str(stored_audio) if stored_audio else None,
             "presentation_path": str(stored_presentation) if stored_presentation else None,
-            "lecture_title": lecture_title,
+            "lecture_title": identity.display_title,
+            "lecture_name": identity.base_name,
+            "source_lecture_title": lecture_title,
             "subject_id": subject_id,
             "resume_run_directory": resume_run_directory,
         }
@@ -406,6 +416,9 @@ class JobManager:
         source_job_id: str,
         slide_number: int,
         priority: int = PRIORITIES["Normal"],
+        library_subject_id: str | None = None,
+        library_folder_id: str | None = None,
+        lecture_name: str | None = None,
     ) -> JobRecord:
         """Queue an expensive, source-grounded deep review for one completed slide."""
         if priority not in PRIORITY_LABELS:
@@ -442,6 +455,14 @@ class JobManager:
 
         number = int(selected["slide"])
         slide_title = str(selected.get("title", f"Slide {number}")).strip() or f"Slide {number}"
+        if library_subject_id:
+            library = LibraryStore(self.project_root / "library")
+            try:
+                library.get_subject(library_subject_id)
+                if library_folder_id and library.get_folder(library_folder_id).subject_id != library_subject_id:
+                    raise JobError("The selected lecture folder does not belong to the library subject.")
+            except LibraryError as exc:
+                raise JobError(f"The selected library destination is unavailable: {exc}") from exc
         job_id = uuid4().hex
         (self.root / job_id).mkdir(parents=True, exist_ok=False)
         payload = {
@@ -450,6 +471,9 @@ class JobManager:
             "run_dir": str(run_dir),
             "slide_number": number,
             "slide_title": slide_title,
+            "library_subject_id": library_subject_id,
+            "library_folder_id": library_folder_id,
+            "lecture_name": lecture_name,
         }
         now = self._timestamp()
         with self._condition:
@@ -1074,6 +1098,9 @@ class JobManager:
                         "run_dir": str(run_dir),
                         "transcript_path": str(Path(run_dir) / "transcript.json"),
                         "raw_transcript_path": str(Path(run_dir) / "transcript.raw.json"),
+                        "transcript_text_path": str(Path(run_dir) / "transcript.txt"),
+                        "slide_summaries_path": str(Path(run_dir) / "slide_summaries.json"),
+                        "manifest_path": str(Path(run_dir) / "lecture_manifest.json"),
                         "cleaned_partial_transcript_path": str(
                             Path(run_dir) / "transcript.cleanup.partial.json"
                         ),
@@ -1119,7 +1146,7 @@ class JobManager:
                 library,
                 payload["subject_id"],
                 result,
-                payload.get("lecture_title"),
+                getattr(result, "lecture_title", None) or payload.get("lecture_title"),
             )
         result_payload = {
             "run_id": result.run_id,
@@ -1128,11 +1155,22 @@ class JobManager:
             "pdf_path": str(result.pdf_path),
             "transcript_path": str(result.transcript_path),
             "raw_transcript_path": str(result.raw_transcript_path),
+            "transcript_text_path": str(
+                getattr(result, "transcript_text_path", result.run_dir / "transcript.txt")
+            ),
             "cleaned_partial_transcript_path": str(result.run_dir / "transcript.cleanup.partial.json"),
             "partial_transcript_path": str(result.run_dir / "transcript.partial.json"),
             "slides_path": str(result.slides_path),
+            "slide_summaries_path": str(
+                getattr(result, "slide_summaries_path", result.run_dir / "slide_summaries.json")
+            ),
             "alignment_path": str(result.alignment_path),
             "quality_report_path": str(result.quality_report_path),
+            "manifest_path": str(
+                getattr(result, "manifest_path", result.run_dir / "lecture_manifest.json")
+            ),
+            "lecture_name": str(getattr(result, "lecture_name", payload.get("lecture_name", ""))),
+            "lecture_title": str(getattr(result, "lecture_title", payload.get("lecture_title", ""))),
             "indexed_chunks": result.indexed_chunks,
             "output_language": "English",
             "library_messages": library_messages,
@@ -1259,6 +1297,30 @@ class JobManager:
             pdf_path = None
         self._raise_if_interrupted(job.id)
 
+        library_messages: list[str] = []
+        if payload.get("library_subject_id"):
+            library = LibraryStore(self.project_root / "library")
+            base_name = safe_filename(
+                str(payload.get("lecture_name") or source_job.result.get("lecture_name") or "Lecture")
+            )
+            library_candidates = [(markdown_path, ".md")]
+            if pdf_path is not None:
+                library_candidates.append((pdf_path, ".pdf"))
+            for path, suffix in library_candidates:
+                filename = f"{base_name}_Slide_{number:03d}_Deep_Review_{job.id[:8]}{suffix}"
+                try:
+                    stored = library.add_document(
+                        str(payload["library_subject_id"]),
+                        path,
+                        filename=filename,
+                        folder_id=str(payload.get("library_folder_id") or "") or None,
+                    )
+                    library_messages.append(f"Saved {stored.original_name} to the lecture folder.")
+                except DuplicateDocumentError as exc:
+                    library_messages.append(str(exc))
+                except LibraryError as exc:
+                    library_messages.append(f"Could not add {filename} to the lecture folder: {exc}")
+
         result_payload = {
             "source_job_id": source_job.id,
             "slide_number": number,
@@ -1268,6 +1330,7 @@ class JobManager:
             "pdf_path": str(pdf_path) if pdf_path is not None else "",
             "pdf_warning": pdf_warning,
             "generation_profile": "deep",
+            "library_messages": library_messages,
         }
         now = self._timestamp()
         message = f"Deep review for slide {number} is ready"

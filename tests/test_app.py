@@ -11,6 +11,7 @@ from streamlit.testing.v1 import AppTest
 
 from src.config import PipelineConfig
 from src.jobs import PRIORITIES, JobManager
+from src.library import LibraryStore
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -22,6 +23,7 @@ class StreamlitAppTest(unittest.TestCase):
             temporary_root = Path(directory)
             source = temporary_root / "lecture.pdf"
             source.write_bytes(b"lecture")
+            LibraryStore(temporary_root / "library").create_subject("Computer Science")
             seed_manager = JobManager(temporary_root, autostart=False)
             self.addCleanup(seed_manager.stop)
             completed_job = seed_manager.enqueue_lecture(
@@ -57,11 +59,20 @@ class StreamlitAppTest(unittest.TestCase):
                 app = AppTest.from_file(str(PROJECT_ROOT / "app.py"), default_timeout=20).run()
                 self.assertFalse(list(app.exception))
                 workspace = next(item for item in app.radio if item.label == "Workspace")
-                self.assertEqual(workspace.options, ["Library", "Agent", "Lecture Notes", "Job Queue"])
+                self.assertEqual(
+                    workspace.options,
+                    ["Library", "Agent", "Lecture Notes", "Job Queue"],
+                )
 
                 workspace.set_value("Agent").run()
                 self.assertFalse(list(app.exception))
                 self.assertIn("🤖 Local Library Agent", [item.value for item in app.title])
+                active_agent = next(item for item in app.toggle if item.label == "Activate local agent")
+                active_agent.set_value(True).run()
+                self.assertFalse(list(app.exception))
+                agent_expanders = [item.label for item in app.expander]
+                self.assertNotIn("Insert documents into a subject", agent_expanders)
+                self.assertNotIn("Quick file jobs", agent_expanders)
 
                 workspace = next(item for item in app.radio if item.label == "Workspace")
                 workspace.set_value("Job Queue").run()

@@ -100,16 +100,27 @@ class PDFProcessor:
                     lines = [clean_text(line) for line in raw_text.splitlines() if clean_text(line)]
                     title = self._infer_title(lines, number)
                     content = clean_text("\n".join(lines))
+                    preview_path = image_dir / f"slide_{number:03d}_preview.png"
+                    rendered = page.get_pixmap(matrix=fitz.Matrix(1.5, 1.5), alpha=False)
+                    preview_path.write_bytes(rendered.tobytes("png"))
                     images, visual_text = self._extract_pdf_images(page, number, image_dir)
                     # Scanned slides often have no extractable page text; local OCR is a useful fallback.
                     if not content and self.config.enable_ocr:
-                        rendered = page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False)
-                        visual_text.append(self._ocr_bytes(rendered.tobytes("png")))
+                        ocr_render = page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False)
+                        visual_text.append(self._ocr_bytes(ocr_render.tobytes("png")))
                         visual_text = [item for item in visual_text if item]
                         content = " ".join(visual_text)
                         title = self._infer_title(content.splitlines(), number)
                     slides.append(
-                        self._slide_record(number, title, content, notes="", images=images, visual_text=visual_text)
+                        self._slide_record(
+                            number,
+                            title,
+                            content,
+                            notes="",
+                            images=images,
+                            visual_text=visual_text,
+                            preview_image=str(preview_path),
+                        )
                     )
         except Exception as exc:
             raise SlideProcessingError(f"Could not process PDF: {exc}") from exc
@@ -123,6 +134,7 @@ class PDFProcessor:
             raise SlideProcessingError("python-pptx is not installed. Run: pip install -r requirements.txt") from exc
 
         image_dir.mkdir(parents=True, exist_ok=True)
+        rendered_previews = self._render_powerpoint_previews(path, image_dir)
         try:
             deck = Presentation(path)
         except Exception as exc:
@@ -170,8 +182,51 @@ class PDFProcessor:
             if not title:
                 title = self._infer_title(text_parts, number)
             content = "\n".join(text_parts)
-            slides.append(self._slide_record(number, title, content, notes, images, visual_text))
+            preview_path = rendered_previews.get(number, image_dir / f"slide_{number:03d}_preview.png")
+            if not preview_path.is_file():
+                self._make_text_preview(preview_path, number, title, content)
+            slides.append(
+                self._slide_record(
+                    number,
+                    title,
+                    content,
+                    notes,
+                    images,
+                    visual_text,
+                    preview_image=str(preview_path),
+                )
+            )
         return slides
+
+    @staticmethod
+    def _render_powerpoint_previews(path: Path, image_dir: Path) -> dict[int, Path]:
+        """Render real PPTX slides through local LibreOffice, with a safe fallback."""
+        soffice = shutil.which("soffice") or shutil.which("libreoffice")
+        if not soffice:
+            return {}
+        rendered_dir = image_dir.parent / "rendered_presentation"
+        rendered_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            subprocess.run(
+                [soffice, "--headless", "--convert-to", "pdf", "--outdir", str(rendered_dir), str(path)],
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=180,
+            )
+            import fitz
+
+            output: dict[int, Path] = {}
+            with muted_mupdf_errors(fitz), fitz.open(rendered_dir / f"{path.stem}.pdf") as document:
+                for number, page in enumerate(document, start=1):
+                    preview = image_dir / f"slide_{number:03d}_preview.png"
+                    preview.write_bytes(
+                        page.get_pixmap(matrix=fitz.Matrix(1.5, 1.5), alpha=False).tobytes("png")
+                    )
+                    output[number] = preview
+            return output
+        except Exception:
+            return {}
 
     @classmethod
     def _walk_shapes(cls, shapes: Any) -> Any:
@@ -218,6 +273,39 @@ class PDFProcessor:
             return ""
 
     @staticmethod
+    def _make_text_preview(path: Path, number: int, title: str, content: str) -> None:
+        """Create a readable local fallback when PowerPoint rendering is unavailable."""
+        try:
+            from PIL import Image, ImageDraw, ImageFont
+            import textwrap
+
+            image = Image.new("RGB", (1280, 720), "#f8fafc")
+            draw = ImageDraw.Draw(image)
+            title_font = ImageFont.truetype("Arial.ttf", 46)
+            body_font = ImageFont.truetype("Arial.ttf", 28)
+            small_font = ImageFont.truetype("Arial.ttf", 20)
+        except (ImportError, OSError):
+            from PIL import Image, ImageDraw, ImageFont
+            import textwrap
+
+            image = Image.new("RGB", (1280, 720), "white")
+            draw = ImageDraw.Draw(image)
+            title_font = body_font = small_font = ImageFont.load_default()
+        draw.rectangle((0, 0, 1280, 14), fill="#2563eb")
+        draw.text((72, 55), title or f"Slide {number}", fill="#0f172a", font=title_font)
+        y = 145
+        for paragraph in clean_text(content).split(" • "):
+            for line in textwrap.wrap(paragraph, width=72):
+                draw.text((80, y), line, fill="#334155", font=body_font)
+                y += 38
+                if y > 640:
+                    break
+            if y > 640:
+                break
+        draw.text((1135, 675), str(number), fill="#64748b", font=small_font)
+        image.save(path, format="PNG")
+
+    @staticmethod
     def _infer_title(lines: list[str], number: int) -> str:
         for line in lines:
             compact = clean_text(line)
@@ -233,6 +321,7 @@ class PDFProcessor:
         notes: str,
         images: list[str],
         visual_text: list[str],
+        preview_image: str = "",
     ) -> dict[str, Any]:
         return {
             "slide": number,
@@ -241,4 +330,5 @@ class PDFProcessor:
             "notes": notes,
             "images": images,
             "visual_text": visual_text,
+            "preview_image": preview_image,
         }

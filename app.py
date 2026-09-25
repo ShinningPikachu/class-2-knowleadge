@@ -51,7 +51,7 @@ with st.sidebar:
     )
 
 if workspace == "Library":
-    render_library(library)
+    render_library(library, job_manager)
 elif workspace == "Job Queue":
     render_jobs(job_manager)
 else:

@@ -290,57 +290,6 @@ def _render_translation_request(job: JobRecord, manager: JobManager, key_prefix:
                 st.error(str(exc))
 
 
-def _render_slide_review_request(job: JobRecord, manager: JobManager, key_prefix: str) -> None:
-    if job.kind != "lecture" or job.status != "completed":
-        return
-    slides_path = Path(str(job.result.get("slides_path", "")))
-    try:
-        payload = json.loads(slides_path.read_text(encoding="utf-8"))
-        choices = [
-            (int(slide["slide"]), str(slide.get("title", "")).strip())
-            for slide in payload.get("slides", [])
-        ]
-    except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError, ValueError):
-        choices = []
-    if not choices:
-        return
-    with st.expander("Deep-review one slide on demand", expanded=False):
-        st.caption(
-            "Uses high reasoning and a second factual audit only for the selected slide. "
-            "The fast baseline notes remain unchanged."
-        )
-        with st.form(f"{key_prefix}_slide_review_form_{job.id}"):
-            selected = st.selectbox(
-                "Slide",
-                choices,
-                format_func=lambda item: f"Slide {item[0]}: {item[1]}" if item[1] else f"Slide {item[0]}",
-            )
-            priority_label = st.selectbox(
-                "Deep-review priority",
-                list(PRIORITIES),
-                index=list(PRIORITIES).index("Normal"),
-            )
-            submitted = st.form_submit_button(
-                "Queue deep review",
-                type="primary",
-                use_container_width=True,
-            )
-        if submitted:
-            try:
-                review_job = manager.enqueue_slide_review(
-                    job.id,
-                    selected[0],
-                    priority=PRIORITIES[priority_label],
-                )
-                st.session_state["job_log_id"] = review_job.id
-                st.session_state["job_log_notice"] = (
-                    f"Queued a deep review of slide {selected[0]}. The baseline notes are unchanged."
-                )
-                st.rerun()
-            except JobError as exc:
-                st.error(str(exc))
-
-
 def _render_job(job: JobRecord, manager: JobManager, editable: bool = False) -> None:
     icon = STATUS_ICONS.get(job.status, "•")
     with st.container(border=True):
@@ -361,7 +310,6 @@ def _render_job(job: JobRecord, manager: JobManager, editable: bool = False) -> 
                     st.write(f"- {message}")
         if job.status == "completed":
             _render_completed_files(job, "job")
-            _render_slide_review_request(job, manager, "card")
             _render_translation_request(job, manager, "card")
 
         if editable:
@@ -487,7 +435,6 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
             except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
                 st.warning(f"The transcript exists but could not be opened yet: {exc}")
         _render_translation_request(job, manager, "log")
-        _render_slide_review_request(job, manager, "log")
 
     st.subheader("Processing timeline")
     events = manager.list_job_events(job.id)

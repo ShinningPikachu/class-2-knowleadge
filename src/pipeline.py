@@ -16,11 +16,12 @@ from .audio_processor import AudioProcessor, SUPPORTED_RECORDING_SUFFIXES
 from .config import PipelineConfig, project_path
 from .embeddings import OllamaEmbedder, build_source_documents
 from .exporter import export_markdown, export_pdf
+from .lecture_naming import infer_lecture_identity
 from .pdf_processor import PDFProcessor
 from .quality import validate_evidence_quality, validate_final_notes
 from .rag import LocalRAG
 from .transcript_cleaner import TranscriptCleaner
-from .utils import dump_json, safe_filename, seconds_to_timestamp
+from .utils import clean_text, dump_json, seconds_to_timestamp
 
 
 StageCallback = Callable[[str, str], None]
@@ -37,9 +38,14 @@ class PipelineResult:
     pdf_path: Path
     transcript_path: Path
     raw_transcript_path: Path
+    transcript_text_path: Path
     slides_path: Path
+    slide_summaries_path: Path
     alignment_path: Path
     quality_report_path: Path
+    manifest_path: Path
+    lecture_name: str
+    lecture_title: str
     indexed_chunks: int
 
 
@@ -70,7 +76,8 @@ class LecturePipeline:
         Keeping JSON and Chroma artifacts per run makes the result reproducible:
         a learner can inspect exactly what text and mapping informed the notes.
         """
-        run_id = f"lecture_{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}_{uuid4().hex[:8]}"
+        identity = infer_lecture_identity(lecture_title, audio_path, presentation_path)
+        run_id = f"{identity.base_name}_{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}_{uuid4().hex[:8]}"
         run_dir = self.project_root / "runs" / run_id
         run_dir.mkdir(parents=True, exist_ok=False)
         self.current_run_dir = run_dir
@@ -79,9 +86,13 @@ class LecturePipeline:
         # Preserve immutable input copies beside the output for later auditing.
         input_dir = run_dir / "input"
         input_dir.mkdir()
-        stored_audio = input_dir / safe_filename(Path(audio_path).name, "lecture_audio") if audio_path else None
+        stored_audio = (
+            input_dir / f"{identity.base_name}_Recording{Path(audio_path).suffix.lower()}" if audio_path else None
+        )
         stored_presentation = (
-            input_dir / safe_filename(Path(presentation_path).name, "lecture_slides") if presentation_path else None
+            input_dir / f"{identity.base_name}_Slides{Path(presentation_path).suffix.lower()}"
+            if presentation_path
+            else None
         )
         try:
             if audio_path and stored_audio:
@@ -91,7 +102,9 @@ class LecturePipeline:
         except OSError as exc:
             raise RuntimeError(f"Could not preserve lecture input files for this run: {exc}") from exc
 
-        return self._process_run(run_id, run_dir, stored_audio, stored_presentation, lecture_title, on_stage)
+        return self._process_run(
+            run_id, run_dir, stored_audio, stored_presentation, identity.display_title, on_stage
+        )
 
     def resume(
         self,
@@ -157,7 +170,9 @@ class LecturePipeline:
                 message += f". Confirmed transcript preview: {preview}"
             notify("recording", message)
 
+        identity = infer_lecture_identity(lecture_title, stored_audio, stored_presentation)
         slides_path = run_dir / "slides.json"
+        raw_transcript: dict[str, Any]
         if stored_audio:
             # Runs created before transcript cleanup used transcript.json for the
             # raw Whisper output. Preserve that evidence when resuming them.
@@ -170,10 +185,24 @@ class LecturePipeline:
             raw_transcript = AudioProcessor(self.config).transcribe(
                 stored_audio, raw_transcript_path, progress=transcription_progress
             )
+        else:
+            raw_transcript = {"metadata": {"source_type": "none"}, "segments": [], "paragraphs": []}
+            dump_json(raw_transcript_path, raw_transcript)
+
+        # Extract slides before cleanup so the cleaner can distinguish the
+        # lecture subject from personal conversation and background chatter.
+        if stored_presentation:
+            notify("slides", "Extracting slide text, titles, notes, and local image OCR")
+            slide_payload = PDFProcessor(self.config).process(stored_presentation, slides_path)
+            slides = slide_payload["slides"]
+        else:
+            slides = []
+
+        if stored_audio:
             if self.config.enable_transcript_cleanup:
                 notify(
                     "cleanup",
-                    "Repairing noisy speech recognition while preserving timestamps and raw evidence",
+                    "Cleaning lecture speech and removing clearly unrelated background conversation",
                 )
 
                 def cleanup_progress(index: int, total: int, message: str) -> None:
@@ -183,6 +212,7 @@ class LecturePipeline:
                     raw_transcript,
                     transcript_path,
                     progress=cleanup_progress,
+                    lecture_context=self._lecture_context(identity.display_title, slides),
                 )
             else:
                 transcript = {
@@ -198,20 +228,18 @@ class LecturePipeline:
                 dump_json(transcript_path, transcript)
         else:
             transcript = {"metadata": {"source_type": "none"}, "segments": [], "paragraphs": []}
-            dump_json(raw_transcript_path, transcript)
             dump_json(transcript_path, transcript)
 
-        if stored_presentation:
-            notify("slides", "Extracting slide text, titles, notes, and local image OCR")
-            slide_payload = PDFProcessor(self.config).process(stored_presentation, slides_path)
-            slides = slide_payload["slides"]
-        else:
+        if not stored_presentation:
             notify("alignment", "Creating timestamped recording sections from the cleaned professor transcript")
             slides = self._recording_sections(transcript)
             dump_json(
                 slides_path,
                 {"metadata": {"source_type": "recording", "section_count": len(slides)}, "slides": slides},
             )
+
+        transcript_text_path = run_dir / "transcript.txt"
+        transcript_text_path.write_text(self._transcript_text(transcript), encoding="utf-8")
 
         alignment_path = run_dir / "alignment.json"
         if stored_audio and stored_presentation:
@@ -243,7 +271,8 @@ class LecturePipeline:
         def note_progress(index: int, total: int, message: str) -> None:
             notify("notes", f"{message} ({index}/{total})")
 
-        effective_title = lecture_title or (stored_audio.stem if stored_audio and not stored_presentation else None)
+        effective_title = identity.display_title
+        slide_summaries_path = run_dir / "slide_summaries.json"
         notes = agent.generate_lecture_notes(
             slides,
             alignment,
@@ -251,6 +280,7 @@ class LecturePipeline:
             progress=note_progress,
             checkpoint_dir=run_dir / "notes_checkpoints",
             partial_output_path=run_dir / "lecture_notes.partial.md",
+            slide_summaries_path=slide_summaries_path,
         )
         section_label = "Recording section" if slides and slides[0].get("section_kind") == "recording" else "Slide"
         validate_final_notes(notes, len(slides), section_label=section_label)
@@ -258,6 +288,28 @@ class LecturePipeline:
 
         notify("export", "Rendering an offline PDF copy of the lecture notes")
         pdf_path = export_pdf(notes, run_dir / "lecture_notes.pdf")
+        manifest_path = run_dir / "lecture_manifest.json"
+        dump_json(
+            manifest_path,
+            {
+                "lecture_name": identity.base_name,
+                "lecture_title": identity.display_title,
+                "run_id": run_id,
+                "files": {
+                    "recording": str(stored_audio) if stored_audio else "",
+                    "slides_source": str(stored_presentation) if stored_presentation else "",
+                    "raw_transcript": str(raw_transcript_path),
+                    "cleaned_transcript_json": str(transcript_path),
+                    "cleaned_transcript_text": str(transcript_text_path),
+                    "extracted_slides": str(slides_path),
+                    "slide_summaries": str(slide_summaries_path),
+                    "alignment": str(alignment_path),
+                    "quality_report": str(quality_report_path),
+                    "notes_markdown": str(markdown_path),
+                    "notes_pdf": str(pdf_path),
+                },
+            },
+        )
         notify("complete", "Lecture notes are ready")
         return PipelineResult(
             run_id=run_id,
@@ -267,11 +319,41 @@ class LecturePipeline:
             pdf_path=pdf_path,
             transcript_path=transcript_path,
             raw_transcript_path=raw_transcript_path,
+            transcript_text_path=transcript_text_path,
             slides_path=slides_path,
+            slide_summaries_path=slide_summaries_path,
             alignment_path=alignment_path,
             quality_report_path=quality_report_path,
+            manifest_path=manifest_path,
+            lecture_name=identity.base_name,
+            lecture_title=identity.display_title,
             indexed_chunks=indexed_chunks,
         )
+
+    @staticmethod
+    def _lecture_context(lecture_title: str, slides: list[dict[str, Any]]) -> str:
+        blocks = [f"Lecture: {lecture_title}"]
+        for slide in slides:
+            number = slide.get("slide", "?")
+            title = clean_text(str(slide.get("title", "")))
+            content = clean_text(str(slide.get("content", "")))
+            blocks.append(f"Slide {number}: {title}\n{content[:800]}")
+            if sum(len(item) for item in blocks) >= 12_000:
+                break
+        return "\n\n".join(blocks)[:12_000]
+
+    @staticmethod
+    def _transcript_text(transcript: dict[str, Any]) -> str:
+        lines: list[str] = []
+        for paragraph in transcript.get("paragraphs", []):
+            if not isinstance(paragraph, dict):
+                continue
+            text = clean_text(str(paragraph.get("text", "")))
+            if not text:
+                continue
+            timestamp = f"{paragraph.get('start_time', '')}–{paragraph.get('end_time', '')}".strip("–")
+            lines.append(f"[{timestamp}] {text}" if timestamp else text)
+        return "\n\n".join(lines) + ("\n" if lines else "")
 
     @staticmethod
     def _recording_sections(transcript: dict[str, Any], section_seconds: int = 900) -> list[dict[str, Any]]:

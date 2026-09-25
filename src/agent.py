@@ -27,7 +27,7 @@ class LectureAgent:
     """Generate grounded, per-slide study notes with a local Ollama model."""
 
     CHECKPOINT_SCHEMA_VERSION = 1
-    SLIDE_PROMPT_VERSION = "lecture-slide-notes-v1"
+    SLIDE_PROMPT_VERSION = "lecture-slide-notes-v3"
     SYNTHESIS_PROMPT_VERSION = "lecture-synthesis-v1"
 
     SYSTEM_PROMPT = """You are a university lecture assistant.
@@ -73,6 +73,7 @@ translation is a separate operation requested by the user after completion."""
         progress: ProgressCallback | None = None,
         checkpoint_dir: str | Path | None = None,
         partial_output_path: str | Path | None = None,
+        slide_summaries_path: str | Path | None = None,
     ) -> str:
         """Generate a complete Markdown document with durable model-call checkpoints."""
         if not slides:
@@ -82,6 +83,7 @@ translation is a separate operation requested by the user after completion."""
         aligned_by_slide = {int(item["slide"]): item for item in alignment.get("slides", [])}
         checkpoint_root = Path(checkpoint_dir) if checkpoint_dir is not None else None
         partial_path = Path(partial_output_path) if partial_output_path is not None else None
+        summaries_path = Path(slide_summaries_path) if slide_summaries_path is not None else None
         if checkpoint_root is not None:
             checkpoint_root.mkdir(parents=True, exist_ok=True)
 
@@ -112,6 +114,7 @@ translation is a separate operation requested by the user after completion."""
                 progress(index, total, f"Writing study notes for {section_label.lower()} {number} of {total}")
             response = cached if cached is not None else self._generate_slide(slide, aligned, section_label)
             slide_sections.append((number, slide_title, response))
+            self._write_slide_summaries(summaries_path, title, section_label, slide_sections, total)
             if cached is None:
                 self._save_checkpoint(
                     checkpoint_root / f"slide_{number:04d}.json" if checkpoint_root else None,
@@ -272,10 +275,17 @@ translation is a separate operation requested by the user after completion."""
         cached = cls._load_checkpoint(path, "slide", signature)
         if cached is None:
             return None
+        cached = cls._ensure_concise_summary(cached)
         try:
             cls._require_headings(
                 cached,
-                ["## Slide content", "## Professor explanation", "## Important concepts", "## Exam points"],
+                [
+                    "## Concise summary",
+                    "## Slide content",
+                    "## Professor explanation",
+                    "## Important concepts",
+                    "## Exam points",
+                ],
                 f"slide {number} checkpoint",
             )
         except AgentError:
@@ -436,6 +446,12 @@ LOCAL RETRIEVAL CONTEXT (restricted to this slide and its aligned transcript):
         prompt = f"""Write the study-notes body for {section_label} {slide_number}: {slide.get('title', '')}.
 Use only the sources below. Return exactly these Markdown sections, in this order:
 
+## Concise summary
+In 1–3 short sentences (maximum 90 words), state only what is needed to understand
+this specific slide or small recording fragment. Combine the essential slide content
+with directly relevant professor explanation. Remove repetition, general background,
+speculation, unrelated context, and details belonging to other slides.
+
 ## Slide content
 Clear explanation of material actually shown on this slide.
 
@@ -454,9 +470,16 @@ SOURCES:
         draft = self._chat(prompt)
         should_review = self.config.note_generation_profile == "deep" and self.config.quality_review
         result = self._review_slide(slide_number, context, draft) if should_review else draft
+        result = self._ensure_concise_summary(result)
         self._require_headings(
             result,
-            ["## Slide content", "## Professor explanation", "## Important concepts", "## Exam points"],
+            [
+                "## Concise summary",
+                "## Slide content",
+                "## Professor explanation",
+                "## Important concepts",
+                "## Exam points",
+            ],
             f"slide {slide_number}",
         )
         return result
@@ -493,9 +516,13 @@ TRANSCRIPT BATCH:
 Compare the draft with the supplied sources line by line. Remove or correct every
 claim, definition, example, formula, exam hint, or causal link that is not directly
 supported. Preserve useful professor additions, prefixed with "Professor explanation:".
+Explain source-supported concepts, relationships, context, qualifications, and important
+details more deeply than the baseline draft. Keep the concise summary slide-specific,
+non-repetitive, and no longer than 90 words.
 Do not improve the draft using outside knowledge. If evidence is absent, state that
 plainly. Return only the corrected Markdown with exactly these headings:
 
+## Concise summary
 ## Slide content
 ## Professor explanation
 ## Important concepts
@@ -507,6 +534,71 @@ SOURCES:
 DRAFT TO AUDIT:
 {draft}"""
         return self._chat(prompt)
+
+    @classmethod
+    def concise_summary(cls, markdown: str) -> str:
+        """Extract the model's concise per-slide summary from a note body."""
+        marker = "## Concise summary"
+        start = markdown.find(marker)
+        if start < 0:
+            return clean_text(markdown.split("##", 1)[0])
+        remainder = markdown[start + len(marker) :].lstrip("\n ")
+        end = remainder.find("\n## ")
+        return remainder[:end].strip() if end >= 0 else remainder.strip()
+
+    @classmethod
+    def _ensure_concise_summary(cls, markdown: str) -> str:
+        """Upgrade older/fallback slide notes without losing their grounded content."""
+        if "## Concise summary" in markdown:
+            return markdown
+
+        def section(heading: str) -> str:
+            start = markdown.find(heading)
+            if start < 0:
+                return ""
+            remainder = markdown[start + len(heading) :].lstrip("\n ")
+            end = remainder.find("\n## ")
+            return remainder[:end].strip() if end >= 0 else remainder.strip()
+
+        slide_text = clean_text(section("## Slide content"))
+        professor_text = clean_text(section("## Professor explanation"))
+        useful_professor = "" if professor_text.lower().startswith("no additional professor") else professor_text
+        summary = " ".join(item for item in (slide_text, useful_professor) if item)
+        if not summary:
+            summary = "No concise source-grounded summary is available for this slide."
+        return f"## Concise summary\n{summary}\n\n{markdown.lstrip()}"
+
+    @classmethod
+    def _write_slide_summaries(
+        cls,
+        path: Path | None,
+        lecture_title: str,
+        section_label: str,
+        slide_sections: list[tuple[int, str, str]],
+        total: int,
+    ) -> None:
+        if path is None:
+            return
+        dump_json(
+            path,
+            {
+                "metadata": {
+                    "lecture_title": lecture_title,
+                    "section_label": section_label,
+                    "completed": len(slide_sections),
+                    "total": total,
+                    "is_partial": len(slide_sections) < total,
+                },
+                "slides": [
+                    {
+                        "slide": number,
+                        "title": title,
+                        "summary": cls.concise_summary(notes),
+                    }
+                    for number, title, notes in slide_sections
+                ],
+            },
+        )
 
     def _generate_final_sections(self, title: str, digest: str) -> str:
         prompt = f"""Create the final revision sections for "{title}" from only the source digest below.

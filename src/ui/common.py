@@ -38,12 +38,22 @@ def render_subject_creator(library: LibraryStore, key_prefix: str) -> None:
                 st.error(str(exc))
 
 
-def store_uploads(library: LibraryStore, subject_id: str, uploads: list[Any]) -> tuple[int, list[str]]:
+def store_uploads(
+    library: LibraryStore,
+    subject_id: str,
+    uploads: list[Any],
+    folder_id: str | None = None,
+) -> tuple[int, list[str]]:
     stored = 0
     messages: list[str] = []
     for upload in uploads:
         try:
-            document = library.add_document_bytes(subject_id, upload.name, bytes(upload.getbuffer()))
+            document = library.add_document_bytes(
+                subject_id,
+                upload.name,
+                bytes(upload.getbuffer()),
+                folder_id=folder_id,
+            )
             stored += 1
             if document.status == "indexed":
                 messages.append(f"Indexed {document.original_name}.")
@@ -71,14 +81,28 @@ def render_upload_panel(library: LibraryStore, subjects: list[Subject], key_pref
         format_func=lambda value: lookup[value].name,
         key=f"{key_prefix}_upload_subject",
     )
+    folders = library.list_folders(subject_id)
+    folder_lookup = {folder.id: folder for folder in folders}
+    folder_id = st.selectbox(
+        "Destination folder",
+        options=[""] + [folder.id for folder in folders],
+        format_func=lambda value: "Subject root (no folder)" if not value else folder_lookup[value].name,
+        key=f"{key_prefix}_upload_folder_{subject_id}",
+        help="Create lecture folders in the Files & folders tab, then add related files together here.",
+    )
     uploads = st.file_uploader(
         "Choose one or more documents",
         accept_multiple_files=True,
         key=f"{key_prefix}_uploads",
         help="PDF, PPTX, Markdown, text, CSV, and JSON are searchable immediately. Other files are safely stored.",
     )
-    if st.button("Add documents", type="primary", disabled=not uploads, key=f"{key_prefix}_upload_button"):
-        stored, messages = store_uploads(library, subject_id, list(uploads or []))
+    if st.button("Add files", type="primary", disabled=not uploads, key=f"{key_prefix}_upload_button"):
+        stored, messages = store_uploads(
+            library,
+            subject_id,
+            list(uploads or []),
+            folder_id=folder_id or None,
+        )
         if stored:
             st.success(f"Added {stored} document{'s' if stored != 1 else ''}.")
         for message in messages:
@@ -109,17 +133,12 @@ def render_model_settings(workspace: str) -> PipelineConfig:
         }
         if workspace == "Lecture Notes":
             values["whisper_model"] = st.text_input("faster-whisper model or local path", value="large-v3").strip()
-            note_profile = st.selectbox(
-                "Lecture note depth",
-                ["Fast baseline", "Deep reviewed"],
-                help=(
-                    "Fast baseline uses one bounded, non-thinking call per slide. Deep reviewed uses high "
-                    "reasoning plus a second factual audit and can take much longer. Individual baseline "
-                    "slides can be deep-reviewed later from the completed job."
-                ),
+            st.caption(
+                "The lecture pass creates concise slide-specific summaries. Deeper reasoning runs only when "
+                "you click Deep Review beside a slide in the Library."
             )
-            values["note_generation_profile"] = "fast" if note_profile == "Fast baseline" else "deep"
-            values["note_max_output_tokens"] = 1_200 if note_profile == "Fast baseline" else 4_096
+            values["note_generation_profile"] = "fast"
+            values["note_max_output_tokens"] = 1_200
             language = st.text_input(
                 "Spoken language (ISO code)",
                 value="en",
@@ -142,8 +161,8 @@ def render_model_settings(workspace: str) -> PipelineConfig:
                     "Repair noisy transcript with local Qwen",
                     value=True,
                     help=(
-                        "Preserves the raw transcript and creates a grounded, punctuated, human-readable copy "
-                        "before alignment and note generation."
+                        "Preserves the raw transcript and creates a readable lecture-only copy, removing clearly "
+                        "unrelated personal conversation and background discussion before alignment."
                     ),
                 )
                 values["transcript_cleanup_batch_chars"] = int(

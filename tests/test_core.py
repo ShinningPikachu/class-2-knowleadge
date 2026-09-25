@@ -330,7 +330,10 @@ class CoreHelpersTest(unittest.TestCase):
         self.assertEqual(calls[0]["options"]["num_predict"], 1_200)  # type: ignore[index]
 
     def test_fast_slide_notes_skip_the_deep_second_review_call(self) -> None:
-        note = """## Slide content
+        note = """## Concise summary
+Grounded content.
+
+## Slide content
 Grounded content.
 
 ## Professor explanation
@@ -394,7 +397,10 @@ No additional professor explanation was aligned with this slide.
                 {"slide": 2, "paragraphs": []},
             ]
         }
-        slide_note = """## Slide content
+        slide_note = """## Concise summary
+Grounded content.
+
+## Slide content
 Grounded content.
 
 ## Professor explanation

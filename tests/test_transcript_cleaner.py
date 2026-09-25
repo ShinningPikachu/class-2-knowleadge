@@ -35,6 +35,24 @@ class EchoCleanupClient:
         return {"message": {"content": json.dumps({"paragraphs": cleaned})}}
 
 
+class FilteringCleanupClient(EchoCleanupClient):
+    def chat(self, **kwargs: object) -> dict[str, dict[str, str]]:
+        self.calls += 1
+        messages = kwargs["messages"]  # type: ignore[index]
+        prompt = messages[-1]["content"]  # type: ignore[index]
+        source = json.loads(prompt.split("INPUT JSON:\n", 1)[1])
+        cleaned = [
+            {
+                "id": item["id"],
+                "text": "" if item["id"] == 2 else item["text"].strip().capitalize() + ".",
+                "keep": item["id"] != 2,
+                "reason": "personal background conversation" if item["id"] == 2 else "lecture content",
+            }
+            for item in source["paragraphs"]
+        ]
+        return {"message": {"content": json.dumps({"paragraphs": cleaned})}}
+
+
 class TranscriptCleanerTest(unittest.TestCase):
     @staticmethod
     def _cleaner(client: object) -> TranscriptCleaner:
@@ -127,6 +145,23 @@ class TranscriptCleanerTest(unittest.TestCase):
                 resumed["metadata"]["cleanup_source_digest"],
             )
             self.assertTrue(resumed["paragraphs"][0]["text"].startswith("Changed words"))
+
+    def test_cleanup_removes_clearly_unrelated_speech_and_records_reason(self) -> None:
+        raw = self._raw_transcript()
+        with tempfile.TemporaryDirectory() as directory:
+            result = self._cleaner(FilteringCleanupClient()).clean(
+                raw,
+                Path(directory) / "transcript.json",
+                lecture_context="Lecture: Search algorithms",
+            )
+
+        self.assertEqual([item["id"] for item in result["paragraphs"]], [1])
+        self.assertEqual(result["metadata"]["kept_paragraph_count"], 1)
+        self.assertEqual(result["metadata"]["removed_paragraph_count"], 1)
+        self.assertEqual(
+            result["removed_paragraphs"],
+            [{"id": 2, "reason": "personal background conversation"}],
+        )
 
 
 if __name__ == "__main__":

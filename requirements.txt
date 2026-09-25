@@ -1,6 +1,7 @@
 # The app sends no data to cloud APIs. Ollama must be installed separately.
 urllib3>=1.26.20,<2.0; python_version < "3.10"
-streamlit>=1.40,<2.0
+streamlit>=1.50,<2.0
+streamlit-pdf>=1.0,<2.0
 faster-whisper>=1.1,<2.0
 PyMuPDF>=1.24,<2.0
 python-pptx>=1.0,<2.0

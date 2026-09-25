@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
@@ -116,6 +117,91 @@ class LibraryStoreTest(unittest.TestCase):
         self.assertFalse(old_path.exists())
         self.assertEqual(self.store.search_documents("packet", first.id), [])
         self.assertEqual(self.store.search_documents("packet", second.id)[0].document_id, document.id)
+
+    def test_folder_keeps_related_files_together_and_accepts_moves(self) -> None:
+        subject = self.store.create_subject("Algorithms")
+        lecture = self.store.create_folder(subject.id, "Lecture 3")
+        slides = self.store.add_document_bytes(
+            subject.id,
+            "slides.pdf",
+            b"not-a-real-pdf",
+            folder_id=lecture.id,
+        )
+        recording = self.store.add_document_bytes(subject.id, "recording.mp3", b"audio-data")
+
+        moved = self.store.move_document_to_folder(recording.id, lecture.id)
+        reopened = LibraryStore(self.store.root)
+        documents = reopened.list_documents(subject.id)
+
+        self.assertEqual({item.folder_name for item in documents}, {"Lecture 3"})
+        self.assertEqual(reopened.get_folder(lecture.id).document_count, 2)
+        self.assertEqual(slides.stored_path.parent, moved.stored_path.parent)
+
+    def test_document_can_be_deleted_with_its_search_index(self) -> None:
+        subject = self.store.create_subject("Networks")
+        document = self.store.add_document_bytes(subject.id, "packets.txt", b"Packet switching")
+
+        deleted = self.store.delete_document(document.id)
+
+        self.assertEqual(deleted.id, document.id)
+        self.assertFalse(document.stored_path.exists())
+        self.assertEqual(self.store.list_documents(subject.id), [])
+        self.assertEqual(self.store.search_documents("packet", subject.id), [])
+
+    def test_nonempty_folder_requires_explicit_content_deletion(self) -> None:
+        subject = self.store.create_subject("Networks")
+        folder = self.store.create_folder(subject.id, "Lecture 1")
+        document = self.store.add_document_bytes(
+            subject.id,
+            "packets.txt",
+            b"Packet switching",
+            folder_id=folder.id,
+        )
+        folder_path = document.stored_path.parent
+
+        with self.assertRaises(LibraryError):
+            self.store.delete_folder(folder.id)
+
+        self.store.delete_folder(folder.id, delete_documents=True)
+        self.assertFalse(folder_path.exists())
+        self.assertEqual(self.store.list_folders(subject.id), [])
+        self.assertEqual(self.store.list_documents(subject.id), [])
+
+    def test_existing_flat_library_is_migrated_without_moving_its_files(self) -> None:
+        legacy_root = Path(self.temporary_directory.name) / "legacy-library"
+        legacy_root.mkdir()
+        database_path = legacy_root / "library.sqlite3"
+        with sqlite3.connect(database_path) as connection:
+            connection.executescript(
+                """
+                CREATE TABLE subjects (
+                    id TEXT PRIMARY KEY, name TEXT NOT NULL COLLATE NOCASE UNIQUE,
+                    description TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL
+                );
+                CREATE TABLE documents (
+                    id TEXT PRIMARY KEY,
+                    subject_id TEXT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+                    original_name TEXT NOT NULL, stored_path TEXT NOT NULL UNIQUE,
+                    media_type TEXT NOT NULL, size_bytes INTEGER NOT NULL,
+                    sha256 TEXT NOT NULL, status TEXT NOT NULL,
+                    extraction_error TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL,
+                    UNIQUE(subject_id, sha256)
+                );
+                INSERT INTO subjects VALUES ('subject', 'Legacy', '', 'now');
+                INSERT INTO documents VALUES (
+                    'document', 'subject', 'notes.txt',
+                    'subjects/subject/files/document_notes.txt', 'text/plain',
+                    5, 'checksum', 'indexed', '', 'now'
+                );
+                """
+            )
+
+        migrated = LibraryStore(legacy_root)
+        document = migrated.list_documents("subject")[0]
+
+        self.assertIsNone(document.folder_id)
+        self.assertEqual(document.folder_name, "")
+        self.assertEqual(migrated.list_folders("subject"), [])
 
 
 class LibraryAgentTest(unittest.TestCase):

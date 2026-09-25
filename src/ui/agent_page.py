@@ -1,4 +1,4 @@
-"""Explicitly activated local agent with cited Q&A and confirmed file jobs."""
+"""Explicitly activated local agent with cited Q&A and confirmed file changes."""
 
 from __future__ import annotations
 
@@ -8,17 +8,13 @@ from ..config import PipelineConfig
 from ..jobs import JobManager
 from ..library import LibraryDocument, LibraryError, LibraryStore, Subject
 from ..library_agent import AgentPlan, LibraryAgent, LibraryAgentError
-from .common import render_subject_creator, render_upload_panel, subject_lookup
+from .common import render_subject_creator, subject_lookup
 
 
 def _messages() -> list[dict[str, object]]:
     if "agent_messages" not in st.session_state:
         st.session_state["agent_messages"] = []
     return st.session_state["agent_messages"]
-
-
-def _document_label(document: LibraryDocument) -> str:
-    return f"{document.original_name} — {document.subject_name}"
 
 
 def _stage_plan(plan: AgentPlan) -> None:
@@ -79,43 +75,6 @@ def _render_pending_action(library: LibraryStore) -> None:
                 st.error(str(exc))
         if cancel.button("Cancel", use_container_width=True):
             st.session_state.pop("pending_agent_action", None)
-            st.rerun()
-
-
-def _render_quick_jobs(library: LibraryStore, subjects: list[Subject], documents: list[LibraryDocument]) -> None:
-    with st.expander("Quick file jobs"):
-        if not documents:
-            st.info("Add a document before using rename or move jobs.")
-            return
-        document_lookup = {document.id: document for document in documents}
-        selected_id = st.selectbox(
-            "Document",
-            options=[document.id for document in documents],
-            format_func=lambda value: _document_label(document_lookup[value]),
-            key="agent_job_document",
-        )
-        selected = document_lookup[selected_id]
-        new_name = st.text_input(
-            "New file name",
-            value=selected.original_name,
-            key=f"agent_rename_{selected.id}",
-            help="The original file extension is preserved.",
-        )
-        if st.button("Prepare rename", use_container_width=True):
-            _stage_plan(AgentPlan(action="rename_document", document_id=selected.id, new_name=new_name))
-            st.rerun()
-
-        destinations = [subject for subject in subjects if subject.id != selected.subject_id]
-        destination_lookup = subject_lookup(destinations)
-        target_id = st.selectbox(
-            "Move to subject",
-            options=[subject.id for subject in destinations],
-            format_func=lambda value: destination_lookup[value].name,
-            disabled=not destinations,
-            key=f"agent_move_{selected.id}",
-        ) if destinations else ""
-        if st.button("Prepare move", use_container_width=True, disabled=not destinations):
-            _stage_plan(AgentPlan(action="move_document", document_id=selected.id, target_subject_id=target_id))
             st.rerun()
 
 
@@ -203,9 +162,6 @@ def render_agent(library: LibraryStore, config: PipelineConfig, manager: JobMana
         'or “Rename notes.txt to week-1-notes.txt”.'
     )
 
-    with st.expander("Insert documents into a subject"):
-        render_upload_panel(library, subjects, "agent")
-    _render_quick_jobs(library, subjects, documents)
     _render_pending_action(library)
 
     for message in _messages():

@@ -35,6 +35,15 @@ class Subject:
 
 
 @dataclass(frozen=True)
+class LibraryFolder:
+    id: str
+    subject_id: str
+    name: str
+    created_at: str
+    document_count: int = 0
+
+
+@dataclass(frozen=True)
 class LibraryDocument:
     id: str
     subject_id: str
@@ -47,6 +56,8 @@ class LibraryDocument:
     status: str
     extraction_error: str
     created_at: str
+    folder_id: str | None = None
+    folder_name: str = ""
 
 
 @dataclass(frozen=True)
@@ -131,6 +142,14 @@ class LibraryStore:
                     created_at TEXT NOT NULL
                 );
 
+                CREATE TABLE IF NOT EXISTS folders (
+                    id TEXT PRIMARY KEY,
+                    subject_id TEXT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+                    name TEXT NOT NULL COLLATE NOCASE,
+                    created_at TEXT NOT NULL,
+                    UNIQUE(subject_id, name)
+                );
+
                 CREATE TABLE IF NOT EXISTS documents (
                     id TEXT PRIMARY KEY,
                     subject_id TEXT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
@@ -142,6 +161,7 @@ class LibraryStore:
                     status TEXT NOT NULL,
                     extraction_error TEXT NOT NULL DEFAULT '',
                     created_at TEXT NOT NULL,
+                    folder_id TEXT REFERENCES folders(id) ON DELETE SET NULL,
                     UNIQUE(subject_id, sha256)
                 );
 
@@ -158,6 +178,16 @@ class LibraryStore:
                 CREATE INDEX IF NOT EXISTS idx_chunks_document ON document_chunks(document_id);
                 """
             )
+            document_columns = {
+                str(row["name"])
+                for row in connection.execute("PRAGMA table_info(documents)").fetchall()
+            }
+            if "folder_id" not in document_columns:
+                connection.execute(
+                    "ALTER TABLE documents ADD COLUMN folder_id TEXT REFERENCES folders(id) ON DELETE SET NULL"
+                )
+            connection.execute("CREATE INDEX IF NOT EXISTS idx_folders_subject ON folders(subject_id)")
+            connection.execute("CREATE INDEX IF NOT EXISTS idx_documents_folder ON documents(folder_id)")
 
     def create_subject(self, name: str, description: str = "") -> Subject:
         normalized_name = clean_text(name)
@@ -202,16 +232,79 @@ class LibraryStore:
             raise LibraryError("The selected subject no longer exists.")
         return self._subject_from_row(row)
 
+    def create_folder(self, subject_id: str, name: str) -> LibraryFolder:
+        """Create a one-level folder inside a subject."""
+        self.get_subject(subject_id)
+        normalized_name = clean_text(name)
+        if not normalized_name:
+            raise LibraryError("Folder name cannot be empty.")
+        if len(normalized_name) > 120:
+            raise LibraryError("Folder name must contain no more than 120 characters.")
+
+        folder_id = uuid4().hex
+        created_at = self._timestamp()
+        folder_path = self.subjects_root / subject_id / "files" / folder_id
+        try:
+            folder_path.mkdir(parents=False, exist_ok=False)
+            with self._connect() as connection:
+                connection.execute(
+                    "INSERT INTO folders(id, subject_id, name, created_at) VALUES (?, ?, ?, ?)",
+                    (folder_id, subject_id, normalized_name, created_at),
+                )
+        except sqlite3.IntegrityError as exc:
+            if folder_path.exists():
+                folder_path.rmdir()
+            raise LibraryError(f"A folder named '{normalized_name}' already exists in this subject.") from exc
+        except (OSError, sqlite3.Error) as exc:
+            if folder_path.exists():
+                folder_path.rmdir()
+            raise LibraryError(f"Could not create the folder: {exc}") from exc
+        return LibraryFolder(folder_id, subject_id, normalized_name, created_at)
+
+    def list_folders(self, subject_id: str) -> list[LibraryFolder]:
+        self.get_subject(subject_id)
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT folders.*, COUNT(documents.id) AS document_count
+                FROM folders
+                LEFT JOIN documents ON documents.folder_id = folders.id
+                WHERE folders.subject_id = ?
+                GROUP BY folders.id
+                ORDER BY folders.name COLLATE NOCASE
+                """,
+                (subject_id,),
+            ).fetchall()
+        return [self._folder_from_row(row) for row in rows]
+
+    def get_folder(self, folder_id: str) -> LibraryFolder:
+        with self._connect() as connection:
+            row = connection.execute(
+                """
+                SELECT folders.*, COUNT(documents.id) AS document_count
+                FROM folders
+                LEFT JOIN documents ON documents.folder_id = folders.id
+                WHERE folders.id = ?
+                GROUP BY folders.id
+                """,
+                (folder_id,),
+            ).fetchone()
+        if row is None:
+            raise LibraryError("The selected folder no longer exists.")
+        return self._folder_from_row(row)
+
     def add_document(
         self,
         subject_id: str,
         source_path: str | Path,
         filename: str | None = None,
+        folder_id: str | None = None,
     ) -> LibraryDocument:
         source = Path(source_path)
         if not source.is_file():
             raise LibraryError(f"Document file not found: {source}")
         subject = self.get_subject(subject_id)
+        folder = self._folder_for_subject(subject.id, folder_id)
         original_name = safe_filename(filename or source.name, "document")
         checksum_builder = hashlib.sha256()
         size_bytes = 0
@@ -228,7 +321,9 @@ class LibraryStore:
         self._require_not_duplicate(subject, checksum)
 
         document_id = uuid4().hex
-        relative_path = Path("subjects") / subject_id / "files" / f"{document_id}_{original_name}"
+        relative_path = self._document_relative_path(
+            subject_id, document_id, original_name, folder.id if folder else None
+        )
         destination = self.root / relative_path
         temporary = destination.with_name(destination.name + ".part")
         try:
@@ -246,10 +341,18 @@ class LibraryStore:
             destination,
             checksum,
             size_bytes,
+            folder.id if folder else None,
         )
 
-    def add_document_bytes(self, subject_id: str, filename: str, data: bytes) -> LibraryDocument:
+    def add_document_bytes(
+        self,
+        subject_id: str,
+        filename: str,
+        data: bytes,
+        folder_id: str | None = None,
+    ) -> LibraryDocument:
         subject = self.get_subject(subject_id)
+        folder = self._folder_for_subject(subject.id, folder_id)
         original_name = safe_filename(filename, "document")
         if not data:
             raise LibraryError(f"'{original_name}' is empty and was not added.")
@@ -257,7 +360,9 @@ class LibraryStore:
         self._require_not_duplicate(subject, checksum)
 
         document_id = uuid4().hex
-        relative_path = Path("subjects") / subject_id / "files" / f"{document_id}_{original_name}"
+        relative_path = self._document_relative_path(
+            subject_id, document_id, original_name, folder.id if folder else None
+        )
         destination = self.root / relative_path
         temporary = destination.with_name(destination.name + ".part")
         try:
@@ -276,6 +381,7 @@ class LibraryStore:
             destination,
             checksum,
             len(data),
+            folder.id if folder else None,
         )
 
     def _require_not_duplicate(self, subject: Subject, checksum: str) -> None:
@@ -298,6 +404,7 @@ class LibraryStore:
         destination: Path,
         checksum: str,
         size_bytes: int,
+        folder_id: str | None,
     ) -> LibraryDocument:
         """Extract searchable chunks and atomically register a stored file."""
 
@@ -321,8 +428,8 @@ class LibraryStore:
                     """
                     INSERT INTO documents(
                         id, subject_id, original_name, stored_path, media_type,
-                        size_bytes, sha256, status, extraction_error, created_at
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        size_bytes, sha256, status, extraction_error, created_at, folder_id
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
                         document_id,
@@ -335,6 +442,7 @@ class LibraryStore:
                         status,
                         extraction_error,
                         created_at,
+                        folder_id,
                     ),
                 )
                 connection.executemany(
@@ -364,6 +472,8 @@ class LibraryStore:
             status,
             extraction_error,
             created_at,
+            folder_id,
+            self.get_folder(folder_id).name if folder_id else "",
         )
 
     def list_documents(self, subject_id: str | None = None) -> list[LibraryDocument]:
@@ -375,9 +485,11 @@ class LibraryStore:
         with self._connect() as connection:
             rows = connection.execute(
                 f"""
-                SELECT documents.*, subjects.name AS subject_name
+                SELECT documents.*, subjects.name AS subject_name,
+                       COALESCE(folders.name, '') AS folder_name
                 FROM documents
                 JOIN subjects ON subjects.id = documents.subject_id
+                LEFT JOIN folders ON folders.id = documents.folder_id
                 {where}
                 ORDER BY documents.created_at DESC
                 """,
@@ -389,9 +501,11 @@ class LibraryStore:
         with self._connect() as connection:
             row = connection.execute(
                 """
-                SELECT documents.*, subjects.name AS subject_name
+                SELECT documents.*, subjects.name AS subject_name,
+                       COALESCE(folders.name, '') AS folder_name
                 FROM documents
                 JOIN subjects ON subjects.id = documents.subject_id
+                LEFT JOIN folders ON folders.id = documents.folder_id
                 WHERE documents.id = ?
                 """,
                 (document_id,),
@@ -428,7 +542,9 @@ class LibraryStore:
         if duplicate:
             raise LibraryError(f"A document named '{normalized}' already exists in {document.subject_name}.")
 
-        relative_path = Path("subjects") / document.subject_id / "files" / f"{document.id}_{normalized}"
+        relative_path = self._document_relative_path(
+            document.subject_id, document.id, normalized, document.folder_id
+        )
         destination = self.root / relative_path
         try:
             document.stored_path.replace(destination)
@@ -470,13 +586,13 @@ class LibraryStore:
         if duplicate_name:
             raise LibraryError(f"A document named '{document.original_name}' already exists in {target.name}.")
 
-        relative_path = Path("subjects") / target.id / "files" / f"{document.id}_{document.original_name}"
+        relative_path = self._document_relative_path(target.id, document.id, document.original_name, None)
         destination = self.root / relative_path
         try:
             document.stored_path.replace(destination)
             with self._connect() as connection:
                 connection.execute(
-                    "UPDATE documents SET subject_id = ?, stored_path = ? WHERE id = ?",
+                    "UPDATE documents SET subject_id = ?, stored_path = ?, folder_id = NULL WHERE id = ?",
                     (target.id, str(relative_path), document.id),
                 )
         except (OSError, sqlite3.Error) as exc:
@@ -484,6 +600,87 @@ class LibraryStore:
                 destination.replace(document.stored_path)
             raise LibraryError(f"Could not move '{document.original_name}' to {target.name}: {exc}") from exc
         return self.get_document(document.id)
+
+    def move_document_to_folder(self, document_id: str, folder_id: str | None) -> LibraryDocument:
+        """Move a document within its subject, using ``None`` for the subject root."""
+        document = self.get_document(document_id)
+        folder = self._folder_for_subject(document.subject_id, folder_id)
+        target_folder_id = folder.id if folder else None
+        if target_folder_id == document.folder_id:
+            return document
+
+        relative_path = self._document_relative_path(
+            document.subject_id, document.id, document.original_name, target_folder_id
+        )
+        destination = self.root / relative_path
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            document.stored_path.replace(destination)
+            with self._connect() as connection:
+                connection.execute(
+                    "UPDATE documents SET stored_path = ?, folder_id = ? WHERE id = ?",
+                    (str(relative_path), target_folder_id, document.id),
+                )
+        except (OSError, sqlite3.Error) as exc:
+            if destination.exists() and not document.stored_path.exists():
+                destination.replace(document.stored_path)
+            raise LibraryError(f"Could not move '{document.original_name}' into the folder: {exc}") from exc
+        return self.get_document(document.id)
+
+    def delete_document(self, document_id: str) -> LibraryDocument:
+        """Delete one document and its extracted chunks from the library."""
+        document = self.get_document(document_id)
+        tombstone = document.stored_path.with_name(f".{document.id}.deleting")
+        try:
+            if document.stored_path.exists():
+                document.stored_path.replace(tombstone)
+        except OSError as exc:
+            raise LibraryError(f"Could not delete '{document.original_name}': {exc}") from exc
+        try:
+            with self._connect() as connection:
+                connection.execute("DELETE FROM documents WHERE id = ?", (document.id,))
+        except sqlite3.Error as exc:
+            if tombstone.exists() and not document.stored_path.exists():
+                tombstone.replace(document.stored_path)
+            raise LibraryError(f"Could not delete '{document.original_name}': {exc}") from exc
+        try:
+            if tombstone.exists():
+                tombstone.unlink()
+        except OSError:
+            # The catalog and search index are already safely deleted. A hidden
+            # tombstone is preferable to restoring an unregistered source file.
+            pass
+        return document
+
+    def delete_folder(self, folder_id: str, delete_documents: bool = False) -> LibraryFolder:
+        """Delete an empty folder, or its complete contents after explicit opt-in."""
+        folder = self.get_folder(folder_id)
+        if folder.document_count and not delete_documents:
+            raise LibraryError(
+                f"'{folder.name}' contains {folder.document_count} file(s). Move or delete them first."
+            )
+        folder_path = self.subjects_root / folder.subject_id / "files" / folder.id
+        tombstone = folder_path.with_name(f".{folder.id}.deleting")
+        try:
+            if folder_path.exists():
+                folder_path.replace(tombstone)
+        except OSError as exc:
+            raise LibraryError(f"Could not delete the folder '{folder.name}': {exc}") from exc
+        try:
+            with self._connect() as connection:
+                if delete_documents:
+                    connection.execute("DELETE FROM documents WHERE folder_id = ?", (folder.id,))
+                connection.execute("DELETE FROM folders WHERE id = ?", (folder.id,))
+        except sqlite3.Error as exc:
+            if tombstone.exists() and not folder_path.exists():
+                tombstone.replace(folder_path)
+            raise LibraryError(f"Could not delete the folder '{folder.name}': {exc}") from exc
+        try:
+            if tombstone.exists():
+                shutil.rmtree(tombstone)
+        except OSError:
+            pass
+        return folder
 
     def search_documents(
         self,
@@ -552,7 +749,33 @@ class LibraryStore:
             subjects = connection.execute("SELECT COUNT(*) FROM subjects").fetchone()[0]
             documents = connection.execute("SELECT COUNT(*) FROM documents").fetchone()[0]
             indexed = connection.execute("SELECT COUNT(*) FROM documents WHERE status = 'indexed'").fetchone()[0]
-        return {"subjects": int(subjects), "documents": int(documents), "indexed_documents": int(indexed)}
+            folders = connection.execute("SELECT COUNT(*) FROM folders").fetchone()[0]
+        return {
+            "subjects": int(subjects),
+            "folders": int(folders),
+            "documents": int(documents),
+            "indexed_documents": int(indexed),
+        }
+
+    def _folder_for_subject(self, subject_id: str, folder_id: str | None) -> LibraryFolder | None:
+        if not folder_id:
+            return None
+        folder = self.get_folder(folder_id)
+        if folder.subject_id != subject_id:
+            raise LibraryError("The selected folder does not belong to this subject.")
+        return folder
+
+    @staticmethod
+    def _document_relative_path(
+        subject_id: str,
+        document_id: str,
+        original_name: str,
+        folder_id: str | None,
+    ) -> Path:
+        relative = Path("subjects") / subject_id / "files"
+        if folder_id:
+            relative /= folder_id
+        return relative / f"{document_id}_{original_name}"
 
     def _extract_sections(self, path: Path) -> list[tuple[str, str]]:
         suffix = path.suffix.lower()
@@ -626,6 +849,16 @@ class LibraryStore:
     def _subject_from_row(row: sqlite3.Row) -> Subject:
         return Subject(str(row["id"]), str(row["name"]), str(row["description"]), str(row["created_at"]))
 
+    @staticmethod
+    def _folder_from_row(row: sqlite3.Row) -> LibraryFolder:
+        return LibraryFolder(
+            id=str(row["id"]),
+            subject_id=str(row["subject_id"]),
+            name=str(row["name"]),
+            created_at=str(row["created_at"]),
+            document_count=int(row["document_count"]),
+        )
+
     def _document_from_row(self, row: sqlite3.Row) -> LibraryDocument:
         return LibraryDocument(
             id=str(row["id"]),
@@ -639,4 +872,6 @@ class LibraryStore:
             status=str(row["status"]),
             extraction_error=str(row["extraction_error"]),
             created_at=str(row["created_at"]),
+            folder_id=str(row["folder_id"]) if row["folder_id"] is not None else None,
+            folder_name=str(row["folder_name"]),
         )

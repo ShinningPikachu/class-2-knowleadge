@@ -18,7 +18,7 @@ from .utils import clean_text, dump_json
 
 
 CleanupProgressCallback = Callable[[int, int, str], None]
-CLEANUP_VERSION = 1
+CLEANUP_VERSION = 2
 
 
 class TranscriptCleanupError(RuntimeError):
@@ -28,14 +28,17 @@ class TranscriptCleanupError(RuntimeError):
 class TranscriptCleaner:
     """Repair readability while preserving timestamps, meaning, and raw evidence."""
 
-    SYSTEM_PROMPT = """You edit an automatic lecture transcript made from imperfect audio.
+    SYSTEM_PROMPT = """You edit and filter an automatic lecture transcript made from imperfect audio.
 Your only source is the supplied transcript text. Improve punctuation, capitalization,
 sentence boundaries, repeated fragments, and obvious speech-recognition mistakes when
 the surrounding words make the correction strongly supported. Preserve technical terms,
 numbers, formulas, qualifications, and the lecturer's meaning. Never add explanations,
 facts, examples, or transitions that were not spoken. Never silently guess uncertain
-content: write [unclear] for words that cannot be responsibly recovered. Keep every input
-paragraph ID exactly once. Keep the result in English and never translate it. Return valid JSON only."""
+content: write [unclear] for words that cannot be responsibly recovered. Mark clearly
+unrelated personal conversations, background chatter, and off-topic speech for removal.
+Keep course logistics only when they affect learning or assessment. When relevance is
+uncertain, keep the passage. Return every input paragraph ID exactly once, even when it
+is marked for removal. Keep the result in English and never translate it. Return valid JSON only."""
 
     def __init__(
         self,
@@ -57,6 +60,7 @@ paragraph ID exactly once. Keep the result in English and never translate it. Re
         raw_transcript: dict[str, Any],
         output_path: str | Path,
         progress: CleanupProgressCallback | None = None,
+        lecture_context: str = "",
     ) -> dict[str, Any]:
         """Clean timestamped paragraphs in resumable batches and retain raw segments."""
         output_path = Path(output_path)
@@ -64,12 +68,14 @@ paragraph ID exactly once. Keep the result in English and never translate it. Re
         if not isinstance(raw_paragraphs, list):
             raise TranscriptCleanupError("The raw transcript has an invalid paragraphs field.")
         paragraphs = [dict(item) for item in raw_paragraphs if isinstance(item, dict)]
-        source_digest = self._paragraph_digest(paragraphs)
+        source_digest = self._cleanup_source_digest(paragraphs, lecture_context)
         existing = self._load_completed_output(output_path, source_digest)
         if existing is not None:
             return existing
         if not paragraphs:
-            payload = self._build_payload(raw_transcript, [], output_path, 0, 0, is_partial=False)
+            payload = self._build_payload(
+                raw_transcript, [], {}, output_path, 0, 0, source_digest=source_digest, is_partial=False
+            )
             dump_json(output_path, payload)
             return payload
 
@@ -80,16 +86,16 @@ paragraph ID exactly once. Keep the result in English and never translate it. Re
         checkpoint_dir = output_path.parent / "transcript_cleanup"
         checkpoint_dir.mkdir(parents=True, exist_ok=True)
         partial_path = output_path.with_name("transcript.cleanup.partial.json")
-        cleaned_by_id: dict[int, str] = {}
+        cleaned_by_id: dict[int, dict[str, Any]] = {}
         report = progress or (lambda _index, _total, _message: None)
 
         for index, batch in enumerate(batches, start=1):
             checkpoint_path = checkpoint_dir / f"batch_{index:04d}.json"
-            batch_digest = self._paragraph_digest(batch)
+            batch_digest = self._cleanup_source_digest(batch, lecture_context)
             cleaned = self._load_checkpoint(checkpoint_path, batch, batch_digest)
             reused = cleaned is not None
             if cleaned is None:
-                cleaned = self._clean_batch(batch, index, len(batches))
+                cleaned = self._clean_batch(batch, index, len(batches), lecture_context)
                 dump_json(
                     checkpoint_path,
                     {
@@ -101,14 +107,16 @@ paragraph ID exactly once. Keep the result in English and never translate it. Re
                     },
                 )
             for item in cleaned:
-                cleaned_by_id[int(item["id"])] = str(item["text"])
+                cleaned_by_id[int(item["id"])] = dict(item)
             partial_paragraphs = self._merge_cleaned_paragraphs(paragraphs, cleaned_by_id, completed_only=True)
             partial_payload = self._build_payload(
                 raw_transcript,
                 partial_paragraphs,
+                cleaned_by_id,
                 output_path,
                 index,
                 len(batches),
+                source_digest=source_digest,
                 is_partial=index < len(batches),
             )
             dump_json(partial_path, partial_payload)
@@ -119,9 +127,11 @@ paragraph ID exactly once. Keep the result in English and never translate it. Re
         payload = self._build_payload(
             raw_transcript,
             cleaned_paragraphs,
+            cleaned_by_id,
             output_path,
             len(batches),
             len(batches),
+            source_digest=source_digest,
             is_partial=False,
         )
         dump_json(output_path, payload)
@@ -132,6 +142,7 @@ paragraph ID exactly once. Keep the result in English and never translate it. Re
         batch: list[dict[str, Any]],
         batch_index: int,
         total_batches: int,
+        lecture_context: str,
     ) -> list[dict[str, Any]]:
         source = {
             "paragraphs": [
@@ -146,16 +157,24 @@ paragraph ID exactly once. Keep the result in English and never translate it. Re
         }
         prompt = f"""Clean transcript batch {batch_index} of {total_batches}.
 Return exactly this JSON shape and no other text:
-{{"paragraphs": [{{"id": 1, "text": "cleaned text"}}]}}
+{{"paragraphs": [{{"id": 1, "text": "cleaned text", "keep": true, "reason": "lecture content"}}]}}
 
 Rules:
-- Keep the exact input IDs in the same order; do not merge, split, omit, or add paragraphs.
+- Return the exact input IDs in the same order; do not merge, split, omit, or add IDs.
+- Set keep=false only for clearly unrelated personal conversation, background discussion,
+  greetings/farewells, or material unrelated to the lecture subject.
+- For keep=false, use an empty text value and give a short reason. When unsure, keep it.
+- Preserve lecture examples, questions, definitions, explanations, assessment guidance,
+  and course logistics that affect learning.
 - Make fragmented speech read naturally, but preserve the original claims and level of certainty.
 - Remove accidental word repetitions and verbal filler only when meaning is unchanged.
 - Correct a recognized word only when context strongly establishes the intended word.
 - Use [unclear] instead of guessing damaged speech.
-- Do not summarize or shorten substantive material.
+- Do not summarize or shorten substantive lecture material.
 - Write in English only; do not translate the transcript.
+
+LECTURE SUBJECT CONTEXT:
+{lecture_context or '(No slide context was available; keep uncertain material.)'}
 
 INPUT JSON:
 {json.dumps(source, ensure_ascii=False)}"""
@@ -219,17 +238,32 @@ INPUT JSON:
             raise TranscriptCleanupError("The cleanup response changed, omitted, or reordered paragraph IDs.")
 
         normalized: list[dict[str, Any]] = []
-        raw_length = sum(len(str(item["text"])) for item in batch)
+        source_by_id = {int(item["id"]): item for item in batch}
+        kept_source_text: list[str] = []
         for item in cleaned:
+            keep_value = item.get("keep", True)
+            if not isinstance(keep_value, bool):
+                raise TranscriptCleanupError("The cleanup response contains a non-boolean keep decision.")
+            keep = keep_value
             text = clean_text(str(item.get("text", "")))
-            if not text:
-                raise TranscriptCleanupError("The cleanup response erased a transcript paragraph.")
-            normalized.append({"id": int(item["id"]), "text": text})
-        cleaned_length = sum(len(item["text"]) for item in normalized)
+            reason = clean_text(str(item.get("reason", "lecture content" if keep else "unrelated speech")))
+            if keep and not text:
+                raise TranscriptCleanupError("The cleanup response erased a kept transcript paragraph.")
+            if not keep:
+                text = ""
+                if not reason:
+                    raise TranscriptCleanupError("A removed transcript paragraph needs a reason.")
+            else:
+                kept_source_text.append(str(source_by_id[int(item["id"])]["text"]))
+            normalized.append({"id": int(item["id"]), "text": text, "keep": keep, "reason": reason})
+        raw_length = sum(len(text) for text in kept_source_text)
+        cleaned_length = sum(len(item["text"]) for item in normalized if item["keep"])
         if raw_length and not 0.45 <= cleaned_length / raw_length <= 1.65:
             raise TranscriptCleanupError("The cleanup response changed the transcript length too aggressively.")
-        raw_words = Counter(re.findall(r"[\w'-]+", " ".join(str(item["text"]).lower() for item in batch)))
-        cleaned_words = Counter(re.findall(r"[\w'-]+", " ".join(item["text"].lower() for item in normalized)))
+        raw_words = Counter(re.findall(r"[\w'-]+", " ".join(text.lower() for text in kept_source_text)))
+        cleaned_words = Counter(
+            re.findall(r"[\w'-]+", " ".join(item["text"].lower() for item in normalized if item["keep"]))
+        )
         retained_words = sum((raw_words & cleaned_words).values())
         if raw_words and retained_words / sum(raw_words.values()) < 0.55:
             raise TranscriptCleanupError("The cleanup response replaced too much source wording.")
@@ -269,7 +303,7 @@ INPUT JSON:
     @staticmethod
     def _merge_cleaned_paragraphs(
         paragraphs: list[dict[str, Any]],
-        cleaned_by_id: dict[int, str],
+        cleaned_by_id: dict[int, dict[str, Any]],
         completed_only: bool = False,
     ) -> list[dict[str, Any]]:
         output: list[dict[str, Any]] = []
@@ -279,8 +313,11 @@ INPUT JSON:
                 if completed_only:
                     continue
                 raise TranscriptCleanupError(f"Cleaned transcript is missing paragraph {paragraph_id}.")
+            decision = cleaned_by_id[paragraph_id]
+            if not bool(decision.get("keep", True)):
+                continue
             cleaned = dict(paragraph)
-            cleaned["text"] = cleaned_by_id[paragraph_id]
+            cleaned["text"] = str(decision["text"])
             output.append(cleaned)
         return output
 
@@ -288,10 +325,12 @@ INPUT JSON:
         self,
         raw_transcript: dict[str, Any],
         paragraphs: list[dict[str, Any]],
+        decisions_by_id: dict[int, dict[str, Any]],
         output_path: Path,
         completed_batches: int,
         total_batches: int,
         *,
+        source_digest: str,
         is_partial: bool,
     ) -> dict[str, Any]:
         metadata = dict(raw_transcript.get("metadata", {}))
@@ -301,9 +340,7 @@ INPUT JSON:
                 "output_language": "English",
                 "cleanup_version": CLEANUP_VERSION,
                 "cleanup_model": self.config.llm_model,
-                "cleanup_source_digest": self._paragraph_digest(
-                    [item for item in raw_transcript.get("paragraphs", []) if isinstance(item, dict)]
-                ),
+                "cleanup_source_digest": source_digest,
                 "cleanup_created_at": datetime.now(timezone.utc).isoformat(),
                 "cleanup_completed_batches": completed_batches,
                 "cleanup_total_batches": total_batches,
@@ -315,6 +352,12 @@ INPUT JSON:
                 "raw_transcript_file": "transcript.raw.json",
                 "raw_segment_count": len(raw_transcript.get("segments", [])),
                 "cleaned_transcript_file": output_path.name,
+                "kept_paragraph_count": sum(
+                    1 for decision in decisions_by_id.values() if bool(decision.get("keep", True))
+                ),
+                "removed_paragraph_count": sum(
+                    1 for decision in decisions_by_id.values() if not bool(decision.get("keep", True))
+                ),
             }
         )
         return {
@@ -324,6 +367,11 @@ INPUT JSON:
             # entering the subject library and RAG index.
             "segments": [],
             "paragraphs": paragraphs,
+            "removed_paragraphs": [
+                {"id": paragraph_id, "reason": str(decision.get("reason", "unrelated speech"))}
+                for paragraph_id, decision in sorted(decisions_by_id.items())
+                if not bool(decision.get("keep", True))
+            ],
         }
 
     @staticmethod
@@ -344,9 +392,24 @@ INPUT JSON:
             expected_ids = [int(item["id"]) for item in batch]
             if [int(item["id"]) for item in cleaned] != expected_ids:
                 return None
-            if any(not clean_text(str(item.get("text", ""))) for item in cleaned):
-                return None
-            return [{"id": int(item["id"]), "text": clean_text(str(item["text"]))} for item in cleaned]
+            normalized: list[dict[str, Any]] = []
+            for item in cleaned:
+                keep_value = item.get("keep", True)
+                if not isinstance(keep_value, bool):
+                    return None
+                keep = keep_value
+                text = clean_text(str(item.get("text", "")))
+                if keep and not text:
+                    return None
+                normalized.append(
+                    {
+                        "id": int(item["id"]),
+                        "text": text if keep else "",
+                        "keep": keep,
+                        "reason": clean_text(str(item.get("reason", "lecture content" if keep else "unrelated speech"))),
+                    }
+                )
+            return normalized
         except (KeyError, TypeError, ValueError, OSError, json.JSONDecodeError):
             return None
 
@@ -383,3 +446,8 @@ INPUT JSON:
         ]
         encoded = json.dumps(source, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
         return hashlib.sha256(encoded).hexdigest()
+
+    @classmethod
+    def _cleanup_source_digest(cls, paragraphs: list[dict[str, Any]], lecture_context: str) -> str:
+        source = f"{cls._paragraph_digest(paragraphs)}\n{clean_text(lecture_context)}"
+        return hashlib.sha256(source.encode("utf-8")).hexdigest()

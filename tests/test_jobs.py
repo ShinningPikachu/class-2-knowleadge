@@ -14,6 +14,7 @@ from unittest.mock import patch
 
 from src.config import PipelineConfig
 from src.jobs import PRIORITIES, JobDeferred, JobError, JobManager
+from src.library import LibraryStore
 from src.ollama_runtime import OllamaUnloadReport, RunningOllamaModel
 
 
@@ -584,10 +585,17 @@ class JobManagerTest(unittest.TestCase):
         )
         self.manager._finish_job(source_job.id, "completed", "Lecture notes are ready", "")
 
+        library = LibraryStore(self.root / "library")
+        subject = library.create_subject("Artificial Intelligence")
+        folder = library.create_folder(subject.id, "Lecture 01 — Agents")
+
         review_job = self.manager.enqueue_slide_review(
             source_job.id,
             1,
             priority=PRIORITIES["High"],
+            library_subject_id=subject.id,
+            library_folder_id=folder.id,
+            lecture_name="Lecture_01_Agents",
         )
         self.assertEqual(review_job.kind, "slide_review")
         self.assertEqual(review_job.payload["slide_number"], 1)
@@ -656,6 +664,15 @@ No additional professor explanation was aligned with this slide.
         self.assertEqual(completed.result["slide_number"], 1)
         self.assertTrue(Path(completed.result["markdown_path"]).is_file())
         self.assertTrue(Path(completed.result["pdf_path"]).is_file())
+        self.assertEqual(len(completed.result["library_messages"]), 2)
+        stored_names = {item.original_name for item in library.list_documents(subject.id)}
+        self.assertEqual(
+            stored_names,
+            {
+                f"Lecture_01_Agents_Slide_001_Deep_Review_{review_job.id[:8]}.md",
+                f"Lecture_01_Agents_Slide_001_Deep_Review_{review_job.id[:8]}.pdf",
+            },
+        )
         self.assertIn(
             "baseline lecture notes are unchanged",
             Path(completed.result["markdown_path"]).read_text(encoding="utf-8").lower(),

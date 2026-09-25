@@ -74,7 +74,11 @@ def render_lecture_processor(
             slides_local = st.text_input("Local slide-deck path (optional)", placeholder="/path/to/lecture.pdf")
         st.caption("Local inputs are copied into durable job storage before the task is queued.")
 
-    lecture_title = st.text_input("Lecture title", placeholder="e.g. Introduction to Artificial Intelligence")
+    lecture_title = st.text_input(
+        "Lecture title (optional)",
+        placeholder="e.g. Lecture 01 — Introduction",
+        help="Leave blank to generate a meaningful Lecture_01_Topic name from the source files.",
+    )
     with st.expander("Resume an interrupted pipeline run"):
         resume_run_directory = st.text_input(
             "Run folder",
