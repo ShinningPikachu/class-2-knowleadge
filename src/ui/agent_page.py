@@ -8,7 +8,7 @@ from ..config import PipelineConfig
 from ..jobs import JobManager
 from ..library import LibraryDocument, LibraryError, LibraryStore, Subject
 from ..library_agent import AgentPlan, LibraryAgent, LibraryAgentError
-from .common import render_subject_creator, subject_lookup
+from .common import subject_lookup
 
 
 def _messages() -> list[dict[str, object]]:
@@ -147,8 +147,7 @@ def render_agent(library: LibraryStore, config: PipelineConfig, manager: JobMana
 
     subjects = library.list_subjects()
     if not subjects:
-        st.info("Create a subject and add documents before starting library jobs.")
-        render_subject_creator(library, "agent")
+        st.info("Add a subject from the Library subject selector before starting library jobs.")
         return
     documents = library.list_documents()
     lookup = subject_lookup(subjects)

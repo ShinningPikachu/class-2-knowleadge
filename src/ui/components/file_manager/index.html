@@ -99,7 +99,66 @@
       font-size: 0.87rem;
       font-weight: 650;
     }
-    .toolbar-hint { flex: none; color: var(--muted); font-size: 0.70rem; }
+    .folder-actions { position: relative; flex: none; }
+    .menu-trigger {
+      width: 32px;
+      height: 30px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+    .menu-trigger:hover { background: var(--soft); }
+    .folder-menu {
+      position: absolute;
+      z-index: 20;
+      top: 35px;
+      right: 0;
+      width: 210px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+    }
+    .folder-menu[hidden] { display: none; }
+    .menu-title {
+      padding: 4px 6px 8px;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 0.70rem;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .menu-action {
+      width: 100%;
+      margin: 2px 0;
+      padding: 8px 9px;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.78rem;
+    }
+    .menu-action:hover { background: var(--soft); }
+    .menu-action.danger { color: #d13b3b; }
+    .menu-field {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.78rem;
+    }
+    .menu-row { display: flex; gap: 6px; margin-top: 7px; }
+    .menu-row .menu-action { text-align: center; }
+    .menu-copy { padding: 4px 6px; color: var(--muted); font-size: 0.72rem; line-height: 1.35; }
     .section-label {
       margin: 12px 0 7px;
       color: var(--muted);
@@ -181,6 +240,7 @@
       color: var(--muted);
       font-size: 0.71rem;
     }
+    .status:empty { display: none; }
     @media (max-width: 620px) {
       .explorer { grid-template-columns: 1fr; }
       .sidebar {
@@ -192,7 +252,6 @@
       }
       .sidebar-title { display: none; }
       .location { min-width: 130px; }
-      .toolbar-hint { display: none; }
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -255,6 +314,105 @@
       return node;
     }
 
+    function makeFolderMenu(folder) {
+      const wrapper = element("div", "folder-actions");
+      const trigger = element("button", "menu-trigger", "⋯");
+      trigger.type = "button";
+      trigger.title = "Folder actions";
+      trigger.setAttribute("aria-label", `Actions for ${folder.name}`);
+      const menu = element("div", "folder-menu");
+      menu.hidden = true;
+
+      function addTitle() {
+        menu.appendChild(element("div", "menu-title", folder.name));
+      }
+
+      function renderActions() {
+        menu.replaceChildren();
+        addTitle();
+        const rename = element("button", "menu-action", "Rename");
+        rename.type = "button";
+        rename.addEventListener("click", (eventObject) => {
+          eventObject.stopPropagation();
+          renderRename();
+        });
+        const remove = element("button", "menu-action danger", "Delete");
+        remove.type = "button";
+        remove.addEventListener("click", (eventObject) => {
+          eventObject.stopPropagation();
+          renderDelete();
+        });
+        menu.append(rename, remove);
+      }
+
+      function renderRename() {
+        menu.replaceChildren();
+        addTitle();
+        const input = element("input", "menu-field");
+        input.type = "text";
+        input.maxLength = 120;
+        input.value = folder.name;
+        input.setAttribute("aria-label", "Folder name");
+        const row = element("div", "menu-row");
+        const save = element("button", "menu-action", "Save");
+        save.type = "button";
+        const cancel = element("button", "menu-action", "Cancel");
+        cancel.type = "button";
+        const submit = () => {
+          const newName = input.value.trim();
+          if (!newName) {
+            input.focus();
+            return;
+          }
+          event("rename_folder", { folder_id: folder.id, new_name: newName });
+        };
+        save.addEventListener("click", submit);
+        input.addEventListener("keydown", (eventObject) => {
+          if (eventObject.key === "Enter") submit();
+          if (eventObject.key === "Escape") renderActions();
+        });
+        cancel.addEventListener("click", renderActions);
+        row.append(save, cancel);
+        menu.append(input, row);
+        input.focus();
+        input.select();
+      }
+
+      function renderDelete() {
+        menu.replaceChildren();
+        addTitle();
+        const count = Number(folder.document_count || 0);
+        menu.appendChild(
+          element(
+            "div",
+            "menu-copy",
+            count
+              ? `Delete this folder and its ${count} file${count === 1 ? "" : "s"}?`
+              : "Delete this empty folder?"
+          )
+        );
+        const row = element("div", "menu-row");
+        const confirm = element("button", "menu-action danger", "Delete");
+        confirm.type = "button";
+        confirm.addEventListener("click", () => {
+          event("delete_folder", { folder_id: folder.id });
+        });
+        const cancel = element("button", "menu-action", "Cancel");
+        cancel.type = "button";
+        cancel.addEventListener("click", renderActions);
+        row.append(confirm, cancel);
+        menu.appendChild(row);
+      }
+
+      trigger.addEventListener("click", (eventObject) => {
+        eventObject.stopPropagation();
+        menu.hidden = !menu.hidden;
+        if (!menu.hidden) renderActions();
+      });
+      wrapper.append(trigger, menu);
+      return wrapper;
+    }
+
     function dropFile(eventObject, targetFolder, status) {
       eventObject.preventDefault();
       const documentId = eventObject.dataTransfer && eventObject.dataTransfer.getData("text/plain");
@@ -297,7 +455,7 @@
       const sidebar = element("aside", "sidebar");
       sidebar.appendChild(element("div", "sidebar-title", "Locations"));
       const content = element("section", "content");
-      const status = element("div", "status", "Click a file once to preview it. Drag it onto any folder to move it.");
+      const status = element("div", "status");
 
       folders.forEach((folder) => {
         const location = element("button", "location");
@@ -320,7 +478,7 @@
       toolbar.appendChild(
         element("div", "breadcrumb", `Subject / ${currentFolder ? currentFolder.name : "Subject root"}`)
       );
-      toolbar.appendChild(element("div", "toolbar-hint", "Click to preview · Drag to move"));
+      if (currentFolder && currentFolder.id) toolbar.appendChild(makeFolderMenu(currentFolder));
       content.appendChild(toolbar);
 
       if (!currentId && folders.length > 1) {
@@ -347,7 +505,7 @@
           const tile = element("button", "item file-item");
           tile.type = "button";
           tile.draggable = true;
-          tile.title = `Click to preview ${file.name}; drag to move it`;
+          tile.title = file.name;
           if (file.id === currentArgs.selected_document_id) tile.classList.add("selected");
           const top = element("div", "item-top");
           top.appendChild(element("div", "item-icon", file.icon || "📎"));

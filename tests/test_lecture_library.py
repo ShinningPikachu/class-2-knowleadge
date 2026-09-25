@@ -12,7 +12,7 @@ from src.library import LibraryStore
 
 
 class LectureLibraryHandoffTest(unittest.TestCase):
-    def test_sources_transcript_markdown_and_pdf_are_saved_with_clear_names(self) -> None:
+    def test_only_learner_facing_sources_and_concise_pdf_are_saved(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             store = LibraryStore(root / "library")
@@ -68,24 +68,15 @@ class LectureLibraryHandoffTest(unittest.TestCase):
             names,
             {
                 "Lecture_01_Introduction_to_AI_Slides.pdf",
-                "Lecture_01_Introduction_to_AI_Transcript_Raw.json",
-                "Lecture_01_Introduction_to_AI_Transcript_Cleaned.json",
-                "Lecture_01_Introduction_to_AI_Transcript_Cleaned.txt",
-                "Lecture_01_Introduction_to_AI_Slides_Extracted.json",
-                "Lecture_01_Introduction_to_AI_Slide_Summaries.json",
-                "Lecture_01_Introduction_to_AI_Alignment.json",
-                "Lecture_01_Introduction_to_AI_Quality_Report.json",
-                "Lecture_01_Introduction_to_AI_Manifest.json",
-                "Lecture_01_Introduction_to_AI_Notes.md",
-                "Lecture_01_Introduction_to_AI_Notes.pdf",
+                "Lecture_01_Introduction_to_AI_Concise_Notes.pdf",
             },
         )
-        self.assertEqual(len(messages), 11)
+        self.assertEqual(len(messages), 2)
         self.assertEqual(
             {document.folder_name for document in documents},
             {"Lecture 01 — Introduction to AI"},
         )
-        self.assertEqual(folder_counts, [11])
+        self.assertEqual(folder_counts, [2])
 
 
 if __name__ == "__main__":

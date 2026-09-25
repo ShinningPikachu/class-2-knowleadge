@@ -27,7 +27,7 @@ class LectureAgent:
     """Generate grounded, per-slide study notes with a local Ollama model."""
 
     CHECKPOINT_SCHEMA_VERSION = 1
-    SLIDE_PROMPT_VERSION = "lecture-slide-notes-v3"
+    SLIDE_PROMPT_VERSION = "lecture-slide-notes-v4"
     SYNTHESIS_PROMPT_VERSION = "lecture-synthesis-v1"
 
     SYSTEM_PROMPT = """You are a university lecture assistant.
@@ -41,12 +41,10 @@ concepts only when they are stated, emphasized, defined, contrasted, repeated,
 or otherwise supported by the sources.
 
 Never invent information, examples, formulas, citations, or claims. Do not use
-outside knowledge to fill gaps. When a detail comes only from spoken material,
-place it in the Professor explanation section and begin the relevant sentence
-with "Professor explanation:". If the audio provides no useful addition, say
-"No additional professor explanation was aligned with this slide." Be concise
-but explanatory. Treat OCR text as potentially imperfect and do not infer a
-diagram's meaning unless the slide text or transcript supports it. Write the
+outside knowledge to fill gaps. Normal lecture notes contain only a concise
+slide-specific summary. Detailed fields are permitted only for an explicitly
+requested Deep Review. Treat OCR text as potentially imperfect and do not infer
+a diagram's meaning unless the slide text or transcript supports it. Write the
 canonical lecture notes in English only. Never translate them during generation;
 translation is a separate operation requested by the user after completion."""
 
@@ -99,6 +97,7 @@ translation is a separate operation requested by the user after completion."""
                 checkpoint_root / f"slide_{number:04d}.json" if checkpoint_root else None,
                 signature,
                 number,
+                detailed=self.config.note_generation_profile == "deep",
             )
             if cached is not None:
                 reused += 1
@@ -133,6 +132,19 @@ translation is a separate operation requested by the user after completion."""
                         f"Completed {section_label.lower()} {number} and saved its checkpoint in {duration}",
                     )
         self._write_partial_notes(partial_path, title, section_label, slide_sections, total)
+
+        if self.config.note_generation_profile == "fast":
+            sections = [f"# {title}"]
+            for number, slide_title, response in slide_sections:
+                sections.extend(
+                    [
+                        "",
+                        f"## {section_label} {number}: {slide_title}",
+                        "",
+                        self.concise_summary(response),
+                    ]
+                )
+            return "\n".join([*sections, ""])
 
         synthesis_source = [
             {"slide": number, "title": slide_title, "notes": response}
@@ -228,7 +240,12 @@ translation is a separate operation requested by the user after completion."""
         section_label = "Recording section" if slide.get("section_kind") == "recording" else "Slide"
         path = Path(checkpoint_path) if checkpoint_path is not None else None
         signature = self._slide_checkpoint_signature(slide, aligned, section_label)
-        cached = self._load_slide_checkpoint(path, signature, number)
+        cached = self._load_slide_checkpoint(
+            path,
+            signature,
+            number,
+            detailed=self.config.note_generation_profile == "deep",
+        )
         if cached is not None:
             return cached
         response = self._generate_slide(slide, aligned, section_label)
@@ -271,6 +288,8 @@ translation is a separate operation requested by the user after completion."""
         path: Path | None,
         signature: str,
         number: int,
+        *,
+        detailed: bool,
     ) -> str | None:
         cached = cls._load_checkpoint(path, "slide", signature)
         if cached is None:
@@ -279,7 +298,9 @@ translation is a separate operation requested by the user after completion."""
         try:
             cls._require_headings(
                 cached,
-                [
+                ["## Concise summary"]
+                if not detailed
+                else [
                     "## Concise summary",
                     "## Slide content",
                     "## Professor explanation",
@@ -290,7 +311,7 @@ translation is a separate operation requested by the user after completion."""
             )
         except AgentError:
             return None
-        return cached
+        return cached if detailed else cls._concise_only(cached)
 
     def _checkpoint_signature(self, kind: str, payload: dict[str, Any]) -> str:
         """Bind a checkpoint to its exact evidence, prompts, and model settings."""
@@ -443,21 +464,35 @@ LOCAL RETRIEVAL CONTEXT (restricted to this slide and its aligned transcript):
                 f"Authoritative source context for slide {slide_number} exceeds the safe model window; "
                 "increase Ollama context or reduce the media chunk size."
             )
-        prompt = f"""Write the study-notes body for {section_label} {slide_number}: {slide.get('title', '')}.
+        detailed = self.config.note_generation_profile == "deep"
+        if not detailed:
+            prompt = f"""Write only the concise note for {section_label} {slide_number}: {slide.get('title', '')}.
+Use only the sources below. Return exactly one Markdown heading and its paragraph:
+
+## Concise summary
+Write 1–3 clear sentences, with a strict maximum of 90 words. Include only what is
+needed to understand this exact slide or small recording fragment. Combine essential
+slide content with directly relevant professor explanation. Remove repetition,
+background detail, speculation, labels about the source, unrelated context, and
+material belonging to other slides. Do not return any other sections or fields.
+
+SOURCES:
+{context}"""
+            return self._concise_only(self._chat(prompt))
+
+        prompt = f"""Deeply review {section_label} {slide_number}: {slide.get('title', '')}.
 Use only the sources below. Return exactly these Markdown sections, in this order:
 
 ## Concise summary
 In 1–3 short sentences (maximum 90 words), state only what is needed to understand
-this specific slide or small recording fragment. Combine the essential slide content
-with directly relevant professor explanation. Remove repetition, general background,
-speculation, unrelated context, and details belonging to other slides.
+this specific slide or small recording fragment.
 
 ## Slide content
 Clear explanation of material actually shown on this slide.
 
 ## Professor explanation
-Only the meaningful additions from the aligned transcript. Prefix each spoken-only
-claim with "Professor explanation:". Do not repeat the slide verbatim.
+Only meaningful additions from the aligned transcript. Prefix each spoken-only claim
+with "Professor explanation:". Do not repeat the slide verbatim.
 
 ## Important concepts
 - Grounded concept or "- No additional concepts stated."
@@ -468,8 +503,7 @@ claim with "Professor explanation:". Do not repeat the slide verbatim.
 SOURCES:
 {context}"""
         draft = self._chat(prompt)
-        should_review = self.config.note_generation_profile == "deep" and self.config.quality_review
-        result = self._review_slide(slide_number, context, draft) if should_review else draft
+        result = self._review_slide(slide_number, context, draft) if self.config.quality_review else draft
         result = self._ensure_concise_summary(result)
         self._require_headings(
             result,
@@ -545,6 +579,17 @@ DRAFT TO AUDIT:
         remainder = markdown[start + len(marker) :].lstrip("\n ")
         end = remainder.find("\n## ")
         return remainder[:end].strip() if end >= 0 else remainder.strip()
+
+    @classmethod
+    def _concise_only(cls, markdown: str) -> str:
+        """Normalize a baseline response to one bounded summary field."""
+        summary = clean_text(cls.concise_summary(markdown))
+        words = summary.split()
+        if len(words) > 90:
+            summary = " ".join(words[:90]).rstrip(" ,;:") + "…"
+        if not summary:
+            summary = "No concise source-grounded summary is available for this slide."
+        return f"## Concise summary\n{summary}"
 
     @classmethod
     def _ensure_concise_summary(cls, markdown: str) -> str:

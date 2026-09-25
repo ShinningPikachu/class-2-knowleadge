@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+import streamlit as st
 from streamlit.testing.v1 import AppTest
 
 from src.config import PipelineConfig
@@ -18,6 +19,37 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 class StreamlitAppTest(unittest.TestCase):
+    def setUp(self) -> None:
+        st.cache_resource.clear()
+
+    def tearDown(self) -> None:
+        st.cache_resource.clear()
+
+    def test_subject_is_created_inline_from_the_selector(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temporary_root = Path(directory)
+            with patch(
+                "src.config.project_path",
+                side_effect=lambda *parts: temporary_root.joinpath(*parts),
+            ), patch("src.jobs.JobManager.start"):
+                app = AppTest.from_file(str(PROJECT_ROOT / "app.py"), default_timeout=20).run()
+                self.assertFalse(list(app.exception))
+                self.assertEqual(list(app.metric), [])
+                self.assertNotIn("Create a subject", [item.label for item in app.expander])
+                self.assertNotIn("Description (optional)", [item.label for item in app.text_area])
+
+                add_subject = next(item for item in app.button if item.label == "＋")
+                add_subject.click().run()
+                self.assertFalse(list(app.exception))
+                subject_name = next(item for item in app.text_input if item.label == "Subject name")
+                subject_name.set_value("Linear Algebra").run()
+                self.assertFalse(list(app.exception))
+
+                subjects = LibraryStore(temporary_root / "library").list_subjects()
+                self.assertEqual([subject.name for subject in subjects], ["Linear Algebra"])
+                selector = next(item for item in app.selectbox if item.label == "Open subject")
+                self.assertEqual(selector.value, subjects[0].id)
+
     def test_all_workspaces_render_without_exceptions(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             temporary_root = Path(directory)
@@ -105,9 +137,13 @@ class StreamlitAppTest(unittest.TestCase):
                 workspace.set_value("Lecture Notes").run()
                 self.assertFalse(list(app.exception))
                 self.assertIn("🎓 Queue Lecture Notes", [item.value for item in app.title])
-                self.assertIn(
+                self.assertNotIn(
                     "Repair noisy transcript with local Qwen",
                     [item.label for item in app.checkbox],
+                )
+                self.assertIn(
+                    "Recordings always receive a cleaned, lecture-only transcript before timeline alignment.",
+                    [item.value for item in app.caption],
                 )
                 spoken_language = next(
                     item for item in app.text_input if item.label == "Spoken language (ISO code)"

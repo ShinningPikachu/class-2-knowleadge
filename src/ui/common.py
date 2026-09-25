@@ -23,21 +23,6 @@ def subject_lookup(subjects: list[Subject]) -> dict[str, Subject]:
     return {subject.id: subject for subject in subjects}
 
 
-def render_subject_creator(library: LibraryStore, key_prefix: str) -> None:
-    with st.expander("Create a subject", expanded=not library.list_subjects()):
-        with st.form(f"{key_prefix}_create_subject", clear_on_submit=True):
-            name = st.text_input("Subject name", placeholder="e.g. Artificial Intelligence")
-            description = st.text_area("Description (optional)", placeholder="Course, semester, or useful context")
-            submitted = st.form_submit_button("Create subject", type="primary", use_container_width=True)
-        if submitted:
-            try:
-                subject = library.create_subject(name, description)
-                st.success(f"Created {subject.name}.")
-                st.rerun()
-            except LibraryError as exc:
-                st.error(str(exc))
-
-
 def store_uploads(
     library: LibraryStore,
     subject_id: str,
@@ -133,10 +118,7 @@ def render_model_settings(workspace: str) -> PipelineConfig:
         }
         if workspace == "Lecture Notes":
             values["whisper_model"] = st.text_input("faster-whisper model or local path", value="large-v3").strip()
-            st.caption(
-                "The lecture pass creates concise slide-specific summaries. Deeper reasoning runs only when "
-                "you click Deep Review beside a slide in the Library."
-            )
+            st.caption("The lecture pass creates concise slide-specific summaries.")
             values["note_generation_profile"] = "fast"
             values["note_max_output_tokens"] = 1_200
             language = st.text_input(
@@ -157,13 +139,9 @@ def render_model_settings(workspace: str) -> PipelineConfig:
                 values["whisper_parallel_workers"] = int(
                     st.selectbox("Parallel transcription workers", [1, 2], index=1)
                 )
-                values["enable_transcript_cleanup"] = st.checkbox(
-                    "Repair noisy transcript with local Qwen",
-                    value=True,
-                    help=(
-                        "Preserves the raw transcript and creates a readable lecture-only copy, removing clearly "
-                        "unrelated personal conversation and background discussion before alignment."
-                    ),
+                values["enable_transcript_cleanup"] = True
+                st.caption(
+                    "Recordings always receive a cleaned, lecture-only transcript before timeline alignment."
                 )
                 values["transcript_cleanup_batch_chars"] = int(
                     st.number_input("Transcript cleanup batch size", 2000, 24000, 12000, 1000)

@@ -23,7 +23,7 @@ from src.ui.agent_page import render_agent
 from src.ui.common import render_model_settings
 from src.ui.jobs_page import render_jobs
 from src.ui.lecture_page import render_lecture_processor
-from src.ui.library_page import render_library
+from src.ui.library_page import render_full_library_document, render_library
 
 
 st.set_page_config(page_title="Class Knowledge Library", page_icon="🎓", layout="wide")
@@ -36,6 +36,11 @@ def _job_manager() -> JobManager:
 
 library = LibraryStore(project_path("library"))
 job_manager = _job_manager()
+full_file_id = str(st.query_params.get("open_file", "")).strip()
+if full_file_id:
+    render_full_library_document(library, job_manager, full_file_id)
+    st.stop()
+
 workspace_options = ["Library", "Agent", "Lecture Notes", "Job Queue"]
 requested_workspace = st.session_state.pop("requested_workspace", "")
 if requested_workspace in workspace_options:

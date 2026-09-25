@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 import unittest
 
 from src.ui.file_manager_component import file_icon
@@ -21,6 +22,21 @@ class FileManagerIconTest(unittest.TestCase):
         self.assertEqual(file_icon("slides.pdf"), "📕")
         self.assertEqual(file_icon("notes.md"), "📝")
         self.assertEqual(file_icon("deck.pptx"), "📊")
+
+    def test_folder_actions_use_a_compact_three_dot_menu(self) -> None:
+        component = (
+            Path(__file__).resolve().parents[1]
+            / "src"
+            / "ui"
+            / "components"
+            / "file_manager"
+            / "index.html"
+        ).read_text(encoding="utf-8")
+
+        self.assertNotIn("Click to preview · Drag to move", component)
+        self.assertIn('"⋯"', component)
+        self.assertIn('event("rename_folder"', component)
+        self.assertIn('event("delete_folder"', component)
 
 
 if __name__ == "__main__":

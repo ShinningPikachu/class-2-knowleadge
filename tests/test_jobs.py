@@ -664,12 +664,11 @@ No additional professor explanation was aligned with this slide.
         self.assertEqual(completed.result["slide_number"], 1)
         self.assertTrue(Path(completed.result["markdown_path"]).is_file())
         self.assertTrue(Path(completed.result["pdf_path"]).is_file())
-        self.assertEqual(len(completed.result["library_messages"]), 2)
+        self.assertEqual(len(completed.result["library_messages"]), 1)
         stored_names = {item.original_name for item in library.list_documents(subject.id)}
         self.assertEqual(
             stored_names,
             {
-                f"Lecture_01_Agents_Slide_001_Deep_Review_{review_job.id[:8]}.md",
                 f"Lecture_01_Agents_Slide_001_Deep_Review_{review_job.id[:8]}.pdf",
             },
         )

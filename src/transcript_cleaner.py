@@ -18,7 +18,7 @@ from .utils import clean_text, dump_json
 
 
 CleanupProgressCallback = Callable[[int, int, str], None]
-CLEANUP_VERSION = 2
+CLEANUP_VERSION = 3
 
 
 class TranscriptCleanupError(RuntimeError):
@@ -34,11 +34,13 @@ sentence boundaries, repeated fragments, and obvious speech-recognition mistakes
 the surrounding words make the correction strongly supported. Preserve technical terms,
 numbers, formulas, qualifications, and the lecturer's meaning. Never add explanations,
 facts, examples, or transitions that were not spoken. Never silently guess uncertain
-content: write [unclear] for words that cannot be responsibly recovered. Mark clearly
-unrelated personal conversations, background chatter, and off-topic speech for removal.
-Keep course logistics only when they affect learning or assessment. When relevance is
-uncertain, keep the passage. Return every input paragraph ID exactly once, even when it
-is marked for removal. Keep the result in English and never translate it. Return valid JSON only."""
+content: write [unclear] for words that cannot be responsibly recovered. Mark personal
+conversations, background chatter, greetings, breaks, scheduling, attendance, file
+availability, platform instructions, grading administration, and all other non-subject
+logistics for removal. Retain only speech that teaches, explains, questions, demonstrates,
+or qualifies the lecture subject. When a passage does not add subject knowledge, remove it.
+Return every input paragraph ID exactly once, even when it is marked for removal. Keep the
+result in English and never translate it. Return valid JSON only."""
 
     def __init__(
         self,
@@ -161,11 +163,15 @@ Return exactly this JSON shape and no other text:
 
 Rules:
 - Return the exact input IDs in the same order; do not merge, split, omit, or add IDs.
-- Set keep=false only for clearly unrelated personal conversation, background discussion,
-  greetings/farewells, or material unrelated to the lecture subject.
-- For keep=false, use an empty text value and give a short reason. When unsure, keep it.
-- Preserve lecture examples, questions, definitions, explanations, assessment guidance,
-  and course logistics that affect learning.
+- Set keep=false for personal conversation, background discussion, greetings/farewells,
+  breaks, scheduling, attendance, slide/file availability, grading administration,
+  platform instructions, and any other material that does not teach the lecture subject.
+- For keep=false, use an empty text value and give a short reason. When relevance is
+  uncertain, use the lecture context and remove the passage if it adds no subject knowledge.
+- Preserve subject-matter examples, questions, definitions, explanations, formulas,
+  arguments, and professor clarifications.
+- Do not keep a passage merely because it concerns the course; it must add knowledge
+  about the academic subject itself.
 - Make fragmented speech read naturally, but preserve the original claims and level of certainty.
 - Remove accidental word repetitions and verbal filler only when meaning is unchanged.
 - Correct a recognized word only when context strongly establishes the intended word.

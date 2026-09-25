@@ -82,19 +82,19 @@ def validate_evidence_quality(
 
 
 def validate_final_notes(markdown: str, slide_count: int, section_label: str = "Slide") -> None:
-    """Ensure the exported document has complete structural coverage."""
-    rendered_slides = sum(line.startswith(f"# {section_label} ") for line in markdown.splitlines())
+    """Ensure every source section has exactly one concise exported note."""
+    lines = markdown.splitlines()
+    rendered_slides = sum(
+        line.startswith(f"# {section_label} ") or line.startswith(f"## {section_label} ")
+        for line in lines
+    )
     if rendered_slides != slide_count:
         raise QualityGateError(
             f"Final notes contain {rendered_slides} {section_label.lower()} sections for {slide_count} source sections."
         )
-    required = [
-        "## Overall Summary",
-        "# Complete Lecture Summary",
-        "# Key Definitions",
-        "# Important Formulas",
-        "# Possible Exam Questions",
-    ]
-    missing = [heading for heading in required if heading not in markdown]
-    if missing:
-        raise QualityGateError("Final notes are incomplete; missing: " + ", ".join(missing))
+    if "## Concise summary" in markdown:
+        concise_sections = sum(line.strip() == "## Concise summary" for line in lines)
+        if concise_sections != slide_count:
+            raise QualityGateError(
+                f"Final notes contain {concise_sections} concise summaries for {slide_count} source sections."
+            )

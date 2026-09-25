@@ -1303,9 +1303,7 @@ class JobManager:
             base_name = safe_filename(
                 str(payload.get("lecture_name") or source_job.result.get("lecture_name") or "Lecture")
             )
-            library_candidates = [(markdown_path, ".md")]
-            if pdf_path is not None:
-                library_candidates.append((pdf_path, ".pdf"))
+            library_candidates = [(pdf_path, ".pdf")] if pdf_path is not None else []
             for path, suffix in library_candidates:
                 filename = f"{base_name}_Slide_{number:03d}_Deep_Review_{job.id[:8]}{suffix}"
                 try:

@@ -2,14 +2,14 @@
 
 An offline-first subject library, document assistant, lecture-note generator, and background job queue tuned for a 32 GB local machine. The Streamlit application has four workspaces:
 
-- **Library** — use a desktop-style two-pane file explorer with a folder sidebar and icon grid, drag file tiles into any folder, recognize file types from simple PDF/audio/Markdown/PowerPoint icons, click files to preview their contents, remove or rename files and folders, and search extracted text.
+- **Library** — use a desktop-style two-pane file explorer with a folder sidebar and icon grid, drag file tiles into any folder, recognize file types from simple PDF/audio/Markdown/PowerPoint icons, click files to preview their contents, remove or rename files and folders, and search extracted text. A lecture recording opens with its cleaned, synchronized transcript timeline; class slides and concise notes are linked as one lecture set, and every preview can open full-page in a new browser tab.
 - **Agent** — explicitly activate a local assistant to ask grounded questions across every subject or within one selected subject, with document/page/slide citations. It can list, rename, and move documents or create a subject through conversational requests; every write action is previewed and requires confirmation.
-- **Lecture Notes** — queue a university lecture recording, slide deck (`.pdf`, `.pptx`, or `.ppt`), or both for background processing. The original sources, stored transcript, and both final note formats can be saved automatically into one lecture folder inside a subject.
+- **Lecture Notes** — queue a university lecture recording, slide deck (`.pdf`, `.pptx`, or `.ppt`), or both for background processing. The learner-facing recording, class deck, and concise notes PDF are saved automatically into one lecture folder; processing JSON and transcript files stay behind the combined previews instead of cluttering the file explorer.
 - **Job Queue** — see what is planned, running, waiting, saved for later, completed, failed, or cancelled; stop active work safely; resume it from checkpoints with a new priority; open a live processing log; preview or download stored transcripts; request an on-demand translation of finished notes; and inspect or unload Ollama models.
 
 Lecture tasks are selected by priority (`High`, `Normal`, then `Low`) and creation time. **Stop safely · do later** is distinct from permanent cancellation: Whisper finishes its current chunk and stores the partial transcript, while an in-flight Qwen response finishes and is checkpointed before the task moves to **Later**. **Resume from checkpoints** returns it to the priority queue and reuses the same run folder, completed transcript chunks, cleanup batches, final transcript, and every completed slide note. If the application itself restarts during a task, that task is also recovered into **Later** instead of being marked failed. Whisper transcription can run while the interactive Qwen agent is active. Transcript cleanup and lecture-note generation use Qwen, so they wait between model calls while the interactive agent remains activated, then resume automatically after the agent is deactivated. Automatic model cleanup is enabled by default. Qwen stays warm while the interactive agent is activated, and lecture jobs hand resident models directly to queued work that uses the same Ollama host and model. Models are unloaded after completion, deferral, failure, cancellation, agent deactivation, or restart recovery only when no active or queued consumer still needs them. This releases unused model memory without causing avoidable unload/reload cycles or terminating the Ollama server.
 
-Lecture processing uses one bounded, non-thinking Qwen call per slide. Every slide produces a concise summary combining its visible content with the professor's relevant aligned explanation. Detailed reasoning runs only after **Deep Review** is clicked beside an individual slide in the Library. That focused job uses high reasoning and a second factual audit, writes separate Markdown/PDF files back into the lecture folder, and never overwrites the baseline notes.
+Lecture processing uses one bounded, non-thinking Qwen call per slide. Every slide produces a concise summary combining its visible content with the professor's relevant aligned explanation. Detailed reasoning runs only from the **🧠** action beside an individual slide in the Library. That focused job uses high reasoning and a second factual audit, writes a separate PDF back into the lecture folder, and never overwrites the baseline notes.
 
 English is the default recording and canonical-output language. Transcript repair and lecture-note generation explicitly remain in English; they never translate automatically. After a lecture finishes, expand **Translate finished notes on demand**, choose Chinese or another target language, and queue a separate translation task. Only that explicit action creates translated Markdown/PDF files. The English transcript and notes remain unchanged, and translation batches support the same safe stop and checkpoint-resume workflow.
 
@@ -138,32 +138,21 @@ streamlit run app.py
 
 Then open the local URL Streamlit prints. The server is explicitly bound to `127.0.0.1` so the local-file controls are not exposed to other machines by default.
 
-Start in **Library** to create a subject and optional lecture folders. The file explorer has persistent folder locations on the left, file/folder icons in the center, and a content preview on the right—there are no repeated document rows. Click a folder to browse it, click a file once to preview it, or press and drag a file tile onto any folder (including the subject root) to move it. When a lecture PDF/PPT is clicked, the same preview pane shows the selected slide on the left and its exact slide-plus-professor summary on the right, with **Deep Review** available only for that slide. In **Lecture Notes**, provide one or both lecture inputs, choose a priority and optional destination subject, and select **Queue Lecture Task**. A blank title is inferred automatically into a consistent name such as `Lecture_01_Introduction`; related source and result files use the same base name and are stored together. With both inputs, professor speech is aligned to the relevant slides.
+Start in **Library** to create a subject and optional lecture folders. The file explorer has persistent folder locations on the left, file/folder icons in the center, and a content preview on the right—there are no repeated document rows. Click a folder to browse it, click a file once to preview it, or press and drag a file tile onto any folder (including the subject root) to move it. A lecture recording appears above its cleaned transcript; playback highlights the matching timestamped passage, and selecting a passage seeks the audio. When a lecture PDF/PPT is clicked, the same preview pane shows the selected slide on the left and its exact slide-plus-professor summary on the right, with arrow navigation and a **🧠** action for that slide. The recording, class slides, and concise notes PDF are linked as one lecture set, and **Full screen** opens any file in a dedicated browser tab. In **Lecture Notes**, provide one or both lecture inputs, choose a priority and optional destination subject, and select **Queue Lecture Task**. A blank title is inferred automatically into a consistent name such as `Lecture_01_Introduction`; related source and result files use the same base name and are stored together. With both inputs, professor speech is aligned to the relevant slides.
 
 Open **Job Queue → Ollama model memory** to disable automatic unloading, inspect resident models, or unload an idle model manually. Manual unloading is blocked while a lecture or model call is active and for models required by queued work, so it cannot interrupt a task or force the next task to reload the same model.
 
 ## Output format
 
-The generated Markdown follows this structure:
+The generated Markdown and PDF intentionally contain only the concise content:
 
 ```markdown
 # Lecture title
 
-## Overall Summary
-
-# Slide 1: Title
-## Concise summary
-## Slide content
-## Professor explanation
-## Important concepts
-## Exam points
+## Slide 1: Title
+One to three precise sentences combining this slide with the professor's directly relevant explanation.
 
 ...
-
-# Complete Lecture Summary
-# Key Definitions
-# Important Formulas
-# Possible Exam Questions
 ```
 
 Every run is stored under `runs/<run-id>/`:
@@ -172,8 +161,8 @@ Every run is stored under `runs/<run-id>/`:
 - `transcript.partial.json` — atomically refreshed raw transcript of all completed recording chunks
 - `transcript.raw.json` — untouched Whisper segments and paragraphs for audit/comparison
 - `transcript_cleanup/` and `transcript.cleanup.partial.json` — resumable Qwen cleanup checkpoints
-- `transcript.json` — cleaned, timestamped human-readable paragraphs used downstream
-- `transcript.txt` — cleaned transcript in a directly readable text format
+- `transcript.json` — cleaned, timestamped paragraphs used by the recording's synchronized Library view
+- `transcript.txt` — internal plain-text copy of the same cleaned transcript
 - `transcript_chunks/` — completed chunk checkpoints for inspecting long transcriptions
 - `slides.json` — slide text, titles, notes, image paths, OCR hints, and rendered preview paths
 - `slide_summaries.json` — one concise slide-plus-professor summary per slide
@@ -181,7 +170,7 @@ Every run is stored under `runs/<run-id>/`:
 - `quality_report.json` — evidence coverage, low-confidence ratio, warnings, and failures
 - `database/` — local ChromaDB vectors for that lecture only
 - `notes_checkpoints/` and `lecture_notes.partial.md` — atomic per-slide model checkpoints and a readable partial preview used when resuming
-- `lecture_notes.md` and `lecture_notes.pdf` — canonical English exports
+- `lecture_notes.md` and `lecture_notes.pdf` — concise, slide-by-slide English exports
 - `lecture_manifest.json` — named inventory of the source and generated artifacts
 - `slide_reviews/` — separate on-demand deep-review Markdown/PDF files for selected slides
 - `translations/` — created only after an explicit translation request

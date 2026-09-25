@@ -293,6 +293,28 @@ class LibraryStore:
             raise LibraryError("The selected folder no longer exists.")
         return self._folder_from_row(row)
 
+    def rename_folder(self, folder_id: str, name: str) -> LibraryFolder:
+        """Rename a folder without moving the files stored inside it."""
+        folder = self.get_folder(folder_id)
+        normalized_name = clean_text(name)
+        if not normalized_name:
+            raise LibraryError("Folder name cannot be empty.")
+        if len(normalized_name) > 120:
+            raise LibraryError("Folder name must contain no more than 120 characters.")
+        try:
+            with self._connect() as connection:
+                connection.execute(
+                    "UPDATE folders SET name = ? WHERE id = ?",
+                    (normalized_name, folder.id),
+                )
+        except sqlite3.IntegrityError as exc:
+            raise LibraryError(
+                f"A folder named '{normalized_name}' already exists in this subject."
+            ) from exc
+        except sqlite3.Error as exc:
+            raise LibraryError(f"Could not rename the folder: {exc}") from exc
+        return self.get_folder(folder.id)
+
     def add_document(
         self,
         subject_id: str,

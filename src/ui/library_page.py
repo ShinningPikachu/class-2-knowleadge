@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import hashlib
+import html
 import json
 from pathlib import Path
 import re
@@ -13,7 +14,8 @@ import streamlit as st
 
 from ..jobs import JobError, JobManager, JobRecord
 from ..library import LibraryDocument, LibraryError, LibraryFolder, LibraryStore
-from .common import format_size, render_search_results, render_subject_creator, render_upload_panel, subject_lookup
+from .audio_transcript_component import render_audio_transcript
+from .common import format_size, render_search_results, render_upload_panel, subject_lookup
 from .file_manager_component import file_icon, render_file_manager
 
 
@@ -33,6 +35,8 @@ TEXT_PREVIEW_SUFFIXES = {
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
 AUDIO_SUFFIXES = {".m4a", ".mp3", ".wav", ".aac", ".flac", ".ogg", ".opus"}
 VIDEO_SUFFIXES = {".mp4", ".mov", ".mkv", ".webm", ".m4v"}
+INLINE_PREVIEW_HEIGHT = 620
+INLINE_PREVIEW_CONTENT_HEIGHT = 570
 
 
 @dataclass(frozen=True)
@@ -41,6 +45,43 @@ class _LectureSlideBundle:
     summaries: dict[int, str]
     alignment: dict[int, list[dict[str, Any]]]
     source_job: JobRecord | None
+
+
+@dataclass(frozen=True)
+class _LectureAudioBundle:
+    paragraphs: list[dict[str, Any]]
+    source_job: JobRecord | None
+
+
+_INTERNAL_LECTURE_ARTIFACTS = (
+    "_transcript_raw",
+    "_transcript_cleaned",
+    "_slides_extracted",
+    "_slide_summaries",
+    "_alignment",
+    "_quality_report",
+    "_manifest",
+)
+
+
+def _is_internal_lecture_artifact_name(filename: str) -> bool:
+    """Recognize generated evidence that belongs behind a lecture preview."""
+    path = Path(filename)
+    normalized = re.sub(r"[^a-z0-9]+", "_", path.stem.casefold()).strip("_")
+    return (
+        "transcript" in normalized and path.suffix.lower() in {".json", ".txt"}
+    ) or any(normalized.endswith(token.strip("_")) for token in _INTERNAL_LECTURE_ARTIFACTS) or (
+        normalized.endswith("_notes") and path.suffix.lower() in {".md", ".markdown"}
+    ) or ("_deep_review_" in f"_{normalized}_" and path.suffix.lower() in {".md", ".markdown"})
+
+
+def _is_internal_lecture_artifact(document: LibraryDocument) -> bool:
+    """Hide processing evidence from the learner-facing file explorer."""
+    return _is_internal_lecture_artifact_name(document.original_name)
+
+
+def _visible_documents(documents: list[LibraryDocument]) -> list[LibraryDocument]:
+    return [document for document in documents if not _is_internal_lecture_artifact(document)]
 
 
 def _load_json_file(path: Path | None) -> dict[str, Any]:
@@ -197,7 +238,90 @@ def _lecture_slide_bundle(
     return _LectureSlideBundle(slides, summaries, alignment, source_job)
 
 
-def _render_pdf(document: LibraryDocument) -> None:
+def _lecture_audio_bundle(
+    library: LibraryStore,
+    manager: JobManager,
+    document: LibraryDocument,
+) -> _LectureAudioBundle | None:
+    if document.stored_path.suffix.lower() not in AUDIO_SUFFIXES:
+        return None
+    related = _related_documents(library, document)
+    source_job = _matching_lecture_job(manager, document)
+    transcript_path = next(
+        (
+            item.stored_path
+            for item in related
+            if "transcript_cleaned" in re.sub(
+                r"[^a-z0-9]+", "_", item.original_name.casefold()
+            ).strip("_")
+            and item.stored_path.suffix.lower() == ".json"
+        ),
+        None,
+    ) or _result_path(source_job, "transcript_path")
+    payload = _load_json_file(transcript_path)
+    metadata = payload.get("metadata", {}) if isinstance(payload.get("metadata"), dict) else {}
+    transcript_kind = str(metadata.get("transcript_kind", "")).casefold()
+    cleanup_enabled = True
+    if source_job is not None and isinstance(source_job.payload.get("config"), dict):
+        cleanup_enabled = bool(source_job.payload["config"].get("enable_transcript_cleanup", True))
+    if transcript_kind and transcript_kind != "cleaned":
+        return _LectureAudioBundle([], source_job)
+    if source_job is not None and not cleanup_enabled:
+        return _LectureAudioBundle([], source_job)
+    paragraphs = [
+        item
+        for item in payload.get("paragraphs", [])
+        if isinstance(item, dict) and str(item.get("text", "")).strip()
+    ]
+    return _LectureAudioBundle(paragraphs, source_job)
+
+
+def _lecture_material_role(document: LibraryDocument) -> tuple[int, str] | None:
+    suffix = document.stored_path.suffix.lower()
+    normalized = re.sub(r"[^a-z0-9]+", "_", document.original_name.casefold()).strip("_")
+    if suffix in AUDIO_SUFFIXES:
+        return 1, "Recording"
+    if suffix in {".ppt", ".pptx"} or (
+        suffix == ".pdf" and "notes" not in normalized and "deep_review" not in normalized
+    ):
+        return 0, "Class slides"
+    if suffix == ".pdf" and "notes" in normalized and "deep_review" not in normalized:
+        return 2, "Concise notes"
+    return None
+
+
+def _lecture_material_documents(
+    library: LibraryStore,
+    manager: JobManager,
+    document: LibraryDocument,
+) -> list[tuple[LibraryDocument, str]]:
+    source_job = _matching_lecture_job(manager, document)
+    if source_job is None:
+        return []
+    lecture_name = str(
+        source_job.result.get("lecture_name", source_job.payload.get("lecture_name", ""))
+    ).casefold()
+    matches: list[tuple[int, LibraryDocument, str]] = []
+    for candidate in _visible_documents(_related_documents(library, document)):
+        role = _lecture_material_role(candidate)
+        if role is None:
+            continue
+        # Completed lectures receive a dedicated folder, so legacy files with
+        # pre-canonical names still belong to the same lecture set. Subject-root
+        # files retain strict job/name matching to avoid combining lectures.
+        belongs = document.folder_id is not None
+        if not belongs:
+            belongs = bool(lecture_name and candidate.original_name.casefold().startswith(lecture_name))
+        if not belongs:
+            candidate_job = _matching_lecture_job(manager, candidate)
+            belongs = bool(candidate_job and candidate_job.id == source_job.id)
+        if belongs:
+            matches.append((role[0], candidate, role[1]))
+    matches.sort(key=lambda item: (item[0], item[1].original_name.casefold()))
+    return [(candidate, label) for _rank, candidate, label in matches]
+
+
+def _render_pdf(document: LibraryDocument, *, height: int = 680) -> None:
     """Render a stored PDF without exposing its local filesystem path to the browser."""
     try:
         pdf_data = document.stored_path.read_bytes()
@@ -206,7 +330,7 @@ def _render_pdf(document: LibraryDocument) -> None:
         return
 
     try:
-        st.pdf(pdf_data, height=680, key=f"pdf_viewer_{document.id}")
+        st.pdf(pdf_data, height=height, key=f"pdf_viewer_{document.id}_{height}")
     except Exception:
         st.error(
             "The local PDF viewer is unavailable. Reinstall the project dependencies "
@@ -278,7 +402,7 @@ def _render_current_slide(document: LibraryDocument, slide: dict[str, Any]) -> N
 
             with fitz.open(document.stored_path) as pdf:
                 page = pdf[number - 1]
-                image = page.get_pixmap(matrix=fitz.Matrix(1.45, 1.45), alpha=False).tobytes("png")
+                image = page.get_pixmap(matrix=fitz.Matrix(2.0, 2.0), alpha=False).tobytes("png")
             st.image(image, use_container_width=True)
             return
         except Exception as exc:
@@ -288,8 +412,12 @@ def _render_current_slide(document: LibraryDocument, slide: dict[str, Any]) -> N
     if preview_path.is_file():
         st.image(str(preview_path), use_container_width=True)
         return
-    st.markdown(f"#### {slide.get('title', f'Slide {number}')}")
-    st.text(str(slide.get("content", "")) or "(No extractable slide text.)")
+    title = html.escape(str(slide.get("title", f"Slide {number}")))
+    content = html.escape(str(slide.get("content", "")) or "(No extractable slide text.)")
+    st.markdown(
+        f'<div class="lecture-slide-fallback"><strong>{title}</strong><br><br>{content}</div>',
+        unsafe_allow_html=True,
+    )
 
 
 def _matching_deep_reviews(
@@ -312,6 +440,7 @@ def _render_deep_review_control(
     document: LibraryDocument,
     bundle: _LectureSlideBundle,
     slide_number: int,
+    button_target: Any | None = None,
 ) -> None:
     source_job = bundle.source_job
     reviews = _matching_deep_reviews(manager, source_job, slide_number) if source_job else []
@@ -323,9 +452,10 @@ def _render_deep_review_control(
             with st.expander("Detailed explanation", expanded=True):
                 st.markdown(markdown_path.read_text(encoding="utf-8"))
     elif latest and active:
-        st.info(f"Deep Review: {latest.status} · {latest.progress}% — {latest.message}")
+        st.info(f"🧠 {latest.status.title()} · {latest.progress}% — {latest.message}")
         if st.button(
-            "Refresh review status",
+            "↻",
+            help="Refresh review status",
             key=f"refresh_deep_review_{document.id}_{slide_number}",
             use_container_width=True,
         ):
@@ -336,8 +466,9 @@ def _render_deep_review_control(
         if source_job
         else "The completed lecture job for this file could not be located."
     )
-    if st.button(
-        "Deep Review",
+    target = button_target or st
+    if target.button(
+        "🧠",
         type="primary",
         disabled=source_job is None or active,
         help=help_text,
@@ -366,43 +497,178 @@ def _render_slide_document(
     manager: JobManager,
     document: LibraryDocument,
     bundle: _LectureSlideBundle,
+    *,
+    full_page: bool = False,
 ) -> None:
     slide_lookup = {int(item["slide"]): item for item in bundle.slides}
     slide_numbers = sorted(slide_lookup)
-    selected_number = st.selectbox(
-        "Current slide",
-        slide_numbers,
-        format_func=lambda number: f"Slide {number}: {slide_lookup[number].get('title', '')}",
-        key=f"current_library_slide_{document.id}",
-    )
+    slide_key = f"current_library_slide_{document.id}"
+    try:
+        selected_number = int(st.session_state.get(slide_key, slide_numbers[0]))
+    except (TypeError, ValueError):
+        selected_number = slide_numbers[0]
+    if selected_number not in slide_lookup:
+        selected_number = slide_numbers[0]
+    st.session_state[slide_key] = selected_number
     slide = slide_lookup[selected_number]
-    st.progress(
-        (slide_numbers.index(selected_number) + 1) / len(slide_numbers),
-        text=f"Slide {selected_number} of {len(slide_numbers)}",
+    selected_index = slide_numbers.index(selected_number)
+    st.markdown(
+        """<style>
+        .lecture-slide-nav { text-align:center; line-height:1.25; padding:.15rem .3rem; }
+        .lecture-slide-nav strong { display:block; font-size:clamp(1rem, 1.3vw, 1.25rem); }
+        .lecture-slide-nav span { color:#687083; font-size:.78rem; }
+        .lecture-slide-summary { font-size:clamp(1.08rem, 1.45vw, 1.38rem); line-height:1.58; }
+        .lecture-slide-fallback { font-size:clamp(1.08rem, 1.65vw, 1.55rem); line-height:1.55;
+          padding:1.25rem; border:1px solid rgba(128,128,128,.25); border-radius:.75rem; }
+        </style>""",
+        unsafe_allow_html=True,
     )
-    slide_column, summary_column = st.columns([1.15, 1], gap="large")
-    with slide_column:
-        st.markdown(f"#### Slide {selected_number}")
+    def render_slide() -> None:
+        previous_column, title_column, next_column = st.columns([1, 5, 1], vertical_alignment="center")
+        if previous_column.button(
+            "◀",
+            disabled=selected_index == 0,
+            help="Previous slide",
+            key=f"previous_library_slide_{document.id}",
+            use_container_width=True,
+        ):
+            st.session_state[slide_key] = slide_numbers[selected_index - 1]
+            st.rerun()
+        slide_title = html.escape(str(slide.get("title", "")).strip())
+        title_column.markdown(
+            f'<div class="lecture-slide-nav"><strong>{slide_title or f"Slide {selected_number}"}</strong>'
+            f'<span>{selected_number} / {len(slide_numbers)}</span></div>',
+            unsafe_allow_html=True,
+        )
+        if next_column.button(
+            "▶",
+            disabled=selected_index == len(slide_numbers) - 1,
+            help="Next slide",
+            key=f"next_library_slide_{document.id}",
+            use_container_width=True,
+        ):
+            st.session_state[slide_key] = slide_numbers[selected_index + 1]
+            st.rerun()
         _render_current_slide(document, slide)
-    with summary_column:
-        st.markdown("#### Slide summary")
-        st.write(_exact_slide_summary(bundle, slide))
-        _render_deep_review_control(manager, document, bundle, selected_number)
 
-    with st.expander("Open full document", expanded=False):
-        if document.stored_path.suffix.lower() == ".pdf":
-            _render_pdf(document)
-        else:
-            _render_powerpoint_preview(document)
+    def render_summary() -> None:
+        summary_title, review_button = st.columns([5, 1], vertical_alignment="center")
+        summary_title.markdown("#### Slide summary")
+        summary = html.escape(_exact_slide_summary(bundle, slide))
+        st.markdown(f'<div class="lecture-slide-summary">{summary}</div>', unsafe_allow_html=True)
+        _render_deep_review_control(
+            manager,
+            document,
+            bundle,
+            selected_number,
+            button_target=review_button,
+        )
+
+    if full_page:
+        slide_column, summary_column = st.columns([1.65, 1], gap="large")
+        with slide_column:
+            render_slide()
+        with summary_column:
+            render_summary()
+    else:
+        render_slide()
+        render_summary()
+
+def _render_transcript_fallback(
+    document: LibraryDocument,
+    paragraphs: list[dict[str, Any]],
+) -> None:
+    st.audio(str(document.stored_path), format=document.media_type)
+    if not paragraphs:
+        st.info("A cleaned transcript is not available for this recording yet.")
+        return
+    timeline = st.container(height=560, border=True)
+    with timeline:
+        st.markdown("#### Cleaned transcript timeline")
+        for paragraph in paragraphs:
+            start = str(paragraph.get("start_time", "")).strip()
+            end = str(paragraph.get("end_time", "")).strip()
+            stamp = f"{start}–{end}".strip("–")
+            if stamp:
+                st.caption(stamp)
+            st.write(str(paragraph.get("text", "")).strip())
 
 
-def _render_document_content(document: LibraryDocument) -> None:
+def _render_audio_document(
+    document: LibraryDocument,
+    bundle: _LectureAudioBundle | None,
+    *,
+    full_page: bool = False,
+) -> None:
+    paragraphs = bundle.paragraphs if bundle is not None else []
+    if not paragraphs:
+        _render_transcript_fallback(document, paragraphs)
+        return
+    rendered = render_audio_transcript(
+        document.stored_path,
+        document.media_type,
+        paragraphs,
+        key=document.id,
+        height=790 if full_page else INLINE_PREVIEW_CONTENT_HEIGHT,
+    )
+    if not rendered:
+        _render_transcript_fallback(document, paragraphs)
+
+
+def _render_related_materials(
+    library: LibraryStore,
+    manager: JobManager,
+    document: LibraryDocument,
+    *,
+    selected_key: str | None,
+    stacked: bool = False,
+) -> None:
+    materials = _lecture_material_documents(library, manager, document)
+    if len(materials) < 2:
+        return
+    st.caption("Lecture files" if stacked else "Lecture set")
+    def render_material(material: LibraryDocument, label: str) -> None:
+        button_label = f"{file_icon(material.original_name)} {label}"
+        if selected_key is None:
+            st.link_button(
+                button_label,
+                f"?open_file={material.id}",
+                disabled=material.id == document.id,
+                use_container_width=True,
+            )
+        elif st.button(
+            button_label,
+            key=f"related_material_{document.id}_{material.id}",
+            disabled=material.id == document.id,
+            use_container_width=True,
+        ):
+            st.session_state[selected_key] = material.id
+            st.rerun()
+
+    if stacked:
+        for material, label in materials:
+            render_material(material, label)
+    else:
+        columns = st.columns(len(materials))
+        for column, (material, label) in zip(columns, materials):
+            with column:
+                render_material(material, label)
+    if not stacked:
+        st.divider()
+
+
+def _render_document_content(
+    document: LibraryDocument,
+    audio_bundle: _LectureAudioBundle | None = None,
+    *,
+    full_page: bool = False,
+) -> None:
     suffix = document.stored_path.suffix.lower()
     try:
         if suffix == ".pdf":
-            _render_pdf(document)
+            _render_pdf(document, height=900 if full_page else INLINE_PREVIEW_CONTENT_HEIGHT)
         elif suffix in AUDIO_SUFFIXES:
-            st.audio(str(document.stored_path), format=document.media_type)
+            _render_audio_document(document, audio_bundle, full_page=full_page)
         elif suffix in VIDEO_SUFFIXES:
             st.video(str(document.stored_path), format=document.media_type)
         elif suffix in IMAGE_SUFFIXES:
@@ -439,69 +705,140 @@ def _render_file_preview(
     document: LibraryDocument,
     selected_key: str,
     slide_bundle: _LectureSlideBundle | None = None,
+    audio_bundle: _LectureAudioBundle | None = None,
 ) -> None:
-    st.markdown(f"### {file_icon(document.original_name)} {document.original_name}")
-    st.caption(
-        f"📁 {document.folder_name or 'Subject root'} · {format_size(document.size_bytes)} · "
-        f"{document.status.replace('_', ' ').title()}"
+    st.markdown(
+        """<style>
+        .st-key-library_preview_menu {
+          position: sticky; top: .4rem; z-index: 100; width: 2.7rem; height: 0;
+          margin: 0 .2rem 0 auto; overflow: visible; transform: translateY(.1rem);
+        }
+        .st-key-library_preview_menu div[data-testid="stPopover"] > button {
+          border-radius: 999px; background: color-mix(in srgb, var(--secondary-background-color) 88%, transparent);
+          box-shadow: 0 2px 10px rgba(0,0,0,.22); font-size: 1.15rem;
+        }
+        </style>""",
+        unsafe_allow_html=True,
     )
-    if document.extraction_error:
-        st.warning(document.extraction_error)
-
-    close_col, rename_col, delete_col = st.columns(3)
-    if close_col.button("Close", key=f"close_preview_{document.id}", use_container_width=True):
-        st.session_state.pop(selected_key, None)
-        st.rerun()
-    with rename_col.popover("Rename", use_container_width=True):
-        with st.form(f"rename_file_{document.id}"):
-            new_name = st.text_input("File name", value=document.original_name)
-            rename = st.form_submit_button("Save name", use_container_width=True)
-        if rename:
-            try:
-                updated = library.rename_document(document.id, new_name)
-                st.session_state["library_file_notice"] = f"Renamed file to {updated.original_name}."
-                st.rerun()
-            except LibraryError as exc:
-                st.error(str(exc))
-    if delete_col.button("Delete", key=f"delete_preview_{document.id}", use_container_width=True):
-        st.session_state["library_document_delete_confirmation"] = document.id
-
-    if st.session_state.get("library_document_delete_confirmation") == document.id:
-        st.warning(f"Permanently delete '{document.original_name}'?")
-        confirm, cancel = st.columns(2)
-        if confirm.button("Yes, delete", type="primary", key=f"confirm_delete_{document.id}"):
-            try:
-                library.delete_document(document.id)
-                st.session_state.pop("library_document_delete_confirmation", None)
+    with st.container(key="library_preview_menu"):
+        with st.popover("⋯", help="File actions", use_container_width=True):
+            if st.button(
+                "Close preview",
+                key=f"close_preview_{document.id}",
+                use_container_width=True,
+            ):
                 st.session_state.pop(selected_key, None)
-                st.session_state["library_file_notice"] = f"Deleted {document.original_name}."
                 st.rerun()
-            except LibraryError as exc:
-                st.error(str(exc))
-        if cancel.button("Keep file", key=f"cancel_delete_{document.id}"):
-            st.session_state.pop("library_document_delete_confirmation", None)
-            st.rerun()
-
-    if document.size_bytes <= 100 * 1024 * 1024:
-        try:
-            st.download_button(
-                "Download",
-                data=document.stored_path.read_bytes(),
-                file_name=document.original_name,
-                mime=document.media_type,
-                key=f"download_file_{document.id}",
+            st.link_button(
+                "Full screen ↗",
+                f"?open_file={document.id}",
+                help="Open this file in a full-page browser view.",
                 use_container_width=True,
             )
-        except OSError as exc:
-            st.error(f"Could not prepare this file for download: {exc}")
-    else:
-        st.caption("Large file download is disabled in the preview to avoid loading it into memory.")
+            with st.expander("Rename"):
+                with st.form(f"rename_file_{document.id}"):
+                    new_name = st.text_input("File name", value=document.original_name)
+                    rename = st.form_submit_button("Save", use_container_width=True)
+                if rename:
+                    try:
+                        updated = library.rename_document(document.id, new_name)
+                        st.session_state["library_file_notice"] = f"Renamed file to {updated.original_name}."
+                        st.rerun()
+                    except LibraryError as exc:
+                        st.error(str(exc))
+            if document.size_bytes <= 100 * 1024 * 1024:
+                try:
+                    st.download_button(
+                        "Download",
+                        data=document.stored_path.read_bytes(),
+                        file_name=document.original_name,
+                        mime=document.media_type,
+                        key=f"download_file_{document.id}",
+                        use_container_width=True,
+                    )
+                except OSError as exc:
+                    st.error(f"Could not prepare this file for download: {exc}")
+            else:
+                st.caption("This file is too large for an in-browser download.")
+            if st.button(
+                "Delete",
+                key=f"delete_preview_{document.id}",
+                use_container_width=True,
+            ):
+                st.session_state["library_document_delete_confirmation"] = document.id
 
-    st.divider()
+            if st.session_state.get("library_document_delete_confirmation") == document.id:
+                st.warning(f"Permanently delete '{document.original_name}'?")
+                confirm, cancel = st.columns(2)
+                if confirm.button("Delete", type="primary", key=f"confirm_delete_{document.id}"):
+                    try:
+                        library.delete_document(document.id)
+                        st.session_state.pop("library_document_delete_confirmation", None)
+                        st.session_state.pop(selected_key, None)
+                        st.session_state["library_file_notice"] = f"Deleted {document.original_name}."
+                        st.rerun()
+                    except LibraryError as exc:
+                        st.error(str(exc))
+                if cancel.button("Cancel", key=f"cancel_delete_{document.id}"):
+                    st.session_state.pop("library_document_delete_confirmation", None)
+                    st.rerun()
+
+            _render_related_materials(
+                library,
+                manager,
+                document,
+                selected_key=selected_key,
+                stacked=True,
+            )
+
+    if document.extraction_error:
+        st.warning(document.extraction_error)
     if slide_bundle is not None:
         _render_slide_document(manager, document, slide_bundle)
     else:
-        _render_document_content(document)
+        _render_document_content(document, audio_bundle)
+
+
+def render_full_library_document(
+    library: LibraryStore,
+    manager: JobManager,
+    document_id: str,
+) -> None:
+    """Render one library file without the workspace chrome for a new tab."""
+    try:
+        document = library.get_document(document_id)
+    except LibraryError as exc:
+        st.error(str(exc))
+        return
+
+    st.title(f"{file_icon(document.original_name)} {document.original_name}")
+    st.caption(
+        f"{document.subject_name} / {document.folder_name or 'Subject root'} · "
+        f"{format_size(document.size_bytes)}"
+    )
+    action_column, space = st.columns([1, 5])
+    with action_column:
+        if document.size_bytes <= 100 * 1024 * 1024:
+            try:
+                st.download_button(
+                    "Download",
+                    data=document.stored_path.read_bytes(),
+                    file_name=document.original_name,
+                    mime=document.media_type,
+                    key=f"full_download_{document.id}",
+                    use_container_width=True,
+                )
+            except OSError as exc:
+                st.error(f"Could not prepare this file for download: {exc}")
+    space.caption("Full-page file view")
+    st.divider()
+    _render_related_materials(library, manager, document, selected_key=None)
+    slide_bundle = _lecture_slide_bundle(library, manager, document)
+    if slide_bundle is not None:
+        _render_slide_document(manager, document, slide_bundle, full_page=True)
+        return
+    audio_bundle = _lecture_audio_bundle(library, manager, document)
+    _render_document_content(document, audio_bundle, full_page=True)
 
 
 def _render_folder_creator(library: LibraryStore, subject_id: str, browse_key: str) -> None:
@@ -517,41 +854,6 @@ def _render_folder_creator(library: LibraryStore, subject_id: str, browse_key: s
                 st.rerun()
             except LibraryError as exc:
                 st.error(str(exc))
-
-
-def _render_folder_delete(
-    library: LibraryStore,
-    folder: LibraryFolder,
-    browse_key: str,
-    selected_key: str,
-) -> None:
-    confirmation_key = "library_folder_delete_confirmation"
-    if st.button("Delete folder", key=f"delete_folder_{folder.id}"):
-        st.session_state[confirmation_key] = folder.id
-
-    if st.session_state.get(confirmation_key) != folder.id:
-        return
-    if folder.document_count:
-        st.warning(
-            f"Delete '{folder.name}' and all {folder.document_count} file(s) inside it? "
-            "This cannot be undone."
-        )
-    else:
-        st.warning(f"Delete the empty folder '{folder.name}'?")
-    confirm, cancel, _ = st.columns([1, 1, 3])
-    if confirm.button("Yes, delete", type="primary", key=f"confirm_folder_delete_{folder.id}"):
-        try:
-            library.delete_folder(folder.id, delete_documents=bool(folder.document_count))
-            st.session_state.pop(confirmation_key, None)
-            st.session_state[browse_key] = ""
-            st.session_state.pop(selected_key, None)
-            st.session_state["library_file_notice"] = f"Deleted {folder.name}."
-            st.rerun()
-        except LibraryError as exc:
-            st.error(str(exc))
-    if cancel.button("Keep folder", key=f"cancel_folder_delete_{folder.id}"):
-        st.session_state.pop(confirmation_key, None)
-        st.rerun()
 
 
 def _handle_file_manager_event(
@@ -592,6 +894,33 @@ def _handle_file_manager_event(
         st.session_state[selected_key] = document_id
         st.rerun()
 
+    if action == "rename_folder":
+        if folder_id not in folder_lookup:
+            st.error("That folder no longer exists. Refresh the library and try again.")
+            return
+        try:
+            renamed = library.rename_folder(folder_id, str(event.get("new_name", "")))
+            st.session_state["library_file_notice"] = f"Renamed folder to {renamed.name}."
+            st.rerun()
+        except LibraryError as exc:
+            st.error(str(exc))
+        return
+
+    if action == "delete_folder":
+        if folder_id not in folder_lookup:
+            st.error("That folder no longer exists. Refresh the library and try again.")
+            return
+        folder = folder_lookup[folder_id]
+        try:
+            library.delete_folder(folder.id, delete_documents=bool(folder.document_count))
+            st.session_state[browse_key] = ""
+            st.session_state.pop(selected_key, None)
+            st.session_state["library_file_notice"] = f"Deleted {folder.name}."
+            st.rerun()
+        except LibraryError as exc:
+            st.error(str(exc))
+        return
+
     if action != "move":
         return
     if document_id not in document_lookup or (folder_id and folder_id not in folder_lookup):
@@ -608,32 +937,86 @@ def _handle_file_manager_event(
         st.error(str(exc))
 
 
+def _render_subject_selector(library: LibraryStore) -> str | None:
+    creating_key = "library_creating_subject"
+    name_key = "library_new_subject_name"
+    error_key = "library_new_subject_error"
+    notice_key = "library_new_subject_notice"
+
+    if st.session_state.get(creating_key, False):
+        def create_subject() -> None:
+            name = str(st.session_state.get(name_key, "")).strip()
+            if not name:
+                st.session_state[error_key] = "Subject name cannot be empty."
+                return
+            try:
+                subject = library.create_subject(name)
+            except LibraryError as exc:
+                st.session_state[error_key] = str(exc)
+                return
+            st.session_state["library_open_subject"] = subject.id
+            st.session_state[creating_key] = False
+            st.session_state.pop(error_key, None)
+            st.session_state[notice_key] = f"Created {subject.name}."
+
+        st.text_input(
+            "Subject name",
+            key=name_key,
+            max_chars=120,
+            placeholder="Type a subject name and press Enter",
+            icon=":material/add:",
+            on_change=create_subject,
+        )
+        error = st.session_state.get(error_key)
+        if error:
+            st.error(str(error))
+        return None
+
+    notice = st.session_state.pop(notice_key, None)
+    if notice:
+        st.success(str(notice))
+
+    subjects = library.list_subjects()
+    lookup = subject_lookup(subjects)
+    selector, add = st.columns([12, 1], vertical_alignment="bottom")
+    with selector:
+        selected_id = st.selectbox(
+            "Open subject",
+            options=[subject.id for subject in subjects],
+            format_func=lambda value: lookup[value].name,
+            key="library_open_subject",
+            placeholder="No subjects yet",
+            disabled=not subjects,
+        )
+    with add:
+        if st.button(
+            "＋",
+            key="library_add_subject",
+            help="Add a subject",
+            use_container_width=True,
+        ):
+            st.session_state[creating_key] = True
+            st.session_state.pop(name_key, None)
+            st.session_state.pop(error_key, None)
+            st.rerun()
+    if not subjects:
+        st.info("Select + to add your first subject.")
+        return None
+    return str(selected_id)
+
+
 def render_library(library: LibraryStore, manager: JobManager) -> None:
     st.title("📚 Subject Library")
     st.caption(
         "Browse folders like a desktop file manager, drag files to move them, "
         "and click a file to preview its contents."
     )
-    stats = library.stats()
-    first, second, third, fourth = st.columns(4)
-    first.metric("Subjects", stats["subjects"])
-    second.metric("Folders", stats["folders"])
-    third.metric("Files", stats["documents"])
-    fourth.metric("Searchable", stats["indexed_documents"])
 
-    render_subject_creator(library, "library")
-    subjects = library.list_subjects()
-    if not subjects:
-        st.info("Your library is empty. Create the first subject above to get started.")
+    selected_id = _render_subject_selector(library)
+    if selected_id is None:
         return
-
+    subjects = library.list_subjects()
     lookup = subject_lookup(subjects)
-    selected_id = st.selectbox(
-        "Open subject",
-        options=[subject.id for subject in subjects],
-        format_func=lambda value: lookup[value].name,
-        key="library_open_subject",
-    )
     subject = lookup[selected_id]
     st.subheader(subject.name)
     if subject.description:
@@ -642,7 +1025,7 @@ def render_library(library: LibraryStore, manager: JobManager) -> None:
     documents_tab, upload_tab, search_tab = st.tabs(["File explorer", "Add files", "Search"])
     with documents_tab:
         folders = library.list_folders(subject.id)
-        documents = library.list_documents(subject.id)
+        documents = _visible_documents(library.list_documents(subject.id))
         folder_lookup = {folder.id: folder for folder in folders}
         document_lookup = {document.id: document for document in documents}
         browse_key = f"library_browse_folder_{subject.id}"
@@ -658,18 +1041,9 @@ def render_library(library: LibraryStore, manager: JobManager) -> None:
         if notice:
             st.success(notice)
 
-        control_left, control_right, control_space = st.columns([1, 1, 4])
+        control_left, _ = st.columns([1, 5])
         with control_left:
             _render_folder_creator(library, subject.id, browse_key)
-        if current_folder_id and current_folder_id in folder_lookup:
-            with control_right:
-                _render_folder_delete(
-                    library,
-                    folder_lookup[current_folder_id],
-                    browse_key,
-                    selected_key,
-                )
-        control_space.caption("Folders stay visible as drop targets. Click a file once to open its preview.")
 
         selected_document = document_lookup.get(selected_document_id) if selected_document_id else None
         slide_bundle = (
@@ -677,7 +1051,12 @@ def render_library(library: LibraryStore, manager: JobManager) -> None:
             if selected_document is not None
             else None
         )
-        explorer_column, preview_column = st.columns([1, 3] if slide_bundle else [3, 2], gap="large")
+        audio_bundle = (
+            _lecture_audio_bundle(library, manager, selected_document)
+            if selected_document is not None
+            else None
+        )
+        explorer_column, preview_column = st.columns([3, 2], gap="large")
         with explorer_column:
             manager_event = render_file_manager(
                 folders,
@@ -687,16 +1066,18 @@ def render_library(library: LibraryStore, manager: JobManager) -> None:
                 key=f"library_explorer_{subject.id}",
             )
         with preview_column:
-            if selected_document_id and selected_document_id in document_lookup:
-                _render_file_preview(
-                    library,
-                    manager,
-                    document_lookup[selected_document_id],
-                    selected_key,
-                    slide_bundle,
-                )
-            else:
-                st.info("Click a file icon to preview its contents here.")
+            with st.container(height=INLINE_PREVIEW_HEIGHT, border=True):
+                if selected_document_id and selected_document_id in document_lookup:
+                    _render_file_preview(
+                        library,
+                        manager,
+                        document_lookup[selected_document_id],
+                        selected_key,
+                        slide_bundle,
+                        audio_bundle,
+                    )
+                else:
+                    st.info("Click a file icon to preview its contents here.")
 
         _handle_file_manager_event(
             library,
@@ -712,4 +1093,9 @@ def render_library(library: LibraryStore, manager: JobManager) -> None:
     with search_tab:
         query = st.text_input("Search this subject", placeholder="Enter a file name, topic, definition, or phrase")
         if query.strip():
-            render_search_results(library.search_documents(query, subject_id=subject.id, limit=12))
+            results = [
+                result
+                for result in library.search_documents(query, subject_id=subject.id, limit=30)
+                if not _is_internal_lecture_artifact_name(result.document_name)
+            ][:12]
+            render_search_results(results)

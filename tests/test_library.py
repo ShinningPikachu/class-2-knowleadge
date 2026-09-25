@@ -137,6 +137,23 @@ class LibraryStoreTest(unittest.TestCase):
         self.assertEqual(reopened.get_folder(lecture.id).document_count, 2)
         self.assertEqual(slides.stored_path.parent, moved.stored_path.parent)
 
+    def test_folder_can_be_renamed_without_moving_its_files(self) -> None:
+        subject = self.store.create_subject("Algorithms")
+        folder = self.store.create_folder(subject.id, "Lecture 3")
+        document = self.store.add_document_bytes(
+            subject.id,
+            "slides.pdf",
+            b"not-a-real-pdf",
+            folder_id=folder.id,
+        )
+
+        renamed = self.store.rename_folder(folder.id, "Lecture 03 — Search")
+        refreshed_document = self.store.get_document(document.id)
+
+        self.assertEqual(renamed.name, "Lecture 03 — Search")
+        self.assertEqual(refreshed_document.folder_name, "Lecture 03 — Search")
+        self.assertEqual(refreshed_document.stored_path, document.stored_path)
+
     def test_document_can_be_deleted_with_its_search_index(self) -> None:
         subject = self.store.create_subject("Networks")
         document = self.store.add_document_bytes(subject.id, "packets.txt", b"Packet switching")

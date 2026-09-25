@@ -65,7 +65,7 @@ def render_file_manager(
             "id": folder.id,
             "name": folder.name,
             "icon": "📁",
-            "document_count": folder.document_count,
+            "document_count": sum(document.folder_id == folder.id for document in documents),
         }
         for folder in folders
     )

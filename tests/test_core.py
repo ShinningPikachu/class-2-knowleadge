@@ -356,7 +356,10 @@ No additional professor explanation was aligned with this slide.
         fast.config = PipelineConfig(note_generation_profile="fast")
         fast.rag = FakeRag()
         fast._chat = lambda prompt: fast_calls.append(prompt) or note  # type: ignore[method-assign]
-        self.assertEqual(fast._generate_slide(slide, aligned, "Slide"), note)
+        self.assertEqual(
+            fast._generate_slide(slide, aligned, "Slide"),
+            "## Concise summary\nGrounded content.",
+        )
         self.assertEqual(len(fast_calls), 1)
 
         deep_calls: list[str] = []
@@ -479,6 +482,9 @@ Summary.
             self.assertEqual(notes.count("# Slide 1: First"), 1)
             self.assertEqual(notes.count("# Slide 2: Second"), 1)
             self.assertIn("2 of 2 slides completed", partial.read_text(encoding="utf-8"))
+            self.assertNotIn("## Slide content", notes)
+            self.assertNotIn("# Complete Lecture Summary", notes)
+            self.assertEqual(notes.count("Grounded content."), 2)
 
     def test_quality_gate_rejects_mostly_temporal_alignment(self) -> None:
         slides = [{"slide": 1, "content": "Topic", "notes": "", "visual_text": []}]
