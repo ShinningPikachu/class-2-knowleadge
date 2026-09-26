@@ -1311,12 +1311,9 @@ class JobManager:
         library_messages: list[str] = []
         if payload.get("library_subject_id"):
             library = LibraryStore(self.project_root / "library")
-            base_name = safe_filename(
-                str(payload.get("lecture_name") or source_job.result.get("lecture_name") or "Lecture")
-            )
             library_candidates = [(pdf_path, ".pdf")] if pdf_path is not None else []
             for path, suffix in library_candidates:
-                filename = f"{base_name}_Slide_{number:03d}_Deep_Review_{job.id[:8]}{suffix}"
+                filename = f"Slide_{number:03d}_Review_{job.id[:8]}{suffix}"
                 try:
                     stored = library.add_document(
                         str(payload["library_subject_id"]),

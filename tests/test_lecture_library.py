@@ -67,8 +67,8 @@ class LectureLibraryHandoffTest(unittest.TestCase):
         self.assertEqual(
             names,
             {
-                "Lecture_01_Introduction_to_AI_Slides.pdf",
-                "Lecture_01_Introduction_to_AI_Concise_Notes.pdf",
+                "Slides.pdf",
+                "Notes.pdf",
             },
         )
         self.assertEqual(len(messages), 2)

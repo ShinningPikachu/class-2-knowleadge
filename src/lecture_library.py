@@ -44,7 +44,6 @@ def save_lecture_result(
     messages: list[str] = []
     source_files = sorted((result.run_dir / "input").iterdir())
     identity = infer_lecture_identity(lecture_title or getattr(result, "lecture_title", None))
-    base_name = str(getattr(result, "lecture_name", "") or identity.base_name)
     folder_name = clean_text(str(getattr(result, "lecture_title", "") or identity.display_title))
     folder: LibraryFolder | None = None
     if folder_id:
@@ -60,8 +59,8 @@ def save_lecture_result(
     candidates: list[tuple[Path, str | None]] = []
     for path in source_files:
         role = "Slides" if path.suffix.lower() in {".pdf", ".ppt", ".pptx"} else "Recording"
-        candidates.append((path, f"{base_name}_{role}{path.suffix.lower()}"))
-    artifact_specs = [("pdf_path", f"{base_name}_Concise_Notes.pdf")]
+        candidates.append((path, f"{role}{path.suffix.lower()}"))
+    artifact_specs = [("pdf_path", "Notes.pdf")]
     candidates.extend(
         (Path(path), filename)
         for attribute, filename in artifact_specs

@@ -686,7 +686,7 @@ No additional professor explanation was aligned with this slide.
         self.assertEqual(
             stored_names,
             {
-                f"Lecture_01_Agents_Slide_001_Deep_Review_{review_job.id[:8]}.pdf",
+                f"Slide_001_Review_{review_job.id[:8]}.pdf",
             },
         )
         self.assertIn(
