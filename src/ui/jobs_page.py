@@ -38,7 +38,7 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
         if apply_column.button(
             "Update priority",
             key=f"{key_prefix}_apply_priority_{job.id}",
-            use_container_width=True,
+            width="stretch",
         ):
             try:
                 manager.update_priority(job.id, PRIORITIES[priority])
@@ -48,7 +48,7 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
         if later_column.button(
             "Do later",
             key=f"{key_prefix}_defer_{job.id}",
-            use_container_width=True,
+            width="stretch",
         ):
             try:
                 manager.defer_job(job.id)
@@ -58,7 +58,7 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
         if cancel_column.button(
             "Cancel permanently",
             key=f"{key_prefix}_cancel_{job.id}",
-            use_container_width=True,
+            width="stretch",
         ):
             manager.cancel_job(job.id)
             st.rerun()
@@ -69,7 +69,7 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
             key=f"{key_prefix}_defer_{job.id}",
             disabled=job.defer_requested or job.cancel_requested,
             help="Finishes the current safe checkpoint, preserves transcript and completed slide notes, then moves the task to Later.",
-            use_container_width=True,
+            width="stretch",
         ):
             try:
                 manager.defer_job(job.id)
@@ -80,7 +80,7 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
             "Cancel permanently",
             key=f"{key_prefix}_cancel_{job.id}",
             disabled=job.cancel_requested,
-            use_container_width=True,
+            width="stretch",
         ):
             manager.cancel_job(job.id)
             st.rerun()
@@ -98,7 +98,7 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
             "Resume from checkpoints",
             key=f"{key_prefix}_resume_{job.id}",
             type="primary",
-            use_container_width=True,
+            width="stretch",
         ):
             try:
                 manager.resume_job(job.id, PRIORITIES[priority])
@@ -108,7 +108,7 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
         if cancel_column.button(
             "Cancel permanently",
             key=f"{key_prefix}_cancel_{job.id}",
-            use_container_width=True,
+            width="stretch",
         ):
             manager.cancel_job(job.id)
             st.rerun()
@@ -171,14 +171,14 @@ def _render_ollama_controls(manager: JobManager) -> None:
             model_column, stop_column = st.columns([3, 1])
             model_column.markdown(f"**{model.name}**")
             model_column.caption(details)
-            if stop_column.button("Unload", key=f"unload_ollama_{model.name}", use_container_width=True):
+            if stop_column.button("Unload", key=f"unload_ollama_{model.name}", width="stretch"):
                 try:
                     _show_unload_result(manager.stop_loaded_ollama_models(host, [model.name]))
                     st.rerun()
                 except JobError as exc:
                     st.error(str(exc))
 
-        if len(models) > 1 and st.button("Unload all models", use_container_width=True):
+        if len(models) > 1 and st.button("Unload all models", width="stretch"):
             try:
                 _show_unload_result(manager.stop_loaded_ollama_models(host))
                 st.rerun()
@@ -221,7 +221,7 @@ def _render_completed_files(job: JobRecord, key_prefix: str, *, preview: bool = 
             file_name=markdown_path.name,
             mime="text/markdown",
             key=f"{key_prefix}_md_{job.id}",
-            use_container_width=True,
+            width="stretch",
         )
     if pdf_path.is_file():
         right.download_button(
@@ -230,7 +230,7 @@ def _render_completed_files(job: JobRecord, key_prefix: str, *, preview: bool = 
             file_name=pdf_path.name,
             mime="application/pdf",
             key=f"{key_prefix}_pdf_{job.id}",
-            use_container_width=True,
+            width="stretch",
         )
     if (translated or slide_review) and job.result.get("pdf_warning"):
         st.warning(str(job.result["pdf_warning"]))
@@ -271,7 +271,7 @@ def _render_translation_request(job: JobRecord, manager: JobManager, key_prefix:
             submitted = st.form_submit_button(
                 "Queue translation",
                 type="primary",
-                use_container_width=True,
+                width="stretch",
             )
         if submitted:
             target_language = custom_language.strip() if language_option == "Other language" else language_option
@@ -301,7 +301,7 @@ def _render_job(job: JobRecord, manager: JobManager, editable: bool = False) -> 
 
         if job.error:
             st.error(job.error)
-        if st.button("Open processing log", key=f"open_job_log_{job.id}", use_container_width=True):
+        if st.button("Open processing log", key=f"open_job_log_{job.id}", width="stretch"):
             st.session_state["job_log_id"] = job.id
             st.rerun()
         if job.result.get("library_messages"):
@@ -339,7 +339,7 @@ def _transcript_text(payload: dict[str, object]) -> str:
 
 
 def _render_job_log(manager: JobManager, job_id: str) -> None:
-    if st.button("← Back to Job Queue", use_container_width=False):
+    if st.button("← Back to Job Queue", width="content"):
         st.session_state.pop("job_log_id", None)
         st.rerun()
     try:
@@ -413,7 +413,7 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
                     file_name=transcript_path.name,
                     mime="application/json",
                     key=f"job_transcript_json_{job.id}",
-                    use_container_width=True,
+                    width="stretch",
                 )
                 text_column.download_button(
                     "Download transcript text",
@@ -421,7 +421,7 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
                     file_name=f"{transcript_path.stem}.txt",
                     mime="text/plain",
                     key=f"job_transcript_text_{job.id}",
-                    use_container_width=True,
+                    width="stretch",
                 )
                 if raw_transcript_path:
                     download_columns[2].download_button(
@@ -430,7 +430,7 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
                         file_name=raw_transcript_path.name,
                         mime="application/json",
                         key=f"job_raw_transcript_{job.id}",
-                        use_container_width=True,
+                        width="stretch",
                     )
             except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
                 st.warning(f"The transcript exists but could not be opened yet: {exc}")
@@ -465,7 +465,7 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
         file_name=f"{job.id}_processing_log.json",
         mime="application/json",
         key=f"job_log_json_{job.id}",
-        use_container_width=True,
+        width="stretch",
     )
     text_column.download_button(
         "Download log text",
@@ -473,7 +473,7 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
         file_name=f"{job.id}_processing_log.txt",
         mime="text/plain",
         key=f"job_log_text_{job.id}",
-        use_container_width=True,
+        width="stretch",
     )
     for event in reversed(events):
         with st.container(border=True):
@@ -511,7 +511,7 @@ def render_jobs(manager: JobManager) -> None:
             "The local agent is active. Transcription may continue, but lecture Qwen generation waits "
             "between model calls until the agent is deactivated."
         )
-        if st.button("Deactivate local agent", use_container_width=True):
+        if st.button("Deactivate local agent", width="stretch"):
             manager.set_agent_active(False)
             st.session_state["agent_active_toggle"] = False
             st.rerun()

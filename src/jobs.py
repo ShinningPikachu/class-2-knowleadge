@@ -19,7 +19,7 @@ from .agent import LectureAgent
 from .config import PipelineConfig
 from .embeddings import OllamaEmbedder
 from .exporter import ExportError, export_markdown, export_pdf
-from .lecture_library import save_lecture_result
+from .lecture_library import ensure_lecture_folder, save_lecture_result
 from .lecture_naming import infer_lecture_identity
 from .library import DuplicateDocumentError, LibraryError, LibraryStore
 from .ollama_runtime import (
@@ -282,20 +282,28 @@ class JobManager:
         if not resume_run_directory and audio_path is None and presentation_path is None:
             raise JobError("A lecture job needs a recording, a slide deck, or a run folder to resume.")
 
+        existing_lectures = sum(1 for item in self.list_jobs(limit=500) if item.kind == "lecture")
+        identity = infer_lecture_identity(
+            lecture_title,
+            audio_path,
+            presentation_path,
+            default_number=existing_lectures + 1,
+        )
+        title = identity.display_title
+        library_folder_id: str | None = None
+        if subject_id:
+            try:
+                library = LibraryStore(self.project_root / "library")
+                library_folder_id = ensure_lecture_folder(library, subject_id, title).id
+            except LibraryError as exc:
+                raise JobError(f"Could not create the lecture folder: {exc}") from exc
+
         job_id = uuid4().hex
         job_root = self.root / job_id
         input_root = job_root / "input"
         input_root.mkdir(parents=True, exist_ok=False)
         stored_audio = self._copy_job_input(audio_path, input_root, "recording")
         stored_presentation = self._copy_job_input(presentation_path, input_root, "slides")
-        existing_lectures = sum(1 for item in self.list_jobs(limit=500) if item.kind == "lecture")
-        identity = infer_lecture_identity(
-            lecture_title,
-            stored_audio,
-            stored_presentation,
-            default_number=existing_lectures + 1,
-        )
-        title = identity.display_title
         payload = {
             "config": asdict(config),
             "audio_path": str(stored_audio) if stored_audio else None,
@@ -304,6 +312,7 @@ class JobManager:
             "lecture_name": identity.base_name,
             "source_lecture_title": lecture_title,
             "subject_id": subject_id,
+            "library_folder_id": library_folder_id,
             "resume_run_directory": resume_run_directory,
         }
         now = self._timestamp()
@@ -1147,6 +1156,7 @@ class JobManager:
                 payload["subject_id"],
                 result,
                 getattr(result, "lecture_title", None) or payload.get("lecture_title"),
+                folder_id=str(payload.get("library_folder_id") or "") or None,
             )
         result_payload = {
             "run_id": result.run_id,
@@ -1174,6 +1184,7 @@ class JobManager:
             "indexed_chunks": result.indexed_chunks,
             "output_language": "English",
             "library_messages": library_messages,
+            "library_folder_id": str(payload.get("library_folder_id") or ""),
         }
         now = self._timestamp()
         completed = False

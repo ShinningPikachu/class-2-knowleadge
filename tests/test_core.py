@@ -6,6 +6,7 @@ from contextlib import contextmanager
 import json
 import sys
 import tempfile
+import threading
 import unittest
 import warnings
 from pathlib import Path
@@ -28,6 +29,91 @@ from src.quality import QualityGateError, validate_evidence_quality, validate_fi
 
 
 class CoreHelpersTest(unittest.TestCase):
+    def test_recording_and_slide_extraction_start_together(self) -> None:
+        barrier = threading.Barrier(2)
+
+        class FakeEmbedder:
+            def __init__(self, *_args: object) -> None:
+                pass
+
+            def verify_local_models(self) -> None:
+                pass
+
+        class FakeAudioProcessor:
+            def __init__(self, *_args: object) -> None:
+                pass
+
+            def transcribe(self, *_args: object, **_kwargs: object) -> dict[str, object]:
+                barrier.wait(timeout=1)
+                return {"metadata": {}, "segments": [], "paragraphs": []}
+
+        class FakePDFProcessor:
+            def __init__(self, *_args: object) -> None:
+                pass
+
+            def process(self, *_args: object) -> dict[str, object]:
+                barrier.wait(timeout=1)
+                return {
+                    "slides": [
+                        {"slide": 1, "title": "Queues", "content": "FIFO", "notes": "", "visual_text": []}
+                    ]
+                }
+
+        class FakeAligner:
+            def __init__(self, *_args: object) -> None:
+                pass
+
+            def align(self, *_args: object) -> dict[str, object]:
+                return {"slides": [{"slide": 1, "paragraphs": []}], "paragraph_alignment": []}
+
+        class FakeRag:
+            def __init__(self, *_args: object) -> None:
+                pass
+
+            def index(self, *_args: object) -> int:
+                return 1
+
+        class FakeAgent:
+            def __init__(self, *_args: object, **_kwargs: object) -> None:
+                pass
+
+            def generate_lecture_notes(self, *_args: object, **_kwargs: object) -> str:
+                return "# Notes\n\nGrounded summary."
+
+        def write_markdown(_notes: str, path: Path) -> Path:
+            path.write_text("# Notes\n", encoding="utf-8")
+            return path
+
+        def write_pdf(_notes: str, path: Path) -> Path:
+            path.write_bytes(b"notes")
+            return path
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            recording = root / "recording.m4a"
+            slides = root / "slides.pdf"
+            recording.write_bytes(b"recording")
+            slides.write_bytes(b"slides")
+            pipeline = LecturePipeline(
+                PipelineConfig(enable_transcript_cleanup=False),
+                project_root=root,
+            )
+            with patch("src.pipeline.OllamaEmbedder", FakeEmbedder), patch(
+                "src.pipeline.AudioProcessor", FakeAudioProcessor
+            ), patch("src.pipeline.PDFProcessor", FakePDFProcessor), patch(
+                "src.pipeline.SlideAligner", FakeAligner
+            ), patch("src.pipeline.build_source_documents", return_value=[]), patch(
+                "src.pipeline.LocalRAG", FakeRag
+            ), patch("src.pipeline.LectureAgent", FakeAgent), patch(
+                "src.pipeline.validate_evidence_quality"
+            ), patch("src.pipeline.validate_final_notes"), patch(
+                "src.pipeline.export_markdown", write_markdown
+            ), patch("src.pipeline.export_pdf", write_pdf):
+                result = pipeline.run(recording, slides, lecture_title="Queues")
+
+        self.assertEqual(result.indexed_chunks, 1)
+        self.assertEqual(result.lecture_title, "Queues")
+
     def test_audio_validation_rejects_non_finite_decoder_output(self) -> None:
         import numpy as np
 

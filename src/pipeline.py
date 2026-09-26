@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import os
 from pathlib import Path
 import shutil
 from typing import Any, ContextManager
@@ -83,7 +85,9 @@ class LecturePipeline:
         self.current_run_dir = run_dir
         if audio_path is None and presentation_path is None:
             raise ValueError("Provide at least one source: a recording or a PDF/PPT/PPTX deck.")
-        # Preserve immutable input copies beside the output for later auditing.
+        # Preserve immutable inputs beside the output for later auditing. Job
+        # inputs are already durable, so hard-link them when possible instead
+        # of copying large recordings a second time.
         input_dir = run_dir / "input"
         input_dir.mkdir()
         stored_audio = (
@@ -96,15 +100,23 @@ class LecturePipeline:
         )
         try:
             if audio_path and stored_audio:
-                shutil.copy2(audio_path, stored_audio)
+                self._link_or_copy_input(Path(audio_path), stored_audio)
             if presentation_path and stored_presentation:
-                shutil.copy2(presentation_path, stored_presentation)
+                self._link_or_copy_input(Path(presentation_path), stored_presentation)
         except OSError as exc:
             raise RuntimeError(f"Could not preserve lecture input files for this run: {exc}") from exc
 
         return self._process_run(
             run_id, run_dir, stored_audio, stored_presentation, identity.display_title, on_stage
         )
+
+    @staticmethod
+    def _link_or_copy_input(source: Path, destination: Path) -> None:
+        """Avoid a second large source-file copy when both paths share a volume."""
+        try:
+            os.link(source, destination)
+        except OSError:
+            shutil.copy2(source, destination)
 
     def resume(
         self,
@@ -172,32 +184,54 @@ class LecturePipeline:
 
         identity = infer_lecture_identity(lecture_title, stored_audio, stored_presentation)
         slides_path = run_dir / "slides.json"
-        raw_transcript: dict[str, Any]
-        if stored_audio:
+        def transcribe_recording() -> dict[str, Any]:
             # Runs created before transcript cleanup used transcript.json for the
             # raw Whisper output. Preserve that evidence when resuming them.
             if transcript_path.is_file() and not raw_transcript_path.is_file():
                 shutil.copy2(transcript_path, raw_transcript_path)
+            assert stored_audio is not None
+            return AudioProcessor(self.config).transcribe(
+                stored_audio, raw_transcript_path, progress=transcription_progress
+            )
+
+        def extract_slides() -> list[dict[str, Any]]:
+            assert stored_presentation is not None
+            slide_payload = PDFProcessor(self.config).process(stored_presentation, slides_path)
+            return slide_payload["slides"]
+
+        raw_transcript: dict[str, Any]
+        slides: list[dict[str, Any]]
+        if stored_audio and stored_presentation:
+            # These source-only stages have no dependency on each other. Start
+            # both immediately; cleanup deliberately waits for slide context.
+            notify(
+                "recording",
+                f"Transcribing locally with faster-whisper (up to {self.config.whisper_parallel_workers} CPU workers) while slides are extracted",
+            )
+            notify("slides", "Extracting slide text, titles, notes, previews, and local image OCR in parallel")
+            with ThreadPoolExecutor(max_workers=2, thread_name_prefix="lecture-source") as executor:
+                transcript_future = executor.submit(transcribe_recording)
+                slides_future = executor.submit(extract_slides)
+                raw_transcript = transcript_future.result()
+                slides = slides_future.result()
+        elif stored_audio:
             notify(
                 "recording",
                 f"Transcribing locally with faster-whisper (up to {self.config.whisper_parallel_workers} CPU workers)",
             )
-            raw_transcript = AudioProcessor(self.config).transcribe(
-                stored_audio, raw_transcript_path, progress=transcription_progress
-            )
+            raw_transcript = transcribe_recording()
+            slides = []
         else:
             raw_transcript = {"metadata": {"source_type": "none"}, "segments": [], "paragraphs": []}
             dump_json(raw_transcript_path, raw_transcript)
+            if stored_presentation:
+                notify("slides", "Extracting slide text, titles, notes, and local image OCR")
+                slides = extract_slides()
+            else:
+                slides = []
 
-        # Extract slides before cleanup so the cleaner can distinguish the
-        # lecture subject from personal conversation and background chatter.
-        if stored_presentation:
-            notify("slides", "Extracting slide text, titles, notes, and local image OCR")
-            slide_payload = PDFProcessor(self.config).process(stored_presentation, slides_path)
-            slides = slide_payload["slides"]
-        else:
-            slides = []
-
+        # Cleanup starts only after both sources are available, so it can use
+        # slide context to distinguish lecture material from background speech.
         if stored_audio:
             if self.config.enable_transcript_cleanup:
                 notify(

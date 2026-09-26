@@ -5,9 +5,25 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from .library import DuplicateDocumentError, LibraryError, LibraryStore
+from .library import DuplicateDocumentError, LibraryError, LibraryFolder, LibraryStore
 from .lecture_naming import infer_lecture_identity
 from .utils import clean_text
+
+
+def ensure_lecture_folder(
+    library: LibraryStore,
+    subject_id: str,
+    folder_name: str,
+) -> LibraryFolder:
+    """Return one named lecture folder, creating it only when it is absent."""
+    normalized_name = clean_text(folder_name)
+    if not normalized_name:
+        raise LibraryError("Lecture folder name cannot be empty.")
+    existing = next(
+        (item for item in library.list_folders(subject_id) if item.name.casefold() == normalized_name.casefold()),
+        None,
+    )
+    return existing or library.create_folder(subject_id, normalized_name)
 
 
 def save_lecture_result(
@@ -15,6 +31,7 @@ def save_lecture_result(
     subject_id: str,
     result: Any,
     lecture_title: str | None,
+    folder_id: str | None = None,
 ) -> list[str]:
     """Store the learner-facing lecture set in one subject folder.
 
@@ -29,12 +46,17 @@ def save_lecture_result(
     identity = infer_lecture_identity(lecture_title or getattr(result, "lecture_title", None))
     base_name = str(getattr(result, "lecture_name", "") or identity.base_name)
     folder_name = clean_text(str(getattr(result, "lecture_title", "") or identity.display_title))
-    folder = next(
-        (item for item in library.list_folders(subject_id) if item.name.casefold() == folder_name.casefold()),
-        None,
-    )
+    folder: LibraryFolder | None = None
+    if folder_id:
+        try:
+            candidate = library.get_folder(folder_id)
+            if candidate.subject_id == subject_id:
+                folder = candidate
+        except LibraryError:
+            # A deleted folder is recreated using the lecture title below.
+            pass
     if folder is None:
-        folder = library.create_folder(subject_id, folder_name)
+        folder = ensure_lecture_folder(library, subject_id, folder_name)
     candidates: list[tuple[Path, str | None]] = []
     for path in source_files:
         role = "Slides" if path.suffix.lower() in {".pdf", ".ppt", ".pptx"} else "Recording"

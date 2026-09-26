@@ -36,9 +36,10 @@ def infer_lecture_identity(
     *,
     default_number: int = 1,
 ) -> LectureIdentity:
-    """Infer a stable ``Lecture_01_Topic`` identity from titles and source names."""
+    """Infer a stable artifact identity while preserving an explicit task title."""
+    explicit_title = clean_text(lecture_title or "")
     candidates = [
-        clean_text(lecture_title or ""),
+        explicit_title,
         Path(presentation_path).stem if presentation_path else "",
         Path(audio_path).stem if audio_path else "",
     ]
@@ -57,5 +58,7 @@ def infer_lecture_identity(
     topic_slug = Path(safe_filename(topic, "Untitled")).stem.strip("_-") or "Untitled"
     base_name = f"Lecture_{number:02d}_{topic_slug}"
     display_topic = re.sub(r"[_-]+", " ", topic_slug).strip()
-    display_title = f"Lecture {number:02d} — {display_topic}"
+    # A manually supplied title is the user-facing task and folder name. The
+    # generated base name remains stable and filesystem-friendly for artifacts.
+    display_title = explicit_title or f"Lecture {number:02d} — {display_topic}"
     return LectureIdentity(number, display_topic, base_name, display_title)

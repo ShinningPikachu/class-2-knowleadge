@@ -90,7 +90,7 @@ class LibrarySlideReviewTest(unittest.TestCase):
 
             library = LibraryStore(root / "library")
             subject = library.create_subject("AI")
-            folder = library.create_folder(subject.id, "Lecture 01 — Introduction")
+            folder = library.create_folder(subject.id, "Introduction")
             document = library.add_document(subject.id, source, folder_id=folder.id)
 
             bundle = _lecture_slide_bundle(library, manager, document)

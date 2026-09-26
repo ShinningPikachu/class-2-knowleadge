@@ -74,7 +74,7 @@ class LectureLibraryHandoffTest(unittest.TestCase):
         self.assertEqual(len(messages), 2)
         self.assertEqual(
             {document.folder_name for document in documents},
-            {"Lecture 01 — Introduction to AI"},
+            {"Introduction to AI"},
         )
         self.assertEqual(folder_counts, [2])
 

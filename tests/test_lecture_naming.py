@@ -14,10 +14,11 @@ class LectureNamingTest(unittest.TestCase):
         self.assertEqual(identity.base_name, "Lecture_07_Neural_Networks")
         self.assertEqual(identity.display_title, "Lecture 07 — Neural Networks")
 
-    def test_plain_title_receives_the_requested_default_sequence(self) -> None:
+    def test_plain_title_is_preserved_for_the_task_and_folder(self) -> None:
         identity = infer_lecture_identity("Introduction", default_number=3)
 
         self.assertEqual(identity.base_name, "Lecture_03_Introduction")
+        self.assertEqual(identity.display_title, "Introduction")
 
 
 if __name__ == "__main__":

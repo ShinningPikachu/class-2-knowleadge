@@ -34,7 +34,7 @@ def _render_recent_jobs(manager: JobManager) -> None:
                 f"{job.stage.replace('_', ' ').title()}"
             )
             details.caption(job.message)
-            if action.button("Open log", key=f"recent_lecture_log_{job.id}", use_container_width=True):
+            if action.button("Open log", key=f"recent_lecture_log_{job.id}", width="stretch"):
                 st.session_state["job_log_id"] = job.id
                 st.session_state["requested_workspace"] = "Job Queue"
                 st.rerun()
@@ -77,7 +77,10 @@ def render_lecture_processor(
     lecture_title = st.text_input(
         "Lecture title (optional)",
         placeholder="e.g. Lecture 01 — Introduction",
-        help="Leave blank to generate a meaningful Lecture_01_Topic name from the source files.",
+        help=(
+            "A title is used exactly for the task and its destination library folder. "
+            "Leave it blank to generate a meaningful name from the source files."
+        ),
     )
     with st.expander("Resume an interrupted pipeline run"):
         resume_run_directory = st.text_input(
@@ -94,7 +97,7 @@ def render_lecture_processor(
         ["none"] + [subject.id for subject in subjects],
         format_func=lambda value: "Do not add to library" if value == "none" else lookup[value].name,
         disabled=not subjects,
-        help="Create subjects from the Library workspace.",
+        help="Selecting a subject creates the named lecture folder as soon as the task is queued.",
     )
     if not subjects:
         st.info("Create a subject in the Library workspace to save completed lecture files automatically.")
@@ -106,7 +109,7 @@ def render_lecture_processor(
     )
 
     st.subheader("3. Add to queue")
-    if st.button("Queue Lecture Task", type="primary", use_container_width=True):
+    if st.button("Queue Lecture Task", type="primary", width="stretch"):
         missing_upload = input_mode == "Upload files" and not (audio_upload or slides_upload)
         missing_path = input_mode == "Use local file paths" and not (recording_local.strip() or slides_local.strip())
         if not resume_run_directory.strip() and (missing_upload or missing_path):

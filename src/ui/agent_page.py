@@ -57,7 +57,7 @@ def _render_pending_action(library: LibraryStore) -> None:
         st.warning("Agent action awaiting confirmation")
         st.markdown(description)
         confirm, cancel = st.columns(2)
-        if confirm.button("Confirm action", type="primary", use_container_width=True):
+        if confirm.button("Confirm action", type="primary", width="stretch"):
             try:
                 if action == "rename_document":
                     updated = library.rename_document(str(pending["document_id"]), str(pending["new_name"]))
@@ -73,7 +73,7 @@ def _render_pending_action(library: LibraryStore) -> None:
                 st.rerun()
             except LibraryError as exc:
                 st.error(str(exc))
-        if cancel.button("Cancel", use_container_width=True):
+        if cancel.button("Cancel", width="stretch"):
             st.session_state.pop("pending_agent_action", None)
             st.rerun()
 

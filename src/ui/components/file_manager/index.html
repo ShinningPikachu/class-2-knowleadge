@@ -80,7 +80,15 @@
       font-size: 0.80rem;
     }
     .location-count { margin-top: 1px; color: var(--muted); font-size: 0.66rem; }
-    .content { min-width: 0; padding: 13px 15px 16px; }
+    .content {
+      min-width: 0;
+      padding: 13px 15px 16px;
+      transition: background 100ms ease, box-shadow 100ms ease;
+    }
+    .content.drag-over {
+      background: var(--accent-soft);
+      box-shadow: inset 0 0 0 2px var(--accent);
+    }
     .toolbar {
       display: flex;
       align-items: center;
@@ -271,6 +279,9 @@
     const app = document.getElementById("app");
     let currentArgs = { folders: [], documents: [], current_folder_id: "", selected_document_id: "" };
     let didDrag = false;
+    let pendingFileOpen = null;
+    const MAX_DIRECT_DROP_FILE_BYTES = 64 * 1024 * 1024;
+    const MAX_DIRECT_DROP_TOTAL_BYTES = 96 * 1024 * 1024;
 
     function send(type, payload = {}) {
       window.parent.postMessage({ isStreamlitMessage: true, type, ...payload }, "*");
@@ -292,6 +303,13 @@
         ...values,
         event_id: `${Date.now()}-${Math.random().toString(16).slice(2)}`
       });
+    }
+
+    function openFullPage(documentId) {
+      const streamlitUrl = new URLSearchParams(window.location.search).get("streamlitUrl");
+      const url = new URL(streamlitUrl || window.parent.location.href);
+      url.searchParams.set("open_file", documentId);
+      window.open(url.toString(), "_blank", "noopener");
     }
 
     function applyTheme(theme) {
@@ -330,6 +348,16 @@
       function renderActions() {
         menu.replaceChildren();
         addTitle();
+        if (!folder.id) {
+          const create = element("button", "menu-action", "New folder");
+          create.type = "button";
+          create.addEventListener("click", (eventObject) => {
+            eventObject.stopPropagation();
+            renderCreate();
+          });
+          menu.appendChild(create);
+          return;
+        }
         const rename = element("button", "menu-action", "Rename");
         rename.type = "button";
         rename.addEventListener("click", (eventObject) => {
@@ -343,6 +371,38 @@
           renderDelete();
         });
         menu.append(rename, remove);
+      }
+
+      function renderCreate() {
+        menu.replaceChildren();
+        addTitle();
+        const input = element("input", "menu-field");
+        input.type = "text";
+        input.maxLength = 120;
+        input.placeholder = "Folder name";
+        input.setAttribute("aria-label", "Folder name");
+        const row = element("div", "menu-row");
+        const create = element("button", "menu-action", "Create");
+        create.type = "button";
+        const cancel = element("button", "menu-action", "Cancel");
+        cancel.type = "button";
+        const submit = () => {
+          const name = input.value.trim();
+          if (!name) {
+            input.focus();
+            return;
+          }
+          event("create_folder", { name });
+        };
+        create.addEventListener("click", submit);
+        input.addEventListener("keydown", (eventObject) => {
+          if (eventObject.key === "Enter") submit();
+          if (eventObject.key === "Escape") renderActions();
+        });
+        cancel.addEventListener("click", renderActions);
+        row.append(create, cancel);
+        menu.append(input, row);
+        input.focus();
       }
 
       function renderRename() {
@@ -413,8 +473,58 @@
       return wrapper;
     }
 
+    function readAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error(`Could not read ${file.name}.`));
+        reader.onload = () => {
+          const result = String(reader.result || "");
+          const comma = result.indexOf(",");
+          resolve(comma === -1 ? result : result.slice(comma + 1));
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function uploadFiles(files, targetFolder, status) {
+      const targetName = targetFolder.name || "Subject root";
+      const tooLarge = files.filter((file) => file.size > MAX_DIRECT_DROP_FILE_BYTES);
+      const uploadable = files.filter((file) => file.size <= MAX_DIRECT_DROP_FILE_BYTES);
+      const totalBytes = uploadable.reduce((total, file) => total + file.size, 0);
+      if (!uploadable.length) {
+        status.textContent = "Each dropped file must be 64 MB or smaller.";
+        return;
+      }
+      if (totalBytes > MAX_DIRECT_DROP_TOTAL_BYTES) {
+        status.textContent = "Drop fewer files at once (up to 96 MB total).";
+        return;
+      }
+      status.textContent = `Uploading ${uploadable.length} file${uploadable.length === 1 ? "" : "s"} to ${targetName}…`;
+      try {
+        const uploads = await Promise.all(
+          uploadable.map(async (file) => ({ name: file.name, data: await readAsBase64(file) }))
+        );
+        if (tooLarge.length) {
+          status.textContent = `${tooLarge.length} file${tooLarge.length === 1 ? " is" : "s are"} too large; uploading the rest…`;
+        }
+        event("upload", {
+          folder_id: targetFolder.id || "",
+          files: uploads,
+          skipped_too_large: tooLarge.map((file) => file.name)
+        });
+      } catch (error) {
+        status.textContent = error instanceof Error ? error.message : "Could not read the dropped files.";
+      }
+    }
+
     function dropFile(eventObject, targetFolder, status) {
       eventObject.preventDefault();
+      eventObject.stopPropagation();
+      const droppedFiles = Array.from((eventObject.dataTransfer && eventObject.dataTransfer.files) || []);
+      if (droppedFiles.length) {
+        uploadFiles(droppedFiles, targetFolder, status);
+        return;
+      }
       const documentId = eventObject.dataTransfer && eventObject.dataTransfer.getData("text/plain");
       const file = (currentArgs.documents || []).find((item) => item.id === documentId);
       if (!file) return;
@@ -430,7 +540,9 @@
     function makeDropTarget(node, folder, status) {
       node.addEventListener("dragover", (eventObject) => {
         eventObject.preventDefault();
-        if (eventObject.dataTransfer) eventObject.dataTransfer.dropEffect = "move";
+        if (eventObject.dataTransfer) {
+          eventObject.dataTransfer.dropEffect = eventObject.dataTransfer.files.length ? "copy" : "move";
+        }
         node.classList.add("drag-over");
       });
       node.addEventListener("dragleave", () => node.classList.remove("drag-over"));
@@ -456,6 +568,7 @@
       sidebar.appendChild(element("div", "sidebar-title", "Locations"));
       const content = element("section", "content");
       const status = element("div", "status");
+      makeDropTarget(content, currentFolder || { id: "", name: "Subject root" }, status);
 
       folders.forEach((folder) => {
         const location = element("button", "location");
@@ -478,7 +591,7 @@
       toolbar.appendChild(
         element("div", "breadcrumb", `Subject / ${currentFolder ? currentFolder.name : "Subject root"}`)
       );
-      if (currentFolder && currentFolder.id) toolbar.appendChild(makeFolderMenu(currentFolder));
+      if (currentFolder) toolbar.appendChild(makeFolderMenu(currentFolder));
       content.appendChild(toolbar);
 
       if (!currentId && folders.length > 1) {
@@ -513,7 +626,16 @@
           tile.appendChild(top);
           tile.appendChild(element("div", "item-name", file.name));
           tile.addEventListener("click", () => {
-            if (!didDrag) event("open", { document_id: file.id });
+            if (didDrag) return;
+            window.clearTimeout(pendingFileOpen);
+            pendingFileOpen = window.setTimeout(() => {
+              event("open", { document_id: file.id });
+            }, 220);
+          });
+          tile.addEventListener("dblclick", (eventObject) => {
+            eventObject.preventDefault();
+            window.clearTimeout(pendingFileOpen);
+            openFullPage(file.id);
           });
           tile.addEventListener("dragstart", (eventObject) => {
             didDrag = true;
@@ -532,7 +654,7 @@
         content.appendChild(fileGrid);
       } else if (currentId || folders.length <= 1) {
         content.appendChild(
-          element("div", "empty", "This folder is empty. Add files or drag them here from another location.")
+          element("div", "empty", "Drop local files here to upload them, or drag a stored file to a folder to move it.")
         );
       }
 

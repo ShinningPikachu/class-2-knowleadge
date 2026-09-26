@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import base64
+import binascii
 from dataclasses import dataclass
 import hashlib
 import html
 import json
 from pathlib import Path
 import re
+import tempfile
 from typing import Any
 
 import streamlit as st
@@ -15,7 +18,7 @@ import streamlit as st
 from ..jobs import JobError, JobManager, JobRecord
 from ..library import LibraryDocument, LibraryError, LibraryFolder, LibraryStore
 from .audio_transcript_component import render_audio_transcript
-from .common import format_size, render_search_results, render_upload_panel, subject_lookup
+from .common import format_size, render_search_results, subject_lookup
 from .file_manager_component import file_icon, render_file_manager
 
 
@@ -35,8 +38,12 @@ TEXT_PREVIEW_SUFFIXES = {
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
 AUDIO_SUFFIXES = {".m4a", ".mp3", ".wav", ".aac", ".flac", ".ogg", ".opus"}
 VIDEO_SUFFIXES = {".mp4", ".mov", ".mkv", ".webm", ".m4v"}
-INLINE_PREVIEW_HEIGHT = 620
-INLINE_PREVIEW_CONTENT_HEIGHT = 570
+# The explorer reports its 430px CSS minimum plus a 4px iframe allowance.
+# Keep the adjacent preview on that same baseline.
+INLINE_PREVIEW_HEIGHT = 434
+INLINE_PREVIEW_CONTENT_HEIGHT = 390
+DIRECT_DROP_MAX_FILE_BYTES = 64 * 1024 * 1024
+DIRECT_DROP_MAX_TOTAL_BYTES = 96 * 1024 * 1024
 
 
 @dataclass(frozen=True)
@@ -276,51 +283,6 @@ def _lecture_audio_bundle(
     return _LectureAudioBundle(paragraphs, source_job)
 
 
-def _lecture_material_role(document: LibraryDocument) -> tuple[int, str] | None:
-    suffix = document.stored_path.suffix.lower()
-    normalized = re.sub(r"[^a-z0-9]+", "_", document.original_name.casefold()).strip("_")
-    if suffix in AUDIO_SUFFIXES:
-        return 1, "Recording"
-    if suffix in {".ppt", ".pptx"} or (
-        suffix == ".pdf" and "notes" not in normalized and "deep_review" not in normalized
-    ):
-        return 0, "Class slides"
-    if suffix == ".pdf" and "notes" in normalized and "deep_review" not in normalized:
-        return 2, "Concise notes"
-    return None
-
-
-def _lecture_material_documents(
-    library: LibraryStore,
-    manager: JobManager,
-    document: LibraryDocument,
-) -> list[tuple[LibraryDocument, str]]:
-    source_job = _matching_lecture_job(manager, document)
-    if source_job is None:
-        return []
-    lecture_name = str(
-        source_job.result.get("lecture_name", source_job.payload.get("lecture_name", ""))
-    ).casefold()
-    matches: list[tuple[int, LibraryDocument, str]] = []
-    for candidate in _visible_documents(_related_documents(library, document)):
-        role = _lecture_material_role(candidate)
-        if role is None:
-            continue
-        # Completed lectures receive a dedicated folder, so legacy files with
-        # pre-canonical names still belong to the same lecture set. Subject-root
-        # files retain strict job/name matching to avoid combining lectures.
-        belongs = document.folder_id is not None
-        if not belongs:
-            belongs = bool(lecture_name and candidate.original_name.casefold().startswith(lecture_name))
-        if not belongs:
-            candidate_job = _matching_lecture_job(manager, candidate)
-            belongs = bool(candidate_job and candidate_job.id == source_job.id)
-        if belongs:
-            matches.append((role[0], candidate, role[1]))
-    matches.sort(key=lambda item: (item[0], item[1].original_name.casefold()))
-    return [(candidate, label) for _rank, candidate, label in matches]
-
-
 def _render_pdf(document: LibraryDocument, *, height: int = 680) -> None:
     """Render a stored PDF without exposing its local filesystem path to the browser."""
     try:
@@ -345,6 +307,18 @@ def _read_text_preview(path: Path, maximum_bytes: int = 750_000) -> tuple[str, b
     return data[:maximum_bytes].decode("utf-8", errors="replace"), truncated
 
 
+@st.cache_data(show_spinner=False)
+def _powerpoint_slide_images(path: str, modified_ns: int) -> dict[int, bytes]:
+    """Cache rendered slide images without retaining temporary conversion files."""
+    from ..pdf_processor import PDFProcessor
+
+    with tempfile.TemporaryDirectory(prefix="library-ppt-preview-") as directory:
+        image_dir = Path(directory) / "slide_images"
+        image_dir.mkdir()
+        images = PDFProcessor._render_powerpoint_previews(Path(path), image_dir)
+        return {number: image.read_bytes() for number, image in images.items()}
+
+
 def _render_powerpoint_preview(document: LibraryDocument) -> None:
     try:
         from pptx import Presentation
@@ -353,6 +327,12 @@ def _render_powerpoint_preview(document: LibraryDocument) -> None:
         if not deck.slides:
             st.info("This presentation does not contain slides.")
             return
+        with st.spinner("Preparing slide previews…"):
+            images = _powerpoint_slide_images(
+                str(document.stored_path), document.stored_path.stat().st_mtime_ns
+            )
+        if not images:
+            st.caption("Slide images require LibreOffice. Showing extracted slide content below.")
         for slide_number, slide in enumerate(deck.slides, start=1):
             parts = [
                 str(shape.text).strip()
@@ -361,6 +341,9 @@ def _render_powerpoint_preview(document: LibraryDocument) -> None:
             ]
             title = parts[0].splitlines()[0] if parts else f"Slide {slide_number}"
             with st.expander(f"Slide {slide_number}: {title}", expanded=slide_number == 1):
+                if slide_number in images:
+                    st.image(images[slide_number], width="stretch")
+                st.markdown("#### Slide content")
                 st.text("\n\n".join(parts) if parts else "(No extractable text on this slide.)")
     except Exception as exc:
         st.warning(f"Could not preview this PowerPoint file: {exc}")
@@ -403,14 +386,14 @@ def _render_current_slide(document: LibraryDocument, slide: dict[str, Any]) -> N
             with fitz.open(document.stored_path) as pdf:
                 page = pdf[number - 1]
                 image = page.get_pixmap(matrix=fitz.Matrix(2.0, 2.0), alpha=False).tobytes("png")
-            st.image(image, use_container_width=True)
+            st.image(image, width="stretch")
             return
         except Exception as exc:
             st.warning(f"Could not render slide {number}: {exc}")
 
     preview_path = Path(str(slide.get("preview_image", "")))
     if preview_path.is_file():
-        st.image(str(preview_path), use_container_width=True)
+        st.image(str(preview_path), width="stretch")
         return
     title = html.escape(str(slide.get("title", f"Slide {number}")))
     content = html.escape(str(slide.get("content", "")) or "(No extractable slide text.)")
@@ -457,7 +440,7 @@ def _render_deep_review_control(
             "↻",
             help="Refresh review status",
             key=f"refresh_deep_review_{document.id}_{slide_number}",
-            use_container_width=True,
+            width="stretch",
         ):
             st.rerun()
 
@@ -473,7 +456,7 @@ def _render_deep_review_control(
         disabled=source_job is None or active,
         help=help_text,
         key=f"library_deep_review_{document.id}_{slide_number}",
-        use_container_width=True,
+        width="stretch",
     ):
         try:
             review_job = manager.enqueue_slide_review(
@@ -512,7 +495,7 @@ def _render_slide_document(
     st.session_state[slide_key] = selected_number
     slide = slide_lookup[selected_number]
     selected_index = slide_numbers.index(selected_number)
-    st.markdown(
+    st.html(
         """<style>
         .lecture-slide-nav { text-align:center; line-height:1.25; padding:.15rem .3rem; }
         .lecture-slide-nav strong { display:block; font-size:clamp(1rem, 1.3vw, 1.25rem); }
@@ -520,17 +503,31 @@ def _render_slide_document(
         .lecture-slide-summary { font-size:clamp(1.08rem, 1.45vw, 1.38rem); line-height:1.58; }
         .lecture-slide-fallback { font-size:clamp(1.08rem, 1.65vw, 1.55rem); line-height:1.55;
           padding:1.25rem; border:1px solid rgba(128,128,128,.25); border-radius:.75rem; }
+        /* Streamlit's fit-content image toolbar can collapse in Safari. Give
+           the slide an explicit CSS width instead of relying on its measured width. */
+        .st-key-library_slide_image [data-testid="stFullScreenFrame"] > div:has(> [data-testid="stImage"]) {
+          width: 100%;
+        }
+        .st-key-library_slide_image [data-testid="stImage"],
+        .st-key-library_slide_image [data-testid="stImageContainer"] {
+          width: 100%;
+        }
+        .st-key-library_slide_image [data-testid="stImageContainer"] > img {
+          width: 100% !important; height: auto;
+        }
         </style>""",
-        unsafe_allow_html=True,
     )
     def render_slide() -> None:
-        previous_column, title_column, next_column = st.columns([1, 5, 1], vertical_alignment="center")
+        navigation = st.container(key="library_slide_navigation")
+        previous_column, title_column, next_column = navigation.columns(
+            [1, 5, 1], vertical_alignment="center"
+        )
         if previous_column.button(
             "◀",
             disabled=selected_index == 0,
             help="Previous slide",
             key=f"previous_library_slide_{document.id}",
-            use_container_width=True,
+            width="stretch",
         ):
             st.session_state[slide_key] = slide_numbers[selected_index - 1]
             st.rerun()
@@ -545,11 +542,12 @@ def _render_slide_document(
             disabled=selected_index == len(slide_numbers) - 1,
             help="Next slide",
             key=f"next_library_slide_{document.id}",
-            use_container_width=True,
+            width="stretch",
         ):
             st.session_state[slide_key] = slide_numbers[selected_index + 1]
             st.rerun()
-        _render_current_slide(document, slide)
+        with st.container(key="library_slide_image"):
+            _render_current_slide(document, slide)
 
     def render_summary() -> None:
         summary_title, review_button = st.columns([5, 1], vertical_alignment="center")
@@ -615,48 +613,6 @@ def _render_audio_document(
         _render_transcript_fallback(document, paragraphs)
 
 
-def _render_related_materials(
-    library: LibraryStore,
-    manager: JobManager,
-    document: LibraryDocument,
-    *,
-    selected_key: str | None,
-    stacked: bool = False,
-) -> None:
-    materials = _lecture_material_documents(library, manager, document)
-    if len(materials) < 2:
-        return
-    st.caption("Lecture files" if stacked else "Lecture set")
-    def render_material(material: LibraryDocument, label: str) -> None:
-        button_label = f"{file_icon(material.original_name)} {label}"
-        if selected_key is None:
-            st.link_button(
-                button_label,
-                f"?open_file={material.id}",
-                disabled=material.id == document.id,
-                use_container_width=True,
-            )
-        elif st.button(
-            button_label,
-            key=f"related_material_{document.id}_{material.id}",
-            disabled=material.id == document.id,
-            use_container_width=True,
-        ):
-            st.session_state[selected_key] = material.id
-            st.rerun()
-
-    if stacked:
-        for material, label in materials:
-            render_material(material, label)
-    else:
-        columns = st.columns(len(materials))
-        for column, (material, label) in zip(columns, materials):
-            with column:
-                render_material(material, label)
-    if not stacked:
-        st.divider()
-
-
 def _render_document_content(
     document: LibraryDocument,
     audio_bundle: _LectureAudioBundle | None = None,
@@ -672,7 +628,7 @@ def _render_document_content(
         elif suffix in VIDEO_SUFFIXES:
             st.video(str(document.stored_path), format=document.media_type)
         elif suffix in IMAGE_SUFFIXES:
-            st.image(str(document.stored_path), use_container_width=True)
+            st.image(str(document.stored_path), width="stretch")
         elif suffix == ".json":
             text, truncated = _read_text_preview(document.stored_path)
             try:
@@ -707,25 +663,35 @@ def _render_file_preview(
     slide_bundle: _LectureSlideBundle | None = None,
     audio_bundle: _LectureAudioBundle | None = None,
 ) -> None:
-    st.markdown(
+    # Style-only HTML is placed outside the content flow by Streamlit.
+    st.html(
         """<style>
+        .st-key-library_preview_content {
+          position: relative;
+        }
+        /* Remove the layout wrapper, not just its keyed child, from the flow. */
+        .st-key-library_preview_content > [data-testid="stLayoutWrapper"]:has(> .st-key-library_preview_menu) {
+          position: absolute; top: .4rem; right: .4rem; z-index: 100;
+          width: 2.7rem; min-width: 0; height: auto; overflow: visible;
+        }
         .st-key-library_preview_menu {
-          position: sticky; top: .4rem; z-index: 100; width: 2.7rem; height: 0;
-          margin: 0 .2rem 0 auto; overflow: visible; transform: translateY(.1rem);
+          width: 100%; overflow: visible;
+        }
+        .st-key-library_preview_content .st-key-library_slide_navigation {
+          padding-right: 2.7rem;
         }
         .st-key-library_preview_menu div[data-testid="stPopover"] > button {
           border-radius: 999px; background: color-mix(in srgb, var(--secondary-background-color) 88%, transparent);
           box-shadow: 0 2px 10px rgba(0,0,0,.22); font-size: 1.15rem;
         }
         </style>""",
-        unsafe_allow_html=True,
     )
     with st.container(key="library_preview_menu"):
-        with st.popover("⋯", help="File actions", use_container_width=True):
+        with st.popover("⋯", help="File actions", width="stretch"):
             if st.button(
                 "Close preview",
                 key=f"close_preview_{document.id}",
-                use_container_width=True,
+                width="stretch",
             ):
                 st.session_state.pop(selected_key, None)
                 st.rerun()
@@ -733,12 +699,12 @@ def _render_file_preview(
                 "Full screen ↗",
                 f"?open_file={document.id}",
                 help="Open this file in a full-page browser view.",
-                use_container_width=True,
+                width="stretch",
             )
             with st.expander("Rename"):
                 with st.form(f"rename_file_{document.id}"):
                     new_name = st.text_input("File name", value=document.original_name)
-                    rename = st.form_submit_button("Save", use_container_width=True)
+                    rename = st.form_submit_button("Save", width="stretch")
                 if rename:
                     try:
                         updated = library.rename_document(document.id, new_name)
@@ -754,7 +720,7 @@ def _render_file_preview(
                         file_name=document.original_name,
                         mime=document.media_type,
                         key=f"download_file_{document.id}",
-                        use_container_width=True,
+                        width="stretch",
                     )
                 except OSError as exc:
                     st.error(f"Could not prepare this file for download: {exc}")
@@ -763,7 +729,7 @@ def _render_file_preview(
             if st.button(
                 "Delete",
                 key=f"delete_preview_{document.id}",
-                use_container_width=True,
+                width="stretch",
             ):
                 st.session_state["library_document_delete_confirmation"] = document.id
 
@@ -782,14 +748,6 @@ def _render_file_preview(
                 if cancel.button("Cancel", key=f"cancel_delete_{document.id}"):
                     st.session_state.pop("library_document_delete_confirmation", None)
                     st.rerun()
-
-            _render_related_materials(
-                library,
-                manager,
-                document,
-                selected_key=selected_key,
-                stacked=True,
-            )
 
     if document.extraction_error:
         st.warning(document.extraction_error)
@@ -816,44 +774,13 @@ def render_full_library_document(
         f"{document.subject_name} / {document.folder_name or 'Subject root'} · "
         f"{format_size(document.size_bytes)}"
     )
-    action_column, space = st.columns([1, 5])
-    with action_column:
-        if document.size_bytes <= 100 * 1024 * 1024:
-            try:
-                st.download_button(
-                    "Download",
-                    data=document.stored_path.read_bytes(),
-                    file_name=document.original_name,
-                    mime=document.media_type,
-                    key=f"full_download_{document.id}",
-                    use_container_width=True,
-                )
-            except OSError as exc:
-                st.error(f"Could not prepare this file for download: {exc}")
-    space.caption("Full-page file view")
     st.divider()
-    _render_related_materials(library, manager, document, selected_key=None)
     slide_bundle = _lecture_slide_bundle(library, manager, document)
     if slide_bundle is not None:
         _render_slide_document(manager, document, slide_bundle, full_page=True)
         return
     audio_bundle = _lecture_audio_bundle(library, manager, document)
     _render_document_content(document, audio_bundle, full_page=True)
-
-
-def _render_folder_creator(library: LibraryStore, subject_id: str, browse_key: str) -> None:
-    with st.popover("➕ New folder"):
-        with st.form(f"library_create_folder_{subject_id}", clear_on_submit=True):
-            name = st.text_input("Folder name", placeholder="e.g. Lecture 03 — Search")
-            submitted = st.form_submit_button("Create folder", type="primary", use_container_width=True)
-        if submitted:
-            try:
-                folder = library.create_folder(subject_id, name)
-                st.session_state[browse_key] = folder.id
-                st.session_state["library_file_notice"] = f"Created {folder.name}."
-                st.rerun()
-            except LibraryError as exc:
-                st.error(str(exc))
 
 
 def _handle_file_manager_event(
@@ -894,6 +821,16 @@ def _handle_file_manager_event(
         st.session_state[selected_key] = document_id
         st.rerun()
 
+    if action == "create_folder":
+        try:
+            folder = library.create_folder(subject_id, str(event.get("name", "")))
+            st.session_state[browse_key] = folder.id
+            st.session_state["library_file_notice"] = f"Created {folder.name}."
+            st.rerun()
+        except LibraryError as exc:
+            st.error(str(exc))
+        return
+
     if action == "rename_folder":
         if folder_id not in folder_lookup:
             st.error("That folder no longer exists. Refresh the library and try again.")
@@ -920,6 +857,61 @@ def _handle_file_manager_event(
         except LibraryError as exc:
             st.error(str(exc))
         return
+
+    if action == "upload":
+        if folder_id and folder_id not in folder_lookup:
+            st.error("That folder no longer exists. Refresh the library and try again.")
+            return
+        raw_files = event.get("files", [])
+        if not isinstance(raw_files, list) or not raw_files:
+            st.error("No files were received. Try dropping the files again.")
+            return
+
+        uploaded = 0
+        errors: list[str] = []
+        skipped_too_large = event.get("skipped_too_large", [])
+        if isinstance(skipped_too_large, list):
+            errors.extend(
+                f"{str(filename)} is too large to upload by direct drop."
+                for filename in skipped_too_large
+                if isinstance(filename, str) and filename.strip()
+            )
+        total_bytes = 0
+        for item in raw_files:
+            if not isinstance(item, dict):
+                errors.append("One dropped item could not be read.")
+                continue
+            filename = str(item.get("name", "")).strip()
+            encoded_data = item.get("data", "")
+            if not filename or not isinstance(encoded_data, str):
+                errors.append("One dropped file is missing its name or data.")
+                continue
+            try:
+                data = base64.b64decode(encoded_data, validate=True)
+            except (binascii.Error, ValueError):
+                errors.append(f"Could not read {filename}.")
+                continue
+            if len(data) > DIRECT_DROP_MAX_FILE_BYTES:
+                errors.append(f"{filename} is too large to upload by direct drop.")
+                continue
+            if total_bytes + len(data) > DIRECT_DROP_MAX_TOTAL_BYTES:
+                errors.append("The dropped files are too large to upload together. Drop fewer files at once.")
+                continue
+            total_bytes += len(data)
+            try:
+                library.add_document_bytes(subject_id, filename, data, folder_id=folder_id or None)
+                uploaded += 1
+            except LibraryError as exc:
+                errors.append(f"Could not add {filename}: {exc}")
+
+        destination = folder_lookup[folder_id].name if folder_id else "Subject root"
+        if uploaded:
+            st.session_state["library_file_notice"] = (
+                f"Added {uploaded} file{'s' if uploaded != 1 else ''} to {destination}."
+            )
+        if errors:
+            st.session_state["library_file_upload_errors"] = errors
+        st.rerun()
 
     if action != "move":
         return
@@ -993,7 +985,7 @@ def _render_subject_selector(library: LibraryStore) -> str | None:
             "＋",
             key="library_add_subject",
             help="Add a subject",
-            use_container_width=True,
+            width="stretch",
         ):
             st.session_state[creating_key] = True
             st.session_state.pop(name_key, None)
@@ -1022,80 +1014,85 @@ def render_library(library: LibraryStore, manager: JobManager) -> None:
     if subject.description:
         st.write(subject.description)
 
-    documents_tab, upload_tab, search_tab = st.tabs(["File explorer", "Add files", "Search"])
-    with documents_tab:
-        folders = library.list_folders(subject.id)
-        documents = _visible_documents(library.list_documents(subject.id))
-        folder_lookup = {folder.id: folder for folder in folders}
-        document_lookup = {document.id: document for document in documents}
-        browse_key = f"library_browse_folder_{subject.id}"
-        selected_key = f"library_selected_file_{subject.id}"
-        if st.session_state.get(browse_key, "") not in {"", *folder_lookup}:
-            st.session_state[browse_key] = ""
-        if st.session_state.get(selected_key) not in document_lookup:
-            st.session_state.pop(selected_key, None)
-        current_folder_id = st.session_state.get(browse_key, "")
-        selected_document_id = st.session_state.get(selected_key)
+    folders = library.list_folders(subject.id)
+    documents = _visible_documents(library.list_documents(subject.id))
+    folder_lookup = {folder.id: folder for folder in folders}
+    document_lookup = {document.id: document for document in documents}
+    browse_key = f"library_browse_folder_{subject.id}"
+    selected_key = f"library_selected_file_{subject.id}"
+    if st.session_state.get(browse_key, "") not in {"", *folder_lookup}:
+        st.session_state[browse_key] = ""
+    if st.session_state.get(selected_key) not in document_lookup:
+        st.session_state.pop(selected_key, None)
+    current_folder_id = st.session_state.get(browse_key, "")
+    selected_document_id = st.session_state.get(selected_key)
+    query = st.text_input(
+        "Search this subject",
+        placeholder="Search this subject",
+        icon=":material/search:",
+        label_visibility="collapsed",
+        key=f"library_search_{subject.id}",
+    )
 
-        notice = st.session_state.pop("library_file_notice", "")
-        if notice:
-            st.success(notice)
+    notice = st.session_state.pop("library_file_notice", "")
+    if notice:
+        st.success(notice)
+    upload_errors = st.session_state.pop("library_file_upload_errors", [])
+    for error in upload_errors:
+        st.error(error)
 
-        control_left, _ = st.columns([1, 5])
-        with control_left:
-            _render_folder_creator(library, subject.id, browse_key)
+    if query.strip():
+        results = [
+            result
+            for result in library.search_documents(query, subject_id=subject.id, limit=30)
+            if not _is_internal_lecture_artifact_name(result.document_name)
+        ][:12]
+        render_search_results(results)
 
-        selected_document = document_lookup.get(selected_document_id) if selected_document_id else None
-        slide_bundle = (
-            _lecture_slide_bundle(library, manager, selected_document)
-            if selected_document is not None
-            else None
-        )
-        audio_bundle = (
-            _lecture_audio_bundle(library, manager, selected_document)
-            if selected_document is not None
-            else None
-        )
-        explorer_column, preview_column = st.columns([3, 2], gap="large")
-        with explorer_column:
-            manager_event = render_file_manager(
-                folders,
-                documents,
-                current_folder_id=current_folder_id or None,
-                selected_document_id=selected_document_id,
-                key=f"library_explorer_{subject.id}",
-            )
-        with preview_column:
-            with st.container(height=INLINE_PREVIEW_HEIGHT, border=True):
-                if selected_document_id and selected_document_id in document_lookup:
-                    _render_file_preview(
-                        library,
-                        manager,
-                        document_lookup[selected_document_id],
-                        selected_key,
-                        slide_bundle,
-                        audio_bundle,
-                    )
-                else:
-                    st.info("Click a file icon to preview its contents here.")
-
-        _handle_file_manager_event(
-            library,
-            subject.id,
+    selected_document = document_lookup.get(selected_document_id) if selected_document_id else None
+    slide_bundle = (
+        _lecture_slide_bundle(library, manager, selected_document)
+        if selected_document is not None
+        else None
+    )
+    audio_bundle = (
+        _lecture_audio_bundle(library, manager, selected_document)
+        if selected_document is not None
+        else None
+    )
+    explorer_column, preview_column = st.columns([3, 2], gap="small")
+    with explorer_column:
+        manager_event = render_file_manager(
             folders,
             documents,
-            browse_key,
-            selected_key,
-            manager_event,
+            current_folder_id=current_folder_id or None,
+            selected_document_id=selected_document_id,
+            key=f"library_explorer_{subject.id}",
         )
-    with upload_tab:
-        render_upload_panel(library, [subject], "library")
-    with search_tab:
-        query = st.text_input("Search this subject", placeholder="Enter a file name, topic, definition, or phrase")
-        if query.strip():
-            results = [
-                result
-                for result in library.search_documents(query, subject_id=subject.id, limit=30)
-                if not _is_internal_lecture_artifact_name(result.document_name)
-            ][:12]
-            render_search_results(results)
+    with preview_column:
+        with st.container(
+            height=INLINE_PREVIEW_HEIGHT,
+            border=True,
+            key="library_preview_content",
+        ):
+            if selected_document_id and selected_document_id in document_lookup:
+                _render_file_preview(
+                    library,
+                    manager,
+                    document_lookup[selected_document_id],
+                    selected_key,
+                    slide_bundle,
+                    audio_bundle,
+                )
+            else:
+                st.info("Click a file icon to preview its contents here.")
+
+    _handle_file_manager_event(
+        library,
+        subject.id,
+        folders,
+        documents,
+        browse_key,
+        selected_key,
+        manager_event,
+    )

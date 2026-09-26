@@ -7,7 +7,7 @@ from typing import Any
 import streamlit as st
 
 from ..config import PipelineConfig
-from ..library import DuplicateDocumentError, LibraryError, LibraryStore, SearchResult, Subject
+from ..library import SearchResult, Subject
 
 
 def format_size(size_bytes: int) -> str:
@@ -21,77 +21,6 @@ def format_size(size_bytes: int) -> str:
 
 def subject_lookup(subjects: list[Subject]) -> dict[str, Subject]:
     return {subject.id: subject for subject in subjects}
-
-
-def store_uploads(
-    library: LibraryStore,
-    subject_id: str,
-    uploads: list[Any],
-    folder_id: str | None = None,
-) -> tuple[int, list[str]]:
-    stored = 0
-    messages: list[str] = []
-    for upload in uploads:
-        try:
-            document = library.add_document_bytes(
-                subject_id,
-                upload.name,
-                bytes(upload.getbuffer()),
-                folder_id=folder_id,
-            )
-            stored += 1
-            if document.status == "indexed":
-                messages.append(f"Indexed {document.original_name}.")
-            elif document.status == "extraction_failed":
-                messages.append(
-                    f"Stored {document.original_name}, but text extraction failed: {document.extraction_error}"
-                )
-            else:
-                messages.append(f"Stored {document.original_name}; this file type is not text-indexed yet.")
-        except DuplicateDocumentError as exc:
-            messages.append(str(exc))
-        except LibraryError as exc:
-            messages.append(f"Could not add {upload.name}: {exc}")
-    return stored, messages
-
-
-def render_upload_panel(library: LibraryStore, subjects: list[Subject], key_prefix: str) -> None:
-    if not subjects:
-        st.info("Create a subject before adding documents.")
-        return
-    lookup = subject_lookup(subjects)
-    subject_id = st.selectbox(
-        "Destination subject",
-        options=[subject.id for subject in subjects],
-        format_func=lambda value: lookup[value].name,
-        key=f"{key_prefix}_upload_subject",
-    )
-    folders = library.list_folders(subject_id)
-    folder_lookup = {folder.id: folder for folder in folders}
-    folder_id = st.selectbox(
-        "Destination folder",
-        options=[""] + [folder.id for folder in folders],
-        format_func=lambda value: "Subject root (no folder)" if not value else folder_lookup[value].name,
-        key=f"{key_prefix}_upload_folder_{subject_id}",
-        help="Create lecture folders in the Files & folders tab, then add related files together here.",
-    )
-    uploads = st.file_uploader(
-        "Choose one or more documents",
-        accept_multiple_files=True,
-        key=f"{key_prefix}_uploads",
-        help="PDF, PPTX, Markdown, text, CSV, and JSON are searchable immediately. Other files are safely stored.",
-    )
-    if st.button("Add files", type="primary", disabled=not uploads, key=f"{key_prefix}_upload_button"):
-        stored, messages = store_uploads(
-            library,
-            subject_id,
-            list(uploads or []),
-            folder_id=folder_id or None,
-        )
-        if stored:
-            st.success(f"Added {stored} document{'s' if stored != 1 else ''}.")
-        for message in messages:
-            st.write(f"- {message}")
 
 
 def render_search_results(results: list[SearchResult]) -> None:

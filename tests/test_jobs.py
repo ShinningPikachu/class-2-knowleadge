@@ -91,6 +91,23 @@ class JobManagerTest(unittest.TestCase):
         third = self.manager._claim_next_job()
         self.assertEqual(third.id, low.id)  # type: ignore[union-attr]
 
+    def test_named_lecture_creates_its_destination_folder_when_queued(self) -> None:
+        library = LibraryStore(self.root / "library")
+        subject = library.create_subject("Computer Science")
+
+        job = self.manager.enqueue_lecture(
+            config=PipelineConfig(),
+            audio_path=None,
+            presentation_path=self.source,
+            lecture_title="Graph Algorithms",
+            subject_id=subject.id,
+        )
+
+        folders = library.list_folders(subject.id)
+        self.assertEqual(job.title, "Graph Algorithms")
+        self.assertEqual([folder.name for folder in folders], ["Graph Algorithms"])
+        self.assertEqual(job.payload["library_folder_id"], folders[0].id)
+
     def test_planned_job_priority_can_change_and_job_can_cancel(self) -> None:
         job = self._enqueue("Lecture", PRIORITIES["Low"])
         updated = self.manager.update_priority(job.id, PRIORITIES["High"])
