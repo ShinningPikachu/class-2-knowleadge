@@ -42,6 +42,7 @@ VIDEO_SUFFIXES = {".mp4", ".mov", ".mkv", ".webm", ".m4v"}
 # Keep the adjacent preview on that same baseline.
 INLINE_PREVIEW_HEIGHT = 434
 INLINE_PREVIEW_CONTENT_HEIGHT = 390
+INLINE_PDF_RENDER_SCALE = 1.75
 DIRECT_DROP_MAX_FILE_BYTES = 64 * 1024 * 1024
 DIRECT_DROP_MAX_TOTAL_BYTES = 96 * 1024 * 1024
 
@@ -283,21 +284,138 @@ def _lecture_audio_bundle(
     return _LectureAudioBundle(paragraphs, source_job)
 
 
-def _render_pdf(document: LibraryDocument, *, height: int = 680) -> None:
-    """Render a stored PDF without exposing its local filesystem path to the browser."""
-    try:
-        pdf_data = document.stored_path.read_bytes()
-    except OSError as exc:
-        st.error(f"Could not open this PDF: {exc}")
+@st.cache_data(show_spinner=False)
+def _pdf_page_count(path: str, modified_ns: int) -> int:
+    """Return a PDF's page count, invalidating the cache when it changes."""
+    del modified_ns
+    import fitz
+
+    with fitz.open(path) as pdf:
+        return len(pdf)
+
+
+@st.cache_data(show_spinner=False)
+def _pdf_page_image(path: str, modified_ns: int, page_number: int) -> bytes:
+    """Rasterize one page for a stable, immediately-sized inline preview."""
+    del modified_ns
+    import fitz
+
+    with fitz.open(path) as pdf:
+        page = pdf[page_number - 1]
+        return page.get_pixmap(
+            matrix=fitz.Matrix(INLINE_PDF_RENDER_SCALE, INLINE_PDF_RENDER_SCALE),
+            alpha=False,
+        ).tobytes("png")
+
+
+def _render_stable_pdf_pages(document: LibraryDocument) -> None:
+    """Render PDF pages without the viewer iframe's provisional dimensions."""
+    modified_ns = document.stored_path.stat().st_mtime_ns
+    page_count = _pdf_page_count(str(document.stored_path), modified_ns)
+    if page_count < 1:
+        st.warning("This PDF does not contain any pages.")
         return
 
+    page_key = f"library_pdf_page_{document.id}"
     try:
-        st.pdf(pdf_data, height=height, key=f"pdf_viewer_{document.id}_{height}")
-    except Exception:
-        st.error(
-            "The local PDF viewer is unavailable. Reinstall the project dependencies "
-            "with pip install -r requirements.txt, then restart the website."
+        page_number = int(st.session_state.get(page_key, 1))
+    except (TypeError, ValueError):
+        page_number = 1
+    page_number = min(max(page_number, 1), page_count)
+    st.session_state[page_key] = page_number
+
+    if page_count > 1:
+        navigation = st.container(key="library_pdf_navigation")
+        previous, label, next_page = navigation.columns([1, 5, 1], vertical_alignment="center")
+        if previous.button(
+            "◀",
+            disabled=page_number == 1,
+            help="Previous page",
+            key=f"previous_library_pdf_page_{document.id}",
+            width="stretch",
+        ):
+            st.session_state[page_key] = page_number - 1
+            st.rerun()
+        label.caption(f"Page {page_number} of {page_count}")
+        if next_page.button(
+            "▶",
+            disabled=page_number == page_count,
+            help="Next page",
+            key=f"next_library_pdf_page_{document.id}",
+            width="stretch",
+        ):
+            st.session_state[page_key] = page_number + 1
+            st.rerun()
+
+    # Safari can keep an image toolbar's wrapper at its intrinsic width.
+    # Scope the width override to PDF pages so the rendered page always fills
+    # either the inline panel or the full-page view.
+    st.html(
+        """<style>
+        .st-key-library_pdf_page_image [data-testid="stFullScreenFrame"] > div:has(> [data-testid="stImage"]) {
+          width: 100%;
+        }
+        .st-key-library_pdf_page_image [data-testid="stImage"],
+        .st-key-library_pdf_page_image [data-testid="stImageContainer"] {
+          width: 100%;
+        }
+        .st-key-library_pdf_page_image [data-testid="stImageContainer"] > img {
+          width: 100% !important; height: auto;
+        }
+        </style>""",
+    )
+    with st.container(key="library_pdf_page_image"):
+        st.image(
+            _pdf_page_image(str(document.stored_path), modified_ns, page_number),
+            width="stretch",
         )
+
+
+def _render_scrollable_pdf_pages(document: LibraryDocument) -> None:
+    """Render a full PDF as centered pages that follow the browser scroll."""
+    modified_ns = document.stored_path.stat().st_mtime_ns
+    page_count = _pdf_page_count(str(document.stored_path), modified_ns)
+    if page_count < 1:
+        st.warning("This PDF does not contain any pages.")
+        return
+
+    # The generated lecture-notes PDF is intended to be read like a document,
+    # rather than one slide at a time. A middle column keeps every portrait page
+    # centered, and page images have their dimensions before the browser paints
+    # them, so this avoids the PDF viewer's delayed resize.
+    st.html(
+        """<style>
+        .st-key-library_pdf_scroll_pages [data-testid="stFullScreenFrame"] > div:has(> [data-testid="stImage"]) {
+          width: 100%;
+        }
+        .st-key-library_pdf_scroll_pages [data-testid="stImage"],
+        .st-key-library_pdf_scroll_pages [data-testid="stImageContainer"] {
+          width: 100%;
+        }
+        .st-key-library_pdf_scroll_pages [data-testid="stImageContainer"] > img {
+          width: 100% !important; height: auto; display: block;
+        }
+        </style>""",
+    )
+    _, pages, _ = st.columns([1, 2.25, 1])
+    with pages:
+        with st.container(key="library_pdf_scroll_pages"):
+            for page_number in range(1, page_count + 1):
+                st.image(
+                    _pdf_page_image(str(document.stored_path), modified_ns, page_number),
+                    width="stretch",
+                )
+
+
+def _render_pdf(document: LibraryDocument, *, full_page: bool = False) -> None:
+    """Render a PDF without the viewer iframe's delayed page resize."""
+    try:
+        if full_page:
+            _render_scrollable_pdf_pages(document)
+        else:
+            _render_stable_pdf_pages(document)
+    except (OSError, ValueError, RuntimeError) as exc:
+        st.error(f"Could not render this PDF preview: {exc}")
 
 
 def _read_text_preview(path: Path, maximum_bytes: int = 750_000) -> tuple[str, bool]:
@@ -622,7 +740,7 @@ def _render_document_content(
     suffix = document.stored_path.suffix.lower()
     try:
         if suffix == ".pdf":
-            _render_pdf(document, height=900 if full_page else INLINE_PREVIEW_CONTENT_HEIGHT)
+            _render_pdf(document, full_page=full_page)
         elif suffix in AUDIO_SUFFIXES:
             _render_audio_document(document, audio_bundle, full_page=full_page)
         elif suffix in VIDEO_SUFFIXES:
@@ -678,6 +796,9 @@ def _render_file_preview(
           width: 100%; overflow: visible;
         }
         .st-key-library_preview_content .st-key-library_slide_navigation {
+          padding-right: 2.7rem;
+        }
+        .st-key-library_preview_content .st-key-library_pdf_navigation {
           padding-right: 2.7rem;
         }
         .st-key-library_preview_menu div[data-testid="stPopover"] > button {

@@ -11,10 +11,24 @@ from unittest.mock import Mock, patch
 
 from src.library import LibraryStore
 from src.ui.file_manager_component import file_icon
-from src.ui.library_page import _handle_file_manager_event
+from src.ui.library_page import _handle_file_manager_event, _pdf_page_count, _pdf_page_image
 
 
 class FileManagerIconTest(unittest.TestCase):
+    def test_inline_pdf_preview_uses_a_real_page_image(self) -> None:
+        import fitz
+
+        with TemporaryDirectory() as temporary_directory:
+            source = Path(temporary_directory) / "slides.pdf"
+            with fitz.open() as pdf:
+                pdf.new_page()
+                pdf.new_page()
+                pdf.save(source)
+
+            modified_ns = source.stat().st_mtime_ns
+            self.assertEqual(_pdf_page_count(str(source), modified_ns), 2)
+            self.assertTrue(_pdf_page_image(str(source), modified_ns, 1).startswith(b"\x89PNG\r\n\x1a\n"))
+
     def test_common_lecture_files_have_distinct_icons(self) -> None:
         icons = {
             file_icon("recording.m4a"),
