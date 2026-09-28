@@ -6,13 +6,14 @@ from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import json
 import os
 from pathlib import Path
 import shutil
 from typing import Any, ContextManager
 from uuid import uuid4
 
-from .agent import LectureAgent
+from .agent import AgentError, LectureAgent
 from .alignment import SlideAligner
 from .audio_processor import AudioProcessor, SUPPORTED_RECORDING_SUFFIXES
 from .config import PipelineConfig, project_path
@@ -38,6 +39,8 @@ class PipelineResult:
     notes_markdown: str
     markdown_path: Path
     pdf_path: Path
+    lecture_summary_markdown_path: Path
+    lecture_summary_pdf_path: Path
     transcript_path: Path
     raw_transcript_path: Path
     transcript_text_path: Path
@@ -320,8 +323,39 @@ class LecturePipeline:
         validate_final_notes(notes, len(slides), section_label=section_label)
         markdown_path = export_markdown(notes, run_dir / "lecture_notes.md")
 
-        notify("export", "Rendering an offline PDF copy of the lecture notes")
+        try:
+            summary_payload = json.loads(slide_summaries_path.read_text(encoding="utf-8"))
+            summary_items = summary_payload.get("slides", [])
+            if not isinstance(summary_items, list):
+                raise TypeError("slides must be a list")
+        except (OSError, TypeError, json.JSONDecodeError) as exc:
+            raise RuntimeError("The completed slide summaries could not be read for the lecture overview.") from exc
+
+        notify("summary", "Creating a general summary from all lecture materials")
+
+        def summary_progress(index: int, total: int, message: str) -> None:
+            notify("summary", f"{message} ({index}/{total})")
+
+        try:
+            lecture_summary = agent.generate_lecture_summary(
+                effective_title,
+                summary_items,
+                section_label=section_label,
+                checkpoint_dir=run_dir / "notes_checkpoints",
+                progress=summary_progress,
+            )
+        except AgentError as exc:
+            notify("summary", f"Model synthesis was unavailable; saving a complete source-grounded overview instead ({exc})")
+            lecture_summary = LectureAgent.source_grounded_summary(
+                effective_title,
+                summary_items,
+                section_label=section_label,
+            )
+        lecture_summary_markdown_path = export_markdown(lecture_summary, run_dir / "lecture_summary.md")
+
+        notify("export", "Rendering offline PDF copies of the lecture notes and general summary")
         pdf_path = export_pdf(notes, run_dir / "lecture_notes.pdf")
+        lecture_summary_pdf_path = export_pdf(lecture_summary, run_dir / "lecture_summary.pdf")
         manifest_path = run_dir / "lecture_manifest.json"
         dump_json(
             manifest_path,
@@ -341,6 +375,8 @@ class LecturePipeline:
                     "quality_report": str(quality_report_path),
                     "notes_markdown": str(markdown_path),
                     "notes_pdf": str(pdf_path),
+                    "lecture_summary_markdown": str(lecture_summary_markdown_path),
+                    "lecture_summary_pdf": str(lecture_summary_pdf_path),
                 },
             },
         )
@@ -351,6 +387,8 @@ class LecturePipeline:
             notes_markdown=notes,
             markdown_path=markdown_path,
             pdf_path=pdf_path,
+            lecture_summary_markdown_path=lecture_summary_markdown_path,
+            lecture_summary_pdf_path=lecture_summary_pdf_path,
             transcript_path=transcript_path,
             raw_transcript_path=raw_transcript_path,
             transcript_text_path=transcript_text_path,

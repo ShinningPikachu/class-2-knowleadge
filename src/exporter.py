@@ -73,6 +73,7 @@ def export_pdf(markdown: str, output_path: str | Path) -> Path:
     )
     h1 = ParagraphStyle("LectureH1", parent=styles["Heading1"], fontName=bold_font, fontSize=17, leading=22, spaceBefore=15, spaceAfter=9, textColor=HexColor("#16213e"))
     h2 = ParagraphStyle("LectureH2", parent=styles["Heading2"], fontName=bold_font, fontSize=12.5, leading=17, spaceBefore=10, spaceAfter=6, textColor=HexColor("#0f4c5c"))
+    h3 = ParagraphStyle("LectureH3", parent=styles["Heading3"], fontName=bold_font, fontSize=10.5, leading=14, spaceBefore=8, spaceAfter=4, textColor=HexColor("#334155"))
     bullet_style = ParagraphStyle("LectureBullet", parent=body, leftIndent=7 * mm, firstLineIndent=0, spaceAfter=2)
 
     def escaped(value: str) -> str:
@@ -99,6 +100,9 @@ def export_pdf(markdown: str, output_path: str | Path) -> Path:
         elif line.startswith("## "):
             flush_bullets()
             story.append(Paragraph(escaped(line[3:]), h2))
+        elif line.startswith("### "):
+            flush_bullets()
+            story.append(Paragraph(escaped(line[4:]), h3))
         elif re.match(r"^[-*]\s+", line):
             bullet_items.append(ListItem(Paragraph(escaped(re.sub(r"^[-*]\s+", "", line)), bullet_style)))
         else:

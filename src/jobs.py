@@ -806,7 +806,8 @@ class JobManager:
         A retry is deliberately a new job: the failed run, its error, and its
         processing timeline remain available for diagnosis. Lecture inputs are
         copied into the new job's storage so each queued attempt remains
-        independently runnable.
+        independently runnable. A cleanup failure also reuses its saved run,
+        allowing verified cleanup checkpoints to continue without retranscribing.
         """
         failed_job = self.get_job(job_id)
         if failed_job.status != "failed":
@@ -825,6 +826,11 @@ class JobManager:
                 )
                 payload["audio_path"] = str(stored_audio) if stored_audio else None
                 payload["presentation_path"] = str(stored_presentation) if stored_presentation else None
+                saved_run = str(failed_job.result.get("run_dir", "")).strip()
+                if failed_job.stage == "cleanup" and not payload.get("resume_run_directory") and saved_run:
+                    saved_run_path = Path(saved_run).expanduser().resolve()
+                    if self._is_relative_to(saved_run_path, self.project_root) and saved_run_path.is_dir():
+                        payload["resume_run_directory"] = str(saved_run_path)
             else:
                 retry_root.mkdir(parents=True, exist_ok=False)
         except (OSError, JobError) as exc:
@@ -862,6 +868,8 @@ class JobManager:
                     data={
                         "priority": failed_job.priority_label,
                         "retried_from_job_id": failed_job.id,
+                        "resumes_cleanup_checkpoints": bool(payload.get("resume_run_directory"))
+                        and failed_job.stage == "cleanup",
                     },
                     connection=connection,
                 )
@@ -1177,6 +1185,8 @@ class JobManager:
                         "raw_transcript_path": str(Path(run_dir) / "transcript.raw.json"),
                         "transcript_text_path": str(Path(run_dir) / "transcript.txt"),
                         "slide_summaries_path": str(Path(run_dir) / "slide_summaries.json"),
+                        "lecture_summary_markdown_path": str(Path(run_dir) / "lecture_summary.md"),
+                        "lecture_summary_pdf_path": str(Path(run_dir) / "lecture_summary.pdf"),
                         "manifest_path": str(Path(run_dir) / "lecture_manifest.json"),
                         "cleaned_partial_transcript_path": str(
                             Path(run_dir) / "transcript.cleanup.partial.json"
@@ -1231,6 +1241,12 @@ class JobManager:
             "run_dir": str(result.run_dir),
             "markdown_path": str(result.markdown_path),
             "pdf_path": str(result.pdf_path),
+            "lecture_summary_markdown_path": str(
+                getattr(result, "lecture_summary_markdown_path", result.run_dir / "lecture_summary.md")
+            ),
+            "lecture_summary_pdf_path": str(
+                getattr(result, "lecture_summary_pdf_path", result.run_dir / "lecture_summary.pdf")
+            ),
             "transcript_path": str(result.transcript_path),
             "raw_transcript_path": str(result.raw_transcript_path),
             "transcript_text_path": str(
@@ -1888,6 +1904,7 @@ class JobManager:
             "quality": 78,
             "rag": 82,
             "notes": 84,
+            "summary": 96,
             "translation": 5,
             "export": 98,
             "complete": 100,

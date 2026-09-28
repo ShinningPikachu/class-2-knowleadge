@@ -60,7 +60,10 @@ def save_lecture_result(
     for path in source_files:
         role = "Slides" if path.suffix.lower() in {".pdf", ".ppt", ".pptx"} else "Recording"
         candidates.append((path, f"{role}{path.suffix.lower()}"))
-    artifact_specs = [("pdf_path", "Notes.pdf")]
+    artifact_specs = [
+        ("pdf_path", "Notes.pdf"),
+        ("lecture_summary_pdf_path", "Summary.pdf"),
+    ]
     candidates.extend(
         (Path(path), filename)
         for attribute, filename in artifact_specs

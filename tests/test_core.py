@@ -77,8 +77,15 @@ class CoreHelpersTest(unittest.TestCase):
             def __init__(self, *_args: object, **_kwargs: object) -> None:
                 pass
 
-            def generate_lecture_notes(self, *_args: object, **_kwargs: object) -> str:
+            def generate_lecture_notes(self, *_args: object, **kwargs: object) -> str:
+                Path(str(kwargs["slide_summaries_path"])).write_text(
+                    json.dumps({"slides": [{"slide": 1, "title": "Queues", "summary": "FIFO queues."}]}),
+                    encoding="utf-8",
+                )
                 return "# Notes\n\nGrounded summary."
+
+            def generate_lecture_summary(self, *_args: object, **_kwargs: object) -> str:
+                return "# Queues — General Summary\n\nQueues process items in FIFO order.\n"
 
         def write_markdown(_notes: str, path: Path) -> Path:
             path.write_text("# Notes\n", encoding="utf-8")
@@ -113,6 +120,8 @@ class CoreHelpersTest(unittest.TestCase):
 
         self.assertEqual(result.indexed_chunks, 1)
         self.assertEqual(result.lecture_title, "Queues")
+        self.assertEqual(result.lecture_summary_markdown_path.name, "lecture_summary.md")
+        self.assertEqual(result.lecture_summary_pdf_path.name, "lecture_summary.pdf")
 
     def test_audio_validation_rejects_non_finite_decoder_output(self) -> None:
         import numpy as np
@@ -471,6 +480,50 @@ No additional professor explanation was aligned with this slide.
         agent._chat_guard = guard
         with self.assertRaisesRegex(StopForLater, "pause summary"):
             agent._chat("Write notes")
+
+    def test_lecture_summary_covers_all_saved_slide_summaries_and_reuses_its_checkpoint(self) -> None:
+        agent = LectureAgent.__new__(LectureAgent)
+        agent.config = PipelineConfig()
+        agent._chat_guard = None
+        calls: list[str] = []
+        agent._chat = lambda prompt: calls.append(prompt) or "A grounded lecture overview."  # type: ignore[method-assign]
+        summaries = [
+            {"slide": 2, "title": "Second", "summary": "Second concept."},
+            {"slide": 1, "title": "First", "summary": "First concept."},
+        ]
+
+        with tempfile.TemporaryDirectory() as directory:
+            checkpoints = Path(directory) / "notes_checkpoints"
+            first = agent.generate_lecture_summary(
+                "Overview",
+                summaries,
+                checkpoint_dir=checkpoints,
+            )
+            second = agent.generate_lecture_summary(
+                "Overview",
+                summaries,
+                checkpoint_dir=checkpoints,
+            )
+
+        self.assertEqual(first, "# Overview — General Summary\n\nA grounded lecture overview.\n")
+        self.assertEqual(second, first)
+        self.assertEqual(len(calls), 1)
+        self.assertIn("Slide 1: First", calls[0])
+        self.assertIn("Slide 2: Second", calls[0])
+
+    def test_source_grounded_summary_is_a_general_overview_not_a_slide_walkthrough(self) -> None:
+        summary = LectureAgent.source_grounded_summary(
+            "Overview",
+            [
+                {"slide": 2, "title": "Second", "summary": "Second concept."},
+                {"slide": 1, "title": "First", "summary": "First concept."},
+            ],
+        )
+
+        self.assertIn("First concept.", summary)
+        self.assertIn("Second concept.", summary)
+        self.assertNotIn("###", summary)
+        self.assertNotIn("Slide 1", summary)
 
     def test_lecture_notes_resume_after_the_last_completed_slide_checkpoint(self) -> None:
         class StopForLater(TaskControlSignal):

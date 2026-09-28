@@ -122,10 +122,16 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
             try:
                 retry_job = manager.retry_failed_job(job.id)
                 st.session_state["job_log_id"] = retry_job.id
-                st.session_state["job_log_notice"] = (
-                    "Queued a fresh retry with the same saved parameters. "
-                    "The failed job and its processing log are unchanged."
-                )
+                if retry_job.payload.get("resume_run_directory") and job.stage == "cleanup":
+                    st.session_state["job_log_notice"] = (
+                        "Queued a retry from the saved cleanup checkpoints. "
+                        "The failed job and its processing log are unchanged."
+                    )
+                else:
+                    st.session_state["job_log_notice"] = (
+                        "Queued a fresh retry with the same saved parameters. "
+                        "The failed job and its processing log are unchanged."
+                    )
                 st.rerun()
             except JobError as exc:
                 st.error(str(exc))
@@ -210,6 +216,7 @@ def _render_ollama_controls(manager: JobManager) -> None:
 def _render_completed_files(job: JobRecord, key_prefix: str, *, preview: bool = False) -> None:
     markdown_path = Path(str(job.result.get("markdown_path", "")))
     pdf_path = Path(str(job.result.get("pdf_path", "")))
+    lecture_summary_pdf_path = Path(str(job.result.get("lecture_summary_pdf_path", "")))
     translated = job.kind == "translation"
     slide_review = job.kind == "slide_review"
     if translated:
@@ -230,7 +237,8 @@ def _render_completed_files(job: JobRecord, key_prefix: str, *, preview: bool = 
             )
         except (OSError, UnicodeDecodeError) as exc:
             st.warning(f"The generated notes exist but could not be previewed: {exc}")
-    left, right = st.columns(2)
+    download_columns = st.columns(3 if lecture_summary_pdf_path.is_file() else 2)
+    left, right = download_columns[:2]
     if markdown_path.is_file():
         left.download_button(
             "Download translated Markdown" if translated else "Download deep review" if slide_review else "Download Markdown",
@@ -247,6 +255,15 @@ def _render_completed_files(job: JobRecord, key_prefix: str, *, preview: bool = 
             file_name=pdf_path.name,
             mime="application/pdf",
             key=f"{key_prefix}_pdf_{job.id}",
+            width="stretch",
+        )
+    if lecture_summary_pdf_path.is_file():
+        download_columns[2].download_button(
+            "Download general summary",
+            data=lecture_summary_pdf_path.read_bytes(),
+            file_name=lecture_summary_pdf_path.name,
+            mime="application/pdf",
+            key=f"{key_prefix}_lecture_summary_{job.id}",
             width="stretch",
         )
     if (translated or slide_review) and job.result.get("pdf_warning"):

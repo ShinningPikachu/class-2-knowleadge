@@ -7,6 +7,7 @@ from contextlib import nullcontext
 from hashlib import sha256
 import json
 from pathlib import Path
+import re
 from time import monotonic
 from typing import Any, ContextManager
 
@@ -29,6 +30,7 @@ class LectureAgent:
     CHECKPOINT_SCHEMA_VERSION = 1
     SLIDE_PROMPT_VERSION = "lecture-slide-notes-v4"
     SYNTHESIS_PROMPT_VERSION = "lecture-synthesis-v1"
+    SUMMARY_PROMPT_VERSION = "lecture-material-summary-v2"
 
     SYSTEM_PROMPT = """You are a university lecture assistant.
 Your task is to transform raw lecture material into professional study notes.
@@ -182,7 +184,7 @@ translation is a separate operation requested by the user after completion."""
         if overview is None:
             if progress:
                 progress(total, total, "Writing the overall lecture summary")
-            overview = self._generate_overview(title, digest)
+            overview = self._generate_general_lecture_summary(title, digest)
             self._save_checkpoint(
                 checkpoint_root / "overview.json" if checkpoint_root else None,
                 "overview",
@@ -228,6 +230,172 @@ translation is a separate operation requested by the user after completion."""
             )
         sections.extend(["", final_sections.strip(), ""])
         return "\n".join(sections)
+
+    def generate_lecture_summary(
+        self,
+        lecture_title: str,
+        slide_summaries: list[dict[str, Any]],
+        *,
+        section_label: str = "Slide",
+        checkpoint_dir: str | Path | None = None,
+        progress: ProgressCallback | None = None,
+    ) -> str:
+        """Synthesize every completed slide summary into one grounded overview.
+
+        The source summaries are already bounded and grounded to their matching
+        slides. For long lectures, they are reduced hierarchically so the final
+        overview covers late material rather than silently truncating it.
+        """
+        title = clean_text(lecture_title or "Lecture")
+        sections: list[tuple[int, str, str]] = []
+        for item in slide_summaries:
+            if not isinstance(item, dict):
+                continue
+            try:
+                number = int(item["slide"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            summary = clean_text(str(item.get("summary", "")))
+            if not summary:
+                continue
+            sections.append((number, clean_text(str(item.get("title", ""))), summary))
+        sections.sort(key=lambda item: item[0])
+        if not sections:
+            raise AgentError("Cannot create a lecture summary because no completed slide summaries were found.")
+
+        checkpoint_root = Path(checkpoint_dir) if checkpoint_dir is not None else None
+        if checkpoint_root is not None:
+            checkpoint_root.mkdir(parents=True, exist_ok=True)
+        source = {
+            "prompt_version": self.SUMMARY_PROMPT_VERSION,
+            "section_label": section_label,
+            "sections": [
+                {"number": number, "title": section_title, "summary": summary}
+                for number, section_title, summary in sections
+            ],
+        }
+        digest_signature = self._checkpoint_signature("lecture_summary_digest", source)
+        digest = self._load_checkpoint(
+            checkpoint_root / "lecture_summary_digest.json" if checkpoint_root else None,
+            "lecture_summary_digest",
+            digest_signature,
+        )
+        if digest is None:
+            if progress:
+                progress(1, 2, "Building a complete digest for the lecture summary")
+            digest = self._hierarchical_digest(sections)
+            self._save_checkpoint(
+                checkpoint_root / "lecture_summary_digest.json" if checkpoint_root else None,
+                "lecture_summary_digest",
+                digest_signature,
+                digest,
+            )
+
+        summary_signature = self._checkpoint_signature(
+            "lecture_summary",
+            {"prompt_version": self.SUMMARY_PROMPT_VERSION, "title": title, "digest": digest},
+        )
+        overview = self._load_checkpoint(
+            checkpoint_root / "lecture_summary.json" if checkpoint_root else None,
+            "lecture_summary",
+            summary_signature,
+        )
+        if overview is None:
+            if progress:
+                progress(2, 2, "Writing the general summary of the lecture materials")
+            overview = self._generate_overview(title, digest)
+            self._save_checkpoint(
+                checkpoint_root / "lecture_summary.json" if checkpoint_root else None,
+                "lecture_summary",
+                summary_signature,
+                overview,
+            )
+        return f"# {title} — General Summary\n\n{overview.strip()}\n"
+
+    @staticmethod
+    def source_grounded_summary(
+        lecture_title: str,
+        slide_summaries: list[dict[str, Any]],
+        *,
+        section_label: str = "Slide",
+    ) -> str:
+        """Build a compact lecture-level overview when model synthesis is unavailable.
+
+        The fallback is intentionally extractive: it retains the most distinctive
+        source sentences from across the lecture, but never exposes a slide-by-
+        slide walkthrough as the general summary.
+        """
+        title = clean_text(lecture_title or "Lecture")
+        sections: list[tuple[int, str, str]] = []
+        for item in slide_summaries:
+            if not isinstance(item, dict):
+                continue
+            try:
+                number = int(item["slide"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            summary = clean_text(str(item.get("summary", "")))
+            if summary:
+                sections.append((number, clean_text(str(item.get("title", ""))), summary))
+        sections.sort(key=lambda item: item[0])
+        if not sections:
+            raise AgentError("Cannot create a lecture summary because no completed slide summaries were found.")
+        candidates: list[tuple[int, str, set[str]]] = []
+        for source_index, (_number, _section_title, summary) in enumerate(sections):
+            concise = clean_text(LectureAgent.concise_summary(summary))
+            for sentence in re.split(r"(?<=[.!?])\s+", concise):
+                sentence = sentence.lstrip("-• ").strip()
+                lowered = sentence.casefold()
+                if (
+                    re.search(r"\b(?:slide|recording section)\s*\d*\b", lowered)
+                    or "no additional" in lowered
+                    or "source material or the aligned" in lowered
+                ):
+                    continue
+                words = set(re.findall(r"[a-z0-9]{3,}", sentence.casefold()))
+                if len(sentence) >= 12 and words:
+                    candidates.append((source_index, sentence, words))
+        if not candidates:
+            raise AgentError("Cannot create a lecture summary because the completed slide summaries were empty.")
+
+        # Choose distinctive sentences throughout the lecture, rather than
+        # repeatedly selecting early material or presenting each slide in turn.
+        target = min(12, max(5, (len(sections) + 7) // 8))
+        window_count = min(4, len(sections))
+        selected: list[tuple[int, str]] = []
+        used_words: set[str] = set()
+        remaining = list(candidates)
+        for window in range(window_count):
+            start = window * len(sections) // window_count
+            end = (window + 1) * len(sections) // window_count
+            quota = max(1, target // window_count + (1 if window < target % window_count else 0))
+            for _ in range(quota):
+                choices = [item for item in remaining if start <= item[0] < end]
+                if not choices:
+                    break
+                # Prefer dense, previously uncovered concepts, with a small
+                # penalty for unusually long source sentences.
+                choice = max(
+                    choices,
+                    key=lambda item: (len(item[2] - used_words) * 1000) - len(item[1]),
+                )
+                remaining.remove(choice)
+                selected.append((choice[0], choice[1]))
+                used_words.update(choice[2])
+        if not selected:
+            selected = [(index, sentence) for index, sentence, _words in candidates[:target]]
+
+        selected.sort(key=lambda item: item[0])
+        paragraph_size = max(2, (len(selected) + 3) // 4)
+        paragraphs = [
+            " ".join(sentence for _index, sentence in selected[start : start + paragraph_size])
+            for start in range(0, len(selected), paragraph_size)
+        ]
+        introduction = (
+            "This overview brings together the lecture's central ideas and the relationships "
+            "between its key concepts."
+        )
+        return "\n\n".join([f"# {title} — General Summary", introduction, *paragraphs]) + "\n"
 
     def generate_slide_note(
         self,
@@ -405,6 +573,20 @@ translation is a separate operation requested by the user after completion."""
         prompt = f"""Create a short, source-grounded overall summary for the lecture titled
 "{title}". Use only the verified lecture digest. Return 1–2 coherent paragraphs
 without a heading, lists, or preamble.
+
+VERIFIED LECTURE DIGEST:
+{digest}"""
+        return self._chat(prompt)
+
+    def _generate_general_lecture_summary(self, title: str, digest: str) -> str:
+        prompt = f"""Write a cohesive, source-grounded general summary of the lecture
+"{title}". Explain its central ideas, the relationships among its key concepts,
+and the main takeaways as one lecture-level explanation for a student.
+
+Use all relevant material in the verified digest, but do not give a slide-by-slide
+walkthrough, enumerate source sections, mention slides, or describe this digest.
+Return 2–4 coherent paragraphs without Markdown headings, lists, or preamble.
+Do not add facts that are not in the verified material.
 
 VERIFIED LECTURE DIGEST:
 {digest}"""

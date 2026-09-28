@@ -23,6 +23,8 @@ class LectureLibraryHandoffTest(unittest.TestCase):
             (input_dir / "slides.pdf").write_bytes(b"not-a-real-pdf")
             markdown = run_dir / "lecture_notes.md"
             pdf = run_dir / "lecture_notes.pdf"
+            summary_markdown = run_dir / "lecture_summary.md"
+            summary_pdf = run_dir / "lecture_summary.pdf"
             transcript = run_dir / "transcript.json"
             raw_transcript = run_dir / "transcript.raw.json"
             transcript_text = run_dir / "transcript.txt"
@@ -33,6 +35,8 @@ class LectureLibraryHandoffTest(unittest.TestCase):
             manifest = run_dir / "lecture_manifest.json"
             markdown.write_text("# Search\nBreadth-first search uses a queue.", encoding="utf-8")
             pdf.write_bytes(b"generated-notes-pdf")
+            summary_markdown.write_text("# Search — General Summary\nSearch explores states.", encoding="utf-8")
+            summary_pdf.write_bytes(b"generated-summary-pdf")
             transcript.write_text(
                 '{"paragraphs": [{"start_time": "00:00:01", "text": "Professor explanation."}]}',
                 encoding="utf-8",
@@ -57,6 +61,8 @@ class LectureLibraryHandoffTest(unittest.TestCase):
                 manifest_path=manifest,
                 markdown_path=markdown,
                 pdf_path=pdf,
+                lecture_summary_markdown_path=summary_markdown,
+                lecture_summary_pdf_path=summary_pdf,
             )
 
             messages = save_lecture_result(store, subject.id, result, "Introduction to AI")
@@ -69,14 +75,15 @@ class LectureLibraryHandoffTest(unittest.TestCase):
             {
                 "Slides.pdf",
                 "Notes.pdf",
+                "Summary.pdf",
             },
         )
-        self.assertEqual(len(messages), 2)
+        self.assertEqual(len(messages), 3)
         self.assertEqual(
             {document.folder_name for document in documents},
             {"Introduction to AI"},
         )
-        self.assertEqual(folder_counts, [2])
+        self.assertEqual(folder_counts, [3])
 
 
 if __name__ == "__main__":

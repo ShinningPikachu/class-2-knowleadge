@@ -97,7 +97,13 @@ result in English and never translate it. Return valid JSON only."""
             cleaned = self._load_checkpoint(checkpoint_path, batch, batch_digest)
             reused = cleaned is not None
             if cleaned is None:
-                cleaned = self._clean_batch(batch, index, len(batches), lecture_context)
+                cleaned = self._clean_batch(
+                    batch,
+                    index,
+                    len(batches),
+                    lecture_context,
+                    on_recovery=report,
+                )
                 dump_json(
                     checkpoint_path,
                     {
@@ -145,7 +151,19 @@ result in English and never translate it. Return valid JSON only."""
         batch_index: int,
         total_batches: int,
         lecture_context: str,
+        *,
+        batch_label: str | None = None,
+        on_recovery: CleanupProgressCallback | None = None,
     ) -> list[dict[str, Any]]:
+        """Clean one batch, splitting it safely if the model breaks its ID contract.
+
+        The model must return every input ID exactly once, in order. If it
+        cannot do that after two attempts, smaller prompts are more likely to
+        remain structurally reliable. The returned child results are joined in
+        their original order, so the outer checkpoint remains one complete
+        batch and can still be resumed normally.
+        """
+        label = batch_label or str(batch_index)
         source = {
             "paragraphs": [
                 {
@@ -157,7 +175,7 @@ result in English and never translate it. Return valid JSON only."""
                 for item in batch
             ]
         }
-        prompt = f"""Clean transcript batch {batch_index} of {total_batches}.
+        prompt = f"""Clean transcript batch {label} of {total_batches}.
 Return exactly this JSON shape and no other text:
 {{"paragraphs": [{{"id": 1, "text": "cleaned text", "keep": true, "reason": "lecture content"}}]}}
 
@@ -191,8 +209,35 @@ INPUT JSON:
                 return self._parse_cleaned_response(response_text, batch)
             except TranscriptCleanupError as exc:
                 last_error = str(exc)
+        if len(batch) > 1:
+            split_at = len(batch) // 2
+            first_half = batch[:split_at]
+            second_half = batch[split_at:]
+            if on_recovery:
+                on_recovery(
+                    batch_index,
+                    total_batches,
+                    "Cleanup batch "
+                    f"{label}/{total_batches} returned invalid content twice; retrying its "
+                    f"{len(batch)} paragraphs as {len(first_half)}- and {len(second_half)}-paragraph pieces",
+                )
+            return self._clean_batch(
+                first_half,
+                batch_index,
+                total_batches,
+                lecture_context,
+                batch_label=f"{label}.1",
+                on_recovery=on_recovery,
+            ) + self._clean_batch(
+                second_half,
+                batch_index,
+                total_batches,
+                lecture_context,
+                batch_label=f"{label}.2",
+                on_recovery=on_recovery,
+            )
         raise TranscriptCleanupError(
-            f"Transcript cleanup batch {batch_index} returned unsafe or invalid content twice: {last_error}"
+            f"Transcript cleanup batch {label} returned unsafe or invalid content twice: {last_error}"
         )
 
     def _chat(self, prompt: str) -> str:

@@ -9,7 +9,7 @@ from pathlib import Path
 
 from src.config import PipelineConfig
 from src.task_control import TaskControlSignal
-from src.transcript_cleaner import TranscriptCleaner
+from src.transcript_cleaner import TranscriptCleaner, TranscriptCleanupError
 
 
 class StopForLater(TaskControlSignal):
@@ -40,7 +40,7 @@ class FilteringCleanupClient(EchoCleanupClient):
         self.calls += 1
         messages = kwargs["messages"]  # type: ignore[index]
         prompt = messages[-1]["content"]  # type: ignore[index]
-        source = json.loads(prompt.split("INPUT JSON:\n", 1)[1])
+        source, _ = json.JSONDecoder().raw_decode(prompt.split("INPUT JSON:\n", 1)[1])
         cleaned = [
             {
                 "id": item["id"],
@@ -51,6 +51,41 @@ class FilteringCleanupClient(EchoCleanupClient):
             for item in source["paragraphs"]
         ]
         return {"message": {"content": json.dumps({"paragraphs": cleaned})}}
+
+
+class InvalidLargeBatchCleanupClient(EchoCleanupClient):
+    """Returns invalid IDs for multi-paragraph requests, then succeeds for singles."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.requested_ids: list[list[int]] = []
+
+    def chat(self, **kwargs: object) -> dict[str, dict[str, str]]:
+        self.calls += 1
+        messages = kwargs["messages"]  # type: ignore[index]
+        prompt = messages[-1]["content"]  # type: ignore[index]
+        source, _ = json.JSONDecoder().raw_decode(prompt.split("INPUT JSON:\n", 1)[1])
+        ids = [int(item["id"]) for item in source["paragraphs"]]
+        self.requested_ids.append(ids)
+        if len(ids) > 1:
+            # This is valid JSON but violates the cleaner's exact-ID contract.
+            return {"message": {"content": json.dumps({"paragraphs": []})}}
+        item = source["paragraphs"][0]
+        return {
+            "message": {
+                "content": json.dumps(
+                    {"paragraphs": [{"id": item["id"], "text": item["text"].strip().capitalize() + "."}]}
+                )
+            }
+        }
+
+
+class InvalidCleanupClient(InvalidLargeBatchCleanupClient):
+    """Always violates the exact-ID contract, including for one paragraph."""
+
+    def chat(self, **kwargs: object) -> dict[str, dict[str, str]]:
+        self.calls += 1
+        return {"message": {"content": json.dumps({"paragraphs": []})}}
 
 
 class TranscriptCleanerTest(unittest.TestCase):
@@ -86,6 +121,24 @@ class TranscriptCleanerTest(unittest.TestCase):
                     "end_time": "00:00:40",
                     "text": second,
                 },
+            ],
+        }
+
+    @staticmethod
+    def _short_raw_transcript() -> dict[str, object]:
+        return {
+            "metadata": {"source_file": "lecture.wav", "language": "en"},
+            "segments": [],
+            "paragraphs": [
+                {
+                    "id": index,
+                    "start": float(index),
+                    "end": float(index + 1),
+                    "start_time": f"00:00:{index:02d}",
+                    "end_time": f"00:00:{index + 1:02d}",
+                    "text": f"lecture paragraph {index} " * 25,
+                }
+                for index in range(1, 5)
             ],
         }
 
@@ -162,6 +215,32 @@ class TranscriptCleanerTest(unittest.TestCase):
             result["removed_paragraphs"],
             [{"id": 2, "reason": "personal background conversation"}],
         )
+
+    def test_cleanup_splits_only_an_invalid_batch_into_smaller_pieces(self) -> None:
+        raw = self._short_raw_transcript()
+        client = InvalidLargeBatchCleanupClient()
+        progress: list[str] = []
+        with tempfile.TemporaryDirectory() as directory:
+            result = self._cleaner(client).clean(
+                raw,
+                Path(directory) / "transcript.json",
+                progress=lambda _index, _total, message: progress.append(message),
+            )
+
+        self.assertEqual([item["id"] for item in result["paragraphs"]], [1, 2, 3, 4])
+        self.assertEqual(
+            client.requested_ids,
+            [[1, 2, 3], [1, 2, 3], [1], [2, 3], [2, 3], [2], [3], [4]],
+        )
+        self.assertTrue(any("retrying its 3 paragraphs as 1- and 2-paragraph pieces" in message for message in progress))
+        self.assertTrue(any("retrying its 2 paragraphs as 1- and 1-paragraph pieces" in message for message in progress))
+
+    def test_cleanup_still_fails_safely_when_one_paragraph_cannot_be_validated(self) -> None:
+        raw = self._short_raw_transcript()
+        raw["paragraphs"] = raw["paragraphs"][:1]  # type: ignore[index]
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(TranscriptCleanupError, "batch 1 returned unsafe or invalid content twice"):
+                self._cleaner(InvalidCleanupClient()).clean(raw, Path(directory) / "transcript.json")
 
 
 if __name__ == "__main__":

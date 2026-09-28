@@ -165,6 +165,20 @@ class JobManagerTest(unittest.TestCase):
         self.assertEqual(retry_event.data["retried_from_job_id"], original.id)
         self.assertIn("same saved parameters", retry_event.message)
 
+    def test_failed_cleanup_retry_reuses_the_saved_run_and_checkpoints(self) -> None:
+        original = self._enqueue("Cleanup recovery", PRIORITIES["Normal"])
+        run_directory = self.root / "runs" / "cleanup-recovery"
+        run_directory.mkdir(parents=True)
+        self.manager._merge_job_result(original.id, {"run_dir": str(run_directory)})
+        self.manager._update_job(original.id, stage="cleanup", progress=62, message="Cleaning transcript")
+        self.manager._finish_job(original.id, "failed", "Task failed", "simulated cleanup failure")
+
+        retry = self.manager.retry_failed_job(original.id)
+
+        self.assertEqual(retry.payload["resume_run_directory"], str(run_directory.resolve()))
+        retry_event = self.manager.list_job_events(retry.id)[-1]
+        self.assertTrue(retry_event.data["resumes_cleanup_checkpoints"])
+
     def test_failed_translation_and_slide_review_can_retry_with_the_same_saved_parameters(self) -> None:
         source_job = self._enqueue("Source lecture", PRIORITIES["Normal"])
         self.manager._claim_next_job()
