@@ -10,7 +10,7 @@ from typing import Any
 import streamlit as st
 
 from ..config import PipelineConfig
-from ..jobs import PRIORITIES, JobError, JobManager
+from ..jobs import JobError, JobManager
 from ..library import LibraryStore
 from ..utils import safe_filename
 from .common import subject_lookup
@@ -20,24 +20,6 @@ def _save_temporary_upload(upload: Any, directory: Path) -> Path:
     destination = directory / safe_filename(upload.name)
     destination.write_bytes(upload.getbuffer())
     return destination
-
-
-def _render_recent_jobs(manager: JobManager) -> None:
-    jobs = [job for job in manager.list_jobs(limit=20) if job.kind == "lecture"][:5]
-    if not jobs:
-        return
-    with st.expander("Recent lecture tasks"):
-        for job in jobs:
-            details, action = st.columns([4, 1])
-            details.markdown(
-                f"**{job.title}** — {job.status.title()} · {job.progress}% · "
-                f"{job.stage.replace('_', ' ').title()}"
-            )
-            details.caption(job.message)
-            if action.button("Open log", key=f"recent_lecture_log_{job.id}", width="stretch"):
-                st.session_state["job_log_id"] = job.id
-                st.session_state["requested_workspace"] = "Job Queue"
-                st.rerun()
 
 
 def render_lecture_processor(
@@ -82,14 +64,7 @@ def render_lecture_processor(
             "Leave it blank to generate a meaningful name from the source files."
         ),
     )
-    with st.expander("Resume an interrupted pipeline run"):
-        resume_run_directory = st.text_input(
-            "Run folder",
-            placeholder="/path/to/class-2-knowleadge/runs/lecture_...",
-            help="The background task reuses completed transcription, cleanup, and per-slide note checkpoints.",
-        )
-
-    st.subheader("2. Destination and priority")
+    st.subheader("2. Destination")
     subjects = library.list_subjects()
     lookup = subject_lookup(subjects)
     save_subject = st.selectbox(
@@ -101,26 +76,16 @@ def render_lecture_processor(
     )
     if not subjects:
         st.info("Create a subject in the Library workspace to save completed lecture files automatically.")
-    priority_label = st.selectbox(
-        "Task priority",
-        list(PRIORITIES),
-        index=list(PRIORITIES).index("Normal"),
-        help="High-priority planned tasks are selected before Normal and Low tasks.",
-    )
-
     st.subheader("3. Add to queue")
     if st.button("Queue Lecture Task", type="primary", width="stretch"):
         missing_upload = input_mode == "Upload files" and not (audio_upload or slides_upload)
         missing_path = input_mode == "Use local file paths" and not (recording_local.strip() or slides_local.strip())
-        if not resume_run_directory.strip() and (missing_upload or missing_path):
-            st.error("Provide a recording, a PDF/PPT/PPTX deck, or a run folder to resume.")
+        if missing_upload or missing_path:
+            st.error("Provide a recording or a PDF/PPT/PPTX deck.")
         else:
             try:
                 with ExitStack() as stack:
-                    if resume_run_directory.strip():
-                        audio_path = None
-                        presentation_path = None
-                    elif input_mode == "Upload files":
+                    if input_mode == "Upload files":
                         temporary_dir = Path(stack.enter_context(tempfile.TemporaryDirectory(prefix="lecture_job_")))
                         audio_path = _save_temporary_upload(audio_upload, temporary_dir) if audio_upload else None
                         presentation_path = (
@@ -137,15 +102,10 @@ def render_lecture_processor(
                         presentation_path=presentation_path,
                         lecture_title=lecture_title.strip() or None,
                         subject_id=None if save_subject == "none" else save_subject,
-                        priority=PRIORITIES[priority_label],
-                        resume_run_directory=resume_run_directory.strip() or None,
                     )
                 st.session_state["job_log_id"] = job.id
-                st.session_state["job_log_notice"] = (
-                    f"Queued '{job.title}' with {job.priority_label} priority."
-                )
+                st.session_state["job_log_notice"] = f"Queued '{job.title}'."
                 st.session_state["requested_workspace"] = "Job Queue"
                 st.rerun()
             except (JobError, ValueError) as exc:
                 st.error(str(exc))
-    _render_recent_jobs(manager)

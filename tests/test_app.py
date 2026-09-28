@@ -137,6 +137,9 @@ class StreamlitAppTest(unittest.TestCase):
                 workspace.set_value("Lecture Notes").run()
                 self.assertFalse(list(app.exception))
                 self.assertIn("🎓 Queue Lecture Notes", [item.value for item in app.title])
+                self.assertNotIn("Resume an interrupted pipeline run", [item.label for item in app.expander])
+                self.assertNotIn("Recent lecture tasks", [item.label for item in app.expander])
+                self.assertNotIn("Task priority", [item.label for item in app.selectbox])
                 self.assertNotIn(
                     "Repair noisy transcript with local Qwen",
                     [item.label for item in app.checkbox],
