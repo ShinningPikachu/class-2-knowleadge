@@ -112,6 +112,23 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
         ):
             manager.cancel_job(job.id)
             st.rerun()
+    elif job.status == "failed":
+        if st.button(
+            "Start again with same parameters",
+            key=f"{key_prefix}_retry_{job.id}",
+            type="primary",
+            width="stretch",
+        ):
+            try:
+                retry_job = manager.retry_failed_job(job.id)
+                st.session_state["job_log_id"] = retry_job.id
+                st.session_state["job_log_notice"] = (
+                    "Queued a fresh retry with the same saved parameters. "
+                    "The failed job and its processing log are unchanged."
+                )
+                st.rerun()
+            except JobError as exc:
+                st.error(str(exc))
 
 
 def _format_model_size(size_bytes: int) -> str:
@@ -312,7 +329,7 @@ def _render_job(job: JobRecord, manager: JobManager, editable: bool = False) -> 
             _render_completed_files(job, "job")
             _render_translation_request(job, manager, "card")
 
-        if editable:
+        if editable or job.status == "failed":
             _render_job_actions(job, manager, "card")
 
 

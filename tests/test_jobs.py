@@ -132,6 +132,104 @@ class JobManagerTest(unittest.TestCase):
         self.assertTrue(any("moved to Later" in message for message in messages))
         self.assertTrue(any("returned to the queue" in message for message in messages))
 
+    def test_failed_lecture_can_retry_with_the_same_saved_parameters(self) -> None:
+        library = LibraryStore(self.root / "library")
+        subject = library.create_subject("Computer Science")
+        original = self.manager.enqueue_lecture(
+            config=PipelineConfig(language="nl"),
+            audio_path=None,
+            presentation_path=self.source,
+            lecture_title="Graphs",
+            subject_id=subject.id,
+            priority=PRIORITIES["High"],
+        )
+        self.manager._finish_job(original.id, "failed", "Task failed", "simulated failure")
+
+        retry = self.manager.retry_failed_job(original.id)
+
+        self.assertNotEqual(retry.id, original.id)
+        self.assertEqual(retry.status, "queued")
+        self.assertEqual(retry.kind, original.kind)
+        self.assertEqual(retry.title, original.title)
+        self.assertEqual(retry.priority, original.priority)
+        self.assertEqual(retry.payload["config"], original.payload["config"])
+        self.assertEqual(retry.payload["subject_id"], original.payload["subject_id"])
+        self.assertEqual(retry.payload["library_folder_id"], original.payload["library_folder_id"])
+        self.assertNotEqual(retry.payload["presentation_path"], original.payload["presentation_path"])
+        self.assertEqual(
+            Path(str(retry.payload["presentation_path"])).read_bytes(),
+            Path(str(original.payload["presentation_path"])).read_bytes(),
+        )
+        self.assertEqual(self.manager.get_job(original.id).status, "failed")
+        retry_event = self.manager.list_job_events(retry.id)[-1]
+        self.assertEqual(retry_event.data["retried_from_job_id"], original.id)
+        self.assertIn("same saved parameters", retry_event.message)
+
+    def test_failed_translation_and_slide_review_can_retry_with_the_same_saved_parameters(self) -> None:
+        source_job = self._enqueue("Source lecture", PRIORITIES["Normal"])
+        self.manager._claim_next_job()
+        run_directory = self.root / "runs" / "source-lecture"
+        run_directory.mkdir(parents=True)
+        source_markdown = run_directory / "lecture_notes.md"
+        source_markdown.write_text("# English lecture\n\nOriginal notes.\n", encoding="utf-8")
+        (run_directory / "slides.json").write_text(
+            json.dumps(
+                {
+                    "slides": [
+                        {
+                            "slide": 1,
+                            "title": "Overview",
+                            "content": "Source content",
+                            "notes": "",
+                            "visual_text": [],
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        (run_directory / "alignment.json").write_text(
+            json.dumps({"slides": [{"slide": 1, "paragraphs": []}]}),
+            encoding="utf-8",
+        )
+        self.manager._merge_job_result(
+            source_job.id,
+            {"run_dir": str(run_directory), "markdown_path": str(source_markdown)},
+        )
+        self.manager._finish_job(source_job.id, "completed", "Lecture notes are ready", "")
+
+        translation = self.manager.enqueue_translation(
+            source_job.id,
+            "French",
+            priority=PRIORITIES["Low"],
+        )
+        self.manager._finish_job(translation.id, "failed", "Task failed", "simulated translation failure")
+        retried_translation = self.manager.retry_failed_job(translation.id)
+
+        review = self.manager.enqueue_slide_review(
+            source_job.id,
+            1,
+            priority=PRIORITIES["High"],
+            lecture_name="Source lecture",
+        )
+        self.manager._finish_job(review.id, "failed", "Task failed", "simulated review failure")
+        retried_review = self.manager.retry_failed_job(review.id)
+
+        for original, retry in ((translation, retried_translation), (review, retried_review)):
+            self.assertNotEqual(retry.id, original.id)
+            self.assertEqual(retry.status, "queued")
+            self.assertEqual(retry.kind, original.kind)
+            self.assertEqual(retry.title, original.title)
+            self.assertEqual(retry.priority, original.priority)
+            self.assertEqual(retry.payload, original.payload)
+            self.assertEqual(self.manager.get_job(original.id).status, "failed")
+
+    def test_only_failed_jobs_can_be_retried(self) -> None:
+        job = self._enqueue("Planned lecture", PRIORITIES["Normal"])
+
+        with self.assertRaisesRegex(JobError, "Only failed tasks"):
+            self.manager.retry_failed_job(job.id)
+
     def test_running_job_defers_cooperatively_and_preserves_partial_transcript(self) -> None:
         job = self._enqueue("Long recording", PRIORITIES["Normal"])
         self.manager._claim_next_job()

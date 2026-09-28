@@ -800,6 +800,74 @@ class JobManager:
             self._condition.notify_all()
         return self.get_job(job_id)
 
+    def retry_failed_job(self, job_id: str) -> JobRecord:
+        """Queue a fresh attempt using the failed task's saved parameters.
+
+        A retry is deliberately a new job: the failed run, its error, and its
+        processing timeline remain available for diagnosis. Lecture inputs are
+        copied into the new job's storage so each queued attempt remains
+        independently runnable.
+        """
+        failed_job = self.get_job(job_id)
+        if failed_job.status != "failed":
+            raise JobError("Only failed tasks can be started again.")
+
+        retry_id = uuid4().hex
+        retry_root = self.root / retry_id
+        payload = dict(failed_job.payload)
+        try:
+            if failed_job.kind == "lecture":
+                input_root = retry_root / "input"
+                input_root.mkdir(parents=True, exist_ok=False)
+                stored_audio = self._copy_job_input(payload.get("audio_path"), input_root, "recording")
+                stored_presentation = self._copy_job_input(
+                    payload.get("presentation_path"), input_root, "slides"
+                )
+                payload["audio_path"] = str(stored_audio) if stored_audio else None
+                payload["presentation_path"] = str(stored_presentation) if stored_presentation else None
+            else:
+                retry_root.mkdir(parents=True, exist_ok=False)
+        except (OSError, JobError) as exc:
+            shutil.rmtree(retry_root, ignore_errors=True)
+            raise JobError(f"Could not prepare the retry from the saved inputs: {exc}") from exc
+
+        now = self._timestamp()
+        with self._condition:
+            while self._ollama_maintenance:
+                self._condition.wait(timeout=0.5)
+            with self._database_lock, self._connect() as connection:
+                connection.execute(
+                    """
+                    INSERT INTO jobs(
+                        id, kind, title, status, priority, stage, progress, message,
+                        payload_json, created_at, updated_at
+                    ) VALUES (?, ?, ?, 'queued', ?, 'planned', 0, ?, ?, ?, ?)
+                    """,
+                    (
+                        retry_id,
+                        failed_job.kind,
+                        failed_job.title,
+                        failed_job.priority,
+                        "Waiting to retry with the same saved parameters",
+                        json.dumps(payload),
+                        now,
+                        now,
+                    ),
+                )
+                self._append_event(
+                    retry_id,
+                    f"Retry queued from failed job {failed_job.id[:8]} with the same saved parameters",
+                    stage="planned",
+                    progress=0,
+                    data={
+                        "priority": failed_job.priority_label,
+                        "retried_from_job_id": failed_job.id,
+                    },
+                    connection=connection,
+                )
+            self._condition.notify_all()
+        return self.get_job(retry_id)
+
     def counts(self) -> dict[str, int]:
         values = {
             "queued": 0,

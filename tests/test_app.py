@@ -84,6 +84,15 @@ class StreamlitAppTest(unittest.TestCase):
                 subject_id=None,
                 priority=PRIORITIES["Normal"],
             )
+            failed_job = seed_manager.enqueue_lecture(
+                config=PipelineConfig(),
+                audio_path=None,
+                presentation_path=source,
+                lecture_title="Retryable lecture",
+                subject_id=None,
+                priority=PRIORITIES["Normal"],
+            )
+            seed_manager._finish_job(failed_job.id, "failed", "Task failed", "simulated failure")
             with patch(
                 "src.config.project_path",
                 side_effect=lambda *parts: temporary_root.joinpath(*parts),
@@ -114,6 +123,10 @@ class StreamlitAppTest(unittest.TestCase):
                 self.assertIn(
                     "Automatically unload models after each task",
                     [item.label for item in app.toggle],
+                )
+                self.assertIn(
+                    "Start again with same parameters",
+                    [item.label for item in app.button],
                 )
                 self.assertIn(
                     "Translate finished notes on demand",
