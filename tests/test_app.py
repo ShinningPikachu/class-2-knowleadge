@@ -125,23 +125,23 @@ class StreamlitAppTest(unittest.TestCase):
                     [item.label for item in app.toggle],
                 )
                 self.assertIn(
-                    "Start again with same parameters",
+                    "Retry",
                     [item.label for item in app.button],
                 )
-                self.assertIn(
+                self.assertNotIn(
                     "Translate finished notes on demand",
                     [item.label for item in app.expander],
                 )
 
-                do_later = next(item for item in app.button if item.label == "Do later")
+                do_later = next(item for item in app.button if item.label == "Later")
                 do_later.click().run()
                 self.assertFalse(list(app.exception))
                 self.assertIn("Later (1)", [item.label for item in app.tabs])
-                resume = next(item for item in app.button if item.label == "Resume from checkpoints")
+                resume = next(item for item in app.button if item.label == "Resume")
                 resume.click().run()
                 self.assertFalse(list(app.exception))
 
-                open_log = next(item for item in app.button if item.label == "Open processing log")
+                open_log = next(item for item in app.button if item.label == "Log")
                 open_log.click().run()
                 self.assertFalse(list(app.exception))
                 self.assertIn("📋 Lecture Processing Log", [item.value for item in app.title])

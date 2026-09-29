@@ -14,6 +14,7 @@ from src.ui.library_page import (
     _exact_slide_summary,
     _lecture_audio_bundle,
     _lecture_slide_bundle,
+    _matching_lecture_job,
     _visible_documents,
 )
 
@@ -30,6 +31,8 @@ class LibrarySlideReviewTest(unittest.TestCase):
                 page.insert_text((72, 72), "Intelligent agents")
                 pdf.save(source)
 
+            library = LibraryStore(root / "library")
+            subject = library.create_subject("AI")
             manager = JobManager(root, autostart=False)
             self.addCleanup(manager.stop)
             job = manager.enqueue_lecture(
@@ -37,7 +40,7 @@ class LibrarySlideReviewTest(unittest.TestCase):
                 audio_path=None,
                 presentation_path=source,
                 lecture_title="Introduction",
-                subject_id=None,
+                subject_id=subject.id,
             )
             manager._claim_next_job()
             run_dir = root / "runs" / "lecture-test"
@@ -88,9 +91,7 @@ class LibrarySlideReviewTest(unittest.TestCase):
             )
             manager._finish_job(job.id, "completed", "Lecture notes are ready", "")
 
-            library = LibraryStore(root / "library")
-            subject = library.create_subject("AI")
-            folder = library.create_folder(subject.id, "Introduction")
+            folder = library.get_folder(str(job.payload["library_folder_id"]))
             document = library.add_document(subject.id, source, folder_id=folder.id)
 
             bundle = _lecture_slide_bundle(library, manager, document)
@@ -102,6 +103,60 @@ class LibrarySlideReviewTest(unittest.TestCase):
                 _exact_slide_summary(bundle, bundle.slides[0]),
                 "An agent perceives its environment and selects actions.",
             )
+
+    def test_generic_lecture_folder_never_links_to_a_different_subject(self) -> None:
+        """Regression: every subject can have a folder named ``Lecture 01``."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source_root = root / "sources"
+            source_root.mkdir()
+
+            def create_slide(path: Path, text: str) -> None:
+                # The resolver uses the immutable file checksum, so a small
+                # byte fixture is sufficient and keeps this regression test
+                # independent of the optional PDF preview runtime.
+                path.write_bytes(text.encode("utf-8"))
+
+            ai_source = source_root / "ai" / "Slides.pdf"
+            speech_source = source_root / "speech" / "Slides.pdf"
+            ai_source.parent.mkdir()
+            speech_source.parent.mkdir()
+            create_slide(ai_source, "Artificial intelligence")
+            create_slide(speech_source, "Speech science")
+
+            library = LibraryStore(root / "library")
+            ai = library.create_subject("Artificial Intelligence")
+            speech = library.create_subject("Speech Science")
+            manager = JobManager(root, autostart=False)
+            self.addCleanup(manager.stop)
+
+            ai_job = manager.enqueue_lecture(
+                PipelineConfig(), None, ai_source, "Lecture 01", ai.id
+            )
+            speech_job = manager.enqueue_lecture(
+                PipelineConfig(), None, speech_source, "Lecture 01", speech.id
+            )
+            for job in (ai_job, speech_job):
+                manager._finish_job(job.id, "completed", "Lecture notes are ready", "")
+
+            ai_folder = library.get_folder(str(ai_job.payload["library_folder_id"]))
+            ai_document = library.add_document(
+                ai.id, ai_source, filename="Slides.pdf", folder_id=ai_folder.id
+            )
+
+            self.assertEqual(ai_folder.name, "Lecture 01")
+            self.assertEqual(
+                _matching_lecture_job(manager, ai_document).id,  # type: ignore[union-attr]
+                ai_job.id,
+            )
+
+            unrelated_document = library.add_document_bytes(
+                ai.id,
+                "Additional slides.pdf",
+                b"A different deck added to the same folder",
+                folder_id=ai_folder.id,
+            )
+            self.assertIsNone(_matching_lecture_job(manager, unrelated_document))
 
     def test_audio_resolves_cleaned_timeline_without_showing_transcript_files(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

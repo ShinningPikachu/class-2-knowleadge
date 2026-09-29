@@ -15,7 +15,7 @@ from typing import Any
 
 import streamlit as st
 
-from ..jobs import JobError, JobManager, JobRecord
+from ..jobs import PRIORITIES, JobError, JobManager, JobRecord
 from ..library import LibraryDocument, LibraryError, LibraryFolder, LibraryStore
 from .audio_transcript_component import render_audio_transcript
 from .common import format_size, render_search_results, subject_lookup
@@ -143,29 +143,66 @@ def _matches_document_content(path: Path, document: LibraryDocument) -> bool:
         return False
 
 
-def _matching_lecture_job(manager: JobManager, document: LibraryDocument) -> JobRecord | None:
-    """Resolve a library deck back to the completed lecture that created it."""
-    name = document.original_name.casefold()
-    folder = document.folder_name.casefold()
-    for job in manager.list_jobs(limit=500):
-        if job.kind != "lecture" or job.status != "completed":
+def _job_input_files(manager: JobManager, job: JobRecord) -> list[Path]:
+    """Return the retained source files for a job without trusting display metadata."""
+    roots: list[Path] = []
+    run_dir = str(job.result.get("run_dir", "")).strip()
+    if run_dir:
+        roots.append(Path(run_dir) / "input")
+    # Inputs are retained with every queued job.  A completed run may be moved
+    # or pruned, so this is the durable source of truth for this association.
+    roots.append(manager.root / job.id / "input")
+
+    files: list[Path] = []
+    visited: set[Path] = set()
+    for root in roots:
+        try:
+            resolved = root.resolve()
+        except OSError:
             continue
-        lecture_name = str(job.result.get("lecture_name", job.payload.get("lecture_name", ""))).casefold()
-        lecture_title = str(job.result.get("lecture_title", job.payload.get("lecture_title", ""))).casefold()
-        if lecture_name and name.startswith(lecture_name):
-            return job
-        if folder and lecture_title and folder == lecture_title:
-            return job
-        run_dir = Path(str(job.result.get("run_dir", "")))
-        if run_dir.is_dir():
-            try:
-                input_files = list((run_dir / "input").iterdir())
-                if any(_source_names_match(path.name, name) for path in input_files):
-                    return job
-                if any(_matches_document_content(path, document) for path in input_files):
-                    return job
-            except OSError:
-                continue
+        if resolved in visited or not resolved.is_dir():
+            continue
+        visited.add(resolved)
+        try:
+            files.extend(path for path in resolved.iterdir() if path.is_file())
+        except OSError:
+            continue
+    return files
+
+
+def _matching_lecture_job(manager: JobManager, document: LibraryDocument) -> JobRecord | None:
+    """Resolve a library file to its lecture without crossing subject boundaries.
+
+    Folder and lecture titles are user-facing labels, not stable identifiers:
+    many subjects legitimately have a folder called ``Lecture 01``.  The source
+    file checksum is therefore the required association.  When provenance
+    cannot be verified, this returns no job so an uncertain match never shows
+    the explanation from a different lecture.
+    """
+    candidates = [
+        job
+        for job in manager.list_jobs(limit=500)
+        if job.kind == "lecture"
+        and job.status == "completed"
+        and str(job.payload.get("subject_id") or "") == document.subject_id
+    ]
+    if not candidates:
+        return None
+
+    # A stored job input has the same immutable checksum as the library file.
+    # Check it before labels or folder identity, including when a user renamed
+    # the visible file after import.
+    content_matches = [
+        job
+        for job in candidates
+        if any(_matches_document_content(path, document) for path in _job_input_files(manager, job))
+    ]
+    if len(content_matches) == 1:
+        return content_matches[0]
+    if len(content_matches) > 1:
+        # Reprocessing the exact same source can produce several valid jobs;
+        # use the latest one, all of which describe the same source document.
+        return max(content_matches, key=lambda job: job.created_at)
     return None
 
 
@@ -594,6 +631,77 @@ def _render_deep_review_control(
             st.error(str(exc))
 
 
+def _render_translation_control(
+    manager: JobManager,
+    document: LibraryDocument,
+    bundle: _LectureSlideBundle,
+    slide_number: int,
+    button_target: Any | None = None,
+) -> None:
+    """Queue a lecture translation from the slide explanation controls."""
+    source_job = bundle.source_job
+    target = button_target or st
+    help_text = (
+        "Translate this lecture's slide explanations and notes into another language."
+        if source_job
+        else "The completed lecture job for this file could not be located."
+    )
+    if source_job is None:
+        target.button(
+            "🌐",
+            disabled=True,
+            help=help_text,
+            key=f"library_translation_unavailable_{document.id}_{slide_number}",
+            width="stretch",
+        )
+        return
+    with target.popover("🌐", help=help_text, width="stretch"):
+        st.caption("The original transcript and notes stay in English. The translation is saved to this lecture folder.")
+        with st.form(f"library_translation_form_{document.id}_{source_job.id}_{slide_number}"):
+            language_option = st.selectbox(
+                "Translate to",
+                [
+                    "Chinese (Simplified)",
+                    "Chinese (Traditional)",
+                    "French",
+                    "Dutch",
+                    "German",
+                    "Spanish",
+                    "Japanese",
+                    "Korean",
+                    "Other language",
+                ],
+                key=f"library_translation_language_{document.id}_{source_job.id}_{slide_number}",
+            )
+            custom_language = st.text_input(
+                "Other target language",
+                placeholder="e.g. Italian",
+                disabled=language_option != "Other language",
+                key=f"library_translation_custom_language_{document.id}_{source_job.id}_{slide_number}",
+            )
+            priority_label = st.selectbox(
+                "Priority",
+                list(PRIORITIES),
+                index=list(PRIORITIES).index("Normal"),
+                key=f"library_translation_priority_{document.id}_{source_job.id}_{slide_number}",
+            )
+            submitted = st.form_submit_button("Queue translation", type="primary", width="stretch")
+        if submitted:
+            target_language = custom_language.strip() if language_option == "Other language" else language_option
+            try:
+                translation_job = manager.enqueue_translation(
+                    source_job.id,
+                    target_language,
+                    priority=PRIORITIES[priority_label],
+                )
+                st.session_state["library_file_notice"] = (
+                    f"Queued a {target_language} translation as job {translation_job.id[:8]}."
+                )
+                st.rerun()
+            except JobError as exc:
+                st.error(str(exc))
+
+
 def _render_slide_document(
     manager: JobManager,
     document: LibraryDocument,
@@ -668,7 +776,7 @@ def _render_slide_document(
             _render_current_slide(document, slide)
 
     def render_summary() -> None:
-        summary_title, review_button = st.columns([5, 1], vertical_alignment="center")
+        summary_title, review_button, translation_button = st.columns([5, 1, 1], vertical_alignment="center")
         summary_title.markdown("#### Slide summary")
         summary = html.escape(_exact_slide_summary(bundle, slide))
         st.markdown(f'<div class="lecture-slide-summary">{summary}</div>', unsafe_allow_html=True)
@@ -678,6 +786,13 @@ def _render_slide_document(
             bundle,
             selected_number,
             button_target=review_button,
+        )
+        _render_translation_control(
+            manager,
+            document,
+            bundle,
+            selected_number,
+            button_target=translation_button,
         )
 
     if full_page:
@@ -766,9 +881,9 @@ def _render_document_content(
         elif suffix == ".pptx":
             _render_powerpoint_preview(document)
         elif suffix == ".ppt":
-            st.info("Legacy PPT files cannot be previewed directly. Download or convert this file to PPTX/PDF.")
+            st.info("Legacy PPT files cannot be previewed directly. Use File actions (⋯) to download or organize it.")
         else:
-            st.info("This file type has no inline preview. You can still download or organize the file.")
+            st.info("This file type has no inline preview. Use File actions (⋯) to download or organize it.")
     except OSError as exc:
         st.error(f"Could not open this file: {exc}")
 

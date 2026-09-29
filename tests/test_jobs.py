@@ -91,6 +91,12 @@ class JobManagerTest(unittest.TestCase):
         third = self.manager._claim_next_job()
         self.assertEqual(third.id, low.id)  # type: ignore[union-attr]
 
+    def test_job_display_order_is_most_recent_first(self) -> None:
+        older = self._enqueue("Older", PRIORITIES["High"])
+        newer = self._enqueue("Newer", PRIORITIES["Low"])
+
+        self.assertEqual([job.id for job in self.manager.list_jobs()], [newer.id, older.id])
+
     def test_named_lecture_creates_its_destination_folder_when_queued(self) -> None:
         library = LibraryStore(self.root / "library")
         subject = library.create_subject("Computer Science")
@@ -107,6 +113,8 @@ class JobManagerTest(unittest.TestCase):
         self.assertEqual(job.title, "Graph Algorithms")
         self.assertEqual([folder.name for folder in folders], ["Graph Algorithms"])
         self.assertEqual(job.payload["library_folder_id"], folders[0].id)
+        self.assertEqual(job.payload["subject_name"], "Computer Science")
+        self.assertEqual(self.manager.job_subject(job), (subject.id, "Computer Science"))
 
     def test_planned_job_priority_can_change_and_job_can_cancel(self) -> None:
         job = self._enqueue("Lecture", PRIORITIES["Low"])
@@ -622,7 +630,16 @@ class JobManagerTest(unittest.TestCase):
 
     def test_translation_is_an_explicit_qwen_only_queue_job(self) -> None:
         self.manager.set_auto_unload_enabled(False)
-        source_job = self._enqueue("English lecture", PRIORITIES["Normal"])
+        library = LibraryStore(self.root / "library")
+        subject = library.create_subject("Linguistics")
+        source_job = self.manager.enqueue_lecture(
+            config=PipelineConfig(),
+            audio_path=None,
+            presentation_path=self.source,
+            lecture_title="English lecture",
+            subject_id=subject.id,
+            priority=PRIORITIES["Normal"],
+        )
         claimed = self.manager._claim_next_job()
         self.assertEqual(claimed.id, source_job.id)  # type: ignore[union-attr]
         run_directory = self.root / "runs" / "english-lecture"
@@ -641,6 +658,8 @@ class JobManagerTest(unittest.TestCase):
         self.assertEqual(translation_job.kind, "translation")
         self.assertEqual(translation_job.payload["source_language"], "English")
         self.assertEqual(translation_job.payload["target_language"], "Chinese (Simplified)")
+        self.assertEqual(translation_job.payload["subject_name"], "Linguistics")
+        self.assertEqual(self.manager.job_subject(translation_job), (subject.id, "Linguistics"))
         self.assertFalse((run_directory / "translations").exists())
         self.assertEqual(
             self.manager._pending_model_requirements(),
@@ -677,6 +696,8 @@ class JobManagerTest(unittest.TestCase):
         self.assertEqual(completed.result["target_language"], "Chinese (Simplified)")
         self.assertTrue(Path(completed.result["markdown_path"]).is_file())
         self.assertTrue(Path(completed.result["pdf_path"]).is_file())
+        stored_names = {item.original_name for item in library.list_documents(subject.id)}
+        self.assertTrue({"Notes.chinese_simplified.md", "Notes.chinese_simplified.pdf"}.issubset(stored_names))
 
     def test_completed_lecture_can_queue_a_deep_review_for_one_slide(self) -> None:
         self.manager.set_auto_unload_enabled(False)
@@ -731,6 +752,8 @@ class JobManagerTest(unittest.TestCase):
         self.assertEqual(review_job.payload["config"]["note_generation_profile"], "deep")
         self.assertEqual(review_job.payload["config"]["ollama_thinking"], "high")
         self.assertTrue(review_job.payload["config"]["quality_review"])
+        self.assertEqual(review_job.payload["library_subject_name"], "Artificial Intelligence")
+        self.assertEqual(self.manager.job_subject(review_job), (subject.id, "Artificial Intelligence"))
         self.assertEqual(
             self.manager._pending_model_requirements(),
             [
@@ -793,11 +816,12 @@ No additional professor explanation was aligned with this slide.
         self.assertEqual(completed.result["slide_number"], 1)
         self.assertTrue(Path(completed.result["markdown_path"]).is_file())
         self.assertTrue(Path(completed.result["pdf_path"]).is_file())
-        self.assertEqual(len(completed.result["library_messages"]), 1)
+        self.assertEqual(len(completed.result["library_messages"]), 2)
         stored_names = {item.original_name for item in library.list_documents(subject.id)}
         self.assertEqual(
             stored_names,
             {
+                f"Slide_001_Review_{review_job.id[:8]}.md",
                 f"Slide_001_Review_{review_job.id[:8]}.pdf",
             },
         )

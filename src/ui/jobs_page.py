@@ -9,6 +9,7 @@ import streamlit as st
 
 from ..config import PipelineConfig
 from ..jobs import FINAL_STATUSES, PRIORITIES, JobError, JobManager, JobRecord
+from ..library import LibraryStore
 from ..ollama_runtime import OllamaUnloadReport
 
 
@@ -23,7 +24,13 @@ STATUS_ICONS = {
 }
 
 
-def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) -> None:
+def _render_job_actions(
+    job: JobRecord,
+    manager: JobManager,
+    key_prefix: str,
+    *,
+    compact: bool = False,
+) -> None:
     """Render lifecycle controls consistently on cards and the live log screen."""
     if job.status == "queued":
         labels = list(PRIORITIES)
@@ -33,11 +40,13 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
             labels,
             index=current_index,
             key=f"{key_prefix}_priority_{job.id}",
+            label_visibility="collapsed" if compact else "visible",
         )
-        apply_column, later_column, cancel_column = st.columns(3)
-        if apply_column.button(
-            "Update priority",
+        action_targets = (st, st, st) if compact else st.columns(3)
+        if action_targets[0].button(
+            "Apply" if compact else "Update priority",
             key=f"{key_prefix}_apply_priority_{job.id}",
+            help="Apply the selected priority" if compact else None,
             width="stretch",
         ):
             try:
@@ -45,9 +54,10 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
                 st.rerun()
             except JobError as exc:
                 st.error(str(exc))
-        if later_column.button(
-            "Do later",
+        if action_targets[1].button(
+            "Later" if compact else "Do later",
             key=f"{key_prefix}_defer_{job.id}",
+            help="Move this task to Later" if compact else None,
             width="stretch",
         ):
             try:
@@ -55,17 +65,18 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
                 st.rerun()
             except JobError as exc:
                 st.error(str(exc))
-        if cancel_column.button(
-            "Cancel permanently",
+        if action_targets[2].button(
+            "Cancel" if compact else "Cancel permanently",
             key=f"{key_prefix}_cancel_{job.id}",
+            help="Cancel this task permanently" if compact else None,
             width="stretch",
         ):
             manager.cancel_job(job.id)
             st.rerun()
     elif job.status in {"running", "waiting"}:
-        stop_column, cancel_column = st.columns(2)
-        if stop_column.button(
-            "Stop safely · do later",
+        action_targets = (st, st) if compact else st.columns(2)
+        if action_targets[0].button(
+            "Later" if compact else "Stop safely · do later",
             key=f"{key_prefix}_defer_{job.id}",
             disabled=job.defer_requested or job.cancel_requested,
             help="Finishes the current safe checkpoint, preserves transcript and completed slide notes, then moves the task to Later.",
@@ -76,10 +87,11 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
                 st.rerun()
             except JobError as exc:
                 st.error(str(exc))
-        if cancel_column.button(
-            "Cancel permanently",
+        if action_targets[1].button(
+            "Cancel" if compact else "Cancel permanently",
             key=f"{key_prefix}_cancel_{job.id}",
             disabled=job.cancel_requested,
+            help="Cancel this task permanently" if compact else None,
             width="stretch",
         ):
             manager.cancel_job(job.id)
@@ -92,12 +104,14 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
             labels,
             index=current_index,
             key=f"{key_prefix}_resume_priority_{job.id}",
+            label_visibility="collapsed" if compact else "visible",
         )
-        resume_column, cancel_column = st.columns(2)
-        if resume_column.button(
-            "Resume from checkpoints",
+        action_targets = (st, st) if compact else st.columns(2)
+        if action_targets[0].button(
+            "Resume" if compact else "Resume from checkpoints",
             key=f"{key_prefix}_resume_{job.id}",
             type="primary",
+            help="Resume from the saved checkpoints" if compact else None,
             width="stretch",
         ):
             try:
@@ -105,18 +119,20 @@ def _render_job_actions(job: JobRecord, manager: JobManager, key_prefix: str) ->
                 st.rerun()
             except JobError as exc:
                 st.error(str(exc))
-        if cancel_column.button(
-            "Cancel permanently",
+        if action_targets[1].button(
+            "Cancel" if compact else "Cancel permanently",
             key=f"{key_prefix}_cancel_{job.id}",
+            help="Cancel this task permanently" if compact else None,
             width="stretch",
         ):
             manager.cancel_job(job.id)
             st.rerun()
     elif job.status == "failed":
         if st.button(
-            "Start again with same parameters",
+            "Retry" if compact else "Start again with same parameters",
             key=f"{key_prefix}_retry_{job.id}",
             type="primary",
+            help="Start again with the same parameters" if compact else None,
             width="stretch",
         ):
             try:
@@ -213,16 +229,15 @@ def _render_ollama_controls(manager: JobManager) -> None:
             st.caption(last_cleanup)
 
 
-def _render_completed_files(job: JobRecord, key_prefix: str, *, preview: bool = False) -> None:
-    markdown_path = Path(str(job.result.get("markdown_path", "")))
-    pdf_path = Path(str(job.result.get("pdf_path", "")))
-    lecture_summary_pdf_path = Path(str(job.result.get("lecture_summary_pdf_path", "")))
+def _render_result_preview(job: JobRecord, key_prefix: str) -> None:
+    """Preview generated notes without duplicating File Manager downloads."""
     translated = job.kind == "translation"
     slide_review = job.kind == "slide_review"
     if translated:
         target = str(job.result.get("target_language", job.payload.get("target_language", "translation")))
         st.caption(f"Requested translation: English → {target}")
-    if preview and (translated or slide_review) and markdown_path.is_file():
+    markdown_path = Path(str(job.result.get("markdown_path", "")))
+    if (translated or slide_review) and markdown_path.is_file():
         try:
             result_text = markdown_path.read_text(encoding="utf-8")
             visible_text = result_text[:40_000]
@@ -237,117 +252,70 @@ def _render_completed_files(job: JobRecord, key_prefix: str, *, preview: bool = 
             )
         except (OSError, UnicodeDecodeError) as exc:
             st.warning(f"The generated notes exist but could not be previewed: {exc}")
-    download_columns = st.columns(3 if lecture_summary_pdf_path.is_file() else 2)
-    left, right = download_columns[:2]
-    if markdown_path.is_file():
-        left.download_button(
-            "Download translated Markdown" if translated else "Download deep review" if slide_review else "Download Markdown",
-            data=markdown_path.read_bytes(),
-            file_name=markdown_path.name,
-            mime="text/markdown",
-            key=f"{key_prefix}_md_{job.id}",
-            width="stretch",
-        )
-    if pdf_path.is_file():
-        right.download_button(
-            "Download translated PDF" if translated else "Download deep-review PDF" if slide_review else "Download PDF",
-            data=pdf_path.read_bytes(),
-            file_name=pdf_path.name,
-            mime="application/pdf",
-            key=f"{key_prefix}_pdf_{job.id}",
-            width="stretch",
-        )
-    if lecture_summary_pdf_path.is_file():
-        download_columns[2].download_button(
-            "Download general summary",
-            data=lecture_summary_pdf_path.read_bytes(),
-            file_name=lecture_summary_pdf_path.name,
-            mime="application/pdf",
-            key=f"{key_prefix}_lecture_summary_{job.id}",
-            width="stretch",
-        )
     if (translated or slide_review) and job.result.get("pdf_warning"):
         st.warning(str(job.result["pdf_warning"]))
 
 
-def _render_translation_request(job: JobRecord, manager: JobManager, key_prefix: str) -> None:
-    if job.kind != "lecture" or job.status != "completed":
+def _render_subject_file_action(
+    job: JobRecord,
+    subject: tuple[str, str] | None,
+    key_prefix: str,
+    *,
+    label: str,
+) -> None:
+    """Open the job's subject and lecture folder in the File Manager."""
+    if subject is None:
         return
-    with st.expander("Translate finished notes on demand", expanded=False):
-        st.caption(
-            "The canonical transcript and notes stay in English. Nothing is translated until you submit this request."
-        )
-        with st.form(f"{key_prefix}_translation_form_{job.id}"):
-            language_option = st.selectbox(
-                "Target language",
-                [
-                    "Chinese (Simplified)",
-                    "Chinese (Traditional)",
-                    "French",
-                    "Dutch",
-                    "German",
-                    "Spanish",
-                    "Japanese",
-                    "Korean",
-                    "Other language",
-                ],
-            )
-            custom_language = st.text_input(
-                "Other target language",
-                placeholder="e.g. Italian",
-                disabled=language_option != "Other language",
-            )
-            priority_label = st.selectbox(
-                "Translation priority",
-                list(PRIORITIES),
-                index=list(PRIORITIES).index("Normal"),
-            )
-            submitted = st.form_submit_button(
-                "Queue translation",
-                type="primary",
-                width="stretch",
-            )
-        if submitted:
-            target_language = custom_language.strip() if language_option == "Other language" else language_option
-            try:
-                translation_job = manager.enqueue_translation(
-                    job.id,
-                    target_language,
-                    priority=PRIORITIES[priority_label],
-                )
-                st.session_state["job_log_id"] = translation_job.id
-                st.session_state["job_log_notice"] = (
-                    f"Queued an on-demand {target_language} translation. The English originals are unchanged."
-                )
-                st.rerun()
-            except JobError as exc:
-                st.error(str(exc))
+    subject_id, _ = subject
+    if st.button(
+        label,
+        key=f"{key_prefix}_open_subject_{job.id}",
+        help="Open this job's files in the File Manager.",
+        width="stretch",
+    ):
+        folder_id = str(
+            job.result.get("library_folder_id", job.payload.get("library_folder_id", "")) or ""
+        ).strip()
+        st.session_state["library_open_subject"] = subject_id
+        if folder_id:
+            st.session_state[f"library_browse_folder_{subject_id}"] = folder_id
+        st.session_state["requested_workspace"] = "Library"
+        st.rerun()
 
 
-def _render_job(job: JobRecord, manager: JobManager, editable: bool = False) -> None:
+def _render_job(
+    job: JobRecord,
+    manager: JobManager,
+    subject_names: dict[str, str],
+    editable: bool = False,
+) -> None:
     icon = STATUS_ICONS.get(job.status, "•")
+    subject = manager.job_subject(job, subject_names)
     with st.container(border=True):
-        title_column, status_column = st.columns([3, 1])
-        title_column.markdown(f"**{icon} {job.title}**")
-        status_column.write(job.status.title())
-        st.caption(f"{job.priority_label} priority · {job.kind} · job {job.id[:8]}")
-        st.progress(max(0, min(job.progress, 100)), text=f"{job.progress}% · {job.stage.title()} — {job.message}")
+        details_column, actions_column = st.columns([6, 1.6], vertical_alignment="top")
+        with details_column:
+            st.markdown(f"**{icon} {job.title}**")
+            st.caption(
+                f"{job.status.title()} · {job.priority_label} priority · {job.kind} · "
+                f"Subject: {subject[1] if subject else 'Not saved to a subject'} · job {job.id[:8]}"
+            )
+            status_text = f"{job.progress}% · {job.stage.title()} — {job.message}"
+            if job.status in {"running", "waiting"}:
+                st.progress(max(0, min(job.progress, 100)), text=status_text)
+            else:
+                st.caption(status_text)
+            if job.error:
+                st.error(job.error)
 
-        if job.error:
-            st.error(job.error)
-        if st.button("Open processing log", key=f"open_job_log_{job.id}", width="stretch"):
-            st.session_state["job_log_id"] = job.id
-            st.rerun()
-        if job.result.get("library_messages"):
-            with st.expander("Library storage details"):
-                for message in job.result["library_messages"]:
-                    st.write(f"- {message}")
-        if job.status == "completed":
-            _render_completed_files(job, "job")
-            _render_translation_request(job, manager, "card")
-
-        if editable or job.status == "failed":
-            _render_job_actions(job, manager, "card")
+        with actions_column:
+            log_column, files_column = st.columns(2)
+            if log_column.button("Log", key=f"open_job_log_{job.id}", help="Open processing log", width="stretch"):
+                st.session_state["job_log_id"] = job.id
+                st.rerun()
+            with files_column:
+                _render_subject_file_action(job, subject, "card", label="Files")
+            if editable or job.status == "failed":
+                _render_job_actions(job, manager, "card", compact=True)
 
 
 def _transcript_text(payload: dict[str, object]) -> str:
@@ -393,18 +361,25 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
         st.success(notice)
     icon = STATUS_ICONS.get(job.status, "•")
     st.subheader(f"{icon} {job.title}")
+    subject = manager.job_subject(job)
     st.caption(
         f"{job.status.title()} · {job.priority_label} priority · job {job.id[:8]} · "
         "this screen refreshes every 2 seconds"
     )
+    st.caption(f"Subject · {subject[1] if subject else 'Not saved to a subject'}")
+    _render_subject_file_action(job, subject, "log", label="Open in File Manager")
     st.progress(max(0, min(job.progress, 100)), text=f"{job.progress}% · {job.stage.title()} — {job.message}")
     if job.error:
         st.error(job.error)
+    if job.result.get("library_messages"):
+        with st.expander("Storage details", expanded=False):
+            for message in job.result["library_messages"]:
+                st.write(f"- {message}")
     _render_job_actions(job, manager, "log")
 
     if job.kind in {"translation", "slide_review"} and job.status == "completed":
         st.subheader("Translated result" if job.kind == "translation" else "Deep slide review")
-        _render_completed_files(job, "log", preview=True)
+        _render_result_preview(job, "log")
 
     if job.kind == "lecture":
         st.subheader("Stored transcript")
@@ -438,82 +413,37 @@ def _render_job_log(manager: JobManager, job_id: str) -> None:
                     height=320,
                     disabled=True,
                 )
-                raw_transcript_path = manager.get_raw_transcript_path(job.id)
-                download_columns = st.columns(3 if raw_transcript_path else 2)
-                json_column, text_column = download_columns[:2]
-                json_column.download_button(
-                    "Download transcript JSON",
-                    data=transcript_bytes,
-                    file_name=transcript_path.name,
-                    mime="application/json",
-                    key=f"job_transcript_json_{job.id}",
-                    width="stretch",
-                )
-                text_column.download_button(
-                    "Download transcript text",
-                    data=transcript_text.encode("utf-8"),
-                    file_name=f"{transcript_path.stem}.txt",
-                    mime="text/plain",
-                    key=f"job_transcript_text_{job.id}",
-                    width="stretch",
-                )
-                if raw_transcript_path:
-                    download_columns[2].download_button(
-                        "Download raw Whisper JSON",
-                        data=raw_transcript_path.read_bytes(),
-                        file_name=raw_transcript_path.name,
-                        mime="application/json",
-                        key=f"job_raw_transcript_{job.id}",
-                        width="stretch",
-                    )
             except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
                 st.warning(f"The transcript exists but could not be opened yet: {exc}")
-        _render_translation_request(job, manager, "log")
 
     st.subheader("Processing timeline")
     events = manager.list_job_events(job.id)
     if not events:
         st.info("No processing events have been recorded yet.")
         return
-    event_payload = [
+    timeline_rows = [
         {
-            "id": event.id,
-            "created_at": event.created_at,
-            "level": event.level,
-            "stage": event.stage,
-            "progress": event.progress,
-            "message": event.message,
-            "data": event.data,
+            "Time": event.created_at.replace("T", " ").replace("+00:00", " UTC"),
+            "Stage": (event.stage or "task").replace("_", " ").title(),
+            "Progress": f"{event.progress}%",
+            "Level": event.level.title(),
+            "Message": event.message,
         }
-        for event in events
+        for event in reversed(events)
     ]
-    event_text = "\n".join(
-        f"{event.created_at} | {event.level.upper():7} | {event.progress:3}% | "
-        f"{event.stage or 'task'} | {event.message}"
-        for event in events
-    )
-    json_column, text_column = st.columns(2)
-    json_column.download_button(
-        "Download log JSON",
-        data=json.dumps(event_payload, indent=2, ensure_ascii=False).encode("utf-8"),
-        file_name=f"{job.id}_processing_log.json",
-        mime="application/json",
-        key=f"job_log_json_{job.id}",
+    st.dataframe(
+        timeline_rows,
+        hide_index=True,
         width="stretch",
+        height=min(360, max(80, 36 * (len(timeline_rows) + 1))),
+        column_config={
+            "Time": st.column_config.TextColumn(width="medium"),
+            "Stage": st.column_config.TextColumn(width="small"),
+            "Progress": st.column_config.TextColumn(width="small"),
+            "Level": st.column_config.TextColumn(width="small"),
+            "Message": st.column_config.TextColumn(width="large"),
+        },
     )
-    text_column.download_button(
-        "Download log text",
-        data=event_text.encode("utf-8"),
-        file_name=f"{job.id}_processing_log.txt",
-        mime="text/plain",
-        key=f"job_log_text_{job.id}",
-        width="stretch",
-    )
-    for event in reversed(events):
-        with st.container(border=True):
-            st.markdown(f"**{event.progress}% · {(event.stage or 'task').replace('_', ' ').title()}**")
-            st.write(event.message)
-            st.caption(f"{event.created_at} · {event.level.title()}")
 
 
 @st.fragment(run_every="2s")
@@ -552,6 +482,10 @@ def render_jobs(manager: JobManager) -> None:
     else:
         st.info("The local agent is inactive; queued lecture generation may use Qwen when it reaches that stage.")
     jobs = manager.list_jobs()
+    subject_names = {
+        subject.id: subject.name
+        for subject in LibraryStore(manager.project_root / "library").list_subjects()
+    }
     active = [job for job in jobs if job.status in {"running", "waiting"}]
     planned = [job for job in jobs if job.status == "queued"]
     deferred = [job for job in jobs if job.status == "deferred"]
@@ -569,19 +503,19 @@ def render_jobs(manager: JobManager) -> None:
         if not active:
             st.info("No task is running right now.")
         for job in active:
-            _render_job(job, manager, editable=True)
+            _render_job(job, manager, subject_names, editable=True)
     with planned_tab:
         if not planned:
             st.info("No tasks are waiting in the queue.")
         for job in planned:
-            _render_job(job, manager, editable=True)
+            _render_job(job, manager, subject_names, editable=True)
     with deferred_tab:
         if not deferred:
             st.info("Tasks stopped for future processing will appear here with their saved checkpoints.")
         for job in deferred:
-            _render_job(job, manager, editable=True)
+            _render_job(job, manager, subject_names, editable=True)
     with history_tab:
         if not history:
             st.info("Completed, failed, and cancelled tasks will appear here.")
         for job in history:
-            _render_job(job, manager)
+            _render_job(job, manager, subject_names)

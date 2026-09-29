@@ -11,7 +11,7 @@ import re
 import shutil
 import sqlite3
 import threading
-from typing import Any, Iterator
+from typing import Any, Iterator, Mapping
 from urllib.parse import urlparse
 from uuid import uuid4
 
@@ -291,9 +291,11 @@ class JobManager:
         )
         title = identity.display_title
         library_folder_id: str | None = None
+        subject_name = ""
         if subject_id:
             try:
                 library = LibraryStore(self.project_root / "library")
+                subject_name = library.get_subject(subject_id).name
                 library_folder_id = ensure_lecture_folder(library, subject_id, title).id
             except LibraryError as exc:
                 raise JobError(f"Could not create the lecture folder: {exc}") from exc
@@ -312,6 +314,7 @@ class JobManager:
             "lecture_name": identity.base_name,
             "source_lecture_title": lecture_title,
             "subject_id": subject_id,
+            "subject_name": subject_name,
             "library_folder_id": library_folder_id,
             "resume_run_directory": resume_run_directory,
         }
@@ -375,12 +378,19 @@ class JobManager:
 
         job_id = uuid4().hex
         (self.root / job_id).mkdir(parents=True, exist_ok=False)
+        source_subject = self.job_subject(source_job)
         payload = {
             "config": asdict(config),
             "source_job_id": source_job.id,
             "source_markdown_path": str(source_path),
             "source_language": "English",
             "target_language": target_language,
+            "subject_id": source_subject[0] if source_subject else None,
+            "subject_name": source_subject[1] if source_subject else "",
+            "library_folder_id": str(
+                source_job.result.get("library_folder_id", source_job.payload.get("library_folder_id", ""))
+                or ""
+            ),
         }
         title = f"Translate {source_job.title} → {target_language}"
         now = self._timestamp()
@@ -464,10 +474,11 @@ class JobManager:
 
         number = int(selected["slide"])
         slide_title = str(selected.get("title", f"Slide {number}")).strip() or f"Slide {number}"
+        library_subject_name = ""
         if library_subject_id:
             library = LibraryStore(self.project_root / "library")
             try:
-                library.get_subject(library_subject_id)
+                library_subject_name = library.get_subject(library_subject_id).name
                 if library_folder_id and library.get_folder(library_folder_id).subject_id != library_subject_id:
                     raise JobError("The selected lecture folder does not belong to the library subject.")
             except LibraryError as exc:
@@ -481,6 +492,7 @@ class JobManager:
             "slide_number": number,
             "slide_title": slide_title,
             "library_subject_id": library_subject_id,
+            "library_subject_name": library_subject_name,
             "library_folder_id": library_folder_id,
             "lecture_name": lecture_name,
         }
@@ -530,6 +542,34 @@ class JobManager:
             raise JobError(f"Could not stage {source_path.name}: {exc}") from exc
         return destination
 
+    def _store_job_outputs_in_library(
+        self,
+        subject_id: str | None,
+        folder_id: str | None,
+        candidates: list[tuple[Path | None, str]],
+    ) -> list[str]:
+        """Store user-facing generated files so downloads remain in File Manager."""
+        if not subject_id:
+            return []
+        library = LibraryStore(self.project_root / "library")
+        messages: list[str] = []
+        for path, filename in candidates:
+            if path is None or not path.is_file():
+                continue
+            try:
+                stored = library.add_document(
+                    subject_id,
+                    path,
+                    filename=filename,
+                    folder_id=folder_id or None,
+                )
+                messages.append(f"Saved {stored.original_name} to the File Manager.")
+            except DuplicateDocumentError as exc:
+                messages.append(str(exc))
+            except LibraryError as exc:
+                messages.append(f"Could not add {filename} to the File Manager: {exc}")
+        return messages
+
     def list_jobs(self, limit: int = 100) -> list[JobRecord]:
         with self._database_lock, self._connect() as connection:
             rows = connection.execute(
@@ -543,7 +583,6 @@ class JobManager:
                         WHEN 'deferred' THEN 3
                         ELSE 4
                     END,
-                    priority ASC,
                     created_at DESC
                 LIMIT ?
                 """,
@@ -557,6 +596,48 @@ class JobManager:
         if row is None:
             raise JobError("The selected job no longer exists.")
         return self._job_from_row(row)
+
+    def job_subject(
+        self,
+        job: JobRecord,
+        subject_names: Mapping[str, str] | None = None,
+    ) -> tuple[str, str] | None:
+        """Return the library subject a job belongs to, including derived jobs.
+
+        New jobs retain the subject name as a historical snapshot.  For older
+        jobs, and for renamed subjects, the current library name is preferred.
+        Translation and slide-review jobs inherit their source lecture's
+        subject when they do not have their own library destination.
+        """
+        visited: set[str] = set()
+        current = job
+        while current.id not in visited:
+            visited.add(current.id)
+            payload = current.payload
+            for id_key, name_key in (
+                ("subject_id", "subject_name"),
+                ("library_subject_id", "library_subject_name"),
+            ):
+                subject_id = str(payload.get(id_key) or "").strip()
+                if not subject_id:
+                    continue
+                saved_name = str(payload.get(name_key) or "").strip()
+                if subject_names is not None:
+                    return subject_id, subject_names.get(subject_id, saved_name or "Unavailable subject")
+                try:
+                    subject = LibraryStore(self.project_root / "library").get_subject(subject_id)
+                    return subject.id, subject.name
+                except LibraryError:
+                    return subject_id, saved_name or "Unavailable subject"
+
+            source_job_id = str(payload.get("source_job_id") or "").strip()
+            if not source_job_id:
+                break
+            try:
+                current = self.get_job(source_job_id)
+            except JobError:
+                break
+        return None
 
     def list_job_events(self, job_id: str, limit: int | None = None) -> list[JobEvent]:
         """Return durable events in chronological order, without truncation by default."""
@@ -1392,24 +1473,14 @@ class JobManager:
             pdf_path = None
         self._raise_if_interrupted(job.id)
 
-        library_messages: list[str] = []
-        if payload.get("library_subject_id"):
-            library = LibraryStore(self.project_root / "library")
-            library_candidates = [(pdf_path, ".pdf")] if pdf_path is not None else []
-            for path, suffix in library_candidates:
-                filename = f"Slide_{number:03d}_Review_{job.id[:8]}{suffix}"
-                try:
-                    stored = library.add_document(
-                        str(payload["library_subject_id"]),
-                        path,
-                        filename=filename,
-                        folder_id=str(payload.get("library_folder_id") or "") or None,
-                    )
-                    library_messages.append(f"Saved {stored.original_name} to the lecture folder.")
-                except DuplicateDocumentError as exc:
-                    library_messages.append(str(exc))
-                except LibraryError as exc:
-                    library_messages.append(f"Could not add {filename} to the lecture folder: {exc}")
+        library_messages = self._store_job_outputs_in_library(
+            str(payload.get("library_subject_id") or "") or None,
+            str(payload.get("library_folder_id") or "") or None,
+            [
+                (markdown_path, f"Slide_{number:03d}_Review_{job.id[:8]}.md"),
+                (pdf_path, f"Slide_{number:03d}_Review_{job.id[:8]}.pdf"),
+            ],
+        )
 
         result_payload = {
             "source_job_id": source_job.id,
@@ -1462,7 +1533,9 @@ class JobManager:
         if source_job.kind != "lecture" or source_job.status != "completed":
             raise JobError("The source lecture must remain completed before translation can run.")
 
-        language_slug = safe_filename(target_language.casefold().replace(" ", "_"), "translation")
+        language_slug = re.sub(
+            r"_+", "_", safe_filename(target_language.casefold().replace(" ", "_"), "translation")
+        ).strip("_") or "translation"
         translation_dir = source_path.parent / "translations"
         markdown_path = translation_dir / f"{source_path.stem}.{language_slug}.md"
         pdf_path: Path | None = markdown_path.with_suffix(".pdf")
@@ -1521,6 +1594,15 @@ class JobManager:
             pdf_path = None
         self._raise_if_interrupted(job.id)
 
+        library_messages = self._store_job_outputs_in_library(
+            str(payload.get("subject_id") or "") or None,
+            str(payload.get("library_folder_id") or "") or None,
+            [
+                (markdown_path, f"Notes.{language_slug}.md"),
+                (pdf_path, f"Notes.{language_slug}.pdf"),
+            ],
+        )
+
         result_payload = {
             "source_job_id": source_job.id,
             "source_markdown_path": str(source_path),
@@ -1529,6 +1611,8 @@ class JobManager:
             "markdown_path": str(markdown_path),
             "pdf_path": str(pdf_path) if pdf_path is not None else "",
             "pdf_warning": pdf_warning,
+            "library_messages": library_messages,
+            "library_folder_id": str(payload.get("library_folder_id") or ""),
         }
         now = self._timestamp()
         message = f"{target_language} translation is ready"
