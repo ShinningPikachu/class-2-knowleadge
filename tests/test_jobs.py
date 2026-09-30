@@ -434,6 +434,23 @@ class JobManagerTest(unittest.TestCase):
         worker.join(timeout=2)
         self.assertEqual(self.manager.get_job(job.id).status, "running")
 
+    def test_codex_agent_does_not_pause_lecture_qwen_slot_or_reserve_an_ollama_model(self) -> None:
+        job = self._enqueue("Lecture", PRIORITIES["Normal"])
+        claimed = self.manager._claim_next_job()
+        self.assertEqual(claimed.id, job.id)  # type: ignore[union-attr]
+        config = PipelineConfig(agent_provider="codex")
+        self.manager.set_agent_active(True, config)
+
+        with self.manager.lecture_qwen_slot(job.id):
+            self.assertEqual(self.manager.get_job(job.id).status, "running")
+
+        required = self.manager._models_needed_by_pending_work(
+            config.ollama_host,
+            [config.llm_model, config.embedding_model],
+        )
+        self.assertEqual(required, [config.llm_model, config.embedding_model])
+        self.assertFalse(self.manager.is_ollama_agent_active())
+
     def test_agent_activation_is_persisted(self) -> None:
         self.manager.set_agent_active(True)
         reopened = JobManager(self.root, autostart=False)

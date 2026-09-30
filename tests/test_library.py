@@ -247,6 +247,26 @@ class LibraryAgentTest(unittest.TestCase):
         messages = client.request["messages"]  # type: ignore[index]
         self.assertIn("untrusted reference material", messages[0]["content"])  # type: ignore[index]
         self.assertIn("[S1]", messages[1]["content"])  # type: ignore[index]
+        self.assertEqual(client.request["think"], "high")
+
+    def test_reasoning_levels_map_to_ollama_thinking_effort(self) -> None:
+        class FakeClient:
+            def __init__(self) -> None:
+                self.request = None
+
+            def chat(self, **kwargs: object) -> dict[str, dict[str, str]]:
+                self.request = kwargs
+                return {"message": {"content": "Grounded answer [S1]."}}
+
+        result = SearchResult("doc", "notes.txt", "subject", "AI", "Text", "Evidence", 1.0)
+        for level, expected_thinking in (("light", "low"), ("balanced", "medium"), ("deep", "high")):
+            with self.subTest(level=level):
+                client = FakeClient()
+                answer = LibraryAgent(
+                    PipelineConfig(agent_reasoning_level=level), client=client
+                ).answer("Question?", [result])
+                self.assertEqual(answer, "Grounded answer [S1].")
+                self.assertEqual(client.request["think"], expected_thinking)  # type: ignore[index]
 
     def test_answer_holds_the_configured_qwen_guard(self) -> None:
         class FakeClient:
@@ -302,6 +322,7 @@ class LibraryAgentTest(unittest.TestCase):
         self.assertEqual(plan.action, "rename_document")
         self.assertEqual(plan.document_id, document.id)
         self.assertEqual(plan.new_name, "week-1.txt")
+        self.assertEqual(agent._client.request["think"], "high")  # type: ignore[attr-defined]
         self.assertTrue(agent.should_plan_action("Please move notes.txt to Networks"))
         self.assertTrue(agent.should_plan_action("Change the file name from notes.txt to week-1.txt"))
 

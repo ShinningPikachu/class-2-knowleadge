@@ -25,6 +25,16 @@ class PipelineConfig:
     ollama_num_ctx: int = 16_384
     ollama_keep_alive: str = "45m"
     ollama_thinking: str | bool = "high"
+    # The interactive library agent has its own user-facing effort control.
+    # It maps to Ollama's low/medium/high thinking levels without changing the
+    # lecture pipeline's intentionally separate reasoning configuration.
+    agent_provider: str = "ollama"
+    agent_reasoning_level: str = "deep"
+    # Codex runs through the locally installed CLI and its existing sign-in.
+    # The model is optional: an empty value lets Codex use its configured default.
+    codex_executable: str = "codex"
+    codex_model: str = ""
+    codex_timeout_seconds: int = 180
     quality_review: bool = True
     # Fast baseline notes use one bounded, non-thinking call per slide. Deep
     # mode is intentionally opt-in because it adds thinking and a second audit.
@@ -51,6 +61,11 @@ class PipelineConfig:
     semantic_alignment_threshold: float = 0.20
     max_slide_context_chars: int = 28_000
     enable_ocr: bool = True
+
+    @property
+    def agent_thinking(self) -> str:
+        """Return the Ollama thinking setting for the selected agent effort."""
+        return {"light": "low", "balanced": "medium", "deep": "high"}[self.agent_reasoning_level]
 
     def validate(self) -> None:
         """Fail early on values that would otherwise cause subtle errors."""
@@ -79,6 +94,14 @@ class PipelineConfig:
             raise ValueError("ollama_num_ctx must be at least 4096 for grounded lecture notes.")
         if not isinstance(self.ollama_thinking, bool) and self.ollama_thinking not in {"low", "medium", "high"}:
             raise ValueError("ollama_thinking must be a boolean or one of: low, medium, high.")
+        if self.agent_provider not in {"ollama", "codex"}:
+            raise ValueError("agent_provider must be 'ollama' or 'codex'.")
+        if self.agent_reasoning_level not in {"light", "balanced", "deep"}:
+            raise ValueError("agent_reasoning_level must be 'light', 'balanced', or 'deep'.")
+        if not self.codex_executable.strip():
+            raise ValueError("A Codex executable name or path is required.")
+        if not 30 <= self.codex_timeout_seconds <= 900:
+            raise ValueError("codex_timeout_seconds must be between 30 and 900.")
         if self.note_generation_profile not in {"fast", "deep"}:
             raise ValueError("note_generation_profile must be 'fast' or 'deep'.")
         if not 512 <= self.note_max_output_tokens <= 8_192:

@@ -17,6 +17,14 @@ import streamlit as st
 
 from ..jobs import PRIORITIES, JobError, JobManager, JobRecord
 from ..library import LibraryDocument, LibraryError, LibraryFolder, LibraryStore
+from ..voice import (
+    MAX_NARRATION_CHARS,
+    SYSTEM_DEFAULT_VOICE,
+    VoiceNarrationError,
+    local_voice_options,
+    prepare_narration,
+    synthesize_speech,
+)
 from .audio_transcript_component import render_audio_transcript
 from .common import format_size, render_search_results, subject_lookup
 from .file_manager_component import file_icon, render_file_manager
@@ -455,6 +463,137 @@ def _render_pdf(document: LibraryDocument, *, full_page: bool = False) -> None:
         st.error(f"Could not render this PDF preview: {exc}")
 
 
+@st.cache_data(show_spinner=False)
+def _pdf_page_text(path: str, modified_ns: int, page_number: int) -> str:
+    """Extract a PDF page's readable content for local narration."""
+    del modified_ns
+    import fitz
+
+    with fitz.open(path) as pdf:
+        return str(pdf[page_number - 1].get_text("text"))
+
+
+@st.cache_data(show_spinner=False)
+def _pdf_full_text(path: str, modified_ns: int) -> str:
+    """Extract the complete text of a generated lecture-summary PDF."""
+    del modified_ns
+    import fitz
+
+    with fitz.open(path) as pdf:
+        return "\n\n".join(str(page.get_text("text")) for page in pdf)
+
+
+def _is_summary_pdf(document: LibraryDocument) -> bool:
+    return document.stored_path.suffix.lower() == ".pdf" and "summary" in document.original_name.casefold()
+
+
+def _voice_audio_key(key: str, narration: str, voice: str) -> str:
+    digest = hashlib.sha256(f"{voice}\0{narration}".encode("utf-8")).hexdigest()[:16]
+    return f"library_voice_audio_{key}_{digest}"
+
+
+def _render_voice_narration(
+    narration: str,
+    *,
+    key: str,
+    button_label: str = "🔊",
+    button_target: Any | None = None,
+    help_text: str = "Explain this content aloud with a local voice.",
+) -> None:
+    """Offer local TTS playback without storing narration files in the library."""
+    target = button_target or st
+    voices = local_voice_options()
+    if not voices:
+        target.button(
+            button_label,
+            disabled=True,
+            help="No local voice engine is available on this computer.",
+            key=f"library_voice_unavailable_{key}",
+            width="stretch",
+        )
+        return
+    with target.popover(
+        button_label,
+        help=help_text,
+        width="stretch",
+    ):
+        st.caption("Narration is generated locally and is not uploaded or saved to your library.")
+        voice = st.selectbox(
+            "Voice",
+            voices,
+            key=f"library_voice_choice_{key}",
+        )
+        try:
+            prepared, truncated = prepare_narration(narration)
+        except VoiceNarrationError as exc:
+            st.info(str(exc))
+            return
+        if truncated:
+            st.warning(
+                f"This narration is limited to {MAX_NARRATION_CHARS:,} characters. "
+                "Use the next PDF page to continue."
+            )
+        audio_key = _voice_audio_key(key, prepared, voice)
+        if st.button(
+            "Generate narration",
+            type="primary",
+            key=f"library_generate_voice_{key}",
+            width="stretch",
+        ):
+            try:
+                with st.spinner("Generating local narration…"):
+                    st.session_state[audio_key] = synthesize_speech(prepared, voice)
+            except VoiceNarrationError as exc:
+                st.error(str(exc))
+        audio = st.session_state.get(audio_key)
+        if isinstance(audio, bytes):
+            st.audio(audio, format="audio/wav")
+            st.download_button(
+                "Download WAV",
+                data=audio,
+                file_name="class-knowledge-explanation.wav",
+                mime="audio/wav",
+                key=f"library_download_voice_{key}",
+                width="stretch",
+            )
+
+
+def _render_pdf_voice_control(document: LibraryDocument, *, full_page: bool) -> None:
+    """Add a page-level listener, plus whole-document playback for summaries."""
+    try:
+        modified_ns = document.stored_path.stat().st_mtime_ns
+        page_count = _pdf_page_count(str(document.stored_path), modified_ns)
+        if page_count < 1:
+            return
+        page_key = f"current_library_pdf_page_{document.id}"
+        selected_page = int(st.session_state.get(page_key, 1))
+        selected_page = min(max(selected_page, 1), page_count)
+        if full_page and page_count > 1:
+            selected_page = st.selectbox(
+                "Narration page",
+                list(range(1, page_count + 1)),
+                index=selected_page - 1,
+                format_func=lambda page: f"Page {page}",
+                key=f"library_voice_pdf_page_{document.id}",
+            )
+        page_text = _pdf_page_text(str(document.stored_path), modified_ns, selected_page)
+        _render_voice_narration(
+            page_text,
+            key=f"pdf_page_{document.id}_{selected_page}",
+            button_label="🔊 Listen to page",
+            help_text=f"Explain page {selected_page} aloud with a local voice.",
+        )
+        if _is_summary_pdf(document):
+            _render_voice_narration(
+                _pdf_full_text(str(document.stored_path), modified_ns),
+                key=f"pdf_summary_{document.id}",
+                button_label="🔊 Listen to complete summary",
+                help_text="Explain the complete summary aloud with a local voice.",
+            )
+    except (OSError, ValueError, RuntimeError) as exc:
+        st.caption(f"Voice narration is unavailable for this PDF: {exc}")
+
+
 def _read_text_preview(path: Path, maximum_bytes: int = 750_000) -> tuple[str, bool]:
     with path.open("rb") as source:
         data = source.read(maximum_bytes + 1)
@@ -500,6 +639,12 @@ def _render_powerpoint_preview(document: LibraryDocument) -> None:
                     st.image(images[slide_number], width="stretch")
                 st.markdown("#### Slide content")
                 st.text("\n\n".join(parts) if parts else "(No extractable text on this slide.)")
+                if parts:
+                    _render_voice_narration(
+                        f"Slide {slide_number}. {title}. {' '.join(parts)}",
+                        key=f"powerpoint_slide_{document.id}_{slide_number}",
+                        button_label="🔊 Explain this slide",
+                    )
     except Exception as exc:
         st.warning(f"Could not preview this PowerPoint file: {exc}")
 
@@ -776,10 +921,19 @@ def _render_slide_document(
             _render_current_slide(document, slide)
 
     def render_summary() -> None:
-        summary_title, review_button, translation_button = st.columns([5, 1, 1], vertical_alignment="center")
+        summary_title, voice_button, review_button, translation_button = st.columns(
+            [4, 1, 1, 1], vertical_alignment="center"
+        )
         summary_title.markdown("#### Slide summary")
+        narration = f"Slide {selected_number}. {slide.get('title', '')}. {_exact_slide_summary(bundle, slide)}"
         summary = html.escape(_exact_slide_summary(bundle, slide))
         st.markdown(f'<div class="lecture-slide-summary">{summary}</div>', unsafe_allow_html=True)
+        _render_voice_narration(
+            narration,
+            key=f"slide_{document.id}_{selected_number}",
+            button_target=voice_button,
+            help_text="Explain this slide summary aloud with a local voice.",
+        )
         _render_deep_review_control(
             manager,
             document,
@@ -856,6 +1010,7 @@ def _render_document_content(
     try:
         if suffix == ".pdf":
             _render_pdf(document, full_page=full_page)
+            _render_pdf_voice_control(document, full_page=full_page)
         elif suffix in AUDIO_SUFFIXES:
             _render_audio_document(document, audio_bundle, full_page=full_page)
         elif suffix in VIDEO_SUFFIXES:

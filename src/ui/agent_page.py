@@ -2,13 +2,29 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 import streamlit as st
 
 from ..config import PipelineConfig
+from ..codex_agent import CodexLibraryAgent
 from ..jobs import JobManager
 from ..library import LibraryDocument, LibraryError, LibraryStore, Subject
 from ..library_agent import AgentPlan, LibraryAgent, LibraryAgentError
 from .common import subject_lookup
+
+
+REASONING_LEVELS = {
+    "Light — fast for small tasks": "light",
+    "Balanced — more careful": "balanced",
+    "Deep — slowest, most thorough": "deep",
+}
+REASONING_LEVEL_LABELS = {value: label for label, value in REASONING_LEVELS.items()}
+AGENT_PROVIDERS = {
+    "Local Ollama — private and offline": "ollama",
+    "Codex — signed-in account": "codex",
+}
+AGENT_PROVIDER_LABELS = {value: label for label, value in AGENT_PROVIDERS.items()}
 
 
 def _messages() -> list[dict[str, object]]:
@@ -99,7 +115,11 @@ def _handle_prompt(
     manager: JobManager,
 ) -> tuple[str, list[dict[str, str]]]:
     config.validate()
-    agent = LibraryAgent(config, chat_guard=lambda: manager.agent_qwen_slot(config))
+    agent = (
+        CodexLibraryAgent(config)
+        if config.agent_provider == "codex"
+        else LibraryAgent(config, chat_guard=lambda: manager.agent_qwen_slot(config))
+    )
     if agent.should_plan_action(prompt):
         plan = agent.plan(prompt, subjects, documents)
         if plan.action in {"rename_document", "move_document", "create_subject"}:
@@ -125,25 +145,73 @@ def _handle_prompt(
 
 
 def render_agent(library: LibraryStore, config: PipelineConfig, manager: JobManager) -> None:
-    st.title("🤖 Local Library Agent")
+    st.title("🤖 Library Agent")
     st.caption("Activate the agent only when you need cited explanations or a simple library job.")
+    selected_provider = st.selectbox(
+        "Agent provider",
+        options=list(AGENT_PROVIDERS),
+        index=list(AGENT_PROVIDERS).index(AGENT_PROVIDER_LABELS[config.agent_provider]),
+        help="Ollama stays on this computer. Codex uses the signed-in local Codex CLI.",
+    )
+    agent_config = replace(config, agent_provider=AGENT_PROVIDERS[selected_provider])
+    codex_ready = True
+    if agent_config.agent_provider == "codex":
+        codex_left, codex_right = st.columns(2)
+        executable = codex_left.text_input(
+            "Codex executable",
+            value=agent_config.codex_executable,
+            help="Use `codex` when it is on PATH, or provide the full executable path.",
+        )
+        model = codex_right.text_input(
+            "Codex model (optional)",
+            value=agent_config.codex_model,
+            help="Leave blank to let Codex choose its default model for your signed-in account.",
+        )
+        agent_config = replace(
+            agent_config,
+            codex_executable=executable.strip(),
+            codex_model=model.strip(),
+        )
+        codex_ready, codex_status = CodexLibraryAgent.status(agent_config.codex_executable)
+        (st.success if codex_ready else st.warning)(codex_status)
+        st.caption(
+            "Codex receives only the current question and retrieved excerpts. It runs in an empty, "
+            "read-only temporary workspace and cannot edit your library."
+        )
+    else:
+        selected_level = st.select_slider(
+            "Reasoning level",
+            options=list(REASONING_LEVELS),
+            value=REASONING_LEVEL_LABELS[agent_config.agent_reasoning_level],
+            help=(
+                "Light uses less model reasoning for quick, simple requests. "
+                "Balanced and Deep use progressively more reasoning and can take longer."
+            ),
+        )
+        agent_config = replace(agent_config, agent_reasoning_level=REASONING_LEVELS[selected_level])
     scheduler_active = manager.is_agent_active()
     if "agent_active_toggle" not in st.session_state:
         st.session_state["agent_active_toggle"] = scheduler_active
     active = st.toggle(
-        "Activate local agent",
+        "Activate agent",
         key="agent_active_toggle",
-        help="The local model is contacted only after activation and when you submit a request.",
+        help="The selected provider is contacted only after activation and when you submit a request.",
+        disabled=agent_config.agent_provider == "codex" and not codex_ready and not scheduler_active,
     )
-    if active != scheduler_active:
-        manager.set_agent_active(active, config if active else None)
+    if active:
+        manager.set_agent_active(True, agent_config)
+    elif scheduler_active:
+        manager.set_agent_active(False)
     if not active:
-        st.info("The agent is off. Your library remains available, but no local model is running for this screen.")
+        st.info("The agent is off. Your library remains available, but no model is running for this screen.")
         return
-    st.success(
-        "Agent priority is active. Background transcription may continue, while lecture Qwen generation "
-        "waits safely between model calls."
-    )
+    if agent_config.agent_provider == "codex":
+        st.success("Codex is active in read-only mode. Lecture Qwen generation can continue normally.")
+    else:
+        st.success(
+            "Agent priority is active. Background transcription may continue, while lecture Qwen generation "
+            "waits safely between model calls."
+        )
 
     subjects = library.list_subjects()
     if not subjects:
@@ -184,7 +252,7 @@ def render_agent(library: LibraryStore, config: PipelineConfig, manager: JobMana
             try:
                 answer, sources = _handle_prompt(
                     library,
-                    config,
+                    agent_config,
                     prompt,
                     scope,
                     subjects,

@@ -471,11 +471,14 @@ def render_jobs(manager: JobManager) -> None:
 
     agent_active = manager.is_agent_active()
     if agent_active:
-        st.warning(
-            "The local agent is active. Transcription may continue, but lecture Qwen generation waits "
-            "between model calls until the agent is deactivated."
-        )
-        if st.button("Deactivate local agent", width="stretch"):
+        if manager.is_ollama_agent_active():
+            st.warning(
+                "The local agent is active. Transcription may continue, but lecture Qwen generation waits "
+                "between model calls until the agent is deactivated."
+            )
+        else:
+            st.info("The Codex agent is active in read-only mode; local Qwen lecture generation is not paused.")
+        if st.button("Deactivate agent", width="stretch"):
             manager.set_agent_active(False)
             st.session_state["agent_active_toggle"] = False
             st.rerun()

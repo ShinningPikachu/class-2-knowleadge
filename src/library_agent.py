@@ -145,7 +145,7 @@ USER REQUEST:
                     ],
                     format=self.PLAN_SCHEMA,
                     options={"temperature": 0.0, "num_ctx": self.config.ollama_num_ctx},
-                    think=False,
+                    think=self.config.agent_thinking,
                     keep_alive=self.config.ollama_keep_alive,
                 )
             message = response.get("message") if isinstance(response, dict) else getattr(response, "message", None)
@@ -220,7 +220,7 @@ Answer with inline [S#] citations. Do not use outside knowledge."""
                         {"role": "user", "content": prompt},
                     ],
                     options={"temperature": 0.0, "num_ctx": self.config.ollama_num_ctx},
-                    think=self.config.ollama_thinking,
+                    think=self.config.agent_thinking,
                     keep_alive=self.config.ollama_keep_alive,
                 )
             message = response.get("message") if isinstance(response, dict) else getattr(response, "message", None)

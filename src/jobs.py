@@ -977,6 +977,11 @@ class JobManager:
         with self._condition:
             return self._agent_active
 
+    def is_ollama_agent_active(self) -> bool:
+        """Return whether the active interactive agent reserves local Qwen."""
+        with self._condition:
+            return self._agent_active and self._agent_uses_ollama_locked()
+
     def is_auto_unload_enabled(self) -> bool:
         with self._condition:
             return self._auto_unload_ollama
@@ -1058,6 +1063,7 @@ class JobManager:
             if (
                 was_active
                 and not active
+                and self._agent_uses_ollama_locked()
                 and self._auto_unload_ollama
                 and self._last_agent_config is not None
                 and self._qwen_owner is None
@@ -1119,7 +1125,9 @@ class JobManager:
         }[qwen_stage]
         with self._condition:
             while (
-                self._agent_active or self._qwen_owner is not None or self._ollama_maintenance
+                (self._agent_active and self._agent_uses_ollama_locked())
+                or self._qwen_owner is not None
+                or self._ollama_maintenance
             ) and not self._stop_requested:
                 self._raise_if_interrupted(job_id)
                 if not waiting_marked:
@@ -1881,6 +1889,11 @@ class JobManager:
             )
         ]
 
+    def _agent_uses_ollama_locked(self) -> bool:
+        """Return the active agent provider while the caller holds ``_condition``."""
+        # Preserve legacy state created before provider selection existed.
+        return self._last_agent_config is None or self._last_agent_config.agent_provider == "ollama"
+
     def _pending_model_requirements(self) -> list[tuple[str, str]]:
         requirements: list[tuple[str, str]] = []
         with self._database_lock, self._connect() as connection:
@@ -1897,7 +1910,11 @@ class JobManager:
             if str(row["kind"]) != "translation":
                 requirements.append((config.ollama_host, config.embedding_model))
         with self._condition:
-            if self._agent_active and self._last_agent_config is not None:
+            if (
+                self._agent_active
+                and self._last_agent_config is not None
+                and self._agent_uses_ollama_locked()
+            ):
                 requirements.append(
                     (self._last_agent_config.ollama_host, self._last_agent_config.llm_model)
                 )

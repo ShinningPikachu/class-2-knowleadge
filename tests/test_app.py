@@ -107,8 +107,8 @@ class StreamlitAppTest(unittest.TestCase):
 
                 workspace.set_value("Agent").run()
                 self.assertFalse(list(app.exception))
-                self.assertIn("🤖 Local Library Agent", [item.value for item in app.title])
-                active_agent = next(item for item in app.toggle if item.label == "Activate local agent")
+                self.assertIn("🤖 Library Agent", [item.value for item in app.title])
+                active_agent = next(item for item in app.toggle if item.label == "Activate agent")
                 active_agent.set_value(True).run()
                 self.assertFalse(list(app.exception))
                 agent_expanders = [item.label for item in app.expander]
