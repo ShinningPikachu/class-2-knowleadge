@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+import os
 from pathlib import Path
 import json
 import shutil
@@ -43,11 +44,11 @@ Return only data that matches the supplied JSON schema."""
         self._runner = runner or subprocess.run
 
     @staticmethod
-    def status(executable: str) -> tuple[bool, str]:
+    def status() -> tuple[bool, str]:
         """Check whether an installed Codex CLI is ready for this user account."""
-        resolved = CodexLibraryAgent._resolve_executable(executable)
+        resolved = CodexLibraryAgent._resolve_executable()
         if resolved is None:
-            return False, "Codex was not found. Set the installed Codex executable path."
+            return False, "Codex was not found. Install or update Codex, then restart this app."
         try:
             result = subprocess.run(
                 [resolved, "login", "status"],
@@ -145,11 +146,9 @@ Answer with inline [S#] citations. Do not use outside knowledge."""
             raise LibraryAgentError(f"Codex could not answer this library question: {exc}") from exc
 
     def _run(self, prompt: str, *, output_schema: dict[str, Any] | None = None) -> str:
-        executable = self._resolve_executable(self.config.codex_executable)
+        executable = self._resolve_executable()
         if executable is None:
-            raise LibraryAgentError(
-                "Codex was not found. Install it or set the full path to its executable in the Agent workspace."
-            )
+            raise LibraryAgentError("Codex was not found. Install or update Codex, then restart this app.")
         with tempfile.TemporaryDirectory(prefix="class-knowledge-codex-") as directory:
             workspace = Path(directory)
             output_path = workspace / "last_message.txt"
@@ -169,6 +168,7 @@ Answer with inline [S#] citations. Do not use outside knowledge."""
             model = self.config.codex_model.strip()
             if model:
                 command.extend(["--model", model])
+            command.extend(["--config", f'model_reasoning_effort="{self.config.codex_reasoning_effort}"'])
             if output_schema is not None:
                 schema_path = workspace / "response_schema.json"
                 schema_path.write_text(json.dumps(output_schema), encoding="utf-8")
@@ -201,8 +201,43 @@ Answer with inline [S#] citations. Do not use outside knowledge."""
         return answer
 
     @staticmethod
-    def _resolve_executable(configured: str) -> str | None:
-        candidate = Path(configured.strip()).expanduser()
-        if candidate.is_file():
-            return str(candidate)
-        return shutil.which(configured.strip())
+    def _resolve_executable() -> str | None:
+        if resolved := shutil.which("codex"):
+            return resolved
+        for known_path in CodexLibraryAgent._known_executable_paths():
+            if CodexLibraryAgent._is_executable(known_path):
+                return str(known_path)
+        return None
+
+    @staticmethod
+    def _known_executable_paths() -> list[Path]:
+        """Find supported macOS locations when a GUI-launched app has no CLI PATH."""
+        home = Path.home()
+        candidates = [
+            home / ".local" / "bin" / "codex",
+            Path("/Applications/Codex.app/Contents/Resources/codex"),
+            home / "Applications/Codex.app/Contents/Resources/codex",
+        ]
+        install_dir = os.environ.get("CODEX_INSTALL_DIR", "").strip()
+        if install_dir:
+            candidates.insert(0, Path(install_dir).expanduser() / "codex")
+        # Codex bundled with the VS Code extension is still the same CLI, but
+        # extension directories are normally absent from GUI app PATH values.
+        for extensions_root in (home / ".vscode" / "extensions", home / ".vscode-insiders" / "extensions"):
+            try:
+                extension_binaries = sorted(
+                    extensions_root.glob("openai.chatgpt-*/bin/*/codex"),
+                    key=lambda path: path.stat().st_mtime_ns,
+                    reverse=True,
+                )
+            except OSError:
+                extension_binaries = []
+            candidates.extend(extension_binaries)
+        return candidates
+
+    @staticmethod
+    def _is_executable(path: Path) -> bool:
+        try:
+            return path.is_file() and os.access(path, os.X_OK)
+        except OSError:
+            return False

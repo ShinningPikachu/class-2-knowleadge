@@ -14,17 +14,32 @@ from ..library_agent import AgentPlan, LibraryAgent, LibraryAgentError
 from .common import subject_lookup
 
 
-REASONING_LEVELS = {
-    "Light — fast for small tasks": "light",
-    "Balanced — more careful": "balanced",
-    "Deep — slowest, most thorough": "deep",
+LOCAL_REASONING_LEVELS = {
+    "Light — faster": "light",
+    "Balanced": "balanced",
+    "Deep — more thorough": "deep",
 }
-REASONING_LEVEL_LABELS = {value: label for label, value in REASONING_LEVELS.items()}
+CODEX_MODELS = {
+    "Use my Codex default": "",
+    "GPT-5.3 Codex": "gpt-5.3-codex",
+}
+CODEX_REASONING_LEVELS = {
+    "Low — faster": "low",
+    "Medium — balanced": "medium",
+    "High — more thorough": "high",
+    "Extra high — slowest": "xhigh",
+}
 AGENT_PROVIDERS = {
     "Local Ollama — private and offline": "ollama",
     "Codex — signed-in account": "codex",
 }
 AGENT_PROVIDER_LABELS = {value: label for label, value in AGENT_PROVIDERS.items()}
+
+
+def _option_index(options: dict[str, str], value: str) -> int:
+    """Use the first option when an old saved value is no longer offered."""
+    values = list(options.values())
+    return values.index(value) if value in values else 0
 
 
 def _messages() -> list[dict[str, object]]:
@@ -157,38 +172,42 @@ def render_agent(library: LibraryStore, config: PipelineConfig, manager: JobMana
     codex_ready = True
     if agent_config.agent_provider == "codex":
         codex_left, codex_right = st.columns(2)
-        executable = codex_left.text_input(
-            "Codex executable",
-            value=agent_config.codex_executable,
-            help="Use `codex` when it is on PATH, or provide the full executable path.",
+        selected_model = codex_left.selectbox(
+            "Codex model",
+            options=list(CODEX_MODELS),
+            index=_option_index(CODEX_MODELS, agent_config.codex_model),
+            help="Use your account default, or explicitly select the current Codex model.",
         )
-        model = codex_right.text_input(
-            "Codex model (optional)",
-            value=agent_config.codex_model,
-            help="Leave blank to let Codex choose its default model for your signed-in account.",
+        selected_reasoning = codex_right.selectbox(
+            "Codex reasoning",
+            options=list(CODEX_REASONING_LEVELS),
+            index=_option_index(CODEX_REASONING_LEVELS, agent_config.codex_reasoning_effort),
+            help="Higher reasoning levels take longer but can help with harder requests.",
         )
         agent_config = replace(
             agent_config,
-            codex_executable=executable.strip(),
-            codex_model=model.strip(),
+            codex_model=CODEX_MODELS[selected_model],
+            codex_reasoning_effort=CODEX_REASONING_LEVELS[selected_reasoning],
         )
-        codex_ready, codex_status = CodexLibraryAgent.status(agent_config.codex_executable)
+        codex_ready, codex_status = CodexLibraryAgent.status()
         (st.success if codex_ready else st.warning)(codex_status)
         st.caption(
             "Codex receives only the current question and retrieved excerpts. It runs in an empty, "
             "read-only temporary workspace and cannot edit your library."
         )
     else:
-        selected_level = st.select_slider(
-            "Reasoning level",
-            options=list(REASONING_LEVELS),
-            value=REASONING_LEVEL_LABELS[agent_config.agent_reasoning_level],
+        local_reasoning, local_model = st.columns([1, 2])
+        selected_level = local_reasoning.selectbox(
+            "Local reasoning",
+            options=list(LOCAL_REASONING_LEVELS),
+            index=_option_index(LOCAL_REASONING_LEVELS, agent_config.agent_reasoning_level),
             help=(
                 "Light uses less model reasoning for quick, simple requests. "
                 "Balanced and Deep use progressively more reasoning and can take longer."
             ),
         )
-        agent_config = replace(agent_config, agent_reasoning_level=REASONING_LEVELS[selected_level])
+        local_model.caption(f"Using local model `{agent_config.llm_model}`")
+        agent_config = replace(agent_config, agent_reasoning_level=LOCAL_REASONING_LEVELS[selected_level])
     scheduler_active = manager.is_agent_active()
     if "agent_active_toggle" not in st.session_state:
         st.session_state["agent_active_toggle"] = scheduler_active

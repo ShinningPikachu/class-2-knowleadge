@@ -31,9 +31,12 @@ class PipelineConfig:
     agent_provider: str = "ollama"
     agent_reasoning_level: str = "deep"
     # Codex runs through the locally installed CLI and its existing sign-in.
-    # The model is optional: an empty value lets Codex use its configured default.
+    # An empty model lets the signed-in Codex account select its own default.
+    # Kept only so existing saved agent configurations remain loadable. Codex
+    # discovery is automatic; this value is deliberately never used.
     codex_executable: str = "codex"
     codex_model: str = ""
+    codex_reasoning_effort: str = "medium"
     codex_timeout_seconds: int = 180
     quality_review: bool = True
     # Fast baseline notes use one bounded, non-thinking call per slide. Deep
@@ -98,8 +101,8 @@ class PipelineConfig:
             raise ValueError("agent_provider must be 'ollama' or 'codex'.")
         if self.agent_reasoning_level not in {"light", "balanced", "deep"}:
             raise ValueError("agent_reasoning_level must be 'light', 'balanced', or 'deep'.")
-        if not self.codex_executable.strip():
-            raise ValueError("A Codex executable name or path is required.")
+        if self.codex_reasoning_effort not in {"low", "medium", "high", "xhigh"}:
+            raise ValueError("codex_reasoning_effort must be low, medium, high, or xhigh.")
         if not 30 <= self.codex_timeout_seconds <= 900:
             raise ValueError("codex_timeout_seconds must be between 30 and 900.")
         if self.note_generation_profile not in {"fast", "deep"}:
