@@ -356,6 +356,10 @@ class JobManager:
         source_job_id: str,
         target_language: str,
         priority: int = PRIORITIES["Normal"],
+        *,
+        slide_number: int | None = None,
+        explanation: str | None = None,
+        slide_content: str | None = None,
     ) -> JobRecord:
         """Queue an explicit translation of already-completed English notes."""
         if priority not in PRIORITY_LABELS:
@@ -376,6 +380,8 @@ class JobManager:
         except (KeyError, TypeError, ValueError) as exc:
             raise JobError(f"The source lecture model configuration is invalid: {exc}") from exc
 
+        if slide_number is not None and (slide_number < 1 or not explanation or not explanation.strip()):
+            raise JobError("A slide translation needs a valid slide number and explanation.")
         job_id = uuid4().hex
         (self.root / job_id).mkdir(parents=True, exist_ok=False)
         source_subject = self.job_subject(source_job)
@@ -392,7 +398,11 @@ class JobManager:
                 or ""
             ),
         }
-        title = f"Translate {source_job.title} → {target_language}"
+        if slide_number is not None:
+            payload.update(slide_number=slide_number, source_explanation=explanation.strip())
+            if slide_content is not None:
+                payload["source_slide_content"] = slide_content.strip()
+        title = f"Translate {source_job.title}{f' · Slide {slide_number}' if slide_number is not None else ''} → {target_language}"
         now = self._timestamp()
         with self._condition:
             while self._ollama_maintenance:
@@ -1545,7 +1555,11 @@ class JobManager:
             r"_+", "_", safe_filename(target_language.casefold().replace(" ", "_"), "translation")
         ).strip("_") or "translation"
         translation_dir = source_path.parent / "translations"
-        markdown_path = translation_dir / f"{source_path.stem}.{language_slug}.md"
+        slide_number = payload.get("slide_number")
+        translation_stem = f"slide_{int(slide_number):04d}" if slide_number is not None else source_path.stem
+        if slide_number is not None:
+            translation_dir /= "slides"
+        markdown_path = translation_dir / f"{translation_stem}.{language_slug}.md"
         pdf_path: Path | None = markdown_path.with_suffix(".pdf")
         self._merge_job_result(
             job.id,
@@ -1576,16 +1590,18 @@ class JobManager:
                 message=f"{message} ({index}/{total})",
             )
 
-        source_markdown = source_path.read_text(encoding="utf-8")
-        translated = MarkdownTranslator(
-            config,
-            chat_guard=lambda: self.lecture_qwen_slot(job.id),
-        ).translate(
-            source_markdown,
-            target_language,
-            markdown_path,
-            progress=translation_progress,
+        source_markdown = str(payload["source_explanation"]) if slide_number is not None else source_path.read_text(encoding="utf-8")
+        translator = MarkdownTranslator(config, chat_guard=lambda: self.lecture_qwen_slot(job.id))
+        translated = translator.translate(
+            source_markdown, target_language, markdown_path, progress=translation_progress,
         )
+        translated_content = ""
+        if slide_number is not None and payload.get("source_slide_content"):
+            translated_content = translator.translate(
+                str(payload["source_slide_content"]), target_language,
+                markdown_path.with_name(f"{translation_stem}.content.{language_slug}.md"),
+                progress=translation_progress,
+            )
         self._raise_if_interrupted(job.id)
         self._update_job(
             job.id,
@@ -1606,8 +1622,8 @@ class JobManager:
             str(payload.get("subject_id") or "") or None,
             str(payload.get("library_folder_id") or "") or None,
             [
-                (markdown_path, f"Notes.{language_slug}.md"),
-                (pdf_path, f"Notes.{language_slug}.pdf"),
+                (markdown_path, f"{translation_stem if slide_number is not None else 'Notes'}.{language_slug}.md"),
+                (pdf_path, f"{translation_stem if slide_number is not None else 'Notes'}.{language_slug}.pdf"),
             ],
         )
 
@@ -1622,6 +1638,10 @@ class JobManager:
             "library_messages": library_messages,
             "library_folder_id": str(payload.get("library_folder_id") or ""),
         }
+        if slide_number is not None:
+            result_payload.update(slide_number=slide_number, translated_explanation=translated)
+            if translated_content:
+                result_payload["translated_slide_content"] = translated_content
         now = self._timestamp()
         message = f"{target_language} translation is ready"
         if pdf_warning:

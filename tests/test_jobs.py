@@ -716,6 +716,85 @@ class JobManagerTest(unittest.TestCase):
         stored_names = {item.original_name for item in library.list_documents(subject.id)}
         self.assertTrue({"Notes.chinese_simplified.md", "Notes.chinese_simplified.pdf"}.issubset(stored_names))
 
+    def test_slide_translation_is_linked_and_translates_only_its_explanation(self) -> None:
+        self.manager.set_auto_unload_enabled(False)
+        library = LibraryStore(self.root / "library")
+        subject = library.create_subject("Linguistics")
+        source_job = self.manager.enqueue_lecture(
+            config=PipelineConfig(),
+            audio_path=None,
+            presentation_path=self.source,
+            lecture_title="English lecture",
+            subject_id=subject.id,
+            priority=PRIORITIES["Normal"],
+        )
+        claimed = self.manager._claim_next_job()
+        self.assertEqual(claimed.id, source_job.id)  # type: ignore[union-attr]
+        run_directory = self.root / "runs" / "english-lecture"
+        run_directory.mkdir(parents=True)
+        source_markdown = run_directory / "lecture_notes.md"
+        source_markdown.write_text("# English lecture\n\nOriginal English notes.\n", encoding="utf-8")
+        self.manager._merge_job_result(source_job.id, {"markdown_path": str(source_markdown)})
+        self.manager._finish_job(source_job.id, "completed", "Lecture notes are ready", "")
+
+        translation_job = self.manager.enqueue_translation(
+            source_job.id,
+            "Chinese (Simplified)",
+            priority=PRIORITIES["High"],
+            slide_number=2,
+            explanation="Only slide two explanation.",
+            slide_content="## Slide two\n\nFull original slide content.",
+        )
+
+        self.assertEqual(translation_job.kind, "translation")
+        self.assertEqual(translation_job.payload["source_language"], "English")
+        self.assertEqual(translation_job.payload["target_language"], "Chinese (Simplified)")
+        self.assertEqual(translation_job.payload["subject_name"], "Linguistics")
+        self.assertEqual(self.manager.job_subject(translation_job), (subject.id, "Linguistics"))
+        self.assertFalse((run_directory / "translations").exists())
+        self.assertEqual(
+            self.manager._pending_model_requirements(),
+            [(PipelineConfig().ollama_host, PipelineConfig().llm_model)],
+        )
+
+        class FakeTranslator:
+            def __init__(self, *_args: object, **_kwargs: object) -> None:
+                pass
+
+            @staticmethod
+            def validate_target_language(value: str) -> str:
+                return value
+
+            def translate(self, _source: str, _target: str, output: Path, progress=None) -> str:
+                assert _source in {"Only slide two explanation.", "## Slide two\n\nFull original slide content."}
+                translated = "## 第二张幻灯片\n\n完整的幻灯片内容。\n" if _source.startswith("##") else "# 英语讲座\n\n中文笔记。\n"
+                output.parent.mkdir(parents=True, exist_ok=True)
+                output.write_text(translated, encoding="utf-8")
+                progress(1, 1, "Translated translation batch 1/1")
+                return translated
+
+        def fake_export(_markdown: str, output: Path) -> Path:
+            output.write_bytes(b"translated pdf")
+            return output
+
+        claimed_translation = self.manager._claim_next_job()
+        self.assertEqual(claimed_translation.id, translation_job.id)  # type: ignore[union-attr]
+        with patch("src.jobs.MarkdownTranslator", FakeTranslator), patch("src.jobs.export_pdf", fake_export):
+            self.manager._execute_job(claimed_translation)  # type: ignore[arg-type]
+
+        completed = self.manager.get_job(translation_job.id)
+        self.assertEqual(completed.status, "completed", completed.error)
+        self.assertEqual(completed.result["source_language"], "English")
+        self.assertEqual(completed.result["target_language"], "Chinese (Simplified)")
+        self.assertTrue(Path(completed.result["markdown_path"]).is_file())
+        self.assertTrue(Path(completed.result["pdf_path"]).is_file())
+        self.assertIn("完整的幻灯片内容", completed.result["translated_slide_content"])
+        self.assertEqual(completed.result["slide_number"], 2)
+        self.assertIn("中文笔记", completed.result["translated_explanation"])
+        self.assertIn("slide_0002", completed.result["markdown_path"])
+        stored_names = {item.original_name for item in library.list_documents(subject.id)}
+        self.assertTrue({"slide_0002.chinese_simplified.md", "slide_0002.chinese_simplified.pdf"}.issubset(stored_names))
+
     def test_completed_lecture_can_queue_a_deep_review_for_one_slide(self) -> None:
         self.manager.set_auto_unload_enabled(False)
         source_job = self._enqueue("Baseline lecture", PRIORITIES["Normal"])

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import base64
 import binascii
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import html
 import json
@@ -18,12 +18,12 @@ import streamlit as st
 from ..jobs import PRIORITIES, JobError, JobManager, JobRecord
 from ..library import LibraryDocument, LibraryError, LibraryFolder, LibraryStore
 from ..voice import (
-    MAX_NARRATION_CHARS,
     SYSTEM_DEFAULT_VOICE,
     VoiceNarrationError,
     local_voice_options,
     prepare_narration,
     synthesize_speech,
+    wav_duration_seconds,
 )
 from .audio_transcript_component import render_audio_transcript
 from .common import format_size, render_search_results, subject_lookup
@@ -61,6 +61,7 @@ class _LectureSlideBundle:
     summaries: dict[int, str]
     alignment: dict[int, list[dict[str, Any]]]
     source_job: JobRecord | None
+    saved_translations: dict[int, dict[str, str]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -253,6 +254,59 @@ def _is_slide_deck(
         return False
 
 
+def _translated_slide_sections(markdown: str) -> dict[int, str]:
+    """Read explicit slide numbers, including the existing Chinese note headings."""
+    headings = list(re.finditer(r"^##[ \t]+(.+)$", markdown, re.MULTILINE))
+    sections: dict[int, str] = {}
+    for index, heading in enumerate(headings):
+        match = re.match(
+            r"(?:Slide\s+|幻灯片\s*|幻燈片\s*|投影片\s*|第\s*)([0-9]+)(?:\s*[：:页頁張张]|\b)",
+            heading.group(1), re.IGNORECASE,
+        )
+        if not match:
+            continue
+        number = int(match.group(1))
+        end = headings[index + 1].start() if index + 1 < len(headings) else len(markdown)
+        section = markdown[heading.start():end].strip()
+        if number in sections:
+            return {}  # Ambiguous numbering must never attach the wrong content.
+        if markdown[heading.end():end].strip():
+            sections[number] = section
+    return sections
+
+
+def _saved_lecture_translations(
+    related: list[LibraryDocument], source_job: JobRecord | None,
+) -> dict[int, dict[str, str]]:
+    candidates: list[tuple[Path, str]] = []
+    if source_job:
+        source_path = _result_path(source_job, "markdown_path")
+        if source_path and source_path.is_file():
+            for metadata_path in sorted((source_path.parent / "translations").glob("*.md.metadata.json")):
+                metadata = _load_json_file(metadata_path)
+                path = metadata_path.with_name(metadata_path.name.removesuffix(".metadata.json"))
+                language = str(metadata.get("target_language", "")).strip()
+                if language and path.is_file():
+                    candidates.append((path, language))
+    # Library copies remain usable when a run folder has been moved or removed.
+    for document in related:
+        match = re.search(r"Notes\.([\w-]+)\.md$", document.original_name, re.IGNORECASE)
+        if match:
+            slug = match.group(1).lower()
+            language = {"chinese_simplified": "Chinese (Simplified)",
+                        "chinese_traditional": "Chinese (Traditional)"}.get(slug, slug.replace("_", " ").title())
+            candidates.append((document.stored_path, language))
+    translations: dict[int, dict[str, str]] = {}
+    for path, language in candidates:
+        try:
+            sections = _translated_slide_sections(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError):
+            continue
+        for number, text in sections.items():
+            translations.setdefault(number, {}).setdefault(language, text)
+    return translations
+
+
 def _lecture_slide_bundle(
     library: LibraryStore,
     manager: JobManager,
@@ -288,7 +342,7 @@ def _lecture_slide_bundle(
         for item in alignment_payload.get("slides", [])
         if isinstance(item, dict) and str(item.get("slide", "")).isdigit()
     }
-    return _LectureSlideBundle(slides, summaries, alignment, source_job)
+    return _LectureSlideBundle(slides, summaries, alignment, source_job, _saved_lecture_translations(related, source_job))
 
 
 def _lecture_audio_bundle(
@@ -489,7 +543,7 @@ def _is_summary_pdf(document: LibraryDocument) -> bool:
 
 def _voice_audio_key(key: str, narration: str, voice: str) -> str:
     digest = hashlib.sha256(f"{voice}\0{narration}".encode("utf-8")).hexdigest()[:16]
-    return f"library_voice_audio_{key}_{digest}"
+    return f"library_voice_audio_v4_{key}_{digest}"
 
 
 def _render_voice_narration(
@@ -524,15 +578,10 @@ def _render_voice_narration(
             key=f"library_voice_choice_{key}",
         )
         try:
-            prepared, truncated = prepare_narration(narration)
+            prepared, _ = prepare_narration(narration)
         except VoiceNarrationError as exc:
             st.info(str(exc))
             return
-        if truncated:
-            st.warning(
-                f"This narration is limited to {MAX_NARRATION_CHARS:,} characters. "
-                "Use the next PDF page to continue."
-            )
         audio_key = _voice_audio_key(key, prepared, voice)
         if st.button(
             "Generate narration",
@@ -540,6 +589,9 @@ def _render_voice_narration(
             key=f"library_generate_voice_{key}",
             width="stretch",
         ):
+            # Never leave an older recording visible when a fresh generation
+            # attempt fails or is interrupted.
+            st.session_state.pop(audio_key, None)
             try:
                 with st.spinner("Generating local narration…"):
                     st.session_state[audio_key] = synthesize_speech(prepared, voice)
@@ -548,6 +600,10 @@ def _render_voice_narration(
         audio = st.session_state.get(audio_key)
         if isinstance(audio, bytes):
             st.audio(audio, format="audio/wav")
+            duration = wav_duration_seconds(audio)
+            st.caption(
+                f"Full narration: {duration:.1f} seconds · {len(prepared):,} text characters"
+            )
             st.download_button(
                 "Download WAV",
                 data=audio,
@@ -787,7 +843,7 @@ def _render_translation_control(
     source_job = bundle.source_job
     target = button_target or st
     help_text = (
-        "Translate this lecture's slide explanations and notes into another language."
+        "Translate this slide’s content text and explanation."
         if source_job
         else "The completed lecture job for this file could not be located."
     )
@@ -801,7 +857,7 @@ def _render_translation_control(
         )
         return
     with target.popover("🌐", help=help_text, width="stretch"):
-        st.caption("The original transcript and notes stay in English. The translation is saved to this lecture folder.")
+        st.caption("Translate only this slide. Choose Chinese or English in the slide text language selector.")
         with st.form(f"library_translation_form_{document.id}_{source_job.id}_{slide_number}"):
             language_option = st.selectbox(
                 "Translate to",
@@ -838,13 +894,92 @@ def _render_translation_control(
                     source_job.id,
                     target_language,
                     priority=PRIORITIES[priority_label],
+                    slide_number=slide_number,
+                    explanation=_exact_slide_summary(bundle, next(item for item in bundle.slides if int(item["slide"]) == slide_number)),
+                    slide_content=_slide_content_markdown(next(item for item in bundle.slides if int(item["slide"]) == slide_number)),
                 )
+                st.session_state[f"slide_requested_language_{document.id}_{slide_number}"] = target_language
                 st.session_state["library_file_notice"] = (
                     f"Queued a {target_language} translation as job {translation_job.id[:8]}."
                 )
                 st.rerun()
             except JobError as exc:
                 st.error(str(exc))
+
+
+def _slide_content_markdown(slide: dict[str, Any]) -> str:
+    title = str(slide.get("title", "")).strip()
+    content = str(slide.get("content", "")).strip()
+    return "\n\n".join(part for part in (f"## {title}" if title else "", content) if part)
+
+
+def _slide_content_translations(
+    manager: JobManager, bundle: _LectureSlideBundle, slide: dict[str, Any]
+) -> dict[str, str]:
+    source = _slide_content_markdown(slide)
+    translations = {"English": source}
+    saved = getattr(bundle, "saved_translations", {}).get(int(slide["slide"]), {})
+    if bundle.source_job is None:
+        translations.update(saved)
+        return translations
+    for job in manager.list_jobs(limit=500):
+        if (job.kind == "translation" and job.status == "completed"
+            and job.payload.get("source_job_id") == bundle.source_job.id
+            and job.payload.get("slide_number") == int(slide["slide"])
+            and job.payload.get("source_slide_content") == source):
+            language = str(job.payload.get("target_language", ""))
+            text = str(job.result.get("translated_slide_content", "")).strip()
+            if text and language not in translations:
+                translations[language] = text
+    for language, text in saved.items():
+        translations.setdefault(language, text)
+    return translations
+
+
+def _slide_explanation_translations(
+    manager: JobManager, bundle: _LectureSlideBundle, slide: dict[str, Any]
+) -> tuple[dict[str, str], list[JobRecord]]:
+    explanations = {"English": _exact_slide_summary(bundle, slide)}
+    pending = []
+    if bundle.source_job is None:
+        return explanations, pending
+    # Newest matching translation wins; never mix lectures or slide content.
+    for job in manager.list_jobs(limit=500):
+        if (job.kind != "translation"
+            or job.payload.get("source_job_id") != bundle.source_job.id
+            or job.payload.get("slide_number") != int(slide["slide"])
+            or job.payload.get("source_explanation") != explanations["English"]):
+            continue
+        language = str(job.payload.get("target_language", ""))
+        if job.status == "completed" and language not in explanations:
+            text = str(job.result.get("translated_explanation", "")).strip()
+            if text:
+                explanations[language] = text
+        elif job.status in {"queued", "running", "waiting", "deferred", "failed"}:
+            pending.append(job)
+    return explanations, pending
+
+
+def _render_slide_text_language(document_id: str, slide_number: int, contents: dict[str, str]) -> str:
+    preference_key = f"slide_text_language_preference_{document_id}"
+    widget_key = f"slide_text_language_{document_id}_{slide_number}"
+    requested_key = f"slide_requested_language_{document_id}_{slide_number}"
+    requested = st.session_state.get(requested_key)
+    if requested in contents:
+        st.session_state[preference_key] = requested
+        del st.session_state[requested_key]
+    preferred = st.session_state.get(preference_key, "English")
+    st.session_state[widget_key] = preferred if preferred in contents else "English"
+
+    def remember_language() -> None:
+        st.session_state[preference_key] = st.session_state[widget_key]
+
+    language = st.selectbox(
+        "Slide text language", list(contents), key=widget_key, on_change=remember_language,
+    )
+    if preferred not in contents:
+        st.caption(f"{preferred} is unavailable for this slide. Showing English; your language preference is retained.")
+    return language
 
 
 def _render_slide_document(
@@ -924,15 +1059,31 @@ def _render_slide_document(
         summary_title, voice_button, review_button, translation_button = st.columns(
             [4, 1, 1, 1], vertical_alignment="center"
         )
-        summary_title.markdown("#### Slide summary")
-        narration = f"Slide {selected_number}. {slide.get('title', '')}. {_exact_slide_summary(bundle, slide)}"
-        summary = html.escape(_exact_slide_summary(bundle, slide))
-        st.markdown(f'<div class="lecture-slide-summary">{summary}</div>', unsafe_allow_html=True)
+        summary_title.markdown("#### Slide text")
+        explanations, translation_jobs = _slide_explanation_translations(manager, bundle, slide)
+        contents = _slide_content_translations(manager, bundle, slide)
+        language = _render_slide_text_language(document.id, selected_number, contents)
+        for translation_job in translation_jobs:
+            st.caption(f"{translation_job.payload['target_language']} translation: {translation_job.status}")
+        if translation_jobs and st.button("Refresh translations", key=f"refresh_slide_translation_{document.id}_{selected_number}"):
+            st.rerun()
+        if language in contents:
+            st.markdown("#### Slide content text")
+            st.markdown(contents[language] or "No extractable text on this slide.")
+            explanation = explanations.get(language)
+            if explanation:
+                st.markdown("#### Slide explanation")
+                summary = html.escape(explanation)
+                st.markdown(f'<div class="lecture-slide-summary">{summary}</div>', unsafe_allow_html=True)
+        # The text display choice is independent of speech generation.
+        narration = "\n\n".join(part for part in (
+            str(slide.get("title", "")).strip(), str(slide.get("content", "")).strip(), explanations["English"]
+        ) if part)
         _render_voice_narration(
             narration,
             key=f"slide_{document.id}_{selected_number}",
             button_target=voice_button,
-            help_text="Explain this slide summary aloud with a local voice.",
+            help_text="Read the full original slide content and explanation aloud.",
         )
         _render_deep_review_control(
             manager,

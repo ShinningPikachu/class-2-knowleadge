@@ -1,13 +1,16 @@
-"""Offline text-to-speech support for short library explanations."""
+"""Offline, complete text-to-speech narration for library content."""
 
 from __future__ import annotations
 
 from functools import lru_cache
+from collections.abc import Callable
+import io
 from pathlib import Path
 import re
 import shutil
 import subprocess
 import tempfile
+import wave
 
 
 class VoiceNarrationError(RuntimeError):
@@ -15,17 +18,18 @@ class VoiceNarrationError(RuntimeError):
 
 
 SYSTEM_DEFAULT_VOICE = "System default"
-# Keep browser-memory audio comfortably bounded. Longer PDFs remain available
-# one page at a time, and the UI makes that continuation explicit.
-MAX_NARRATION_CHARS = 9_000
+NARRATION_CHUNK_CHARS = 320
+MINIMUM_RECOVERY_CHARS = 48
+MAXIMUM_RECOVERY_DEPTH = 4
 
 
-def prepare_narration(text: str, maximum_chars: int = MAX_NARRATION_CHARS) -> tuple[str, bool]:
-    """Normalize narration text and clip it only at a natural word boundary."""
-    normalized = re.sub(r"\s+", " ", text).strip()
+def prepare_narration(text: str, maximum_chars: int | None = None) -> tuple[str, bool]:
+    """Normalize narration, clipping only when a caller supplies an explicit limit."""
+    normalized = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]+", " ", text)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
     if not normalized:
         raise VoiceNarrationError("There is no extractable text available to narrate.")
-    if len(normalized) <= maximum_chars:
+    if maximum_chars is None or len(normalized) <= maximum_chars:
         return normalized, False
     boundary = normalized.rfind(" ", 0, maximum_chars)
     if boundary < maximum_chars // 2:
@@ -62,18 +66,156 @@ def local_voice_options() -> tuple[str, ...]:
     return ()
 
 
+def _narration_chunks(text: str, limit: int = NARRATION_CHUNK_CHARS) -> list[str]:
+    """Keep every character while splitting at sentence or word boundaries."""
+    chunks = []
+    while len(text) > limit:
+        boundary = max(text.rfind(mark, 0, limit) + 1 for mark in ".!?。！？")
+        if boundary < limit // 2:
+            boundary = text.rfind(" ", 0, limit)
+        if boundary <= 0:
+            boundary = limit
+        chunks.append(text[:boundary].strip())
+        text = text[boundary:].strip()
+    if text:
+        chunks.append(text)
+    return chunks
+
+
+def wav_duration_seconds(audio: bytes) -> float:
+    """Return the playable duration of a validated in-memory WAV."""
+    try:
+        with wave.open(io.BytesIO(audio), "rb") as wav:
+            if wav.getframerate() <= 0:
+                raise VoiceNarrationError("The voice engine returned audio with an invalid sample rate.")
+            return wav.getnframes() / wav.getframerate()
+    except (wave.Error, EOFError) as exc:
+        raise VoiceNarrationError("The local voice engine returned an invalid WAV audio file.") from exc
+
+
+def _minimum_duration_seconds(text: str) -> float:
+    """Estimate a conservative floor that still detects a two-word truncation."""
+    cjk_characters = len(re.findall(r"[\u3400-\u9fff\uf900-\ufaff]", text))
+    without_cjk = re.sub(r"[\u3400-\u9fff\uf900-\ufaff]", " ", text)
+    words = len(re.findall(r"\b[\w']+\b", without_cjk, flags=re.UNICODE))
+    # The configured engine rate is 175 words/minute. Allow substantial room
+    # for abbreviations, punctuation, URLs, and unusually fast voices.
+    expected = words * 60 / 175 + cjk_characters / 4.5
+    return max(0.18, expected * 0.42)
+
+
+def _validate_segment_completion(text: str, audio: bytes) -> None:
+    duration = wav_duration_seconds(audio)
+    minimum = _minimum_duration_seconds(text)
+    if duration < minimum:
+        raise VoiceNarrationError(
+            f"The voice engine stopped early ({duration:.1f}s generated; "
+            f"at least {minimum:.1f}s expected)."
+        )
+
+
+def _split_for_recovery(text: str) -> list[str]:
+    """Split a failed segment more aggressively without dropping any words."""
+    target = max(MINIMUM_RECOVERY_CHARS, len(text) // 2)
+    pieces = _narration_chunks(text, target)
+    if len(pieces) > 1:
+        return pieces
+    midpoint = len(text) // 2
+    right_boundary = text.find(" ", midpoint)
+    left_boundary = text.rfind(" ", 0, midpoint)
+    boundary = right_boundary if 0 < right_boundary < len(text) else left_boundary
+    if boundary <= 0:
+        boundary = midpoint
+    return [part.strip() for part in (text[:boundary], text[boundary:]) if part.strip()]
+
+
+def _synthesize_complete_segment(
+    text: str,
+    engine: Callable[[str, str], bytes],
+    voice: str,
+    *,
+    depth: int = 0,
+) -> list[bytes]:
+    """Synthesize one segment, recursively shrinking it if an engine truncates."""
+    last_error: VoiceNarrationError | None = None
+    for _attempt in range(2):
+        try:
+            audio = engine(text, voice)
+            _validate_segment_completion(text, audio)
+            return [audio]
+        except VoiceNarrationError as exc:
+            last_error = exc
+
+    if depth < MAXIMUM_RECOVERY_DEPTH and len(text) > MINIMUM_RECOVERY_CHARS:
+        pieces = _split_for_recovery(text)
+        if len(pieces) > 1:
+            recovered: list[bytes] = []
+            for piece in pieces:
+                recovered.extend(
+                    _synthesize_complete_segment(piece, engine, voice, depth=depth + 1)
+                )
+            return recovered
+
+    detail = str(last_error) if last_error else "unknown voice-engine failure"
+    raise VoiceNarrationError(f"The narration segment could not be completed: {detail}")
+
+
+def _join_wav_segments(segments: list[bytes]) -> bytes:
+    """Combine decoded PCM frames so browsers receive one valid WAV container."""
+    if not segments:
+        raise VoiceNarrationError("The voice engine did not return any narration segments.")
+    output = io.BytesIO()
+    with wave.open(output, "wb") as joined:
+        parameters: tuple[int, int, int] | None = None
+        for audio in segments:
+            try:
+                with wave.open(io.BytesIO(audio), "rb") as wav:
+                    current = (wav.getnchannels(), wav.getsampwidth(), wav.getframerate())
+                    if parameters is None:
+                        parameters = current
+                        joined.setnchannels(current[0])
+                        joined.setsampwidth(current[1])
+                        joined.setframerate(current[2])
+                        joined.setcomptype("NONE", "not compressed")
+                    elif current != parameters:
+                        raise VoiceNarrationError(
+                            "The voice engine changed audio format between narration segments."
+                        )
+                    joined.writeframes(wav.readframes(wav.getnframes()))
+            except (wave.Error, EOFError) as exc:
+                raise VoiceNarrationError(
+                    "The local voice engine returned an invalid WAV audio segment."
+                ) from exc
+    return output.getvalue()
+
+
 def synthesize_speech(text: str, voice: str = SYSTEM_DEFAULT_VOICE) -> bytes:
-    """Create a WAV narration with a locally installed speech engine."""
+    """Synthesize all text in bounded chunks and return one complete PCM WAV."""
     narration, _ = prepare_narration(text)
-    if shutil.which("say"):
-        return _synthesize_with_macos_say(narration, voice)
+    macos = shutil.which("say")
     espeak = shutil.which("espeak-ng") or shutil.which("espeak")
-    if espeak:
-        return _synthesize_with_espeak(espeak, narration, voice)
-    raise VoiceNarrationError(
-        "No local voice engine was found. On macOS, enable the built-in 'say' command; "
-        "on Linux, install espeak-ng."
+    if not macos and not espeak:
+        raise VoiceNarrationError(
+            "No local voice engine was found. On macOS, enable the built-in 'say' command; "
+            "on Linux, install espeak-ng."
+        )
+    engine = _synthesize_with_macos_say if macos else (
+        lambda segment, selected_voice: _synthesize_with_espeak(
+            str(espeak), segment, selected_voice
+        )
     )
+    chunks = _narration_chunks(narration)
+    segments: list[bytes] = []
+    for index, chunk in enumerate(chunks, start=1):
+        try:
+            segments.extend(_synthesize_complete_segment(chunk, engine, voice))
+        except VoiceNarrationError as exc:
+            raise VoiceNarrationError(
+                f"Narration part {index} of {len(chunks)} failed: {exc}"
+            ) from exc
+    completed = _join_wav_segments(segments)
+    _validate_segment_completion(narration, completed)
+    return completed
 
 
 def _synthesize_with_macos_say(text: str, voice: str) -> bytes:
@@ -81,8 +223,14 @@ def _synthesize_with_macos_say(text: str, voice: str) -> bytes:
         root = Path(directory)
         text_path = root / "narration.txt"
         output_path = root / "narration.wav"
-        text_path.write_text(text, encoding="utf-8")
-        command = ["say"]
+        # ``say`` reserves double brackets for embedded commands (for example,
+        # ``[[slnc 200]]``). Lecture code such as nested Python lists must be
+        # spoken as content and must never control the speech engine.
+        safe_text = text.replace("[[", " open bracket open bracket ").replace(
+            "]]", " close bracket close bracket "
+        )
+        text_path.write_text(safe_text, encoding="utf-8")
+        command = ["say", "-r", "175"]
         if voice and voice != SYSTEM_DEFAULT_VOICE:
             command.extend(["-v", voice])
         command.extend(
@@ -102,7 +250,7 @@ def _synthesize_with_macos_say(text: str, voice: str) -> bytes:
 def _synthesize_with_espeak(executable: str, text: str, voice: str) -> bytes:
     with tempfile.TemporaryDirectory(prefix="class-knowledge-voice-") as directory:
         output_path = Path(directory) / "narration.wav"
-        command = [executable, "-w", str(output_path)]
+        command = [executable, "-s", "175", "-w", str(output_path)]
         if voice and voice != SYSTEM_DEFAULT_VOICE:
             command.extend(["-v", voice])
         command.append(text)
@@ -130,4 +278,24 @@ def _read_wav(path: Path) -> bytes:
         raise VoiceNarrationError(f"The local voice engine did not produce an audio file: {exc}") from exc
     if len(audio) < 44 or not audio.startswith(b"RIFF") or audio[8:12] != b"WAVE":
         raise VoiceNarrationError("The local voice engine returned an invalid WAV audio file.")
-    return audio
+    try:
+        with wave.open(io.BytesIO(audio), "rb") as wav:
+            if wav.getcomptype() != "NONE" or wav.getsampwidth() != 2:
+                raise VoiceNarrationError("The voice engine returned unsupported audio; select another voice.")
+            frames = wav.readframes(wav.getnframes())
+            expected = wav.getnframes() * wav.getnchannels() * wav.getsampwidth()
+            if not expected or len(frames) != expected:
+                raise VoiceNarrationError(
+                    "The voice engine produced empty or incomplete audio. Try another installed voice. "
+                    "If this persists, run the app from Terminal with access to macOS speech services."
+                )
+            if not any(frames):
+                raise VoiceNarrationError("The voice engine produced silent audio. Try another installed voice.")
+            # Rewrite a standard PCM WAV, removing platform-specific chunks.
+            output = io.BytesIO()
+            with wave.open(output, "wb") as clean:
+                clean.setparams(wav.getparams())
+                clean.writeframes(frames)
+            return output.getvalue()
+    except (wave.Error, EOFError) as exc:
+        raise VoiceNarrationError("The local voice engine returned an invalid WAV audio file.") from exc

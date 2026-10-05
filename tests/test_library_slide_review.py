@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
+from types import SimpleNamespace
 from pathlib import Path
 
 from src.config import PipelineConfig
@@ -12,6 +13,11 @@ from src.jobs import JobManager
 from src.library import LibraryStore
 from src.ui.library_page import (
     _exact_slide_summary,
+    _slide_explanation_translations,
+    _slide_content_translations,
+    _slide_content_markdown,
+    _saved_lecture_translations,
+    _translated_slide_sections,
     _lecture_audio_bundle,
     _lecture_slide_bundle,
     _matching_lecture_job,
@@ -20,6 +26,95 @@ from src.ui.library_page import (
 
 
 class LibrarySlideReviewTest(unittest.TestCase):
+    def test_translations_follow_the_exact_slide_and_current_explanation(self) -> None:
+        slide = {"slide": 2}
+        bundle = SimpleNamespace(source_job=SimpleNamespace(id="lecture-a"), summaries={2: "Original explanation."})
+
+        def job(source="lecture-a", number=2, text="Original explanation.", status="completed"):
+            return SimpleNamespace(kind="translation", status=status,
+                payload={"source_job_id": source, "slide_number": number,
+                         "source_explanation": text, "target_language": "French"},
+                result={"translated_explanation": "Explication française."})
+
+        jobs = [job(source="lecture-b"), job(number=1), job(text="Old explanation."), job(), job(status="running")]
+        manager = SimpleNamespace(list_jobs=lambda **kwargs: jobs)
+        explanations, pending = _slide_explanation_translations(manager, bundle, slide)
+        self.assertEqual(explanations, {"English": "Original explanation.", "French": "Explication française."})
+        self.assertEqual(len(pending), 1)
+
+
+    def test_content_language_switch_uses_full_matching_slide_text(self) -> None:
+        slide = {"slide": 3, "title": "Agents", "content": "All slide text, including the final line."}
+        source = _slide_content_markdown(slide)
+        bundle = SimpleNamespace(source_job=SimpleNamespace(id="lecture-a"))
+        def job(content=source, number=3):
+            return SimpleNamespace(kind="translation", status="completed",
+                payload={"source_job_id": "lecture-a", "slide_number": number,
+                         "source_slide_content": content, "target_language": "Chinese (Simplified)"},
+                result={"translated_slide_content": "## 智能体\n\n完整内容。"})
+        manager = SimpleNamespace(list_jobs=lambda **kwargs: [job(content="Outdated"), job(number=4), job()])
+        result = _slide_content_translations(manager, bundle, slide)
+        self.assertEqual(result["English"], source)
+        self.assertEqual(result["Chinese (Simplified)"], "## 智能体\n\n完整内容。")
+
+    def test_existing_chinese_notes_are_loaded_from_the_lecture_folder(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            notes = root / "Notes.chinese_simplified.md"
+            notes.write_text("# 中文笔记\n\n## 幻灯片 1：标题\n\n第一张的完整内容。\n\n## 幻灯片 3：标题\n\n第三张的内容。", encoding="utf-8")
+            related = [SimpleNamespace(original_name=notes.name, stored_path=notes)]
+            saved = _saved_lecture_translations(related, None)
+            self.assertEqual(set(saved), {1, 3})
+            bundle = SimpleNamespace(source_job=None, saved_translations=saved)
+            manager = SimpleNamespace(list_jobs=lambda **kwargs: [])
+            first = _slide_content_translations(manager, bundle, {"slide": 1, "content": "English"})
+            second = _slide_content_translations(manager, bundle, {"slide": 2, "content": "English"})
+            self.assertEqual(list(first), ["English", "Chinese (Simplified)"])
+            self.assertIn("第一张的完整内容", first["Chinese (Simplified)"])
+            self.assertEqual(list(second), ["English"])
+
+    def test_run_translation_metadata_discovers_existing_language(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "lecture_notes.md"
+            source.write_text("## Slide 1: Title\n\nEnglish.")
+            translated = root / "translations" / "lecture_notes.chinese_simplified.md"
+            translated.parent.mkdir()
+            translated.write_text("## 幻灯片 1：标题\n\n中文内容。", encoding="utf-8")
+            translated.with_suffix(".md.metadata.json").write_text(json.dumps({"target_language": "Chinese (Simplified)"}))
+            job = SimpleNamespace(result={"markdown_path": str(source)})
+            saved = _saved_lecture_translations([], job)
+            self.assertIn("中文内容", saved[1]["Chinese (Simplified)"])
+
+    def test_duplicate_slide_numbers_do_not_attach_ambiguous_translation(self) -> None:
+        self.assertEqual(_translated_slide_sections("## 幻灯片 1：甲\n\n甲。\n\n## 幻灯片 1：乙\n\n乙。"), {})
+
+    def test_language_preference_survives_navigation_and_missing_translation(self) -> None:
+        from streamlit.testing.v1 import AppTest
+        app = AppTest.from_string("""
+import streamlit as st
+from src.ui.library_page import _render_slide_text_language
+slide = st.session_state.get("slide", 1)
+contents = {"English": "English text"}
+if slide != 2:
+    contents["Chinese (Simplified)"] = "中文"
+_render_slide_text_language("lecture-a", slide, contents)
+if st.button("Next"):
+    st.session_state["slide"] = slide + 1
+    st.rerun()
+""").run()
+        app.selectbox[0].select("Chinese (Simplified)").run()
+        self.assertEqual(app.selectbox[0].value, "Chinese (Simplified)")
+        app.button[0].click().run()
+        self.assertEqual(app.selectbox[0].options, ["English"])
+        self.assertEqual(app.selectbox[0].value, "English")
+        app.button[0].click().run()
+        self.assertEqual(app.selectbox[0].value, "Chinese (Simplified)")
+        app.selectbox[0].select("English").run()
+        app.button[0].click().run()
+        self.assertEqual(app.selectbox[0].value, "English")
+        self.assertFalse(app.exception)
+
     def test_library_pdf_resolves_its_exact_slide_summary_and_source_job(self) -> None:
         import fitz
 
