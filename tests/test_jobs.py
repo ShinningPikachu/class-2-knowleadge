@@ -671,8 +671,14 @@ class JobManagerTest(unittest.TestCase):
             "Chinese (Simplified)",
             priority=PRIORITIES["High"],
         )
+        duplicate_request = self.manager.enqueue_translation(
+            source_job.id,
+            "Chinese (Simplified)",
+            priority=PRIORITIES["Normal"],
+        )
 
         self.assertEqual(translation_job.kind, "translation")
+        self.assertEqual(duplicate_request.id, translation_job.id)
         self.assertEqual(translation_job.payload["source_language"], "English")
         self.assertEqual(translation_job.payload["target_language"], "Chinese (Simplified)")
         self.assertEqual(translation_job.payload["subject_name"], "Linguistics")
@@ -714,7 +720,8 @@ class JobManagerTest(unittest.TestCase):
         self.assertTrue(Path(completed.result["markdown_path"]).is_file())
         self.assertTrue(Path(completed.result["pdf_path"]).is_file())
         stored_names = {item.original_name for item in library.list_documents(subject.id)}
-        self.assertTrue({"Notes.chinese_simplified.md", "Notes.chinese_simplified.pdf"}.issubset(stored_names))
+        self.assertIn("Notes.chinese_simplified.md", stored_names)
+        self.assertNotIn("Notes.chinese_simplified.pdf", stored_names)
 
     def test_slide_translation_is_linked_and_translates_only_its_explanation(self) -> None:
         self.manager.set_auto_unload_enabled(False)
@@ -793,7 +800,8 @@ class JobManagerTest(unittest.TestCase):
         self.assertIn("中文笔记", completed.result["translated_explanation"])
         self.assertIn("slide_0002", completed.result["markdown_path"])
         stored_names = {item.original_name for item in library.list_documents(subject.id)}
-        self.assertTrue({"slide_0002.chinese_simplified.md", "slide_0002.chinese_simplified.pdf"}.issubset(stored_names))
+        self.assertIn("slide_0002.chinese_simplified.md", stored_names)
+        self.assertNotIn("slide_0002.chinese_simplified.pdf", stored_names)
 
     def test_completed_lecture_can_queue_a_deep_review_for_one_slide(self) -> None:
         self.manager.set_auto_unload_enabled(False)

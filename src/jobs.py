@@ -382,8 +382,6 @@ class JobManager:
 
         if slide_number is not None and (slide_number < 1 or not explanation or not explanation.strip()):
             raise JobError("A slide translation needs a valid slide number and explanation.")
-        job_id = uuid4().hex
-        (self.root / job_id).mkdir(parents=True, exist_ok=False)
         source_subject = self.job_subject(source_job)
         payload = {
             "config": asdict(config),
@@ -402,6 +400,29 @@ class JobManager:
             payload.update(slide_number=slide_number, source_explanation=explanation.strip())
             if slide_content is not None:
                 payload["source_slide_content"] = slide_content.strip()
+        matching_fields = (
+            "source_job_id",
+            "target_language",
+            "slide_number",
+            "source_explanation",
+            "source_slide_content",
+        )
+        with self._database_lock, self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT * FROM jobs
+                WHERE kind = 'translation'
+                  AND status IN ('queued', 'waiting', 'running', 'deferred', 'completed')
+                ORDER BY created_at DESC
+                """
+            ).fetchall()
+        for row in rows:
+            existing = self._job_from_row(row)
+            if all(existing.payload.get(field) == payload.get(field) for field in matching_fields):
+                return existing
+
+        job_id = uuid4().hex
+        (self.root / job_id).mkdir(parents=True, exist_ok=False)
         title = f"Translate {source_job.title}{f' · Slide {slide_number}' if slide_number is not None else ''} → {target_language}"
         now = self._timestamp()
         with self._condition:
@@ -1623,7 +1644,6 @@ class JobManager:
             str(payload.get("library_folder_id") or "") or None,
             [
                 (markdown_path, f"{translation_stem if slide_number is not None else 'Notes'}.{language_slug}.md"),
-                (pdf_path, f"{translation_stem if slide_number is not None else 'Notes'}.{language_slug}.pdf"),
             ],
         )
 

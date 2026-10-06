@@ -13,6 +13,7 @@ from src.jobs import JobManager
 from src.library import LibraryStore
 from src.ui.library_page import (
     _exact_slide_summary,
+    _is_internal_lecture_artifact_name,
     _slide_explanation_translations,
     _slide_content_translations,
     _slide_content_markdown,
@@ -26,6 +27,17 @@ from src.ui.library_page import (
 
 
 class LibrarySlideReviewTest(unittest.TestCase):
+    def test_translation_artifacts_are_hidden_while_primary_notes_remain_visible(self) -> None:
+        for name in (
+            "Notes.chinese_simplified.md",
+            "Notes.chinese_simplified.pdf",
+            "slide_0002.french.md",
+            "slide_0002.french.pdf",
+        ):
+            self.assertTrue(_is_internal_lecture_artifact_name(name), name)
+        self.assertFalse(_is_internal_lecture_artifact_name("Notes.pdf"))
+        self.assertFalse(_is_internal_lecture_artifact_name("Slides.pdf"))
+
     def test_translations_follow_the_exact_slide_and_current_explanation(self) -> None:
         slide = {"slide": 2}
         bundle = SimpleNamespace(source_job=SimpleNamespace(id="lecture-a"), summaries={2: "Original explanation."})

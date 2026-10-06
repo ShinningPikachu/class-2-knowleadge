@@ -84,12 +84,18 @@ _INTERNAL_LECTURE_ARTIFACTS = (
 def _is_internal_lecture_artifact_name(filename: str) -> bool:
     """Recognize generated evidence that belongs behind a lecture preview."""
     path = Path(filename)
+    stem = path.stem.casefold()
     normalized = re.sub(r"[^a-z0-9]+", "_", path.stem.casefold()).strip("_")
+    translated_output = path.suffix.lower() in {".md", ".markdown", ".pdf"} and (
+        stem.startswith("notes.") or re.match(r"^slide_[0-9]+\.", stem) is not None
+    )
     return (
         "transcript" in normalized and path.suffix.lower() in {".json", ".txt"}
     ) or any(normalized.endswith(token.strip("_")) for token in _INTERNAL_LECTURE_ARTIFACTS) or (
         normalized.endswith("_notes") and path.suffix.lower() in {".md", ".markdown"}
-    ) or ("_deep_review_" in f"_{normalized}_" and path.suffix.lower() in {".md", ".markdown"})
+    ) or translated_output or (
+        "_deep_review_" in f"_{normalized}_" and path.suffix.lower() in {".md", ".markdown"}
+    )
 
 
 def _is_internal_lecture_artifact(document: LibraryDocument) -> bool:
@@ -899,9 +905,16 @@ def _render_translation_control(
                     slide_content=_slide_content_markdown(next(item for item in bundle.slides if int(item["slide"]) == slide_number)),
                 )
                 st.session_state[f"slide_requested_language_{document.id}_{slide_number}"] = target_language
-                st.session_state["library_file_notice"] = (
-                    f"Queued a {target_language} translation as job {translation_job.id[:8]}."
-                )
+                if translation_job.status == "completed":
+                    notice = f"The {target_language} translation is already available."
+                elif translation_job.status in {"queued", "waiting", "running", "deferred"}:
+                    notice = (
+                        f"The {target_language} translation is {translation_job.status} "
+                        f"as job {translation_job.id[:8]}."
+                    )
+                else:
+                    notice = f"Queued a {target_language} translation as job {translation_job.id[:8]}."
+                st.session_state["library_file_notice"] = notice
                 st.rerun()
             except JobError as exc:
                 st.error(str(exc))
