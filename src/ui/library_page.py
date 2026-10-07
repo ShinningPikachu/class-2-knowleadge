@@ -26,7 +26,7 @@ from ..voice import (
     wav_duration_seconds,
 )
 from .audio_transcript_component import render_audio_transcript
-from .common import format_size, render_search_results, subject_lookup
+from .common import format_size, render_preview_image, render_search_results, subject_lookup
 from .file_manager_component import file_icon, render_file_manager
 
 
@@ -470,7 +470,7 @@ def _render_stable_pdf_pages(document: LibraryDocument) -> None:
         </style>""",
     )
     with st.container(key="library_pdf_page_image"):
-        st.image(
+        render_preview_image(
             _pdf_page_image(str(document.stored_path), modified_ns, page_number),
             width="stretch",
         )
@@ -506,7 +506,7 @@ def _render_scrollable_pdf_pages(document: LibraryDocument) -> None:
     with pages:
         with st.container(key="library_pdf_scroll_pages"):
             for page_number in range(1, page_count + 1):
-                st.image(
+                render_preview_image(
                     _pdf_page_image(str(document.stored_path), modified_ns, page_number),
                     width="stretch",
                 )
@@ -698,7 +698,7 @@ def _render_powerpoint_preview(document: LibraryDocument) -> None:
             title = parts[0].splitlines()[0] if parts else f"Slide {slide_number}"
             with st.expander(f"Slide {slide_number}: {title}", expanded=slide_number == 1):
                 if slide_number in images:
-                    st.image(images[slide_number], width="stretch")
+                    render_preview_image(images[slide_number], width="stretch")
                 st.markdown("#### Slide content")
                 st.text("\n\n".join(parts) if parts else "(No extractable text on this slide.)")
                 if parts:
@@ -748,14 +748,14 @@ def _render_current_slide(document: LibraryDocument, slide: dict[str, Any]) -> N
             with fitz.open(document.stored_path) as pdf:
                 page = pdf[number - 1]
                 image = page.get_pixmap(matrix=fitz.Matrix(2.0, 2.0), alpha=False).tobytes("png")
-            st.image(image, width="stretch")
+            render_preview_image(image, width="stretch")
             return
         except Exception as exc:
             st.warning(f"Could not render slide {number}: {exc}")
 
     preview_path = Path(str(slide.get("preview_image", "")))
     if preview_path.is_file():
-        st.image(str(preview_path), width="stretch")
+        render_preview_image(str(preview_path), width="stretch")
         return
     title = html.escape(str(slide.get("title", f"Slide {number}")))
     content = html.escape(str(slide.get("content", "")) or "(No extractable slide text.)")
@@ -1180,7 +1180,7 @@ def _render_document_content(
         elif suffix in VIDEO_SUFFIXES:
             st.video(str(document.stored_path), format=document.media_type)
         elif suffix in IMAGE_SUFFIXES:
-            st.image(str(document.stored_path), width="stretch")
+            render_preview_image(str(document.stored_path), width="stretch")
         elif suffix == ".json":
             text, truncated = _read_text_preview(document.stored_path)
             try:

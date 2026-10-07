@@ -2,12 +2,26 @@
 
 from __future__ import annotations
 
+import base64
+from io import BytesIO
+from pathlib import Path
 from typing import Any
 
 import streamlit as st
 
 from ..config import PipelineConfig
 from ..library import SearchResult, Subject
+
+
+def render_preview_image(image: bytes | str | Path, *, width: str = "stretch") -> None:
+    """Embed local previews without Streamlit's transient media-store URLs."""
+    from PIL import Image
+
+    data = image if isinstance(image, bytes) else Path(image).read_bytes()
+    with Image.open(BytesIO(data)) as source:
+        mime_type = Image.MIME[source.format]
+    encoded = base64.b64encode(data).decode("ascii")
+    st.image(f"data:{mime_type};base64,{encoded}", width=width)
 
 
 def format_size(size_bytes: int) -> str:

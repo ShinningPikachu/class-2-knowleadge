@@ -15,6 +15,32 @@ from src.ui.library_page import _handle_file_manager_event, _pdf_page_count, _pd
 
 
 class FileManagerIconTest(unittest.TestCase):
+    def test_previews_embed_image_data_instead_of_transient_media_urls(self) -> None:
+        from io import BytesIO
+        from PIL import Image
+        from streamlit.testing.v1 import AppTest
+
+        for image_format in ("PNG", "JPEG", "GIF", "WEBP"):
+            with self.subTest(image_format=image_format), TemporaryDirectory() as directory:
+                buffer = BytesIO()
+                Image.new("RGB", (8, 8), "blue").save(buffer, format=image_format)
+                data = buffer.getvalue()
+                path = Path(directory) / "preview"
+                path.write_bytes(data)
+                app = AppTest.from_string(
+                    "from src.ui.common import render_preview_image\n"
+                    f"render_preview_image({data!r})\n"
+                    f"render_preview_image({str(path)!r})\n"
+                ).run()
+
+                self.assertFalse(app.exception)
+                images = app.get("imgs")
+                self.assertEqual(len(images), 2)
+                for image in images:
+                    url = image.proto.imgs[0].url
+                    self.assertTrue(url.startswith(f"data:image/{image_format.lower()};base64,"))
+                    self.assertEqual(base64.b64decode(url.split(",", 1)[1]), data)
+
     def test_inline_pdf_preview_uses_a_real_page_image(self) -> None:
         import fitz
 
