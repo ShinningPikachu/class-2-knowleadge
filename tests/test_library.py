@@ -40,6 +40,43 @@ class LibraryStoreTest(unittest.TestCase):
         with self.assertRaises(LibraryError):
             self.store.create_subject("databases")
 
+    def test_subject_deletion_removes_its_files_folders_and_search_index(self) -> None:
+        deleted_subject = self.store.create_subject("Networks")
+        retained_subject = self.store.create_subject("Algorithms")
+        folder = self.store.create_folder(deleted_subject.id, "Lecture 1")
+        document = self.store.add_document_bytes(
+            deleted_subject.id,
+            "packets.txt",
+            b"Packet switching divides a message into packets.",
+            folder_id=folder.id,
+        )
+        retained_document = self.store.add_document_bytes(
+            retained_subject.id,
+            "graphs.txt",
+            b"Graphs contain vertices and edges.",
+        )
+        derived_file = self.store.subjects_root / deleted_subject.id / "derived" / "notes.md"
+        derived_file.write_text("Generated notes", encoding="utf-8")
+
+        deleted = self.store.delete_subject(deleted_subject.id)
+
+        self.assertEqual(deleted, deleted_subject)
+        self.assertFalse((self.store.subjects_root / deleted_subject.id).exists())
+        self.assertFalse(document.stored_path.exists())
+        self.assertFalse(derived_file.exists())
+        self.assertEqual(self.store.search_documents("packet"), [])
+        with self.assertRaises(LibraryError):
+            self.store.list_folders(deleted_subject.id)
+        self.assertEqual(self.store.list_documents(deleted_subject.id), [])
+        self.assertEqual([item.name for item in self.store.list_subjects()], ["Algorithms"])
+        self.assertTrue(retained_document.stored_path.is_file())
+        self.assertEqual(self.store.stats(), {
+            "subjects": 1,
+            "folders": 0,
+            "documents": 1,
+            "indexed_documents": 1,
+        })
+
     def test_duplicate_file_is_rejected_within_one_subject(self) -> None:
         subject = self.store.create_subject("Algorithms")
         self.store.add_document_bytes(subject.id, "one.txt", b"Dijkstra shortest path")

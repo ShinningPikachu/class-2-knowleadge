@@ -232,6 +232,41 @@ class LibraryStore:
             raise LibraryError("The selected subject no longer exists.")
         return self._subject_from_row(row)
 
+    def delete_subject(self, subject_id: str) -> Subject:
+        """Permanently delete a subject, including its files and search index."""
+        subject = self.get_subject(subject_id)
+        subject_path = self.subjects_root / subject.id
+        tombstone = self.subjects_root / f".{subject.id}.deleting"
+        try:
+            if subject_path.exists():
+                subject_path.replace(tombstone)
+        except OSError as exc:
+            raise LibraryError(f"Could not delete the subject '{subject.name}': {exc}") from exc
+
+        try:
+            with self._connect() as connection:
+                deleted = connection.execute("DELETE FROM subjects WHERE id = ?", (subject.id,))
+                if deleted.rowcount != 1:
+                    raise LibraryError("The selected subject no longer exists.")
+        except (LibraryError, sqlite3.Error) as exc:
+            if tombstone.exists() and not subject_path.exists():
+                try:
+                    tombstone.replace(subject_path)
+                except OSError:
+                    pass
+            if isinstance(exc, LibraryError):
+                raise
+            raise LibraryError(f"Could not delete the subject '{subject.name}': {exc}") from exc
+
+        try:
+            if tombstone.exists():
+                shutil.rmtree(tombstone)
+        except OSError:
+            # The catalog and search index are already deleted. Keep any
+            # undeletable bytes hidden rather than restoring orphaned files.
+            pass
+        return subject
+
     def create_folder(self, subject_id: str, name: str) -> LibraryFolder:
         """Create a one-level folder inside a subject."""
         self.get_subject(subject_id)

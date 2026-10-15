@@ -50,6 +50,33 @@ class StreamlitAppTest(unittest.TestCase):
                 selector = next(item for item in app.selectbox if item.label == "Open subject")
                 self.assertEqual(selector.value, subjects[0].id)
 
+    def test_subject_can_be_removed_from_the_selector(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temporary_root = Path(directory)
+            library = LibraryStore(temporary_root / "library")
+            subject = library.create_subject("Linear Algebra")
+            document = library.add_document_bytes(subject.id, "vectors.txt", b"A vector has magnitude.")
+            with patch(
+                "src.config.project_path",
+                side_effect=lambda *parts: temporary_root.joinpath(*parts),
+            ), patch("src.jobs.JobManager.start"):
+                app = AppTest.from_file(str(PROJECT_ROOT / "app.py"), default_timeout=20).run()
+                self.assertFalse(list(app.exception))
+
+                remove_subject = next(item for item in app.button if item.label == "🗑️")
+                remove_subject.click().run()
+                self.assertFalse(list(app.exception))
+                self.assertIn(
+                    "Permanently remove 'Linear Algebra'? This deletes 1 file, 0 folders, and their search data.",
+                    [item.value for item in app.warning],
+                )
+
+                confirm = next(item for item in app.button if item.label == "Delete subject")
+                confirm.click().run()
+                self.assertFalse(list(app.exception))
+                self.assertEqual(library.list_subjects(), [])
+                self.assertFalse(document.stored_path.exists())
+
     def test_all_workspaces_render_without_exceptions(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             temporary_root = Path(directory)

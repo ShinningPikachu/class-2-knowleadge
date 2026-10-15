@@ -18,9 +18,10 @@ import streamlit as st
 from ..jobs import PRIORITIES, JobError, JobManager, JobRecord
 from ..library import LibraryDocument, LibraryError, LibraryFolder, LibraryStore
 from ..voice import (
-    SYSTEM_DEFAULT_VOICE,
     VoiceNarrationError,
+    install_default_voice,
     local_voice_options,
+    neural_voice_setup_message,
     prepare_narration,
     synthesize_speech,
     wav_duration_seconds,
@@ -560,26 +561,34 @@ def _render_voice_narration(
     button_target: Any | None = None,
     help_text: str = "Explain this content aloud with a local voice.",
 ) -> None:
-    """Offer local TTS playback without storing narration files in the library."""
+    """Offer local neural TTS playback without storing narration files in the library."""
     target = button_target or st
     voices = local_voice_options()
-    if not voices:
-        target.button(
-            button_label,
-            disabled=True,
-            help="No local voice engine is available on this computer.",
-            key=f"library_voice_unavailable_{key}",
-            width="stretch",
-        )
-        return
     with target.popover(
         button_label,
         help=help_text,
         width="stretch",
     ):
-        st.caption("Narration is generated locally and is not uploaded or saved to your library.")
+        st.caption("Narration uses a local Piper neural voice and is not uploaded or saved to your library.")
+        setup_message = neural_voice_setup_message()
+        if setup_message:
+            st.info(setup_message)
+            if "not installed" not in setup_message:
+                if st.button(
+                    "Install English neural voice",
+                    key=f"library_install_voice_{key}",
+                    width="stretch",
+                ):
+                    try:
+                        with st.spinner("Downloading the local neural voice…"):
+                            install_default_voice()
+                    except VoiceNarrationError as exc:
+                        st.error(str(exc))
+                    else:
+                        st.rerun()
+            return
         voice = st.selectbox(
-            "Voice",
+            "Neural voice",
             voices,
             key=f"library_voice_choice_{key}",
         )
@@ -1489,6 +1498,8 @@ def _render_subject_selector(library: LibraryStore) -> str | None:
     name_key = "library_new_subject_name"
     error_key = "library_new_subject_error"
     notice_key = "library_new_subject_notice"
+    deleting_key = "library_subject_delete_confirmation"
+    pending_selection_key = "library_pending_open_subject"
 
     if st.session_state.get(creating_key, False):
         def create_subject() -> None:
@@ -1525,7 +1536,24 @@ def _render_subject_selector(library: LibraryStore) -> str | None:
 
     subjects = library.list_subjects()
     lookup = subject_lookup(subjects)
-    selector, add = st.columns([12, 1], vertical_alignment="bottom")
+    pending_selection = st.session_state.pop(pending_selection_key, None)
+    if pending_selection is not None:
+        if pending_selection in lookup:
+            st.session_state["library_open_subject"] = pending_selection
+        else:
+            st.session_state.pop("library_open_subject", None)
+    elif st.session_state.get("library_open_subject") not in lookup:
+        if subjects:
+            st.session_state["library_open_subject"] = subjects[0].id
+        else:
+            st.session_state.pop("library_open_subject", None)
+
+    deletion_target_id = str(st.session_state.get(deleting_key, ""))
+    if deletion_target_id and deletion_target_id not in lookup:
+        st.session_state.pop(deleting_key, None)
+        deletion_target_id = ""
+
+    selector, add, remove = st.columns([10, 1, 1], vertical_alignment="bottom")
     with selector:
         selected_id = st.selectbox(
             "Open subject",
@@ -1533,7 +1561,7 @@ def _render_subject_selector(library: LibraryStore) -> str | None:
             format_func=lambda value: lookup[value].name,
             key="library_open_subject",
             placeholder="No subjects yet",
-            disabled=not subjects,
+            disabled=not subjects or bool(deletion_target_id),
         )
     with add:
         if st.button(
@@ -1541,14 +1569,52 @@ def _render_subject_selector(library: LibraryStore) -> str | None:
             key="library_add_subject",
             help="Add a subject",
             width="stretch",
+            disabled=bool(deletion_target_id),
         ):
             st.session_state[creating_key] = True
             st.session_state.pop(name_key, None)
             st.session_state.pop(error_key, None)
             st.rerun()
+    with remove:
+        if st.button(
+            "🗑️",
+            key="library_delete_subject",
+            help="Remove this subject",
+            width="stretch",
+            disabled=not subjects or bool(deletion_target_id),
+        ):
+            st.session_state[deleting_key] = str(selected_id)
+            st.rerun()
     if not subjects:
         st.info("Select + to add your first subject.")
         return None
+
+    if deletion_target_id:
+        target = lookup[deletion_target_id]
+        document_count = len(library.list_documents(target.id))
+        folder_count = len(library.list_folders(target.id))
+        st.warning(
+            f"Permanently remove '{target.name}'? This deletes {document_count} "
+            f"file{'s' if document_count != 1 else ''}, {folder_count} "
+            f"folder{'s' if folder_count != 1 else ''}, and their search data."
+        )
+        confirm, cancel = st.columns(2)
+        if confirm.button("Delete subject", type="primary", key="library_confirm_delete_subject"):
+            try:
+                deleted = library.delete_subject(target.id)
+            except LibraryError as exc:
+                st.error(str(exc))
+                return str(selected_id)
+            remaining_subjects = library.list_subjects()
+            st.session_state.pop(deleting_key, None)
+            st.session_state[pending_selection_key] = (
+                remaining_subjects[0].id if remaining_subjects else ""
+            )
+            st.session_state[notice_key] = f"Deleted {deleted.name}."
+            st.rerun()
+        if cancel.button("Cancel", key="library_cancel_delete_subject"):
+            st.session_state.pop(deleting_key, None)
+            st.rerun()
     return str(selected_id)
 
 

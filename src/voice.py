@@ -1,26 +1,103 @@
-"""Offline, complete text-to-speech narration for library content."""
+"""Offline neural text-to-speech narration for library content."""
 
 from __future__ import annotations
 
-from functools import lru_cache
 from collections.abc import Callable
+from functools import lru_cache
 import io
 from pathlib import Path
 import re
-import shutil
 import subprocess
-import tempfile
+import sys
 import wave
 
 
 class VoiceNarrationError(RuntimeError):
-    """Raised when a local voice engine cannot create playable narration."""
+    """Raised when local neural text-to-speech cannot create playable narration."""
 
 
-SYSTEM_DEFAULT_VOICE = "System default"
+DEFAULT_PIPER_VOICE = "en_US-lessac-medium"
 NARRATION_CHUNK_CHARS = 320
 MINIMUM_RECOVERY_CHARS = 48
 MAXIMUM_RECOVERY_DEPTH = 4
+
+
+def _voice_models_root() -> Path:
+    """Keep downloaded neural voices outside the tracked source tree."""
+    return Path(__file__).resolve().parents[1] / "models" / "piper"
+
+
+def _installed_voice_models() -> dict[str, Path]:
+    root = _voice_models_root()
+    if not root.is_dir():
+        return {}
+    models: dict[str, Path] = {}
+    for candidate in root.rglob("*.onnx"):
+        config_path = candidate.with_suffix(candidate.suffix + ".json")
+        if config_path.is_file():
+            name = candidate.relative_to(root).with_suffix("").as_posix()
+            models[name] = candidate
+    return dict(sorted(models.items(), key=lambda item: item[0].casefold()))
+
+
+@lru_cache(maxsize=1)
+def local_voice_options() -> tuple[str, ...]:
+    """Return fully downloaded Piper voice-model names."""
+    return tuple(_installed_voice_models())
+
+
+def neural_voice_setup_message() -> str | None:
+    """Explain the one-time local setup required before narration can run."""
+    try:
+        import piper  # noqa: F401
+    except ImportError:
+        return "The Piper neural voice runtime is not installed. Update the app dependencies, then restart it."
+    if not local_voice_options():
+        root = _voice_models_root()
+        return (
+            "No Piper voice model is installed yet. Install the bundled English voice below, "
+            f"or place a Piper .onnx model and its matching .onnx.json file in {root}."
+        )
+    return None
+
+
+def install_default_voice() -> Path:
+    """Download the default open-source Piper voice after an explicit UI request."""
+    try:
+        import piper  # noqa: F401
+    except ImportError as exc:
+        raise VoiceNarrationError(
+            "The Piper neural voice runtime is not installed. Update dependencies and restart the app."
+        ) from exc
+
+    root = _voice_models_root()
+    root.mkdir(parents=True, exist_ok=True)
+    command = [
+        sys.executable,
+        "-m",
+        "piper.download_voices",
+        DEFAULT_PIPER_VOICE,
+        "--download-dir",
+        str(root),
+    ]
+    try:
+        subprocess.run(command, check=True, capture_output=True, text=True, timeout=300)
+    except subprocess.TimeoutExpired as exc:
+        raise VoiceNarrationError("Downloading the neural voice model took too long. Try again later.") from exc
+    except OSError as exc:
+        raise VoiceNarrationError(f"Could not start the Piper voice download: {exc}") from exc
+    except subprocess.CalledProcessError as exc:
+        detail = (exc.stderr or exc.stdout or "").strip()
+        suffix = f" Details: {detail}" if detail else ""
+        raise VoiceNarrationError(f"Could not download the Piper voice model.{suffix}") from exc
+
+    model_path = root / f"{DEFAULT_PIPER_VOICE}.onnx"
+    config_path = model_path.with_suffix(model_path.suffix + ".json")
+    if not model_path.is_file() or not config_path.is_file():
+        raise VoiceNarrationError("Piper finished without saving a complete voice model. Try the download again.")
+    local_voice_options.cache_clear()
+    _load_piper_voice.cache_clear()
+    return model_path
 
 
 def prepare_narration(text: str, maximum_chars: int | None = None) -> tuple[str, bool]:
@@ -35,35 +112,6 @@ def prepare_narration(text: str, maximum_chars: int | None = None) -> tuple[str,
     if boundary < maximum_chars // 2:
         boundary = maximum_chars
     return normalized[:boundary].rstrip(" ,;:") + "…", True
-
-
-@lru_cache(maxsize=1)
-def local_voice_options() -> tuple[str, ...]:
-    """Return locally installed voices, beginning with the system default."""
-    if shutil.which("say"):
-        try:
-            result = subprocess.run(
-                ["say", "-v", "?"],
-                check=True,
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-        except (OSError, subprocess.SubprocessError):
-            return (SYSTEM_DEFAULT_VOICE,)
-        names = [
-            match.group(1).strip()
-            for line in result.stdout.splitlines()
-            if (match := re.match(r"^(.+?)\s{2,}\S+\s+#", line))
-        ]
-        # The local voice catalog can be very long. Prefer the common English
-        # voices first while retaining every discovered voice for other lessons.
-        preferred = [name for name in ("Samantha", "Ava", "Alex") if name in names]
-        remaining = [name for name in names if name not in preferred]
-        return tuple(dict.fromkeys([SYSTEM_DEFAULT_VOICE, *preferred, *remaining]))
-    if shutil.which("espeak-ng") or shutil.which("espeak"):
-        return (SYSTEM_DEFAULT_VOICE,)
-    return ()
 
 
 def _narration_chunks(text: str, limit: int = NARRATION_CHUNK_CHARS) -> list[str]:
@@ -87,10 +135,10 @@ def wav_duration_seconds(audio: bytes) -> float:
     try:
         with wave.open(io.BytesIO(audio), "rb") as wav:
             if wav.getframerate() <= 0:
-                raise VoiceNarrationError("The voice engine returned audio with an invalid sample rate.")
+                raise VoiceNarrationError("The voice model returned audio with an invalid sample rate.")
             return wav.getnframes() / wav.getframerate()
     except (wave.Error, EOFError) as exc:
-        raise VoiceNarrationError("The local voice engine returned an invalid WAV audio file.") from exc
+        raise VoiceNarrationError("The voice model returned an invalid WAV audio file.") from exc
 
 
 def _minimum_duration_seconds(text: str) -> float:
@@ -98,8 +146,7 @@ def _minimum_duration_seconds(text: str) -> float:
     cjk_characters = len(re.findall(r"[\u3400-\u9fff\uf900-\ufaff]", text))
     without_cjk = re.sub(r"[\u3400-\u9fff\uf900-\ufaff]", " ", text)
     words = len(re.findall(r"\b[\w']+\b", without_cjk, flags=re.UNICODE))
-    # The configured engine rate is 175 words/minute. Allow substantial room
-    # for abbreviations, punctuation, URLs, and unusually fast voices.
+    # Allow substantial room for abbreviations, punctuation, URLs, and fast voices.
     expected = words * 60 / 175 + cjk_characters / 4.5
     return max(0.18, expected * 0.42)
 
@@ -109,8 +156,7 @@ def _validate_segment_completion(text: str, audio: bytes) -> None:
     minimum = _minimum_duration_seconds(text)
     if duration < minimum:
         raise VoiceNarrationError(
-            f"The voice engine stopped early ({duration:.1f}s generated; "
-            f"at least {minimum:.1f}s expected)."
+            f"The voice model stopped early ({duration:.1f}s generated; at least {minimum:.1f}s expected)."
         )
 
 
@@ -136,7 +182,7 @@ def _synthesize_complete_segment(
     *,
     depth: int = 0,
 ) -> list[bytes]:
-    """Synthesize one segment, recursively shrinking it if an engine truncates."""
+    """Synthesize one segment, recursively shrinking it if a model truncates."""
     last_error: VoiceNarrationError | None = None
     for _attempt in range(2):
         try:
@@ -156,14 +202,14 @@ def _synthesize_complete_segment(
                 )
             return recovered
 
-    detail = str(last_error) if last_error else "unknown voice-engine failure"
+    detail = str(last_error) if last_error else "unknown neural voice-model failure"
     raise VoiceNarrationError(f"The narration segment could not be completed: {detail}")
 
 
 def _join_wav_segments(segments: list[bytes]) -> bytes:
     """Combine decoded PCM frames so browsers receive one valid WAV container."""
     if not segments:
-        raise VoiceNarrationError("The voice engine did not return any narration segments.")
+        raise VoiceNarrationError("The voice model did not return any narration segments.")
     output = io.BytesIO()
     with wave.open(output, "wb") as joined:
         parameters: tuple[int, int, int] | None = None
@@ -179,36 +225,109 @@ def _join_wav_segments(segments: list[bytes]) -> bytes:
                         joined.setcomptype("NONE", "not compressed")
                     elif current != parameters:
                         raise VoiceNarrationError(
-                            "The voice engine changed audio format between narration segments."
+                            "The voice model changed audio format between narration segments."
                         )
                     joined.writeframes(wav.readframes(wav.getnframes()))
             except (wave.Error, EOFError) as exc:
-                raise VoiceNarrationError(
-                    "The local voice engine returned an invalid WAV audio segment."
-                ) from exc
+                raise VoiceNarrationError("The voice model returned an invalid WAV audio segment.") from exc
     return output.getvalue()
 
 
-def synthesize_speech(text: str, voice: str = SYSTEM_DEFAULT_VOICE) -> bytes:
-    """Synthesize all text in bounded chunks and return one complete PCM WAV."""
-    narration, _ = prepare_narration(text)
-    macos = shutil.which("say")
-    espeak = shutil.which("espeak-ng") or shutil.which("espeak")
-    if not macos and not espeak:
+def _piper_voice_path(voice: str) -> Path:
+    model_path = _installed_voice_models().get(voice)
+    if model_path is None:
         raise VoiceNarrationError(
-            "No local voice engine was found. On macOS, enable the built-in 'say' command; "
-            "on Linux, install espeak-ng."
+            f"The Piper voice '{voice}' is not installed. Choose an available neural voice model."
         )
-    engine = _synthesize_with_macos_say if macos else (
-        lambda segment, selected_voice: _synthesize_with_espeak(
-            str(espeak), segment, selected_voice
-        )
+    return model_path
+
+
+@lru_cache(maxsize=4)
+def _load_piper_voice(model_path: str) -> object:
+    try:
+        from piper import PiperVoice
+    except ImportError as exc:
+        raise VoiceNarrationError(
+            "The Piper neural voice runtime is not installed. Update dependencies and restart the app."
+        ) from exc
+    try:
+        return PiperVoice.load(model_path)
+    except Exception as exc:
+        raise VoiceNarrationError(f"Could not load the Piper voice model: {exc}") from exc
+
+
+def _piper_safe_text(text: str) -> str:
+    """Keep document text from opting into Piper's raw-phoneme syntax."""
+    return text.replace("[[", "open bracket open bracket").replace(
+        "]]", "close bracket close bracket"
     )
+
+
+def _validate_wav_bytes(audio: bytes) -> bytes:
+    if len(audio) < 44 or not audio.startswith(b"RIFF") or audio[8:12] != b"WAVE":
+        raise VoiceNarrationError("The voice model returned an invalid WAV audio file.")
+    try:
+        with wave.open(io.BytesIO(audio), "rb") as wav:
+            if wav.getcomptype() != "NONE" or wav.getsampwidth() != 2:
+                raise VoiceNarrationError("The voice model returned unsupported audio.")
+            frames = wav.readframes(wav.getnframes())
+            expected = wav.getnframes() * wav.getnchannels() * wav.getsampwidth()
+            if not expected or len(frames) != expected:
+                raise VoiceNarrationError("The voice model produced empty or incomplete audio.")
+            if not any(frames):
+                raise VoiceNarrationError("The voice model produced silent audio.")
+            # Rewrite a standard PCM WAV, removing model/runtime-specific chunks.
+            output = io.BytesIO()
+            with wave.open(output, "wb") as clean:
+                clean.setparams(wav.getparams())
+                clean.writeframes(frames)
+            return output.getvalue()
+    except (wave.Error, EOFError) as exc:
+        raise VoiceNarrationError("The voice model returned an invalid WAV audio file.") from exc
+
+
+def _read_wav(path: Path) -> bytes:
+    """Read and validate a WAV file; retained for filesystem-level validation tests."""
+    try:
+        return _validate_wav_bytes(path.read_bytes())
+    except OSError as exc:
+        raise VoiceNarrationError(f"The voice model did not produce an audio file: {exc}") from exc
+
+
+def _synthesize_with_piper(text: str, voice: str) -> bytes:
+    model_path = _piper_voice_path(voice)
+    model = _load_piper_voice(str(model_path))
+    sample_rate = int(getattr(getattr(model, "config", None), "sample_rate", 0))
+    if sample_rate <= 0:
+        raise VoiceNarrationError("The Piper voice model has an invalid sample rate.")
+    output = io.BytesIO()
+    try:
+        with wave.open(output, "wb") as wav:
+            # Piper otherwise sets the WAV header lazily. Initializing it here
+            # converts a punctuation-only model response into a clear empty-audio
+            # error instead of a low-level wave-module exception.
+            wav.setnchannels(1)
+            wav.setsampwidth(2)
+            wav.setframerate(sample_rate)
+            getattr(model, "synthesize_wav")(_piper_safe_text(text), wav, set_wav_format=False)
+    except VoiceNarrationError:
+        raise
+    except Exception as exc:
+        raise VoiceNarrationError(f"The Piper voice model could not create narration: {exc}") from exc
+    return _validate_wav_bytes(output.getvalue())
+
+
+def synthesize_speech(text: str, voice: str = DEFAULT_PIPER_VOICE) -> bytes:
+    """Synthesize all text locally with Piper and return one complete PCM WAV."""
+    narration, _ = prepare_narration(text)
+    # Resolve the voice before consuming time on chunk synthesis, so a missing
+    # model is reported once with an actionable message.
+    _piper_voice_path(voice)
     chunks = _narration_chunks(narration)
     segments: list[bytes] = []
     for index, chunk in enumerate(chunks, start=1):
         try:
-            segments.extend(_synthesize_complete_segment(chunk, engine, voice))
+            segments.extend(_synthesize_complete_segment(chunk, _synthesize_with_piper, voice))
         except VoiceNarrationError as exc:
             raise VoiceNarrationError(
                 f"Narration part {index} of {len(chunks)} failed: {exc}"
@@ -216,86 +335,3 @@ def synthesize_speech(text: str, voice: str = SYSTEM_DEFAULT_VOICE) -> bytes:
     completed = _join_wav_segments(segments)
     _validate_segment_completion(narration, completed)
     return completed
-
-
-def _synthesize_with_macos_say(text: str, voice: str) -> bytes:
-    with tempfile.TemporaryDirectory(prefix="class-knowledge-voice-") as directory:
-        root = Path(directory)
-        text_path = root / "narration.txt"
-        output_path = root / "narration.wav"
-        # ``say`` reserves double brackets for embedded commands (for example,
-        # ``[[slnc 200]]``). Lecture code such as nested Python lists must be
-        # spoken as content and must never control the speech engine.
-        safe_text = text.replace("[[", " open bracket open bracket ").replace(
-            "]]", " close bracket close bracket "
-        )
-        text_path.write_text(safe_text, encoding="utf-8")
-        command = ["say", "-r", "175"]
-        if voice and voice != SYSTEM_DEFAULT_VOICE:
-            command.extend(["-v", voice])
-        command.extend(
-            [
-                "-f",
-                str(text_path),
-                "-o",
-                str(output_path),
-                "--file-format=WAVE",
-                "--data-format=LEI16@22050",
-            ]
-        )
-        _run_voice_command(command)
-        return _read_wav(output_path)
-
-
-def _synthesize_with_espeak(executable: str, text: str, voice: str) -> bytes:
-    with tempfile.TemporaryDirectory(prefix="class-knowledge-voice-") as directory:
-        output_path = Path(directory) / "narration.wav"
-        command = [executable, "-s", "175", "-w", str(output_path)]
-        if voice and voice != SYSTEM_DEFAULT_VOICE:
-            command.extend(["-v", voice])
-        command.append(text)
-        _run_voice_command(command)
-        return _read_wav(output_path)
-
-
-def _run_voice_command(command: list[str]) -> None:
-    try:
-        subprocess.run(command, check=True, capture_output=True, text=True, timeout=120)
-    except subprocess.TimeoutExpired as exc:
-        raise VoiceNarrationError("The local voice engine took too long to create this narration.") from exc
-    except OSError as exc:
-        raise VoiceNarrationError(f"Could not start the local voice engine: {exc}") from exc
-    except subprocess.CalledProcessError as exc:
-        detail = (exc.stderr or exc.stdout or "").strip()
-        suffix = f" Details: {detail}" if detail else ""
-        raise VoiceNarrationError(f"The local voice engine could not create narration.{suffix}") from exc
-
-
-def _read_wav(path: Path) -> bytes:
-    try:
-        audio = path.read_bytes()
-    except OSError as exc:
-        raise VoiceNarrationError(f"The local voice engine did not produce an audio file: {exc}") from exc
-    if len(audio) < 44 or not audio.startswith(b"RIFF") or audio[8:12] != b"WAVE":
-        raise VoiceNarrationError("The local voice engine returned an invalid WAV audio file.")
-    try:
-        with wave.open(io.BytesIO(audio), "rb") as wav:
-            if wav.getcomptype() != "NONE" or wav.getsampwidth() != 2:
-                raise VoiceNarrationError("The voice engine returned unsupported audio; select another voice.")
-            frames = wav.readframes(wav.getnframes())
-            expected = wav.getnframes() * wav.getnchannels() * wav.getsampwidth()
-            if not expected or len(frames) != expected:
-                raise VoiceNarrationError(
-                    "The voice engine produced empty or incomplete audio. Try another installed voice. "
-                    "If this persists, run the app from Terminal with access to macOS speech services."
-                )
-            if not any(frames):
-                raise VoiceNarrationError("The voice engine produced silent audio. Try another installed voice.")
-            # Rewrite a standard PCM WAV, removing platform-specific chunks.
-            output = io.BytesIO()
-            with wave.open(output, "wb") as clean:
-                clean.setparams(wav.getparams())
-                clean.writeframes(frames)
-            return output.getvalue()
-    except (wave.Error, EOFError) as exc:
-        raise VoiceNarrationError("The local voice engine returned an invalid WAV audio file.") from exc
