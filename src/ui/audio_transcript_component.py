@@ -33,6 +33,7 @@ def render_audio_transcript(
     *,
     key: str,
     height: int = 650,
+    focus_text: str = "",
 ) -> bool:
     """Render transcript cues that follow playback and seek the recording."""
     audio_url = _media_url(path, media_type, key)
@@ -52,6 +53,7 @@ def render_audio_transcript(
     ]
     payload = json.dumps(cues, ensure_ascii=False).replace("</", "<\\/")
     source = json.dumps(audio_url).replace("</", "<\\/")
+    focus = json.dumps(focus_text).replace("</", "<\\/")
     html = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -102,6 +104,7 @@ def render_audio_transcript(
   <script>
     const source = {source};
     const cues = {payload};
+    const focusText = {focus};
     const audio = document.getElementById("audio");
     const timeline = document.getElementById("timeline");
     audio.src = source;
@@ -136,6 +139,28 @@ def render_audio_transcript(
       return button;
     }});
 
+    function words(text) {{
+      return String(text || "").toLowerCase().match(/[\p{{L}}\p{{N}}']{{3,}}/gu) || [];
+    }}
+
+    function focusCue() {{
+      const terms = [...new Set(words(focusText))].slice(0, 12);
+      if (!terms.length) return;
+      let bestIndex = -1;
+      let bestScore = 0;
+      cues.forEach((cue, index) => {{
+        const copy = String(cue.text || "").toLowerCase();
+        const score = terms.reduce((total, term) => total + (copy.includes(term) ? 1 : 0), 0);
+        if (score > bestScore) {{ bestScore = score; bestIndex = index; }}
+      }});
+      if (bestIndex < 0) return;
+      nodes[bestIndex].classList.add("active");
+      nodes[bestIndex].scrollIntoView({{ behavior: "auto", block: "center" }});
+      audio.addEventListener("loadedmetadata", () => {{
+        audio.currentTime = cues[bestIndex].start;
+      }}, {{ once: true }});
+    }}
+
     if (!nodes.length) {{
       const empty = document.createElement("div");
       empty.className = "empty";
@@ -168,6 +193,7 @@ def render_audio_transcript(
     }}
     audio.addEventListener("timeupdate", update);
     audio.addEventListener("seeked", update);
+    focusCue();
   </script>
 </body>
 </html>"""

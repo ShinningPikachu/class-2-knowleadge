@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --text: #31333f;
+      --muted: #687083;
+      --surface: #ffffff;
+      --soft: #f7f8fb;
+      --border: #d9dde7;
+      --accent: #ff4b4b;
+      --accent-soft: rgba(255, 75, 75, 0.10);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .hint {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    .result {
+      width: 100%;
+      margin: 0 0 8px;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--surface);
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+      user-select: text;
+    }
+    .result:hover, .result:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      outline: none;
+    }
+    .title { font-size: .92rem; font-weight: 700; }
+    .meta { margin-top: 3px; color: var(--muted); font-size: .76rem; }
+    .snippet {
+      margin-top: 9px;
+      font-size: .88rem;
+      line-height: 1.48;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #fafafa;
+        --muted: #a7adba;
+        --surface: #15171c;
+        --soft: #20232b;
+        --border: #3a3f4b;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main id="app"></main>
+  <script>
+    const app = document.getElementById("app");
+
+    function send(type, payload = {}) {
+      window.parent.postMessage({ isStreamlitMessage: true, type, ...payload }, "*");
+    }
+
+    function setHeight() {
+      window.requestAnimationFrame(() => {
+        send("streamlit:setFrameHeight", { height: app.scrollHeight + 4 });
+      });
+    }
+
+    function applyTheme(theme) {
+      if (!theme) return;
+      const root = document.documentElement.style;
+      if (theme.textColor) root.setProperty("--text", theme.textColor);
+      if (theme.secondaryBackgroundColor) root.setProperty("--soft", theme.secondaryBackgroundColor);
+      if (theme.backgroundColor) root.setProperty("--surface", theme.backgroundColor);
+      if (theme.primaryColor) {
+        root.setProperty("--accent", theme.primaryColor);
+        root.setProperty("--accent-soft", `${theme.primaryColor}1a`);
+      }
+      if (theme.font) document.body.style.fontFamily = theme.font;
+    }
+
+    function openSearchResult(result) {
+      const streamlitUrl = new URLSearchParams(window.location.search).get("streamlitUrl");
+      const url = new URL(streamlitUrl || window.parent.location.href);
+      url.searchParams.set("open_file", result.document_id);
+      url.searchParams.set("focus_locator", result.locator || "");
+      url.searchParams.set("focus_text", result.text || "");
+      window.open(url.toString(), "_blank", "noopener");
+    }
+
+    function element(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    function render(args, theme) {
+      applyTheme(theme);
+      app.replaceChildren();
+      const results = args.results || [];
+      app.appendChild(element("div", "hint", "Double-click a matching passage to open its source in a new tab."));
+      results.forEach((result) => {
+        const card = element("article", "result");
+        card.tabIndex = 0;
+        card.setAttribute("aria-label", `Open ${result.document_name} at ${result.locator}`);
+        card.append(
+          element("div", "title", result.document_name || "Stored file"),
+          element("div", "meta", [result.subject_name, result.locator].filter(Boolean).join(" · ")),
+          element("div", "snippet", result.text || "")
+        );
+        card.addEventListener("dblclick", (eventObject) => {
+          eventObject.preventDefault();
+          openSearchResult(result);
+        });
+        card.addEventListener("keydown", (eventObject) => {
+          if (eventObject.key === "Enter") {
+            eventObject.preventDefault();
+            openSearchResult(result);
+          }
+        });
+        app.appendChild(card);
+      });
+      setHeight();
+    }
+
+    window.addEventListener("message", (message) => {
+      if (message.data && message.data.type === "streamlit:render") {
+        render(message.data.args || {}, message.data.theme || {});
+      }
+    });
+    send("streamlit:componentReady", { apiVersion: 1 });
+    setHeight();
+  </script>
+</body>
+</html>

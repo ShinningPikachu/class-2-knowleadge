@@ -68,7 +68,7 @@ def render_lecture_processor(
     subjects = library.list_subjects()
     lookup = subject_lookup(subjects)
     save_subject = st.selectbox(
-        "Save sources, transcript, Markdown notes, and PDF notes to",
+        "Save lecture sources and PDF notes to",
         ["none"] + [subject.id for subject in subjects],
         format_func=lambda value: "Do not add to library" if value == "none" else lookup[value].name,
         disabled=not subjects,

@@ -12,6 +12,7 @@ from time import monotonic
 from typing import Any, ContextManager
 
 from .config import PipelineConfig
+from .quality import section_source_coverage
 from .rag import LocalRAG
 from .task_control import TaskControlSignal
 from .utils import clean_text, dump_json
@@ -28,7 +29,7 @@ class LectureAgent:
     """Generate grounded, per-slide study notes with a local Ollama model."""
 
     CHECKPOINT_SCHEMA_VERSION = 1
-    SLIDE_PROMPT_VERSION = "lecture-slide-notes-v4"
+    SLIDE_PROMPT_VERSION = "lecture-slide-synthesis-v6"
     SYNTHESIS_PROMPT_VERSION = "lecture-synthesis-v1"
     SUMMARY_PROMPT_VERSION = "lecture-material-summary-v2"
 
@@ -43,12 +44,19 @@ concepts only when they are stated, emphasized, defined, contrasted, repeated,
 or otherwise supported by the sources.
 
 Never invent information, examples, formulas, citations, or claims. Do not use
-outside knowledge to fill gaps. Normal lecture notes contain only a concise
-slide-specific summary. Detailed fields are permitted only for an explicitly
-requested Deep Review. Treat OCR text as potentially imperfect and do not infer
-a diagram's meaning unless the slide text or transcript supports it. Write the
-canonical lecture notes in English only. Never translate them during generation;
-translation is a separate operation requested by the user after completion."""
+outside knowledge to fill gaps. Normal lecture notes contain one concise, integrated
+slide-specific explanation. A Deep Review may add concept and exam-point sections,
+but its main explanation must remain integrated. Treat OCR text as potentially
+imperfect and do not infer a diagram's meaning unless the slide text or transcript
+supports it. Write the canonical lecture notes in English only. Never translate them
+during generation; translation is a separate operation requested by the user.
+
+For a slide-plus-recording lecture, synthesize both sources into one natural teaching
+text. Cover the slide's essential concepts and incorporate relevant teacher context,
+clarifications, reasoning, examples, qualifications, and emphasis. Mention an idea
+only once when both sources repeat it. Do not copy the slide bullet by bullet or
+transcribe the recording. Do not write source labels such as "the slide says" or
+"the professor explains" unless a genuine source disagreement must be identified."""
 
     def __init__(
         self,
@@ -88,6 +96,13 @@ translation is a separate operation requested by the user after completion."""
             checkpoint_root.mkdir(parents=True, exist_ok=True)
 
         total = len(slides)
+        source_coverage = {
+            int(slide["slide"]): section_source_coverage(
+                slide,
+                aligned_by_slide.get(int(slide["slide"])),
+            )
+            for slide in slides
+        }
         prepared: list[tuple[dict[str, Any], dict[str, Any], int, str, str, str | None]] = []
         reused = 0
         for slide in slides:
@@ -115,7 +130,14 @@ translation is a separate operation requested by the user after completion."""
                 progress(index, total, f"Writing study notes for {section_label.lower()} {number} of {total}")
             response = cached if cached is not None else self._generate_slide(slide, aligned, section_label)
             slide_sections.append((number, slide_title, response))
-            self._write_slide_summaries(summaries_path, title, section_label, slide_sections, total)
+            self._write_slide_summaries(
+                summaries_path,
+                title,
+                section_label,
+                slide_sections,
+                total,
+                source_coverage,
+            )
             if cached is None:
                 self._save_checkpoint(
                     checkpoint_root / f"slide_{number:04d}.json" if checkpoint_root else None,
@@ -470,8 +492,6 @@ translation is a separate operation requested by the user after completion."""
                 if not detailed
                 else [
                     "## Concise summary",
-                    "## Slide content",
-                    "## Professor explanation",
                     "## Important concepts",
                     "## Exam points",
                 ],
@@ -595,11 +615,19 @@ VERIFIED LECTURE DIGEST:
     def _generate_slide(self, slide: dict[str, Any], aligned: dict[str, Any], section_label: str) -> str:
         slide_number = int(slide["slide"])
         aligned_paragraphs = aligned.get("paragraphs", [])
-        transcript_lines = [
-            f"[{item.get('start_time', 'unknown time')}–"
-            f"{item.get('end_time', 'unknown time')}] {item.get('text', '')}"
-            for item in aligned_paragraphs
-        ]
+        transcript_lines = []
+        for item in aligned_paragraphs:
+            provenance = item.get("alignment", {}) if isinstance(item.get("alignment"), dict) else {}
+            method = str(provenance.get("method", "unknown"))
+            try:
+                confidence = f"{float(provenance.get('confidence', 0.0)):.2f}"
+            except (TypeError, ValueError):
+                confidence = "unknown"
+            transcript_lines.append(
+                f"[{item.get('start_time', 'unknown time')}–"
+                f"{item.get('end_time', 'unknown time')} | alignment={method}, confidence={confidence}] "
+                f"{item.get('text', '')}"
+            )
         transcript = self._bounded_transcript_evidence(slide_number, transcript_lines)
         query = " ".join(
             part
@@ -652,11 +680,17 @@ LOCAL RETRIEVAL CONTEXT (restricted to this slide and its aligned transcript):
 Use only the sources below. Return exactly one Markdown heading and its paragraph:
 
 ## Concise summary
-Write 1–3 clear sentences, with a strict maximum of 90 words. Include only what is
-needed to understand this exact slide or small recording fragment. Combine essential
-slide content with directly relevant professor explanation. Remove repetition,
-background detail, speculation, labels about the source, unrelated context, and
-material belonging to other slides. Do not return any other sections or fields.
+Write 1–3 clear sentences, with a strict maximum of 90 words, as one cohesive study
+note. Include the essential meaning of the slide, paraphrased rather than copied, and
+weave in every directly relevant teacher clarification, rationale, example,
+qualification, or emphasis that materially improves understanding. When both sources
+state the same idea, express it once. When only one source contains usable material,
+write from that source. Do not omit a central slide concept merely because it is visible.
+Do not write a slide-text section, transcript section, source labels, or commentary
+about missing sources. Treat transcript paragraphs marked temporal_fallback as uncertain
+and use them only when their content is consistent with this slide. Remove logistics,
+repetition, speculation, and material belonging to other slides. Do not return any
+other sections or fields.
 
 SOURCES:
 {context}"""
@@ -666,15 +700,11 @@ SOURCES:
 Use only the sources below. Return exactly these Markdown sections, in this order:
 
 ## Concise summary
-In 1–3 short sentences (maximum 90 words), state only what is needed to understand
-this specific slide or small recording fragment.
-
-## Slide content
-Clear explanation of material actually shown on this slide.
-
-## Professor explanation
-Only meaningful additions from the aligned transcript. Prefix each spoken-only claim
-with "Professor explanation:". Do not repeat the slide verbatim.
+In 1–3 short sentences (maximum 90 words), synthesize the slide's essential meaning
+with every useful teacher clarification, rationale, example, qualification, or emphasis.
+Write one natural explanation without source labels or repeated ideas. Paraphrase the
+slide instead of copying it. Treat temporal_fallback transcript material as uncertain
+and use it only when consistent with the slide.
 
 ## Important concepts
 - Grounded concept or "- No additional concepts stated."
@@ -687,12 +717,11 @@ SOURCES:
         draft = self._chat(prompt)
         result = self._review_slide(slide_number, context, draft) if self.config.quality_review else draft
         result = self._ensure_concise_summary(result)
+        result = self._bound_concise_summary(result)
         self._require_headings(
             result,
             [
                 "## Concise summary",
-                "## Slide content",
-                "## Professor explanation",
                 "## Important concepts",
                 "## Exam points",
             ],
@@ -713,8 +742,10 @@ SOURCES:
                 prompt = f"""Extract an exhaustive evidence digest from transcript batch
 {batch_index} of {len(batches)} for Slide {slide_number} (round {round_number}).
 Retain timestamps and every substantive definition, explanation, example, formula,
-contrast, warning, and exam emphasis. Remove only filler and repetition. Do not use
-outside knowledge and do not reinterpret uncertain speech. Return at most 3,500 characters.
+contrast, warning, and exam emphasis. Preserve each retained passage's alignment method
+and confidence so later synthesis can treat temporal fallbacks cautiously. Remove only
+filler and repetition. Do not use outside knowledge and do not reinterpret uncertain
+speech. Return at most 3,500 characters.
 
 TRANSCRIPT BATCH:
 {batch}"""
@@ -731,16 +762,16 @@ TRANSCRIPT BATCH:
         prompt = f"""Act as a strict factual reviewer for Slide {slide_number}.
 Compare the draft with the supplied sources line by line. Remove or correct every
 claim, definition, example, formula, exam hint, or causal link that is not directly
-supported. Preserve useful professor additions, prefixed with "Professor explanation:".
-Explain source-supported concepts, relationships, context, qualifications, and important
-details more deeply than the baseline draft. Keep the concise summary slide-specific,
-non-repetitive, and no longer than 90 words.
+supported. Ensure the concise summary covers the slide's essential meaning and folds
+in every material teacher clarification without source labels, duplicate ideas, or
+bullet-by-bullet copying. Treat temporal_fallback transcript material as uncertain and
+retain it only when consistent with the slide. Explain source-supported concepts,
+relationships, qualifications, and important details more deeply than the baseline
+draft. Keep the concise summary slide-specific and no longer than 90 words.
 Do not improve the draft using outside knowledge. If evidence is absent, state that
 plainly. Return only the corrected Markdown with exactly these headings:
 
 ## Concise summary
-## Slide content
-## Professor explanation
 ## Important concepts
 ## Exam points
 
@@ -765,13 +796,34 @@ DRAFT TO AUDIT:
     @classmethod
     def _concise_only(cls, markdown: str) -> str:
         """Normalize a baseline response to one bounded summary field."""
+        summary = cls._bounded_summary_text(markdown)
+        return f"## Concise summary\n{summary}"
+
+    @classmethod
+    def _bounded_summary_text(cls, markdown: str) -> str:
+        """Return a non-empty concise-summary body capped at the export limit."""
         summary = clean_text(cls.concise_summary(markdown))
         words = summary.split()
         if len(words) > 90:
             summary = " ".join(words[:90]).rstrip(" ,;:") + "…"
         if not summary:
             summary = "No concise source-grounded summary is available for this slide."
-        return f"## Concise summary\n{summary}"
+        return summary
+
+    @classmethod
+    def _bound_concise_summary(cls, markdown: str) -> str:
+        """Bound the summary in a detailed note without discarding its other sections."""
+        marker = "## Concise summary"
+        start = markdown.find(marker)
+        if start < 0:
+            return markdown
+        body_start = start + len(marker)
+        remainder = markdown[body_start:]
+        next_heading = remainder.find("\n## ")
+        suffix = remainder[next_heading:].lstrip("\n") if next_heading >= 0 else ""
+        prefix = markdown[:start]
+        tail = f"\n\n{suffix}" if suffix else ""
+        return f"{prefix}{marker}\n{cls._bounded_summary_text(markdown)}{tail}"
 
     @classmethod
     def _ensure_concise_summary(cls, markdown: str) -> str:
@@ -803,6 +855,7 @@ DRAFT TO AUDIT:
         section_label: str,
         slide_sections: list[tuple[int, str, str]],
         total: int,
+        source_coverage: dict[int, dict[str, bool]] | None = None,
     ) -> None:
         if path is None:
             return
@@ -821,6 +874,9 @@ DRAFT TO AUDIT:
                         "slide": number,
                         "title": title,
                         "summary": cls.concise_summary(notes),
+                        "sources": (source_coverage or {}).get(
+                            number, {"slide": False, "teacher_audio": False}
+                        ),
                     }
                     for number, title, notes in slide_sections
                 ],

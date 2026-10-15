@@ -39,10 +39,6 @@ class MediaChunkPlan:
     extract_start: float
     extract_end: float
 
-    @property
-    def extract_duration(self) -> float:
-        return self.extract_end - self.extract_start
-
 
 class AudioProcessor:
     """Transcribe long recordings with bounded, quality-preserving parallelism."""

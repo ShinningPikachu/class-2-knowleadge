@@ -21,7 +21,7 @@ from .embeddings import OllamaEmbedder, build_source_documents
 from .exporter import export_markdown, export_pdf
 from .lecture_naming import infer_lecture_identity
 from .pdf_processor import PDFProcessor
-from .quality import validate_evidence_quality, validate_final_notes
+from .quality import validate_evidence_quality, validate_final_notes, validate_slide_summaries
 from .rag import LocalRAG
 from .transcript_cleaner import TranscriptCleaner
 from .utils import clean_text, dump_json, seconds_to_timestamp
@@ -321,7 +321,6 @@ class LecturePipeline:
         )
         section_label = "Recording section" if slides and slides[0].get("section_kind") == "recording" else "Slide"
         validate_final_notes(notes, len(slides), section_label=section_label)
-        markdown_path = export_markdown(notes, run_dir / "lecture_notes.md")
 
         try:
             summary_payload = json.loads(slide_summaries_path.read_text(encoding="utf-8"))
@@ -330,6 +329,8 @@ class LecturePipeline:
                 raise TypeError("slides must be a list")
         except (OSError, TypeError, json.JSONDecodeError) as exc:
             raise RuntimeError("The completed slide summaries could not be read for the lecture overview.") from exc
+        validate_slide_summaries(slides, alignment, summary_items)
+        markdown_path = export_markdown(notes, run_dir / "lecture_notes.md")
 
         notify("summary", "Creating a general summary from all lecture materials")
 

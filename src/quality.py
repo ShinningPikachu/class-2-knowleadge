@@ -12,6 +12,34 @@ class QualityGateError(RuntimeError):
     """Raised when evidence quality is too weak for trustworthy notes."""
 
 
+def section_source_coverage(
+    slide: dict[str, Any],
+    aligned_section: dict[str, Any] | None = None,
+) -> dict[str, bool]:
+    """Report whether a lecture section has slide and teacher-audio evidence."""
+    number = int(slide.get("slide", 0))
+    title = " ".join(str(slide.get("title", "")).split())
+    meaningful_title = bool(title) and title.casefold() not in {
+        f"slide {number}".casefold(),
+        str(number),
+    }
+    return {
+        "slide": meaningful_title
+        or any(
+            [
+                str(slide.get("content", "")).strip(),
+                str(slide.get("notes", "")).strip(),
+                slide.get("visual_text"),
+            ]
+        ),
+        "teacher_audio": any(
+            str(paragraph.get("text", "")).strip()
+            for paragraph in (aligned_section or {}).get("paragraphs", [])
+            if isinstance(paragraph, dict)
+        ),
+    }
+
+
 def validate_evidence_quality(
     slides: list[dict[str, Any]],
     transcript: dict[str, Any],
@@ -98,3 +126,68 @@ def validate_final_notes(markdown: str, slide_count: int, section_label: str = "
             raise QualityGateError(
                 f"Final notes contain {concise_sections} concise summaries for {slide_count} source sections."
             )
+
+
+def validate_slide_summaries(
+    slides: list[dict[str, Any]],
+    alignment: dict[str, Any],
+    summaries: list[dict[str, Any]],
+) -> None:
+    """Ensure every source section produced one bounded, auditable combined note."""
+    expected_numbers = [int(slide["slide"]) for slide in slides]
+    aligned_by_slide = {
+        int(item["slide"]): item
+        for item in alignment.get("slides", [])
+        if isinstance(item, dict) and str(item.get("slide", "")).isdigit()
+    }
+    observed: dict[int, dict[str, Any]] = {}
+    duplicates: list[int] = []
+    for item in summaries:
+        if not isinstance(item, dict):
+            continue
+        try:
+            number = int(item["slide"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if number in observed:
+            duplicates.append(number)
+        observed[number] = item
+
+    missing = [number for number in expected_numbers if number not in observed]
+    unexpected = sorted(number for number in observed if number not in set(expected_numbers))
+    errors: list[str] = []
+    if missing:
+        errors.append("Missing combined notes for sections: " + ", ".join(map(str, missing)) + ".")
+    if duplicates:
+        errors.append("Duplicate combined notes for sections: " + ", ".join(map(str, sorted(set(duplicates)))) + ".")
+    if unexpected:
+        errors.append("Combined notes reference unknown sections: " + ", ".join(map(str, unexpected)) + ".")
+
+    placeholder_starts = (
+        "no concise source-grounded summary is available",
+        "a combined slide-and-lecture note has not been generated",
+    )
+    for slide in slides:
+        number = int(slide["slide"])
+        item = observed.get(number)
+        if item is None:
+            continue
+        summary = " ".join(str(item.get("summary", "")).split())
+        if not summary:
+            errors.append(f"Section {number} has an empty combined note.")
+            continue
+        if len(summary.split()) > 90:
+            errors.append(f"Section {number} exceeds the 90-word combined-note limit.")
+
+        expected_sources = section_source_coverage(slide, aligned_by_slide.get(number))
+        recorded_sources = item.get("sources")
+        if not isinstance(recorded_sources, dict) or any(
+            bool(recorded_sources.get(source)) != present
+            for source, present in expected_sources.items()
+        ):
+            errors.append(f"Section {number} has incorrect source-coverage metadata.")
+        if any(expected_sources.values()) and summary.casefold().startswith(placeholder_starts):
+            errors.append(f"Section {number} has source material but only a placeholder note.")
+
+    if errors:
+        raise QualityGateError(" ".join(errors))

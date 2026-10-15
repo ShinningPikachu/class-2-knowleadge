@@ -891,11 +891,8 @@ class JobManagerTest(unittest.TestCase):
             ) -> str:
                 checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
                 checkpoint_path.write_text("saved deep checkpoint", encoding="utf-8")
-                return """## Slide content
-Deep grounded content.
-
-## Professor explanation
-No additional professor explanation was aligned with this slide.
+                return """## Concise summary
+Deep combined explanation grounded in the slide and aligned teacher audio.
 
 ## Important concepts
 - Agent.

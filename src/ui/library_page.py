@@ -414,6 +414,12 @@ def _pdf_page_image(path: str, modified_ns: int, page_number: int) -> bytes:
         ).tobytes("png")
 
 
+def _locator_number(locator: str, kind: str) -> int | None:
+    """Return the page or slide number encoded in an indexed chunk locator."""
+    match = re.search(rf"\b{re.escape(kind)}\s+(\d+)\b", locator, flags=re.IGNORECASE)
+    return int(match.group(1)) if match else None
+
+
 def _render_stable_pdf_pages(document: LibraryDocument) -> None:
     """Render PDF pages without the viewer iframe's provisional dimensions."""
     modified_ns = document.stored_path.stat().st_mtime_ns
@@ -477,13 +483,27 @@ def _render_stable_pdf_pages(document: LibraryDocument) -> None:
         )
 
 
-def _render_scrollable_pdf_pages(document: LibraryDocument) -> None:
+def _render_scrollable_pdf_pages(
+    document: LibraryDocument,
+    *,
+    focus_page: int | None = None,
+) -> None:
     """Render a full PDF as centered pages that follow the browser scroll."""
     modified_ns = document.stored_path.stat().st_mtime_ns
     page_count = _pdf_page_count(str(document.stored_path), modified_ns)
     if page_count < 1:
         st.warning("This PDF does not contain any pages.")
         return
+
+    if focus_page is not None:
+        focus_page = min(max(focus_page, 1), page_count)
+        st.markdown(f"#### Search match · Page {focus_page}")
+        with st.container(border=True):
+            render_preview_image(
+                _pdf_page_image(str(document.stored_path), modified_ns, focus_page),
+                width="stretch",
+            )
+        st.caption("The complete document follows below.")
 
     # The generated lecture-notes PDF is intended to be read like a document,
     # rather than one slide at a time. A middle column keeps every portrait page
@@ -513,11 +533,19 @@ def _render_scrollable_pdf_pages(document: LibraryDocument) -> None:
                 )
 
 
-def _render_pdf(document: LibraryDocument, *, full_page: bool = False) -> None:
+def _render_pdf(
+    document: LibraryDocument,
+    *,
+    full_page: bool = False,
+    focus_locator: str = "",
+) -> None:
     """Render a PDF without the viewer iframe's delayed page resize."""
     try:
         if full_page:
-            _render_scrollable_pdf_pages(document)
+            _render_scrollable_pdf_pages(
+                document,
+                focus_page=_locator_number(focus_locator, "page"),
+            )
         else:
             _render_stable_pdf_pages(document)
     except (OSError, ValueError, RuntimeError) as exc:
@@ -684,7 +712,7 @@ def _powerpoint_slide_images(path: str, modified_ns: int) -> dict[int, bytes]:
         return {number: image.read_bytes() for number, image in images.items()}
 
 
-def _render_powerpoint_preview(document: LibraryDocument) -> None:
+def _render_powerpoint_preview(document: LibraryDocument, *, focus_locator: str = "") -> None:
     try:
         from pptx import Presentation
 
@@ -698,6 +726,23 @@ def _render_powerpoint_preview(document: LibraryDocument) -> None:
             )
         if not images:
             st.caption("Slide images require LibreOffice. Showing extracted slide content below.")
+
+        focus_slide = _locator_number(focus_locator, "slide")
+        if focus_slide is not None and 1 <= focus_slide <= len(deck.slides):
+            matched_slide = deck.slides[focus_slide - 1]
+            matched_parts = [
+                str(shape.text).strip()
+                for shape in matched_slide.shapes
+                if getattr(shape, "has_text_frame", False) and str(shape.text).strip()
+            ]
+            st.markdown(f"#### Search match · Slide {focus_slide}")
+            with st.container(border=True):
+                if focus_slide in images:
+                    render_preview_image(images[focus_slide], width="stretch")
+                st.markdown("##### Slide content")
+                st.text("\n\n".join(matched_parts) if matched_parts else "(No extractable text on this slide.)")
+            st.caption("The complete presentation follows below.")
+
         for slide_number, slide in enumerate(deck.slides, start=1):
             parts = [
                 str(shape.text).strip()
@@ -705,7 +750,10 @@ def _render_powerpoint_preview(document: LibraryDocument) -> None:
                 if getattr(shape, "has_text_frame", False) and str(shape.text).strip()
             ]
             title = parts[0].splitlines()[0] if parts else f"Slide {slide_number}"
-            with st.expander(f"Slide {slide_number}: {title}", expanded=slide_number == 1):
+            with st.expander(
+                f"Slide {slide_number}: {title}",
+                expanded=slide_number == (focus_slide or 1),
+            ):
                 if slide_number in images:
                     render_preview_image(images[slide_number], width="stretch")
                 st.markdown("#### Slide content")
@@ -732,19 +780,7 @@ def _exact_slide_summary(bundle: _LectureSlideBundle, slide: dict[str, Any]) -> 
     stored = bundle.summaries.get(number, "").strip()
     if stored:
         return _limit_words(stored, 90)
-
-    slide_text = " ".join(str(slide.get("content", "")).split())
-    professor_text = " ".join(
-        " ".join(str(item.get("text", "")).split())
-        for item in bundle.alignment.get(number, [])
-        if str(item.get("text", "")).strip()
-    )
-    parts: list[str] = []
-    if slide_text:
-        parts.append(_limit_words(slide_text, 60))
-    if professor_text and professor_text.casefold() not in slide_text.casefold():
-        parts.append("Professor explanation: " + _limit_words(professor_text, 30))
-    return " ".join(parts) or "No source-grounded summary is available for this slide."
+    return "A combined slide-and-lecture note has not been generated for this slide."
 
 
 def _render_current_slide(document: LibraryDocument, slide: dict[str, Any]) -> None:
@@ -858,7 +894,7 @@ def _render_translation_control(
     source_job = bundle.source_job
     target = button_target or st
     help_text = (
-        "Translate this slide’s content text and explanation."
+        "Translate this slide’s combined lecture note."
         if source_job
         else "The completed lecture job for this file could not be located."
     )
@@ -872,7 +908,7 @@ def _render_translation_control(
         )
         return
     with target.popover("🌐", help=help_text, width="stretch"):
-        st.caption("Translate only this slide. Choose Chinese or English in the slide text language selector.")
+        st.caption("Translate only this slide’s combined note.")
         with st.form(f"library_translation_form_{document.id}_{source_job.id}_{slide_number}"):
             language_option = st.selectbox(
                 "Translate to",
@@ -911,7 +947,6 @@ def _render_translation_control(
                     priority=PRIORITIES[priority_label],
                     slide_number=slide_number,
                     explanation=_exact_slide_summary(bundle, next(item for item in bundle.slides if int(item["slide"]) == slide_number)),
-                    slide_content=_slide_content_markdown(next(item for item in bundle.slides if int(item["slide"]) == slide_number)),
                 )
                 st.session_state[f"slide_requested_language_{document.id}_{slide_number}"] = target_language
                 if translation_job.status == "completed":
@@ -963,6 +998,9 @@ def _slide_explanation_translations(
 ) -> tuple[dict[str, str], list[JobRecord]]:
     explanations = {"English": _exact_slide_summary(bundle, slide)}
     pending = []
+    for language, text in getattr(bundle, "saved_translations", {}).get(int(slide["slide"]), {}).items():
+        if text.strip():
+            explanations.setdefault(language, text.strip())
     if bundle.source_job is None:
         return explanations, pending
     # Newest matching translation wins; never mix lectures or slide content.
@@ -982,7 +1020,7 @@ def _slide_explanation_translations(
     return explanations, pending
 
 
-def _render_slide_text_language(document_id: str, slide_number: int, contents: dict[str, str]) -> str:
+def _render_note_language(document_id: str, slide_number: int, contents: dict[str, str]) -> str:
     preference_key = f"slide_text_language_preference_{document_id}"
     widget_key = f"slide_text_language_{document_id}_{slide_number}"
     requested_key = f"slide_requested_language_{document_id}_{slide_number}"
@@ -997,7 +1035,7 @@ def _render_slide_text_language(document_id: str, slide_number: int, contents: d
         st.session_state[preference_key] = st.session_state[widget_key]
 
     language = st.selectbox(
-        "Slide text language", list(contents), key=widget_key, on_change=remember_language,
+        "Note language", list(contents), key=widget_key, on_change=remember_language,
     )
     if preferred not in contents:
         st.caption(f"{preferred} is unavailable for this slide. Showing English; your language preference is retained.")
@@ -1010,6 +1048,7 @@ def _render_slide_document(
     bundle: _LectureSlideBundle,
     *,
     full_page: bool = False,
+    focus_locator: str = "",
 ) -> None:
     slide_lookup = {int(item["slide"]): item for item in bundle.slides}
     slide_numbers = sorted(slide_lookup)
@@ -1018,6 +1057,11 @@ def _render_slide_document(
         selected_number = int(st.session_state.get(slide_key, slide_numbers[0]))
     except (TypeError, ValueError):
         selected_number = slide_numbers[0]
+    focus_slide = _locator_number(focus_locator, "slide")
+    focus_key = f"library_search_focus_slide_{document.id}_{focus_slide}"
+    if focus_slide in slide_lookup and not st.session_state.get(focus_key, False):
+        selected_number = focus_slide
+        st.session_state[focus_key] = True
     if selected_number not in slide_lookup:
         selected_number = slide_numbers[0]
     st.session_state[slide_key] = selected_number
@@ -1081,31 +1125,26 @@ def _render_slide_document(
         summary_title, voice_button, review_button, translation_button = st.columns(
             [4, 1, 1, 1], vertical_alignment="center"
         )
-        summary_title.markdown("#### Slide text")
+        summary_title.markdown("#### Combined lecture note")
         explanations, translation_jobs = _slide_explanation_translations(manager, bundle, slide)
-        contents = _slide_content_translations(manager, bundle, slide)
-        language = _render_slide_text_language(document.id, selected_number, contents)
+        language = _render_note_language(document.id, selected_number, explanations)
         for translation_job in translation_jobs:
             st.caption(f"{translation_job.payload['target_language']} translation: {translation_job.status}")
         if translation_jobs and st.button("Refresh translations", key=f"refresh_slide_translation_{document.id}_{selected_number}"):
             st.rerun()
-        if language in contents:
-            st.markdown("#### Slide content text")
-            st.markdown(contents[language] or "No extractable text on this slide.")
-            explanation = explanations.get(language)
-            if explanation:
-                st.markdown("#### Slide explanation")
-                summary = html.escape(explanation)
-                st.markdown(f'<div class="lecture-slide-summary">{summary}</div>', unsafe_allow_html=True)
-        # The text display choice is independent of speech generation.
+        explanation = explanations.get(language)
+        if explanation:
+            summary = html.escape(explanation)
+            st.markdown(f'<div class="lecture-slide-summary">{summary}</div>', unsafe_allow_html=True)
+        # The language display choice is independent of speech generation.
         narration = "\n\n".join(part for part in (
-            str(slide.get("title", "")).strip(), str(slide.get("content", "")).strip(), explanations["English"]
+            str(slide.get("title", "")).strip(), explanations["English"]
         ) if part)
         _render_voice_narration(
             narration,
             key=f"slide_{document.id}_{selected_number}",
             button_target=voice_button,
-            help_text="Read the full original slide content and explanation aloud.",
+            help_text="Read the combined slide-and-lecture note aloud.",
         )
         _render_deep_review_control(
             manager,
@@ -1157,6 +1196,7 @@ def _render_audio_document(
     bundle: _LectureAudioBundle | None,
     *,
     full_page: bool = False,
+    focus_text: str = "",
 ) -> None:
     paragraphs = bundle.paragraphs if bundle is not None else []
     if not paragraphs:
@@ -1168,6 +1208,7 @@ def _render_audio_document(
         paragraphs,
         key=document.id,
         height=790 if full_page else INLINE_PREVIEW_CONTENT_HEIGHT,
+        focus_text=focus_text,
     )
     if not rendered:
         _render_transcript_fallback(document, paragraphs)
@@ -1178,14 +1219,21 @@ def _render_document_content(
     audio_bundle: _LectureAudioBundle | None = None,
     *,
     full_page: bool = False,
+    focus_locator: str = "",
+    focus_text: str = "",
 ) -> None:
     suffix = document.stored_path.suffix.lower()
     try:
         if suffix == ".pdf":
-            _render_pdf(document, full_page=full_page)
+            _render_pdf(document, full_page=full_page, focus_locator=focus_locator)
             _render_pdf_voice_control(document, full_page=full_page)
         elif suffix in AUDIO_SUFFIXES:
-            _render_audio_document(document, audio_bundle, full_page=full_page)
+            _render_audio_document(
+                document,
+                audio_bundle,
+                full_page=full_page,
+                focus_text=focus_text,
+            )
         elif suffix in VIDEO_SUFFIXES:
             st.video(str(document.stored_path), format=document.media_type)
         elif suffix in IMAGE_SUFFIXES:
@@ -1207,7 +1255,7 @@ def _render_document_content(
             if truncated:
                 st.caption("Preview limited to the first 750 KB.")
         elif suffix == ".pptx":
-            _render_powerpoint_preview(document)
+            _render_powerpoint_preview(document, focus_locator=focus_locator)
         elif suffix == ".ppt":
             st.info("Legacy PPT files cannot be previewed directly. Use File actions (⋯) to download or organize it.")
         else:
@@ -1325,6 +1373,9 @@ def render_full_library_document(
     library: LibraryStore,
     manager: JobManager,
     document_id: str,
+    *,
+    focus_locator: str = "",
+    focus_text: str = "",
 ) -> None:
     """Render one library file without the workspace chrome for a new tab."""
     try:
@@ -1338,13 +1389,29 @@ def render_full_library_document(
         f"{document.subject_name} / {document.folder_name or 'Subject root'} · "
         f"{format_size(document.size_bytes)}"
     )
+    if focus_text:
+        with st.container(border=True):
+            st.caption(f"Search match{f' · {focus_locator}' if focus_locator else ''}")
+            st.write(focus_text)
     st.divider()
     slide_bundle = _lecture_slide_bundle(library, manager, document)
     if slide_bundle is not None:
-        _render_slide_document(manager, document, slide_bundle, full_page=True)
+        _render_slide_document(
+            manager,
+            document,
+            slide_bundle,
+            full_page=True,
+            focus_locator=focus_locator,
+        )
         return
     audio_bundle = _lecture_audio_bundle(library, manager, document)
-    _render_document_content(document, audio_bundle, full_page=True)
+    _render_document_content(
+        document,
+        audio_bundle,
+        full_page=True,
+        focus_locator=focus_locator,
+        focus_text=focus_text,
+    )
 
 
 def _handle_file_manager_event(

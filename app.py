@@ -38,7 +38,15 @@ library = LibraryStore(project_path("library"))
 job_manager = _job_manager()
 full_file_id = str(st.query_params.get("open_file", "")).strip()
 if full_file_id:
-    render_full_library_document(library, job_manager, full_file_id)
+    focus_locator = str(st.query_params.get("focus_locator", "")).strip()[:160]
+    focus_text = str(st.query_params.get("focus_text", "")).strip()[:1_200]
+    render_full_library_document(
+        library,
+        job_manager,
+        full_file_id,
+        focus_locator=focus_locator,
+        focus_text=focus_text,
+    )
     st.stop()
 
 workspace_options = ["Library", "Agent", "Lecture Notes", "Job Queue"]

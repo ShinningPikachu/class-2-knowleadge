@@ -17,7 +17,7 @@ from unittest.mock import patch
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.alignment import SlideAligner  # noqa: E402
+from src.alignment import AlignmentError, SlideAligner  # noqa: E402
 from src.agent import LectureAgent  # noqa: E402
 from src.audio_processor import AudioProcessingError, AudioProcessor  # noqa: E402
 from src.config import PipelineConfig  # noqa: E402
@@ -25,7 +25,12 @@ from src.embeddings import OllamaEmbedder, build_source_documents, chunk_text  #
 from src.pipeline import LecturePipeline  # noqa: E402
 from src.task_control import TaskControlSignal  # noqa: E402
 from src.utils import safe_filename, seconds_to_timestamp  # noqa: E402
-from src.quality import QualityGateError, validate_evidence_quality, validate_final_notes  # noqa: E402
+from src.quality import (  # noqa: E402
+    QualityGateError,
+    validate_evidence_quality,
+    validate_final_notes,
+    validate_slide_summaries,
+)
 
 
 class CoreHelpersTest(unittest.TestCase):
@@ -114,6 +119,8 @@ class CoreHelpersTest(unittest.TestCase):
             ), patch("src.pipeline.LectureAgent", FakeAgent), patch(
                 "src.pipeline.validate_evidence_quality"
             ), patch("src.pipeline.validate_final_notes"), patch(
+                "src.pipeline.validate_slide_summaries"
+            ), patch(
                 "src.pipeline.export_markdown", write_markdown
             ), patch("src.pipeline.export_pdf", write_pdf):
                 result = pipeline.run(recording, slides, lecture_title="Queues")
@@ -373,6 +380,21 @@ class CoreHelpersTest(unittest.TestCase):
         self.assertEqual(aligner._spoken_slide_reference("Turn to slide number 8.", {1, 8}), 8)
         self.assertIsNone(aligner._spoken_slide_reference("Turn to slide 9.", {1, 8}))
 
+    def test_alignment_rejects_incomplete_embedding_batches(self) -> None:
+        class IncompleteEmbedder:
+            def embed_documents(self, _texts: object) -> list[list[float]]:
+                return []
+
+        aligner = SlideAligner(PipelineConfig(), embedder=IncompleteEmbedder())  # type: ignore[arg-type]
+        slides = [{"slide": 1, "title": "Queues", "content": "FIFO", "visual_text": []}]
+        transcript = {"paragraphs": [{"id": 1, "start": 0.0, "end": 1.0, "text": "First in."}]}
+
+        with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(
+            AlignmentError,
+            "incomplete batch",
+        ):
+            aligner.align(slides, transcript, Path(directory) / "alignment.json")
+
     def test_alignment_metadata_is_added_to_transcript_chunks(self) -> None:
         slides = [{"slide": 1, "title": "Queues", "content": "Ready queue", "notes": "", "visual_text": []}]
         transcript = {
@@ -428,12 +450,6 @@ class CoreHelpersTest(unittest.TestCase):
         note = """## Concise summary
 Grounded content.
 
-## Slide content
-Grounded content.
-
-## Professor explanation
-No additional professor explanation was aligned with this slide.
-
 ## Important concepts
 - Grounded concept.
 
@@ -445,7 +461,17 @@ No additional professor explanation was aligned with this slide.
                 return []
 
         slide = {"slide": 1, "title": "Topic", "content": "Evidence", "notes": "", "visual_text": []}
-        aligned = {"slide": 1, "paragraphs": []}
+        aligned = {
+            "slide": 1,
+            "paragraphs": [
+                {
+                    "start_time": "00:00:01",
+                    "end_time": "00:00:03",
+                    "text": "The teacher adds a clarification.",
+                    "alignment": {"method": "semantic", "confidence": 0.87},
+                }
+            ],
+        }
         fast_calls: list[str] = []
         fast = LectureAgent.__new__(LectureAgent)
         fast.config = PipelineConfig(note_generation_profile="fast")
@@ -456,6 +482,9 @@ No additional professor explanation was aligned with this slide.
             "## Concise summary\nGrounded content.",
         )
         self.assertEqual(len(fast_calls), 1)
+        self.assertIn("Include the essential meaning of the slide", fast_calls[0])
+        self.assertIn("weave in every directly relevant teacher clarification", fast_calls[0])
+        self.assertIn("alignment=semantic, confidence=0.87", fast_calls[0])
 
         deep_calls: list[str] = []
         deep = LectureAgent.__new__(LectureAgent)
@@ -464,6 +493,25 @@ No additional professor explanation was aligned with this slide.
         deep._chat = lambda prompt: deep_calls.append(prompt) or note  # type: ignore[method-assign]
         self.assertEqual(deep._generate_slide(slide, aligned, "Slide"), note)
         self.assertEqual(len(deep_calls), 2)
+
+    def test_deep_note_bounds_the_combined_summary_without_losing_review_sections(self) -> None:
+        note = "\n".join(
+            [
+                "## Concise summary",
+                " ".join(f"word{index}" for index in range(100)),
+                "",
+                "## Important concepts",
+                "- Grounded concept.",
+                "",
+                "## Exam points",
+                "- Grounded exam point.",
+            ]
+        )
+        bounded = LectureAgent._bound_concise_summary(note)
+
+        self.assertEqual(len(LectureAgent.concise_summary(bounded).split()), 90)
+        self.assertIn("## Important concepts\n- Grounded concept.", bounded)
+        self.assertIn("## Exam points\n- Grounded exam point.", bounded)
 
     def test_lecture_agent_does_not_wrap_a_safe_stop_as_an_ollama_failure(self) -> None:
         class StopForLater(TaskControlSignal):
@@ -541,12 +589,6 @@ No additional professor explanation was aligned with this slide.
         }
         slide_note = """## Concise summary
 Grounded content.
-
-## Slide content
-Grounded content.
-
-## Professor explanation
-No additional professor explanation was aligned with this slide.
 
 ## Important concepts
 - Grounded concept.
@@ -672,6 +714,38 @@ Summary.
 """
         with self.assertRaises(QualityGateError):
             validate_final_notes(incomplete, slide_count=2)
+
+    def test_slide_summary_gate_requires_source_coverage_and_one_note_per_slide(self) -> None:
+        slides = [
+            {"slide": 1, "title": "Queues", "content": "FIFO", "notes": "", "visual_text": []},
+            {"slide": 2, "title": "Stacks", "content": "LIFO", "notes": "", "visual_text": []},
+        ]
+        alignment = {
+            "slides": [
+                {
+                    "slide": 1,
+                    "paragraphs": [{"text": "The teacher contrasts queues with stacks."}],
+                },
+                {"slide": 2, "paragraphs": []},
+            ]
+        }
+        valid = [
+            {
+                "slide": 1,
+                "summary": "Queues process earlier arrivals first, unlike stacks.",
+                "sources": {"slide": True, "teacher_audio": True},
+            },
+            {
+                "slide": 2,
+                "summary": "Stacks remove the most recently added item first.",
+                "sources": {"slide": True, "teacher_audio": False},
+            },
+        ]
+        validate_slide_summaries(slides, alignment, valid)
+
+        invalid = [dict(valid[0]), {**valid[1], "sources": {"slide": True, "teacher_audio": True}}]
+        with self.assertRaisesRegex(QualityGateError, "source-coverage metadata"):
+            validate_slide_summaries(slides, alignment, invalid)
 
     def test_cloud_endpoints_and_models_are_rejected(self) -> None:
         with self.assertRaises(ValueError):

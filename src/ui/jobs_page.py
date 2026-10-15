@@ -11,6 +11,7 @@ from ..config import PipelineConfig
 from ..jobs import FINAL_STATUSES, PRIORITIES, JobError, JobManager, JobRecord
 from ..library import LibraryStore
 from ..ollama_runtime import OllamaUnloadReport
+from .common import format_size
 
 
 STATUS_ICONS = {
@@ -153,15 +154,6 @@ def _render_job_actions(
                 st.error(str(exc))
 
 
-def _format_model_size(size_bytes: int) -> str:
-    size = float(size_bytes)
-    for unit in ("B", "KB", "MB", "GB"):
-        if size < 1024 or unit == "GB":
-            return f"{size:.0f} {unit}" if unit == "B" else f"{size:.1f} {unit}"
-        size /= 1024
-    return f"{size_bytes} B"
-
-
 def _show_unload_result(report: OllamaUnloadReport) -> None:
     if report.stopped:
         st.success("Unloaded: " + ", ".join(report.stopped))
@@ -204,9 +196,9 @@ def _render_ollama_controls(manager: JobManager) -> None:
         if not models:
             st.info("No loaded models were reported by this Ollama server.")
         for model in models:
-            details = _format_model_size(model.size_bytes)
+            details = format_size(model.size_bytes)
             if model.vram_bytes:
-                details += f" · {_format_model_size(model.vram_bytes)} in VRAM"
+                details += f" · {format_size(model.vram_bytes)} in VRAM"
             model_column, stop_column = st.columns([3, 1])
             model_column.markdown(f"**{model.name}**")
             model_column.caption(details)

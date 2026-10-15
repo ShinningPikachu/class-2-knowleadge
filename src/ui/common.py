@@ -11,6 +11,7 @@ import streamlit as st
 
 from ..config import PipelineConfig
 from ..library import SearchResult, Subject
+from .search_results_component import render_search_result_cards
 
 
 def render_preview_image(image: bytes | str | Path, *, width: str = "stretch") -> None:
@@ -41,10 +42,7 @@ def render_search_results(results: list[SearchResult]) -> None:
     if not results:
         st.info("No matching documents or indexed passages were found.")
         return
-    for result in results:
-        with st.container(border=True):
-            st.markdown(f"**{result.document_name}** · {result.subject_name} · {result.locator}")
-            st.write(result.text)
+    render_search_result_cards(results, key="class_knowledge_search_results")
 
 
 def render_model_settings(workspace: str) -> PipelineConfig:

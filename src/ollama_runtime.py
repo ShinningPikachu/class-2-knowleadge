@@ -112,10 +112,6 @@ class OllamaRuntime:
         ]
         return self.unload_models(targets)
 
-    def unload_all(self) -> OllamaUnloadReport:
-        """Unload every model reported by this Ollama server."""
-        return self.unload_models(model.name for model in self.running_models())
-
     @staticmethod
     def _field(value: Any, name: str) -> Any:
         if isinstance(value, dict):

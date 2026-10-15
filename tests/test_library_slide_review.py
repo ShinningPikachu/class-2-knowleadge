@@ -40,7 +40,11 @@ class LibrarySlideReviewTest(unittest.TestCase):
 
     def test_translations_follow_the_exact_slide_and_current_explanation(self) -> None:
         slide = {"slide": 2}
-        bundle = SimpleNamespace(source_job=SimpleNamespace(id="lecture-a"), summaries={2: "Original explanation."})
+        bundle = SimpleNamespace(
+            source_job=SimpleNamespace(id="lecture-a"),
+            summaries={2: "Original explanation."},
+            saved_translations={2: {"Dutch": "Opgeslagen uitleg."}},
+        )
 
         def job(source="lecture-a", number=2, text="Original explanation.", status="completed"):
             return SimpleNamespace(kind="translation", status=status,
@@ -51,7 +55,14 @@ class LibrarySlideReviewTest(unittest.TestCase):
         jobs = [job(source="lecture-b"), job(number=1), job(text="Old explanation."), job(), job(status="running")]
         manager = SimpleNamespace(list_jobs=lambda **kwargs: jobs)
         explanations, pending = _slide_explanation_translations(manager, bundle, slide)
-        self.assertEqual(explanations, {"English": "Original explanation.", "French": "Explication française."})
+        self.assertEqual(
+            explanations,
+            {
+                "English": "Original explanation.",
+                "Dutch": "Opgeslagen uitleg.",
+                "French": "Explication française.",
+            },
+        )
         self.assertEqual(len(pending), 1)
 
 
@@ -105,12 +116,12 @@ class LibrarySlideReviewTest(unittest.TestCase):
         from streamlit.testing.v1 import AppTest
         app = AppTest.from_string("""
 import streamlit as st
-from src.ui.library_page import _render_slide_text_language
+from src.ui.library_page import _render_note_language
 slide = st.session_state.get("slide", 1)
 contents = {"English": "English text"}
 if slide != 2:
     contents["Chinese (Simplified)"] = "中文"
-_render_slide_text_language("lecture-a", slide, contents)
+_render_note_language("lecture-a", slide, contents)
 if st.button("Next"):
     st.session_state["slide"] = slide + 1
     st.rerun()

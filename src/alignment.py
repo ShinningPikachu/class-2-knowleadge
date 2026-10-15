@@ -51,6 +51,11 @@ class SlideAligner:
             paragraph_vectors = self.embedder.embed_documents(paragraph.get("text", "") for paragraph in paragraphs)
         except Exception as exc:
             raise AlignmentError(f"Semantic alignment requires the local embedding model. {exc}") from exc
+        if len(slide_vectors) != len(slides) or len(paragraph_vectors) != len(paragraphs):
+            raise AlignmentError(
+                "The local embedding model returned an incomplete batch; "
+                "no transcript paragraphs were aligned."
+            )
 
         duration = max(float(paragraph.get("end", 0.0)) for paragraph in paragraphs) or 1.0
         assignments: list[dict[str, Any]] = []

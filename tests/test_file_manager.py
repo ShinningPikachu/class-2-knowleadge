@@ -11,7 +11,7 @@ from unittest.mock import Mock, patch
 
 from src.library import LibraryStore
 from src.ui.file_manager_component import file_icon
-from src.ui.library_page import _handle_file_manager_event, _pdf_page_count, _pdf_page_image
+from src.ui.library_page import _handle_file_manager_event, _locator_number, _pdf_page_count, _pdf_page_image
 
 
 class FileManagerIconTest(unittest.TestCase):
@@ -97,6 +97,26 @@ class FileManagerIconTest(unittest.TestCase):
 
         self.assertIn('event("upload"', component)
         self.assertIn("eventObject.dataTransfer.files", component)
+
+    def test_search_results_open_the_matched_file_and_preserve_its_location(self) -> None:
+        component = (
+            Path(__file__).resolve().parents[1]
+            / "src"
+            / "ui"
+            / "components"
+            / "search_results"
+            / "index.html"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn('card.addEventListener("dblclick"', component)
+        self.assertIn('url.searchParams.set("open_file", result.document_id)', component)
+        self.assertIn('url.searchParams.set("focus_locator", result.locator || "")', component)
+        self.assertIn('url.searchParams.set("focus_text", result.text || "")', component)
+
+    def test_indexed_page_and_slide_locators_are_recognized(self) -> None:
+        self.assertEqual(_locator_number("Page 12 · part 2", "page"), 12)
+        self.assertEqual(_locator_number("Slide 3", "slide"), 3)
+        self.assertIsNone(_locator_number("Text", "page"))
 
     def test_direct_drop_event_stores_file_in_target_folder(self) -> None:
         with TemporaryDirectory() as temporary_directory:
