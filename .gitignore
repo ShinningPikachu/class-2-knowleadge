@@ -22,6 +22,11 @@ htmlcov/
 .vscode/
 *.swp
 *.swo
+macos/.build/
+macos/.swiftpm/
+macos/Build/
+native_settings.json
+*.json.part
 
 # Runtime and local data
 runs/
@@ -35,3 +40,9 @@ database/*
 !database/.gitkeep
 models/*
 !models/.gitkeep
+
+# Local slide-by-slide review outputs (notes, PDFs, and audit records)
+/reviewed/
+
+# 本机 socket 通道（DSH 插件用）
+.native_backend.sock

@@ -97,8 +97,8 @@ class PipelineConfig:
             raise ValueError("ollama_num_ctx must be at least 4096 for grounded lecture notes.")
         if not isinstance(self.ollama_thinking, bool) and self.ollama_thinking not in {"low", "medium", "high"}:
             raise ValueError("ollama_thinking must be a boolean or one of: low, medium, high.")
-        if self.agent_provider not in {"ollama", "codex"}:
-            raise ValueError("agent_provider must be 'ollama' or 'codex'.")
+        if self.agent_provider not in {"ollama", "codex", "dsh"}:
+            raise ValueError("agent_provider must be 'ollama', 'codex' or 'dsh'.")
         if self.agent_reasoning_level not in {"light", "balanced", "deep"}:
             raise ValueError("agent_reasoning_level must be 'light', 'balanced', or 'deep'.")
         if self.codex_reasoning_effort not in {"low", "medium", "high", "xhigh"}:

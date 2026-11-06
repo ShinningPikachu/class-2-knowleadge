@@ -274,8 +274,13 @@ class JobManager:
         subject_id: str | None,
         priority: int = PRIORITIES["Normal"],
         resume_run_directory: str | None = None,
+        deferred: bool = False,
     ) -> JobRecord:
-        """Copy volatile inputs into job storage and enqueue a lecture task."""
+        """Copy volatile inputs into job storage and create a lecture task.
+
+        When ``deferred`` is true, the task is created directly in Later so a
+        running worker cannot pick it up between enqueueing and deferring it.
+        """
         config.validate()
         if priority not in PRIORITY_LABELS:
             raise JobError("Priority must be High, Normal, or Low.")
@@ -319,6 +324,14 @@ class JobManager:
             "resume_run_directory": resume_run_directory,
         }
         now = self._timestamp()
+        initial_status = "deferred" if deferred else "queued"
+        initial_message = "Saved for future processing" if deferred else "Waiting for its turn"
+        event_message = (
+            "Planned task moved to Later"
+            if deferred
+            else f"Task queued with {PRIORITY_LABELS[priority]} priority"
+        )
+        event_data = {"status": "deferred"} if deferred else {"priority": PRIORITY_LABELS[priority]}
         with self._condition:
             while self._ollama_maintenance:
                 self._condition.wait(timeout=0.5)
@@ -328,13 +341,14 @@ class JobManager:
                     INSERT INTO jobs(
                         id, kind, title, status, priority, stage, progress, message,
                         payload_json, created_at, updated_at
-                    ) VALUES (?, 'lecture', ?, 'queued', ?, 'planned', 0, ?, ?, ?, ?)
+                    ) VALUES (?, 'lecture', ?, ?, ?, 'planned', 0, ?, ?, ?, ?)
                     """,
                     (
                         job_id,
                         title,
+                        initial_status,
                         priority,
-                        "Waiting for its turn",
+                        initial_message,
                         json.dumps(payload),
                         now,
                         now,
@@ -342,13 +356,14 @@ class JobManager:
                 )
                 self._append_event(
                     job_id,
-                    f"Task queued with {PRIORITY_LABELS[priority]} priority",
+                    event_message,
                     stage="planned",
                     progress=0,
-                    data={"priority": PRIORITY_LABELS[priority]},
+                    data=event_data,
                     connection=connection,
                 )
-            self._condition.notify_all()
+            if not deferred:
+                self._condition.notify_all()
         return self.get_job(job_id)
 
     def enqueue_translation(

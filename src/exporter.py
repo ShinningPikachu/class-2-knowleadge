@@ -71,13 +71,36 @@ def export_pdf(markdown: str, output_path: str | Path) -> Path:
         spaceAfter=6,
         alignment=TA_LEFT,
     )
-    h1 = ParagraphStyle("LectureH1", parent=styles["Heading1"], fontName=bold_font, fontSize=17, leading=22, spaceBefore=15, spaceAfter=9, textColor=HexColor("#16213e"))
-    h2 = ParagraphStyle("LectureH2", parent=styles["Heading2"], fontName=bold_font, fontSize=12.5, leading=17, spaceBefore=10, spaceAfter=6, textColor=HexColor("#0f4c5c"))
-    h3 = ParagraphStyle("LectureH3", parent=styles["Heading3"], fontName=bold_font, fontSize=10.5, leading=14, spaceBefore=8, spaceAfter=4, textColor=HexColor("#334155"))
+    h1 = ParagraphStyle("LectureH1", parent=styles["Heading1"], fontName=bold_font, fontSize=17, leading=22, spaceBefore=15, spaceAfter=9, textColor=HexColor("#16213e"), keepWithNext=1)
+    h2 = ParagraphStyle("LectureH2", parent=styles["Heading2"], fontName=bold_font, fontSize=12.5, leading=17, spaceBefore=10, spaceAfter=6, textColor=HexColor("#0f4c5c"), keepWithNext=1)
+    h3 = ParagraphStyle("LectureH3", parent=styles["Heading3"], fontName=bold_font, fontSize=10.5, leading=14, spaceBefore=8, spaceAfter=4, textColor=HexColor("#334155"), keepWithNext=1)
     bullet_style = ParagraphStyle("LectureBullet", parent=body, leftIndent=7 * mm, firstLineIndent=0, spaceAfter=2)
 
     def escaped(value: str) -> str:
         return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+    def inline_markdown(value: str) -> str:
+        """Render the inline Markdown commonly used in lecture notes."""
+        normalized = value.replace("—", "-").replace("–", "-").replace("‑", "-")
+        code_spans: dict[str, str] = {}
+
+        def stash_code(match: re.Match[str]) -> str:
+            token = f"ZXQCODE{len(code_spans)}ZXQ"
+            code_spans[token] = f'<font face="Courier">{escaped(match.group(1))}</font>'
+            return token
+
+        text = re.sub(r"`([^`]+)`", stash_code, normalized)
+        text = escaped(text)
+        text = re.sub(
+            r"\[([^\]]+)\]\((https?://[^\s)]+)\)",
+            r'<link href="\2" color="#176b87">\1</link>',
+            text,
+        )
+        text = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", text)
+        text = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"<i>\1</i>", text)
+        for token, markup in code_spans.items():
+            text = text.replace(token, markup)
+        return text
 
     story = []
     bullet_items: list[ListItem] = []
@@ -89,27 +112,32 @@ def export_pdf(markdown: str, output_path: str | Path) -> Path:
             story.append(Spacer(1, 2))
             bullet_items = []
 
+    heading_pending = False
     for original_line in markdown.splitlines():
         line = original_line.strip()
         if not line:
             flush_bullets()
-            story.append(Spacer(1, 3))
+            if not heading_pending:
+                story.append(Spacer(1, 3))
         elif line.startswith("# "):
             flush_bullets()
-            story.append(Paragraph(escaped(line[2:]), h1))
+            story.append(Paragraph(inline_markdown(line[2:]), h1))
+            heading_pending = True
         elif line.startswith("## "):
             flush_bullets()
-            story.append(Paragraph(escaped(line[3:]), h2))
+            story.append(Paragraph(inline_markdown(line[3:]), h2))
+            heading_pending = True
         elif line.startswith("### "):
             flush_bullets()
-            story.append(Paragraph(escaped(line[4:]), h3))
+            story.append(Paragraph(inline_markdown(line[4:]), h3))
+            heading_pending = True
         elif re.match(r"^[-*]\s+", line):
-            bullet_items.append(ListItem(Paragraph(escaped(re.sub(r"^[-*]\s+", "", line)), bullet_style)))
+            bullet_items.append(ListItem(Paragraph(inline_markdown(re.sub(r"^[-*]\s+", "", line)), bullet_style)))
+            heading_pending = False
         else:
             flush_bullets()
-            html = escaped(line)
-            html = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", html)
-            story.append(Paragraph(html, body))
+            story.append(Paragraph(inline_markdown(line), body))
+            heading_pending = False
     flush_bullets()
 
     try:

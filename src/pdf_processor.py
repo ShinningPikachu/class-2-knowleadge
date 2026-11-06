@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from collections import deque
+from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import datetime, timezone
 from io import BytesIO
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -93,35 +96,42 @@ class PDFProcessor:
 
         image_dir.mkdir(parents=True, exist_ok=True)
         slides: list[dict[str, Any]] = []
+        worker_count = self._ocr_worker_count()
+        pending: deque[tuple[dict[str, Any], Future[list[str]] | None]] = deque()
         try:
-            with muted_mupdf_errors(fitz), fitz.open(path) as document:
-                for number, page in enumerate(document, start=1):
-                    raw_text = page.get_text("text")
-                    lines = [clean_text(line) for line in raw_text.splitlines() if clean_text(line)]
-                    title = self._infer_title(lines, number)
-                    content = clean_text("\n".join(lines))
-                    preview_path = image_dir / f"slide_{number:03d}_preview.png"
-                    rendered = page.get_pixmap(matrix=fitz.Matrix(1.5, 1.5), alpha=False)
-                    preview_path.write_bytes(rendered.tobytes("png"))
-                    images, visual_text = self._extract_pdf_images(page, number, image_dir)
-                    # Scanned slides often have no extractable page text; local OCR is a useful fallback.
-                    if not content and self.config.enable_ocr:
-                        ocr_render = page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False)
-                        visual_text.append(self._ocr_bytes(ocr_render.tobytes("png")))
-                        visual_text = [item for item in visual_text if item]
-                        content = " ".join(visual_text)
-                        title = self._infer_title(content.splitlines(), number)
-                    slides.append(
-                        self._slide_record(
-                            number,
-                            title,
-                            content,
-                            notes="",
-                            images=images,
-                            visual_text=visual_text,
-                            preview_image=str(preview_path),
+            with ThreadPoolExecutor(max_workers=worker_count, thread_name_prefix="slide-ocr") as executor:
+                with muted_mupdf_errors(fitz), fitz.open(path) as document:
+                    for number, page in enumerate(document, start=1):
+                        raw_text = page.get_text("text")
+                        lines = [clean_text(line) for line in raw_text.splitlines() if clean_text(line)]
+                        title = self._infer_title(lines, number)
+                        content = clean_text("\n".join(lines))
+                        preview_path = image_dir / f"slide_{number:03d}_preview.png"
+                        rendered = page.get_pixmap(matrix=fitz.Matrix(1.5, 1.5), alpha=False)
+                        preview_path.write_bytes(rendered.tobytes("png"))
+                        images, image_paths = self._extract_pdf_images(page, number, image_dir)
+                        ocr_sources: list[str | bytes] = list(image_paths)
+                        scanned_page = not content and self.config.enable_ocr
+                        if scanned_page:
+                            ocr_render = page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False)
+                            ocr_sources.append(ocr_render.tobytes("png"))
+                        pending.append(
+                            (
+                                {
+                                    "number": number,
+                                    "title": title,
+                                    "content": content,
+                                    "images": images,
+                                    "preview_image": str(preview_path),
+                                    "scanned_page": scanned_page,
+                                },
+                                self._submit_ocr(executor, ocr_sources),
+                            )
                         )
-                    )
+                        if len(pending) >= worker_count * 2:
+                            slides.append(self._finish_pdf_slide(*pending.popleft()))
+                    while pending:
+                        slides.append(self._finish_pdf_slide(*pending.popleft()))
         except Exception as exc:
             raise SlideProcessingError(f"Could not process PDF: {exc}") from exc
         return slides
@@ -141,62 +151,129 @@ class PDFProcessor:
             raise SlideProcessingError(f"Could not open PPTX: {exc}") from exc
 
         slides: list[dict[str, Any]] = []
-        for number, slide in enumerate(deck.slides, start=1):
-            title_shape = slide.shapes.title
-            title = clean_text(title_shape.text) if title_shape and getattr(title_shape, "has_text_frame", False) else ""
-            text_parts: list[str] = []
-            images: list[str] = []
-            visual_text: list[str] = []
-            for image_index, shape in enumerate(self._walk_shapes(slide.shapes), start=1):
-                if getattr(shape, "has_text_frame", False):
-                    text = clean_text(shape.text)
-                    if text and text != title:
-                        text_parts.append(text)
-                if getattr(shape, "has_table", False):
-                    table_text = " | ".join(
-                        clean_text(cell.text)
-                        for row in shape.table.rows
-                        for cell in row.cells
-                        if clean_text(cell.text)
-                    )
-                    if table_text:
-                        text_parts.append(f"Table: {table_text}")
-                if shape.shape_type == MSO_SHAPE_TYPE.PICTURE:
-                    try:
-                        extension = shape.image.ext or "png"
-                        image_path = image_dir / f"slide_{number:03d}_image_{image_index}.{extension}"
-                        image_path.write_bytes(shape.image.blob)
-                        images.append(str(image_path))
-                        hint = self._ocr_bytes(shape.image.blob)
-                        if hint:
-                            visual_text.append(hint)
-                    except Exception:
-                        # An unreadable embedded image should not prevent text extraction.
-                        continue
-            notes = ""
-            try:
-                notes_frame = slide.notes_slide.notes_text_frame
-                notes = clean_text(notes_frame.text) if notes_frame else ""
-            except Exception:
+        worker_count = self._ocr_worker_count()
+        pending: deque[tuple[dict[str, Any], Future[list[str]] | None]] = deque()
+        with ThreadPoolExecutor(max_workers=worker_count, thread_name_prefix="slide-ocr") as executor:
+            for number, slide in enumerate(deck.slides, start=1):
+                title_shape = slide.shapes.title
+                title = clean_text(title_shape.text) if title_shape and getattr(title_shape, "has_text_frame", False) else ""
+                text_parts: list[str] = []
+                images: list[str] = []
+                ocr_sources: list[str | bytes] = []
+                for image_index, shape in enumerate(self._walk_shapes(slide.shapes), start=1):
+                    if getattr(shape, "has_text_frame", False):
+                        text = clean_text(shape.text)
+                        if text and text != title:
+                            text_parts.append(text)
+                    if getattr(shape, "has_table", False):
+                        table_text = " | ".join(
+                            clean_text(cell.text)
+                            for row in shape.table.rows
+                            for cell in row.cells
+                            if clean_text(cell.text)
+                        )
+                        if table_text:
+                            text_parts.append(f"Table: {table_text}")
+                    if shape.shape_type == MSO_SHAPE_TYPE.PICTURE:
+                        try:
+                            extension = shape.image.ext or "png"
+                            image_path = image_dir / f"slide_{number:03d}_image_{image_index}.{extension}"
+                            image_bytes = shape.image.blob
+                            image_path.write_bytes(image_bytes)
+                            images.append(str(image_path))
+                            if self.config.enable_ocr:
+                                ocr_sources.append(str(image_path))
+                        except Exception:
+                            # An unreadable embedded image should not prevent text extraction.
+                            continue
                 notes = ""
-            if not title:
-                title = self._infer_title(text_parts, number)
-            content = "\n".join(text_parts)
-            preview_path = rendered_previews.get(number, image_dir / f"slide_{number:03d}_preview.png")
-            if not preview_path.is_file():
-                self._make_text_preview(preview_path, number, title, content)
-            slides.append(
-                self._slide_record(
-                    number,
-                    title,
-                    content,
-                    notes,
-                    images,
-                    visual_text,
-                    preview_image=str(preview_path),
+                try:
+                    notes_frame = slide.notes_slide.notes_text_frame
+                    notes = clean_text(notes_frame.text) if notes_frame else ""
+                except Exception:
+                    notes = ""
+                if not title:
+                    title = self._infer_title(text_parts, number)
+                content = "\n".join(text_parts)
+                preview_path = rendered_previews.get(number, image_dir / f"slide_{number:03d}_preview.png")
+                if not preview_path.is_file():
+                    self._make_text_preview(preview_path, number, title, content)
+                pending.append(
+                    (
+                        {
+                            "number": number,
+                            "title": title,
+                            "content": content,
+                            "notes": notes,
+                            "images": images,
+                            "preview_image": str(preview_path),
+                        },
+                        self._submit_ocr(executor, ocr_sources),
+                    )
                 )
-            )
+                if len(pending) >= worker_count * 2:
+                    slides.append(self._finish_pptx_slide(*pending.popleft()))
+            while pending:
+                slides.append(self._finish_pptx_slide(*pending.popleft()))
         return slides
+
+    @staticmethod
+    def _ocr_worker_count() -> int:
+        """Bound concurrent OCR work while using more than one available CPU."""
+        return min(4, max(1, os.cpu_count() or 1))
+
+    def _submit_ocr(
+        self, executor: ThreadPoolExecutor, image_data: list[str | bytes]
+    ) -> Future[list[str]] | None:
+        """Queue independent image OCR as one bounded slide task."""
+        if not self.config.enable_ocr or not image_data:
+            return None
+        return executor.submit(self._ocr_image_batch, image_data)
+
+    def _ocr_image_batch(self, image_data: list[str | bytes]) -> list[str]:
+        """OCR every image for a slide in its own worker and preserve image order."""
+        extracted: list[str] = []
+        for source in image_data:
+            try:
+                raw_image = source if isinstance(source, bytes) else Path(source).read_bytes()
+            except OSError:
+                continue
+            text = self._ocr_bytes(raw_image)
+            if text:
+                extracted.append(text)
+        return extracted
+
+    def _finish_pdf_slide(
+        self, data: dict[str, Any], ocr_future: Future[list[str]] | None
+    ) -> dict[str, Any]:
+        visual_text = ocr_future.result() if ocr_future else []
+        content = data["content"]
+        title = data["title"]
+        if data["scanned_page"]:
+            content = " ".join(visual_text)
+            title = self._infer_title(content.splitlines(), data["number"])
+        return self._slide_record(
+            data["number"],
+            title,
+            content,
+            notes="",
+            images=data["images"],
+            visual_text=visual_text,
+            preview_image=data["preview_image"],
+        )
+
+    def _finish_pptx_slide(
+        self, data: dict[str, Any], ocr_future: Future[list[str]] | None
+    ) -> dict[str, Any]:
+        return self._slide_record(
+            data["number"],
+            data["title"],
+            data["content"],
+            data["notes"],
+            data["images"],
+            ocr_future.result() if ocr_future else [],
+            preview_image=data["preview_image"],
+        )
 
     @staticmethod
     def _render_powerpoint_previews(path: Path, image_dir: Path) -> dict[int, Path]:
@@ -239,7 +316,7 @@ class PDFProcessor:
 
     def _extract_pdf_images(self, page: Any, number: int, image_dir: Path) -> tuple[list[str], list[str]]:
         images: list[str] = []
-        visual_text: list[str] = []
+        image_paths: list[str] = []
         seen_xrefs: set[int] = set()
         document = page.parent
         for image_index, image_info in enumerate(page.get_images(full=True), start=1):
@@ -253,12 +330,11 @@ class PDFProcessor:
                 image_path = image_dir / f"slide_{number:03d}_image_{image_index}.{extension}"
                 image_path.write_bytes(extracted["image"])
                 images.append(str(image_path))
-                hint = self._ocr_bytes(extracted["image"])
-                if hint:
-                    visual_text.append(hint)
+                if self.config.enable_ocr:
+                    image_paths.append(str(image_path))
             except Exception:
                 continue
-        return images, visual_text
+        return images, image_paths
 
     def _ocr_bytes(self, image_data: bytes) -> str:
         """Best-effort local OCR; absence of the Tesseract binary is harmless."""
