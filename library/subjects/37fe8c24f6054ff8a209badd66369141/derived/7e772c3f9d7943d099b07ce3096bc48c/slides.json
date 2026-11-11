@@ -1,0 +1,640 @@
+{
+  "metadata": {
+    "source_file": "Lecture_05_Machine_Translation_22_Oct_Slides.pdf",
+    "created_at": "2026-11-06T01:27:22.198586+00:00",
+    "slide_count": 70,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Natural Language Processing:",
+      "content": "Natural Language Processing: Machine translation H02B1A Miryam de Lhoneux Department of Computer Science KU Leuven",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Introduction",
+      "content": "Introduction Outline Introduction Supervised MT Decoding with Beam Search Evaluation Surface overlap-based metrics Embedding-based metrics SOTA and open challenges State-of-the-art Low-resource MT Gender bias Open challenges Summary 1 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Introduction",
+      "content": "Introduction Source (en) Unicorns bring joy to everyone they meet ↓ Target (nl) Eenhoorns brengen vreugde aan iedereen die ze ontmoeten Machine translation The task of translating text from a source language to a target language. 2 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Introduction",
+      "content": "Introduction Why is it useful? Information access • A lot of information on the web is in English • MT helps making it accessible to non-English speakers. 3 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Introduction",
+      "content": "Introduction Why is it useful? Computer-assisted translation (CAT) can speed up human translation. 4 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Introduction",
+      "content": "Introduction Why is it useful? Speech to speech translation can facilitate direct interaction. 5 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Introduction",
+      "content": "Introduction Why is it useful? Translating images on the ﬂy can facilitate e.g. travelling. 6 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Introduction",
+      "content": "Introduction What is diﬃcult? Word order Languages diﬀer in how they order words: E.g. the order of Subject (S) Verb (V) Object (O). English: He wrote a letter to a friend SVO Japanese: tomodachi ni tegami-o kaita (S)OV Friend to letter wrote Arabic: katabt ris¯ala li ˙sadq VSO wrote letter to friend 7 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Introduction",
+      "content": "Introduction What is diﬃcult? Words in the source language do not always translate to the same word in the target language. En → Nl Bank bank oever (verb) indammen (verb) ophopen (See word sense disambiguation in lecture 9) 8 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Introduction",
+      "content": "Introduction What is diﬃcult? Words in the source language do not always translate to the same word in the target language. En → Fr Dog chien chienne (Languages vary in morphology, see lecture 7) 8 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Introduction",
+      "content": "Introduction What is diﬃcult? Languages may have lexical gaps wrt other languages. De → En Schadenfreude The joy a person feels from other people’s misfortune. Wanderlust The need to travel. etc. 9 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Introduction",
+      "content": "Introduction What is diﬃcult? Some languages omit certain words. E.g. pro-drop languages omit certain pronouns. Spanish: Sofia llegó tarde porque ∅perdió el autobús. English: Sofia arrived late because she missed the bus. 10 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Supervised MT",
+      "content": "Supervised MT Outline Introduction Supervised MT Decoding with Beam Search Evaluation Surface overlap-based metrics Embedding-based metrics SOTA and open challenges State-of-the-art Low-resource MT Gender bias Open challenges Summary 11 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Supervised MT",
+      "content": "Supervised MT Machine translation requires training data: a parallel corpus. English Santa Claus teaches NLP to elves in the North Pole. They learn about machine translation and sentiment analysis. Santa loves training AI models for better toy recommendations. The elves code while enjoying hot cocoa and holiday cheer. Everyone prepares for a data-driven Christmas Eve delivery. Dutch De kerstman leert NLP aan elfen op de Noordpool. Ze leren over machinevertaling en sentimentanalyse. De Kerstman traint graag AI-modellen voor betere speelgoedaanbevelingen. De elfen programmeren terwijl ze genieten van warme chocolademelk en kerstsfeer. Iedereen bereidt zich voor op een datagestuurde kerstavondbezorging. 12 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Supervised MT",
+      "content": "Supervised MT First step: sentence alignment. English 1. Santa Claus teaches NLP to elves in the North Pole. 2. They learn about machine translation and sentiment analysis. 3. Santa loves training AI models for better toy recommendations. 4. The elves code while enjoying hot cocoa and holiday cheer. 5. Everyone prepares for a data-driven Christmas Eve delivery. Dutch 1. De kerstman leert NLP aan elfen op de Noordpool. 2. Ze leren over machinevertaling en sentimentanalyse. 3. De Kerstman traint graag AI-modellen voor betere speelgoedaanbevelingen. 4. De elfen programmeren terwijl ze genieten van warme chocolademelk en kerstsfeer. 5. Iedereen bereidt zich voor op een datagestuurde kerstavondbezorging. 13 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Supervised MT",
+      "content": "Supervised MT It is not always that easy. Sample alignment of Le Petit Prince in English and French (Jurafsky and Martin, 2025) Not always a one-to-one mapping between sentences. 14 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Supervised MT",
+      "content": "Supervised MT Sentence alignment 1. Score pairs of spans to measure how likely they are to be translations • Using e.g. character lengths • Using a multilingual embedding space and cosine similarity 2. Align groups of up to 2 sentences based on these scores, using dynamic programming 15 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Supervised MT",
+      "content": "Supervised MT MT as a supervised task • Given a parallel corpus of sentences tokenized (into subwords) • Maximize the probability of the sequence of tokens in the target language y1, ..., ym, given the sequence of tokens in the source language x1, ..., xn: p(y1, ..., ym|x1, ..., xn) • Modelled via an encoder-decoder architecture: h = encoder(x) yt+1 = decoder(h, y1, ..., yt)∀t ∈[1, ..., m]) 16 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Supervised MT",
+      "content": "Supervised MT The encoder-decoder transformer architecture for machine translation (Jurafsky and Martin, 2025). 17 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Supervised MT",
+      "content": "Supervised MT Remember self-attention? (Lecture 4) Self-attention (Jurafsky and Martin, 2025). 18 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Supervised MT",
+      "content": "Supervised MT Cross-attention, adapted from Jurafsky and Martin (2025). Cross-attention uses the same mechanism but the keys and values come from the output of the encoder. 19 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Supervised MT",
+      "content": "Supervised MT Encoder-decoder transformer blocks (Jurafsky and Martin, 2025). 20 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Supervised MT",
+      "content": "Supervised MT Visualizing attention weights when translating a French sentence into English. 21 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Supervised MT",
+      "content": "Supervised MT • Just like for language modelling, the model is trained to predict the next word. • Cross-entropy loss • Using teacher forcing See lecture 4 22 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Decoding with Beam Search",
+      "content": "Decoding with Beam Search Outline Introduction Supervised MT Decoding with Beam Search Evaluation Surface overlap-based metrics Embedding-based metrics SOTA and open challenges State-of-the-art Low-resource MT Gender bias Open challenges Summary 23 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Decoding with Beam Search",
+      "content": "Decoding with Beam Search Greedy decoding • At each time step t, choose the highest probability word: ˆwt = arg max w∈V P(w|w1:t) • May lead to globally suboptimal choices →Beam search maintains multiple choices and leaves choice to later 24 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Decoding with Beam Search",
+      "content": "Decoding with Beam Search Beam search Search for the best path in a tree. Search tree for language modelling (Jurafsky and Martin, 2025) 25 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Decoding with Beam Search",
+      "content": "Decoding with Beam Search Beam search • Search for the best path in a tree. • Exhaustive search is too slow. • Instead, keep k possible tokens at each step • k is the beam width 26 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Decoding with Beam Search",
+      "content": "Decoding with Beam Search Beam search decoding with k = 2 (Jurafsky and Martin, 2025). 27 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Evaluation",
+      "content": "Evaluation Outline Introduction Supervised MT Decoding with Beam Search Evaluation Surface overlap-based metrics Embedding-based metrics SOTA and open challenges State-of-the-art Low-resource MT Gender bias Open challenges Summary 28 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation Evaluation dimensions Adequacy: How well the translation captures the exact meaning of the source sentence. Fluency: How ﬂuent the translation is in the target language (clarity, grammaticality) 29 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Evaluation",
+      "content": "Evaluation Human evaluation • Rating • Fluency • Adequacy: • How much information is preserved from source to target • Comparing to a reference translation • Ranking candidate translations • Post-edit the translation and measure the diﬀerence →Best evaluation but time consuming and expensive 30 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Evaluation",
+      "content": "Evaluation Automatic evaluation Comparison between a human reference translation and a candidate MT translation • chrF: character overlap • BLEU: word overlap • Embedding-based methods 31 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Evaluation",
+      "content": "Evaluation chrF • Given a hypothesis candidate MT translation and a reference translation, • the character F-score measures the character overlap, • parametrized by k: the max length of the n-grams to consider. 33 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Evaluation",
+      "content": "Evaluation chrF chrP: percentage of character 1-grams, 2-grams ... k-grams in the hypothesis that occur in the reference, averaged. chrR: percentage of character 1-grams, 2-grams ... k-grams in the reference that occur in the hypothesis, averaged. chrF+β: (1 + β2) chrP × chrR β2 × chrP + chrR chrF2: (common) 5 × chrP × chrR 4 × chrP + chrR 34 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Evaluation",
+      "content": "Evaluation chrF example k = β = 2 REF witnessforthepast, unigrams: 18, bigrams: 17 HYP witnessofthepast, unigrams: 17, bigrams: 16 1-grams: 17 2-grams: 13 chrP: 1+.813 2 = .906 P 1-gram: 17 17 = 1 P 2-gram: 13 16 = .813 note: the comma is counted as a character 35 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Evaluation",
+      "content": "Evaluation chrF example k = β = 2 REF witnessforthepast, unigrams: 18, bigrams: 17 HYP witnessofthepast, unigrams: 17, bigrams: 16 1-grams: 17 2-grams: 13 chrP: 1+.813 2 = .906 chrR: .944+.765 2 = .855 R 1-gram: 17 18 = .944 R 2-gram: 13 17 = .765 35 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Evaluation",
+      "content": "Evaluation chrF example k = β = 2 REF witnessforthepast, unigrams: 18, bigrams: 17 HYP witnessofthepast, unigrams: 17, bigrams: 16 1-grams: 17 2-grams: 13 chrP: 1+.813 2 = .906 chrR: .944+.765 2 = .855 chrF: 5 chrP×chrP 4chrP+chrR = .86 35 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Evaluation",
+      "content": "Evaluation BLEU • Based on overlap of word n-grams • Using precision only: • Percentage of word 1-grams, 2-grams, 3-grams and 4-grams in the hypothesis that occur in the reference. • This is calculated across all the sentences of the corpus. • Using a brevity penalty: • penalizing translations that are too short • Note: sensitive to word tokenization! 36 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Evaluation",
+      "content": "Evaluation Illustration of n−gram overlap accuracies as part of computing BLEU. Image by Dan Klein . 37 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Evaluation",
+      "content": "Evaluation Limitations of chrF and BLEU • Synonymy (or more generally, word meaning) is not captured (see lecture 9) • Word order diﬀerences are not captured • Cross-sentence properties are not captured (e.g. discourse coherence, see lecture 10). • Generally, highly criticized but still heavily used for lack of (cheap) alternatives 38 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Evaluation",
+      "content": "Evaluation Embedding-based evaluation • Given a hypothesis translation, a reference translation and a rating • Fine-tune an encoder to predict the rating • Given a hypothesis translation, a reference translation: • Compute embeddings of the hypothesis and the reference using an encoder • Measure the similarity of the embeddings 40 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Evaluation",
+      "content": "Evaluation BertScore visualization (Jurafsky and Martin, 2025). R : average max similarity per reference word P : average max similarity per candidate word 41 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Outline Introduction Supervised MT Decoding with Beam Search Evaluation Surface overlap-based metrics Embedding-based metrics SOTA and open challenges State-of-the-art Low-resource MT Gender bias Open challenges Summary 42 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges SOTA Quality tiers Publishable: Publish as is HTER: 0-10% Editable: Requires post-editing HTER: 10-20% Gistable: Useful for information gathering or trend spotting HTER: 20-40% Triagable: Only useful for identifying relevant documents HTER: 40-50% Tiers deﬁned based on human-annotator translation editor rate (HTER). The scale was developed in preparation of the DARPA GALE programme. 44 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges SOTA Language pairs and domains assessment French-English restricted domain publishable French-English news stories publishable German-English news stories publishable Swahili-English news stories gistable Uyghur-English news stories triagable Informal estimates by Philipp Koehn. 45 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges • MT relies on large parallel corpora • Only available for a fraction of possible language pairs • What can we do in low-resource settings? 47 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Backtranslation A type of data augmentation to add sentence pairs to the training data. 48 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Multilingual models One model, many translation directions. Illustration of a many-to-many machine translation model (Aharoni et al., 2019). 49 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Multilingual models • One model for 100s of language pairs (Aharoni et al., 2019). • Enables cross-lingual transfer between related languages (e.g. Spanish and Catalan). • Empirically performs competitively for some language pairs. 50 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Low-resource MT Limitations and open challenges • Low-resource MT is still very much an open challenge • NMT models are data hungry • Certain language properties make MT more diﬃcult: • Morphological complexity (e.g. Ataman and Federico (2018)) • Word order freedom (Bisazza et al., 2021) • Data quality can be an issue (Kreutzer et al., 2022) • English almost always included in language pairs under study 51 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Low-resource MT Limitations and open challenges AmericasNLP shared task (De Gibert et al., 2025) involving polysynthetic languages: • Poor baselines, hard to beat • LLMs help if target side is high-resource, otherwise not. 52 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Some languages encode grammatical gender (Spanish, Italian, Russian, ...) Others do not (English, Turkish, Basque, Finnish) 54 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges In some cases, this can lead to two possible translations. En The doctor asked for help. ↓ Es La doctora pidió ayuda. El doctor pidió ayuda. 55 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Machine translation tools often stick to one translation. Xeet from 2017 56 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges But it’s ﬁxed now - right? Well... Screenshot from 27 Nov 2024 57 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges In other cases, there is only one possible translation. En The doctor asked the nurse to help her in the procedure. ↓ Es La doctora le pidió a la enfermera que le ayudara con el procedimiento. Gender bias may lead to errors. 58 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Gender bias may lead to errors. Screenshot from 27/11/2024 59 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Gender bias evaluation • Constructing stereotypical vs non-stereotypical examples • Testing MT on both types of examples • Measuring gender translation accuracy 60 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Non-stereotypical En The doctor asked the nurse to help her in the procedure. ↓ Es La doctora le pidió a la enfermera que le ayudara con el procedimiento. 61 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Stereotypical En The doctor asked the nurse to help him in the procedure. ↓ Es El doctor le pidió a la enfermera que lo ayudara con el procedimiento. 62 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Results on gender translation accuracy. 63 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges • Gender bias in MT is still an open challenge. • There are some methods to mitigate it, e.g. using controlled text generation (Lu et al., 2023). • There is a workshop dedicated to this, Gender Inclusive Translation Technologies GITT. 64 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "SOTA and open challenges",
+      "content": "SOTA and open challenges Open challenges • Low-resource MT • Gender bias • Document-level translation (Läubli et al., 2018) • Eﬃcient improvements over beam search • Minimum Bayes Risk (MBR) is computationally expensive (Trabelsi et al., 2024) • Low-frequency words • Out-of-domain data See also Koehn and Knowles (2017), still largely relevant today. 66 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Summary",
+      "content": "Summary Outline Introduction Supervised MT Decoding with Beam Search Evaluation Surface overlap-based metrics Embedding-based metrics SOTA and open challenges State-of-the-art Low-resource MT Gender bias Open challenges Summary 67 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "Summary",
+      "content": "Summary Summary • Machine translation with a neural encoder-decoder model • Decoding with beam search • Automatic evaluation methods and their limitations • State-of-the art: highly dependent on language pairs and domain • Strategies for low-resource MT • Gender bias in MT • Overall, much progress but big open challenges 68 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "Summary",
+      "content": "Summary Reminder Next week we meet on Friday at 10h30! 69 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "Summary",
+      "content": "Summary Acknowledgments The quality tiers slides were inspired by the MT course by Philipp Koehn. Good resource if you want to dig more into the topic! The gender bias slides were inspired by Gabriel Stanovsky: . 70 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "Summary",
+      "content": "Summary References I Roee Aharoni, Melvin Johnson, and Orhan Firat. 2019. Massively multilingual neural machine translation. In Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers). Duygu Ataman and Marcello Federico. 2018. Compositional representation of morphologically-rich input for neural machine translation. In Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers). Arianna Bisazza, Ahmet Üstün, and Stephan Sportel. 2021. On the diﬃculty of translating free-order case-marking languages. Transactions of the Association for Computational Linguistics, 9:1233–1248. Ona De Gibert, Robert Pugh, Ali Marashian, Raul Vazquez, Abteen Ebrahimi, Pavel Denisov, Enora Rice, Edward Gow-Smith, Juan Prieto, Melissa Robles, Rubén Manrique, Oscar Moreno, Angel Lino, Rolando Coto-Solano, Aldo Alvarez, Marvin Agüero-Torales, John E. Ortega, Luis Chiruzzo, Arturo Oncevay, Shruti Rijhwani, Katharina Von Der Wense, and Manuel Mager. 2025. Findings of the AmericasNLP 2025 shared tasks on machine translation, creation of educational material, and translation metrics for indigenous languages of the Americas. In Proceedings of the Fifth Workshop on NLP for Indigenous Languages of the Americas (AmericasNLP). Daniel Jurafsky and James H. Martin. 2025. Speech and Language Processing: An Introduction to Natural Language Processing, Computational Linguistics, and Speech Recognition, with Language Models, 3rd edition. Online manuscript released August 24, 2025. Philipp Koehn and Rebecca Knowles. 2017. Six challenges for neural machine translation. In Proceedings of the First Workshop on Neural Machine Translation. 71 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 70,
+      "title": "Summary",
+      "content": "Summary References II Julia Kreutzer, Isaac Caswell, Lisa Wang, Ahsan Wahab, Daan van Esch, Nasanbayar Ulzii-Orshikh, Allahsera Tapo, Nishant Subramani, Artem Sokolov, Claytone Sikasote, Monang Setyawan, Supheakmungkol Sarin, Sokhar Samb, Benoît Sagot, Clara Rivera, Annette Rios, Isabel Papadimitriou, Salomey Osei, Pedro Ortiz Suarez, Iroro Orife, Kelechi Ogueji, Andre Niyongabo Rubungo, Toan Q. Nguyen, Mathias Müller, André Müller, Shamsuddeen Hassan Muhammad, Nanda Muhammad, Ayanda Mnyakeni, Jamshidbek Mirzakhalov, Tapiwanashe Matangira, Colin Leong, Nze Lawson, Sneha Kudugunta, Yacine Jernite, Mathias Jenny, Orhan Firat, Bonaventure F. P. Dossou, Sakhile Dlamini, Nisansa de Silva, Sakine Çabuk Ballı, Stella Biderman, Alessia Battisti, Ahmed Baruwa, Ankur Bapna, Pallavi Baljekar, Israel Abebe Azime, Ayodele Awokoya, Duygu Ataman, Orevaoghene Ahia, Oghenefego Ahia, Sweta Agrawal, and Mofetoluwa Adeyemi. 2022. Quality at a glance: An audit of web-crawled multilingual datasets. Transactions of the Association for Computational Linguistics, 10:50–72. Samuel Läubli, Rico Sennrich, and Martin Volk. 2018. Has machine translation achieved human parity? a case for document-level evaluation. In Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing. Tianshuai Lu, Noëmi Aepli, and Annette Rios. 2023. Reducing gender bias in NMT with FUDGE. In Proceedings of the First Workshop on Gender-Inclusive Translation Technologies. Firas Trabelsi, David Vilar, Mara Finkelstein, and Markus Freitag. 2024. Eﬃcient minimum bayes risk decoding using low-rank matrix completion algorithms. In The Thirty-eighth Annual Conference on Neural Information Processing Systems. 72 NLP: Machine translation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

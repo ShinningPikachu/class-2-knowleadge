@@ -35,7 +35,10 @@ class LibrarySlideReviewTest(unittest.TestCase):
             subject = library.create_subject("Course")
             folder = library.create_folder(subject.id, "Lecture 1")
             deck = root / "Slides.pdf"
-            deck.write_bytes(b"pdf placeholder")
+            import fitz
+            with fitz.open() as pdf:
+                pdf.new_page().insert_text((72, 72), "Title")
+                pdf.save(deck)
             audio = root / "Recording.m4a"
             audio.write_bytes(b"audio placeholder")
             slide_document = library.add_document(subject.id, deck, folder_id=folder.id)
@@ -55,6 +58,15 @@ class LibrarySlideReviewTest(unittest.TestCase):
             self.assertEqual(slide_bundle.summaries[1], "Slide 1: Title")
             self.assertEqual(slide_bundle.alignment[1][0]["text"], "Hello")
             self.assertEqual(audio_bundle.paragraphs[0]["text"], "Hello")
+
+            # A deck with a different page count must not display these links.
+            with fitz.open() as pdf:
+                pdf.new_page()
+                pdf.new_page()
+                mismatched = root / "Slides.shortened.pdf"
+                pdf.save(mismatched)
+            mismatched_document = library.add_document(subject.id, mismatched, folder_id=folder.id)
+            self.assertIsNone(_lecture_slide_bundle(library, manager, mismatched_document))
 
     def test_translation_artifacts_are_hidden_while_primary_notes_remain_visible(self) -> None:
         for name in (

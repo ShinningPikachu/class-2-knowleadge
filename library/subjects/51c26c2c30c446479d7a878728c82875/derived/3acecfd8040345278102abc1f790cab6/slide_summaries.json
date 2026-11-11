@@ -595,7 +595,7 @@
     {
       "slide": 66,
       "title": "Transformer: self-attention",
-      "summary": "No explanatory text, definitions, examples, or professor transcript are available in the supplied sources to describe the mechanism of self-attention within Transformers.",
+      "summary": "Slide 66: Transformer self-attention, illustrated by the sentence “I am television watching.”",
       "sources": {
         "slide": true,
         "teacher_audio": false

@@ -53,7 +53,7 @@ Subjects: **6** · Library documents: **107**
 - [Notes.pdf](library/subjects/51c26c2c30c446479d7a878728c82875/files/3acecfd8040345278102abc1f790cab6/f5e385dc5c9449c0b6bede900d061992_Notes.pdf) · 66.8 KB
 - [Recording.m4a](library/subjects/51c26c2c30c446479d7a878728c82875/files/3acecfd8040345278102abc1f790cab6/2b78435ce10f4e17a4f4ad7f3900c9ff_Recording.m4a) · 41.3 MB
 - [Slides.pdf](library/subjects/51c26c2c30c446479d7a878728c82875/files/3acecfd8040345278102abc1f790cab6/d1b7b799e5344979b67c42ae1db2e391_Slides.pdf) · 6.5 MB
-- [Slide explanations](library/subjects/51c26c2c30c446479d7a878728c82875/derived/3acecfd8040345278102abc1f790cab6/slide_summaries.json) · 61.3 KB
+- [Slide explanations](library/subjects/51c26c2c30c446479d7a878728c82875/derived/3acecfd8040345278102abc1f790cab6/slide_summaries.json) · 61.2 KB
 - [Slide and transcript links](library/subjects/51c26c2c30c446479d7a878728c82875/derived/3acecfd8040345278102abc1f790cab6/alignment.json) · 166.6 KB
 - [Cleaned transcript with timestamps](library/subjects/51c26c2c30c446479d7a878728c82875/derived/3acecfd8040345278102abc1f790cab6/transcript.json) · 106.2 KB
 - [Transcript text](library/subjects/51c26c2c30c446479d7a878728c82875/derived/3acecfd8040345278102abc1f790cab6/transcript.txt) · 67.0 KB
@@ -74,8 +74,8 @@ Subjects: **6** · Library documents: **107**
 
 - [Notes.pdf](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/files/d4da20c694a2492d9a1579f50c892292/a8ed37b0cb584a079e5383aec8cdccff_Notes.pdf) · 56.5 KB
 - [Recording.m4a](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/files/d4da20c694a2492d9a1579f50c892292/b3a8c13d168d46c5a875aec02654d220_Recording.m4a) · 56.6 MB
-- [Slides.original.pdf](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/files/d4da20c694a2492d9a1579f50c892292/e54add2c16044e7094235528d993a7cf_Slides.original.pdf) · 6.4 MB
-- [Slides.pdf](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/files/d4da20c694a2492d9a1579f50c892292/125236daed404a4ca3c66c78fd2f6705_Slides.pdf) · 5.4 MB
+- [Slides.pdf](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/files/d4da20c694a2492d9a1579f50c892292/e54add2c16044e7094235528d993a7cf_Slides.pdf) · 6.4 MB
+- [Slides.shortened.pdf](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/files/d4da20c694a2492d9a1579f50c892292/125236daed404a4ca3c66c78fd2f6705_Slides.shortened.pdf) · 5.4 MB
 - [Slide explanations](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/derived/d4da20c694a2492d9a1579f50c892292/slide_summaries.json) · 31.2 KB
 - [Slide and transcript links](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/derived/d4da20c694a2492d9a1579f50c892292/alignment.json) · 151.2 KB
 - [Cleaned transcript with timestamps](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/derived/d4da20c694a2492d9a1579f50c892292/transcript.json) · 100.0 KB
@@ -231,6 +231,10 @@ Subjects: **6** · Library documents: **107**
 - [Recording.m4a](library/subjects/37fe8c24f6054ff8a209badd66369141/files/7e772c3f9d7943d099b07ce3096bc48c/a31bff21b7a34c1383e95c12ed786bad_Recording.m4a) · 45.1 MB
 - [Slides.original.pdf](library/subjects/37fe8c24f6054ff8a209badd66369141/files/7e772c3f9d7943d099b07ce3096bc48c/13f154df08f549a9a114bd75508b54e8_Slides.original.pdf) · 2.6 MB
 - [Slides.pdf](library/subjects/37fe8c24f6054ff8a209badd66369141/files/7e772c3f9d7943d099b07ce3096bc48c/4645f175a763462f899165150844f810_Slides.pdf) · 2.6 MB
+- [Slide explanations](library/subjects/37fe8c24f6054ff8a209badd66369141/derived/7e772c3f9d7943d099b07ce3096bc48c/slide_summaries.json) · 23.4 KB
+- [Slide and transcript links](library/subjects/37fe8c24f6054ff8a209badd66369141/derived/7e772c3f9d7943d099b07ce3096bc48c/alignment.json) · 114.4 KB
+- [Cleaned transcript with timestamps](library/subjects/37fe8c24f6054ff8a209badd66369141/derived/7e772c3f9d7943d099b07ce3096bc48c/transcript.json) · 72.4 KB
+- [Transcript text](library/subjects/37fe8c24f6054ff8a209badd66369141/derived/7e772c3f9d7943d099b07ce3096bc48c/transcript.txt) · 43.1 KB
 
 **Lecture 6: POS tagging (30 Oct)**
 
@@ -264,8 +268,8 @@ Subjects: **6** · Library documents: **107**
 
 - [Notes.pdf](library/subjects/39a1b2e21dd541708bc04009cd6ce67a/files/81fe0a1c913948c3afc462376f64a801/93d1083178364137a7b0f4073c91c11b_Notes.pdf) · 48.4 KB
 - [Recording.m4a](library/subjects/39a1b2e21dd541708bc04009cd6ce67a/files/81fe0a1c913948c3afc462376f64a801/e2334b25c9ed45769e68314d8bd57683_Recording.m4a) · 42.8 MB
-- [Slides.original.pdf](library/subjects/39a1b2e21dd541708bc04009cd6ce67a/files/81fe0a1c913948c3afc462376f64a801/afe7fb9447de435ca3485ad7580ecd40_Slides.original.pdf) · 221.9 KB
-- [Slides.pdf](library/subjects/39a1b2e21dd541708bc04009cd6ce67a/files/81fe0a1c913948c3afc462376f64a801/c4204d4352664d3bac2d0837fbbdacc9_Slides.pdf) · 228.1 KB
+- [Slides.pdf](library/subjects/39a1b2e21dd541708bc04009cd6ce67a/files/81fe0a1c913948c3afc462376f64a801/afe7fb9447de435ca3485ad7580ecd40_Slides.pdf) · 221.9 KB
+- [Slides.shortened.pdf](library/subjects/39a1b2e21dd541708bc04009cd6ce67a/files/81fe0a1c913948c3afc462376f64a801/c4204d4352664d3bac2d0837fbbdacc9_Slides.shortened.pdf) · 228.1 KB
 - [Slide explanations](library/subjects/39a1b2e21dd541708bc04009cd6ce67a/derived/81fe0a1c913948c3afc462376f64a801/slide_summaries.json) · 20.3 KB
 - [Slide and transcript links](library/subjects/39a1b2e21dd541708bc04009cd6ce67a/derived/81fe0a1c913948c3afc462376f64a801/alignment.json) · 149.8 KB
 - [Cleaned transcript with timestamps](library/subjects/39a1b2e21dd541708bc04009cd6ce67a/derived/81fe0a1c913948c3afc462376f64a801/transcript.json) · 100.5 KB

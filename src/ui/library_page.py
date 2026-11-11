@@ -354,6 +354,15 @@ def _lecture_slide_bundle(
                 slides = []
     if not slides or not _is_slide_deck(document, slides, source_job):
         return None
+    if document.stored_path.suffix.lower() == ".pdf":
+        try:
+            import fitz
+
+            with fitz.open(document.stored_path) as pdf:
+                if len(pdf) != len(slides):
+                    return None
+        except Exception:
+            return None
 
     summaries_path = (portable / "slide_summaries.json" if (portable / "slide_summaries.json").is_file() else None) or _find_related_artifact(related, ("slide", "summaries")) or _result_path(source_job, "slide_summaries_path")
     if summaries_path is None:

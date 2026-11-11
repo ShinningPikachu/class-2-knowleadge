@@ -392,6 +392,13 @@ class NativeBackend:
                         is_deck = len(pdf) == len(slides)
                 except Exception:
                     is_deck = False
+            if is_deck and slides and suffix == ".pdf":
+                try:
+                    import fitz
+                    with fitz.open(document.stored_path) as pdf:
+                        is_deck = len(pdf) == len(slides)
+                except Exception:
+                    is_deck = False
             if is_deck and slides:
                 summaries_path = (portable / "slide_summaries.json" if (portable / "slide_summaries.json").is_file() else None) or self._find_related_artifact(related, ("slide", "summaries")) or self._result_path(source_job, "slide_summaries_path")
                 if summaries_path is None:
