@@ -30,12 +30,15 @@ struct LectureSlidesPreview: View {
     @EnvironmentObject private var model: AppModel
     let document: LibraryDocument
     let bundle: NativeLectureBundle
+    let fullScreen: Bool
     @State private var slideIndex = 0
     @State private var language = "English"
     @State private var translationSlide: NativeLectureSlide?
     @State private var narrationPlayer: AVPlayer?
     @State private var isNarrating = false
-
+    @State private var currentSlideArtwork: NSImage?
+    @State private var artworkCache: [Int: NSImage] = [:]
+    @State private var slidePDFDocument: PDFDocument?
     private var slide: NativeLectureSlide {
         bundle.slides[min(max(slideIndex, 0), max(bundle.slides.count - 1, 0))]
     }
@@ -49,121 +52,34 @@ struct LectureSlidesPreview: View {
         return slide.translations[language] ?? slide.summary
     }
 
+    private var noteContent: String {
+        note.isEmpty ? slide.content : note
+    }
+
+    private var noteHeading: String {
+        note.isEmpty ? "Slide content" : "Slide and lecture note"
+    }
+
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 13) {
-                HStack(spacing: 10) {
-                    Button {
-                        slideIndex = max(0, slideIndex - 1)
-                    } label: { Image(systemName: "chevron.left") }
-                    .disabled(slideIndex == 0)
-                    Text("Slide \(slide.slide) of \(bundle.slides.count)")
-                        .font(.callout.weight(.semibold))
-                        .frame(minWidth: 110)
-                    Button {
-                        slideIndex = min(bundle.slides.count - 1, slideIndex + 1)
-                    } label: { Image(systemName: "chevron.right") }
-                    .disabled(slideIndex >= bundle.slides.count - 1)
-                    Spacer()
-                    Button {
-                        Task { await narrate() }
-                    } label: {
-                        if isNarrating { ProgressView().controlSize(.small) }
-                        else { Label("Speak", systemImage: "speaker.wave.2") }
+        Group {
+            if fullScreen {
+                fullScreenSlideReader
+            } else {
+                VStack(alignment: .leading, spacing: 13) {
+                    slideControls()
+                    presentationStage.frame(height: 330)
+                    Text("Scroll to turn pages · scroll the explanation to read")
+                        .font(.caption).foregroundStyle(.secondary)
+                    ScrollView {
+                        slideDetails(fullScreen: false)
                     }
-                    .disabled(isNarrating || note.isEmpty)
-                    Button("Translate…") { translationSlide = slide }
-                        .disabled(bundle.sourceJob == nil || slide.summary.isEmpty)
-                    Button {
-                        Task { await model.enqueueSlideReview(slide.slide) }
-                    } label: {
-                        Label("Deep review", systemImage: "brain.head.profile")
-                    }
-                    .disabled(bundle.sourceJob == nil || isReviewActive)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(PresentationScrollRegion(isText: true))
                 }
-                .buttonStyle(.bordered)
-
-                if document.fileURL.pathExtension.lowercased() == "pdf" {
-                    PDFDocumentView(url: document.fileURL, pageNumber: slide.slide)
-                        .frame(height: 330)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                } else if !slide.previewImage.isEmpty,
-                          let image = NSImage(contentsOfFile: slide.previewImage) {
-                    Image(nsImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 330)
-                } else {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(slide.title).font(.title3.weight(.semibold))
-                        Text(slide.content.isEmpty ? "No extractable slide text." : slide.content)
-                            .textSelection(.enabled)
-                    }
-                    .padding(16)
-                    .frame(maxWidth: .infinity, minHeight: 210, alignment: .topLeading)
-                    .background(.quaternary.opacity(0.55), in: RoundedRectangle(cornerRadius: 9))
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(alignment: .firstTextBaseline) {
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text(slide.title).font(.headline)
-                            Text("Slide and lecture note")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        Picker("Note language", selection: $language) {
-                            ForEach(languages, id: \.self) { Text($0).tag($0) }
-                        }
-                        .labelsHidden()
-                        .frame(maxWidth: 170)
-                    }
-                    Text(note.isEmpty ? "A combined slide-and-lecture note has not been generated for this slide." : note)
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(14)
-                .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 9))
-
-                if !slide.paragraphs.isEmpty {
-                    DisclosureGroup("Teacher explanation · \(slide.paragraphs.count) passages") {
-                        VStack(alignment: .leading, spacing: 9) {
-                            ForEach(Array(slide.paragraphs.enumerated()), id: \.offset) { _, paragraph in
-                                VStack(alignment: .leading, spacing: 3) {
-                                    if let start = paragraph.startTime, !start.isEmpty {
-                                        Text(start + (paragraph.endTime.map { "–\($0)" } ?? ""))
-                                            .font(.caption.monospacedDigit())
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    Text(paragraph.text).textSelection(.enabled)
-                                }
-                            }
-                        }
-                        .padding(.top, 8)
-                    }
-                    .padding(12)
-                    .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
-                }
-
-                reviewSection
-                ForEach(slide.translationJobs) { job in
-                    HStack {
-                        Text("\(job.language) translation")
-                        Spacer()
-                        Text("\(job.status.capitalized) · \(job.progress)%")
-                            .foregroundStyle(.secondary)
-                    }
-                    .font(.caption)
-                }
-                if let narrationPlayer {
-                    NativeMediaPlayer(player: narrationPlayer)
-                        .frame(height: 82)
-                }
+                .padding(12)
             }
-            .padding(12)
         }
+        .background(PresentationScrollRegion())
         .sheet(item: $translationSlide) { selectedSlide in
             SlideTranslationSheet(slide: selectedSlide) { target in
                 Task { await model.enqueueSlideTranslation(selectedSlide, targetLanguage: target) }
@@ -171,6 +87,212 @@ struct LectureSlidesPreview: View {
         }
         .onChange(of: slideIndex) { _, _ in
             if !languages.contains(language) { language = "English" }
+        }
+        .onAppear {
+            loadCurrentSlideArtwork()
+        }
+    }
+
+    private var fullScreenSlideReader: some View {
+        GeometryReader { geometry in
+            HStack(spacing: 0) {
+                VStack(spacing: 10) {
+                    slideControls().padding(.horizontal, 14).padding(.top, 14)
+                    presentationStage.padding(12)
+                }
+                .frame(width: geometry.size.width * 0.62)
+                Divider()
+                ScrollView {
+                    slideDetails(fullScreen: true)
+
+                        .padding(22)
+                }
+                .frame(width: geometry.size.width * 0.38)
+                .background(PresentationScrollRegion(isText: true))
+            }
+        }
+    }
+
+    private var presentationStage: some View {
+        ElasticPresentationStage(index: Binding(get: { slideIndex }, set: { selectSlide($0) }), count: bundle.slides.count) {
+            slideArtwork(for: slide, fullScreen: true)
+        }
+    }
+
+    private func slideControls(scrollTo: ((Int) -> Void)? = nil) -> some View {
+        HStack(spacing: 10) {
+            Button {
+                guard slideIndex > 0 else { return }
+                selectSlide(slideIndex - 1, scrollTo: scrollTo)
+            } label: { Image(systemName: "chevron.left") }
+            .disabled(slideIndex == 0)
+            Text("Slide \(slide.slide) of \(bundle.slides.count)")
+                .font(.callout.weight(.semibold))
+                .monospacedDigit()
+                .frame(minWidth: 110)
+            Button {
+                guard slideIndex < bundle.slides.count - 1 else { return }
+                selectSlide(slideIndex + 1, scrollTo: scrollTo)
+            } label: { Image(systemName: "chevron.right") }
+            .disabled(slideIndex >= bundle.slides.count - 1)
+            Spacer()
+            Button {
+                Task { await narrate() }
+            } label: {
+                if isNarrating { ProgressView().controlSize(.small) }
+                else { Label("Speak", systemImage: "speaker.wave.2") }
+            }
+            .disabled(isNarrating || noteContent.isEmpty)
+            Button("Translate…") { translationSlide = slide }
+                .disabled(bundle.sourceJob == nil || slide.summary.isEmpty)
+            Button {
+                Task { await model.enqueueSlideReview(slide.slide) }
+            } label: {
+                Label("Deep review", systemImage: "brain.head.profile")
+            }
+            .disabled(bundle.sourceJob == nil || isReviewActive)
+        }
+        .buttonStyle(.bordered)
+    }
+
+    private func selectSlide(_ targetIndex: Int, scrollTo: ((Int) -> Void)? = nil) {
+        guard bundle.slides.indices.contains(targetIndex), targetIndex != slideIndex else { return }
+        withAnimation(.spring(response: 0.46, dampingFraction: 0.86)) {
+            currentSlideArtwork = artworkImage(for: bundle.slides[targetIndex])
+            slideIndex = targetIndex
+        }
+        DispatchQueue.main.async { preloadNeighbors() }
+    }
+
+    private func loadCurrentSlideArtwork() {
+        currentSlideArtwork = artworkImage(for: slide)
+        preloadNeighbors()
+    }
+
+    private func preloadNeighbors() {
+        for neighbor in [slideIndex - 1, slideIndex + 1] where bundle.slides.indices.contains(neighbor) {
+            _ = artworkImage(for: bundle.slides[neighbor])
+        }
+        let retained = Set([slideIndex - 1, slideIndex, slideIndex + 1].filter { bundle.slides.indices.contains($0) }.map { bundle.slides[$0].slide })
+        artworkCache = artworkCache.filter { retained.contains($0.key) }
+    }
+
+    private func artworkImage(for page: NativeLectureSlide) -> NSImage? {
+        if let cached = artworkCache[page.slide] { return cached }
+        let image: NSImage?
+        if !page.previewImage.isEmpty, let preview = NSImage(contentsOfFile: page.previewImage) {
+            image = preview
+        } else if document.fileURL.pathExtension.lowercased() == "pdf" {
+            if slidePDFDocument == nil { slidePDFDocument = PDFDocument(url: document.fileURL) }
+            image = slidePDFDocument?.page(at: max(0, page.slide - 1))?.thumbnail(of: NSSize(width: 1200, height: 900), for: .cropBox)
+        } else {
+            image = nil
+        }
+        if let image { artworkCache[page.slide] = image }
+        return image
+    }
+
+    @ViewBuilder
+    private func slideArtwork(for page: NativeLectureSlide, fullScreen: Bool) -> some View {
+        if fullScreen, let image = currentSlideArtwork, page.slide == slide.slide {
+            Image(nsImage: image)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if fullScreen,
+                  document.fileURL.pathExtension.lowercased() == "pdf",
+                  let pdfPage = PDFDocument(url: document.fileURL)?.page(at: max(0, page.slide - 1)) {
+            Image(nsImage: pdfPage.thumbnail(of: NSSize(width: 1200, height: 900), for: .cropBox))
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+        } else if document.fileURL.pathExtension.lowercased() == "pdf" {
+            PDFDocumentView(url: document.fileURL, pageNumber: page.slide)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(height: fullScreen ? nil : 330)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+        } else if !page.previewImage.isEmpty,
+                  let image = NSImage(contentsOfFile: page.previewImage) {
+            Image(nsImage: image)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(page.title).font(.title3.weight(.semibold))
+                Text(page.content.isEmpty ? "No extractable slide text." : page.content)
+                    .textSelection(.enabled)
+            }
+            .padding(16)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .background(.quaternary.opacity(0.55), in: RoundedRectangle(cornerRadius: 9))
+        }
+    }
+
+    private func slideDetails(fullScreen: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 13) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .firstTextBaseline) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(slide.title)
+                            .font(.system(size: fullScreen ? 27 : 18, weight: .semibold))
+                        Text(noteHeading)
+                            .font(.system(size: fullScreen ? 15 : 12))
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Picker("Note language", selection: $language) {
+                        ForEach(languages, id: \.self) { Text($0).tag($0) }
+                    }
+                    .labelsHidden()
+                    .frame(maxWidth: 170)
+                }
+                Text(noteContent.isEmpty ? "No selectable text is available for this slide." : noteContent)
+                    .font(.system(size: fullScreen ? 23 : 17))
+                    .lineSpacing(fullScreen ? 6 : 0)
+                    .textSelection(.enabled)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(14)
+            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 9))
+
+            if !slide.paragraphs.isEmpty {
+                DisclosureGroup("Teacher explanation · \(slide.paragraphs.count) passages") {
+                    VStack(alignment: .leading, spacing: 9) {
+                        ForEach(Array(slide.paragraphs.enumerated()), id: \.offset) { _, paragraph in
+                            VStack(alignment: .leading, spacing: 3) {
+                                if let start = paragraph.startTime, !start.isEmpty {
+                                    Text(start + (paragraph.endTime.map { "–\($0)" } ?? ""))
+                                        .font(.caption.monospacedDigit())
+                                        .foregroundStyle(.secondary)
+                                }
+                                Text(paragraph.text)
+                                    .font(.system(size: fullScreen ? 19 : 16))
+                                    .textSelection(.enabled)
+                            }
+                        }
+                    }
+                    .padding(.top, 8)
+                }
+                .padding(12)
+                .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
+            }
+
+            reviewSection
+            ForEach(slide.translationJobs) { job in
+                HStack {
+                    Text("\(job.language) translation")
+                    Spacer()
+                    Text("\(job.status.capitalized) · \(job.progress)%")
+                        .foregroundStyle(.secondary)
+                }
+                .font(.caption)
+            }
+            if let narrationPlayer {
+                NativeMediaPlayer(player: narrationPlayer)
+                    .frame(height: 82)
+            }
         }
     }
 
@@ -204,7 +326,7 @@ struct LectureSlidesPreview: View {
     private func narrate() async {
         isNarrating = true
         defer { isNarrating = false }
-        let spoken = "Slide \(slide.slide). \(slide.title). \(note)"
+        let spoken = "Slide \(slide.slide). \(slide.title). \(noteContent)"
         do { narrationPlayer = AVPlayer(url: try await model.synthesizeVoice(spoken)) }
         catch { model.errorMessage = error.localizedDescription }
     }

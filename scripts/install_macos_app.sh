@@ -12,7 +12,7 @@ if [[ $# -gt 0 ]]; then
 fi
 
 project_root="$(cd "$(dirname "$0")/.." && pwd)"
-source_app="$project_root/macos/Build/Class Knowledge.app"
+source_app="${TMPDIR:-/private/tmp}/class-knowledge-native-build/Class Knowledge.app"
 install_directory="${CLASS_KNOWLEDGE_INSTALL_DIR:-${HOME}/Applications}"
 installed_app="$install_directory/Class Knowledge.app"
 staging_app="$install_directory/.Class Knowledge.app.installing.$$"

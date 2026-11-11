@@ -14,6 +14,8 @@ import tempfile
 from typing import Any
 
 import streamlit as st
+import streamlit.components.v1 as components
+from streamlit import runtime
 
 from ..jobs import PRIORITIES, JobError, JobManager, JobRecord
 from ..library import LibraryDocument, LibraryError, LibraryFolder, LibraryStore
@@ -328,7 +330,7 @@ def _lecture_slide_bundle(
     )
     slide_payload = _load_json_file(slides_path)
     slides = [item for item in slide_payload.get("slides", []) if isinstance(item, dict)]
-    if not _is_slide_deck(document, slides, source_job):
+    if not slides or not _is_slide_deck(document, slides, source_job):
         return None
 
     summaries_path = _find_related_artifact(related, ("slide", "summaries")) or _result_path(
@@ -572,6 +574,545 @@ def _pdf_full_text(path: str, modified_ns: int) -> str:
         return "\n\n".join(str(page.get_text("text")) for page in pdf)
 
 
+def _presentation_image_url(image: bytes, *, key: str, page_number: int) -> str:
+    """Register a rendered page with Streamlit's media server for iframe use."""
+    if runtime.exists():
+        try:
+            return str(
+                runtime.get_instance().media_file_mgr.add(
+                    image,
+                    "image/png",
+                    f"elastic-presentation-{key}-{page_number}",
+                )
+            )
+        except Exception:
+            pass
+    encoded = base64.b64encode(image).decode("ascii")
+    return f"data:image/png;base64,{encoded}"
+
+
+def _render_elastic_presentation(
+    pages: list[dict[str, Any]],
+    *,
+    page_label: str,
+    deck_name: str,
+    initial_page: int,
+    key: str,
+) -> None:
+    """Render a scroll-driven page reader with synchronized explanatory text."""
+    if not pages:
+        return
+
+    slides = [
+        {
+            "title": str(page.get("title", "")).strip() or f"{page_label} {number}",
+            "content": str(page.get("content", "")).strip(),
+            "image": _presentation_image_url(
+                page["image"], key=key, page_number=number
+            ) if page.get("image") else "",
+        }
+        for number, page in enumerate(pages, start=1)
+    ]
+    slides_json = json.dumps(slides, ensure_ascii=False).replace("</", "<\\/")
+    start_index = min(max(initial_page - 1, 0), len(slides) - 1)
+    template = r'''<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { color-scheme: light dark; --ink:#20242c; --muted:#727b8a; --line:#d9dee8;
+      --panel:#fff; --soft:#f3f5f9; --accent:#d84f45; --accent-soft:#fbe9e7;
+      --stage:#161a22; --stage-line:#2b313d; --shadow:0 20px 55px rgba(18,25,38,.13); }
+    * { box-sizing:border-box; }
+    html, body { width:100%; height:100%; margin:0; overflow:hidden; background:transparent;
+      color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    button { font:inherit; }
+    .viewer { height:calc(100vh - 14px); min-height:610px; max-height:890px; display:flex;
+      flex-direction:column; overflow:hidden; border:1px solid var(--line); border-radius:18px;
+      background:var(--panel); box-shadow:var(--shadow); outline:none; user-select:none; }
+    .topbar { min-height:57px; padding:0 22px; display:flex; align-items:center; gap:14px;
+      border-bottom:1px solid var(--line); }
+    .brand-mark { width:28px; height:28px; display:grid; place-items:center; flex:none;
+      border-radius:9px; color:#fff; background:var(--accent); font-size:12px; font-weight:800; }
+    .brand-copy { min-width:0; }
+    .eyebrow { display:block; color:var(--muted); font-size:10px; line-height:1.25; font-weight:800;
+      letter-spacing:.11em; text-transform:uppercase; }
+    .deck-name { overflow:hidden; color:var(--ink); font-size:13px; font-weight:650;
+      text-overflow:ellipsis; white-space:nowrap; }
+    .top-meta { margin-left:auto; color:var(--muted); font-size:12px; font-weight:650;
+      font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .progress-track { height:3px; flex:none; overflow:hidden; background:var(--soft); }
+    .progress-fill { height:100%; width:0; background:var(--accent); transition:width .42s cubic-bezier(.2,.8,.2,1); }
+    .reader { flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1.52fr) minmax(290px,.88fr);
+      gap:18px; padding:18px; }
+    .visual-column { min-width:0; min-height:0; display:flex; flex-direction:column; gap:12px; }
+    .stage { position:relative; flex:1; min-height:0; display:grid; place-items:center; overflow:hidden;
+      padding:clamp(16px,3vw,32px); border:1px solid var(--stage-line); border-radius:15px;
+      background:radial-gradient(ellipse at 50% 35%,#252b37 0%,#191e27 58%,#12161d 100%);
+      perspective:1000px; touch-action:none; }
+    .stage-visual { width:100%; height:100%; display:grid; place-items:center; transform-origin:center;
+      transform:translate3d(0,var(--pull-y,0px),0) scale(var(--pull-x,1),var(--pull-y-scale,1));
+      transition:transform .12s cubic-bezier(.2,.8,.2,1), opacity .36s cubic-bezier(.2,.8,.2,1);
+      will-change:transform,opacity; }
+    .stage img { display:block; max-width:100%; max-height:100%; object-fit:contain; border-radius:5px;
+      box-shadow:0 16px 44px rgba(0,0,0,.3); }
+    .slide-fallback { width:min(100%,740px); height:min(100%,430px); overflow:hidden; padding:30px;
+      border:1px solid #454d5a; border-radius:10px; background:#fff; color:#20242c; white-space:pre-wrap;
+      box-shadow:0 16px 44px rgba(0,0,0,.25); }
+    .slide-fallback strong { display:block; margin-bottom:12px; font-size:24px; }
+    .controls { height:44px; flex:none; display:flex; align-items:center; justify-content:space-between; }
+    .control-group { display:flex; align-items:center; gap:8px; }
+    .nav-button { width:38px; height:38px; display:grid; place-items:center; border:1px solid var(--line);
+      border-radius:11px; background:var(--panel); color:var(--ink); cursor:pointer;
+      transition:background .15s ease, border-color .15s ease, transform .15s ease; }
+    .nav-button:hover:not(:disabled) { transform:translateY(-1px); border-color:var(--accent); background:var(--accent-soft); }
+    .nav-button:disabled { opacity:.38; cursor:default; }
+    .nav-button svg { width:16px; height:16px; }
+    .step-label { min-width:72px; text-align:center; color:var(--muted); font-size:11px;
+      font-weight:700; font-variant-numeric:tabular-nums; }
+    .copy-panel { min-width:0; min-height:0; display:flex; flex-direction:column; justify-content:space-between;
+      padding:25px 24px 20px; overflow:hidden; border:1px solid var(--line); border-radius:15px;
+      background:linear-gradient(150deg,var(--panel),var(--soft)); }
+    .copy-block { min-height:0; flex:1; display:flex; flex-direction:column; overflow:hidden;
+      transition:transform .36s cubic-bezier(.2,.8,.2,1), opacity .28s ease; }
+    .copy-kicker { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .copy-number { color:var(--accent); font-size:11px; font-weight:800; font-variant-numeric:tabular-nums; }
+    h1 { margin:18px 0 14px; color:var(--ink); font-size:clamp(22px,2.6vw,34px); line-height:1.12;
+      letter-spacing:-.035em; font-weight:720; }
+    .explanation { min-height:0; flex:1; overflow:auto; padding-right:5px; color:var(--muted); font-size:14px;
+      line-height:1.72; white-space:pre-wrap; overscroll-behavior:contain; user-select:text; }
+    .copy-footer { flex:none; display:flex; align-items:center; gap:8px; margin-top:20px; padding-top:15px;
+      border-top:1px solid var(--line); color:var(--muted); font-size:11px; }
+    .scroll-icon { width:16px; height:23px; display:grid; place-items:center; border:1px solid var(--muted);
+      border-radius:9px; font-size:11px; line-height:1; }
+    .hint { margin-left:auto; color:var(--muted); font-size:10px; }
+    .is-leaving-next .stage-visual { opacity:0; transform:translate3d(0,-54px,0) scale(.975); }
+    .is-leaving-prev .stage-visual { opacity:0; transform:translate3d(0,54px,0) scale(.975); }
+    .is-leaving-next .copy-block { opacity:0; transform:translate3d(0,-13px,0); }
+    .is-leaving-prev .copy-block { opacity:0; transform:translate3d(0,13px,0); }
+    .is-entering-next .stage-visual { opacity:0; transform:translate3d(0,54px,0) scale(.975); }
+    .is-entering-prev .stage-visual { opacity:0; transform:translate3d(0,-54px,0) scale(.975); }
+    .is-entering-next .copy-block { opacity:0; transform:translate3d(0,13px,0); }
+    .is-entering-prev .copy-block { opacity:0; transform:translate3d(0,-13px,0); }
+    .no-motion .stage-visual, .no-motion .copy-block { transition:none !important; }
+    @media (max-width:760px) {
+      .viewer { min-height:650px; border-radius:13px; }
+      .topbar { min-height:50px; padding:0 14px; }
+      .reader { grid-template-columns:minmax(0,1fr); grid-template-rows:minmax(260px,1.25fr) minmax(180px,.8fr);
+        gap:10px; padding:11px; }
+      .stage { padding:14px; border-radius:12px; }
+      .copy-panel { padding:16px 17px 12px; border-radius:12px; }
+      .copy-block { overflow:hidden; }
+      h1 { margin:10px 0 8px; font-size:21px; }
+      .explanation { font-size:12px; line-height:1.5; }
+      .copy-footer { margin-top:10px; padding-top:9px; }
+      .hint { display:none; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after { scroll-behavior:auto !important; transition-duration:.12s !important; }
+    }
+    @media (prefers-color-scheme:dark) {
+      :root { --ink:#f2f4f8; --muted:#a1a9b7; --line:#343a46; --panel:#191c23;
+        --soft:#222630; --accent:#ff8177; --accent-soft:#362526; --shadow:0 20px 55px rgba(0,0,0,.25); }
+      .stage { background:radial-gradient(ellipse at 50% 35%,#2a303c 0%,#1e222b 58%,#15181f 100%); }
+    }
+  </style>
+</head>
+<body>
+  <main id="viewer" class="viewer" tabindex="0" aria-label="Scroll driven presentation viewer">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">↟</div>
+      <div class="brand-copy"><span class="eyebrow">Presentation reader</span><div class="deck-name">__DECK__</div></div>
+      <div id="topMeta" class="top-meta"></div>
+    </header>
+    <div class="progress-track" aria-hidden="true"><div id="progress" class="progress-fill"></div></div>
+    <section class="reader">
+      <div class="visual-column">
+        <div id="stage" class="stage" aria-label="Presentation page">
+          <div class="stage-visual">
+            <img id="pageImage" alt="" />
+            <div id="fallback" class="slide-fallback" hidden><strong></strong><span></span></div>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="step-label" id="stepLabel"></div>
+          <div class="control-group">
+            <button class="nav-button" id="previous" type="button" aria-label="Previous __SINGULAR__">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button class="nav-button" id="next" type="button" aria-label="Next __SINGULAR__">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <aside class="copy-panel" aria-label="__SINGULAR__ explanation">
+        <div id="copyBlock" class="copy-block" aria-live="polite">
+          <div class="copy-kicker"><span class="eyebrow">What to notice</span><span id="copyNumber" class="copy-number"></span></div>
+          <h1 id="pageTitle"></h1>
+          <div id="explanation" class="explanation"></div>
+        </div>
+        <div class="copy-footer"><span class="scroll-icon" aria-hidden="true">↕</span><span>Scroll to move through the deck</span><span class="hint">← → keys</span></div>
+      </aside>
+    </section>
+  </main>
+  <script>
+    const pages = __PAGES__;
+    const label = __LABEL_JSON__;
+    const viewer = document.getElementById("viewer");
+    const stage = document.getElementById("stage");
+    const image = document.getElementById("pageImage");
+    const fallback = document.getElementById("fallback");
+    const titleNode = document.getElementById("pageTitle");
+    const explanation = document.getElementById("explanation");
+    const copyBlock = document.getElementById("copyBlock");
+    const progress = document.getElementById("progress");
+    const topMeta = document.getElementById("topMeta");
+    const stepLabel = document.getElementById("stepLabel");
+    const copyNumber = document.getElementById("copyNumber");
+    const previousButton = document.getElementById("previous");
+    const nextButton = document.getElementById("next");
+    const THRESHOLD = 118;
+    const TRANSITION_MS = 420;
+    const GESTURE_QUIET_MS = 230;
+    let activeIndex = __START__;
+    let pullDistance = 0;
+    let transitioning = false;
+    let consumedGesture = false;
+    let lastInputAt = 0;
+    let springTimer = 0;
+    let gestureTimer = 0;
+    let pointerStart = null;
+
+    function setPull(distance) {
+      pullDistance = Math.max(-THRESHOLD * 1.25, Math.min(THRESHOLD * 1.25, distance));
+      const atEdge = (activeIndex === 0 && pullDistance < 0) ||
+        (activeIndex === pages.length - 1 && pullDistance > 0);
+      const resistance = atEdge ? 0.2 : 1;
+      const amount = Math.max(-1, Math.min(1, pullDistance / THRESHOLD));
+      const eased = Math.sign(amount) * (1 - Math.exp(-Math.abs(amount) * 1.1));
+      stage.style.setProperty("--pull-y", `${-eased * 24 * resistance}px`);
+      stage.style.setProperty("--pull-x", `${1 - Math.abs(eased) * .012}`);
+      stage.style.setProperty("--pull-y-scale", `${1 + Math.abs(eased) * .018}`);
+    }
+
+    function springBack() {
+      window.clearTimeout(springTimer);
+      stage.style.setProperty("--pull-y", "0px");
+      stage.style.setProperty("--pull-x", "1");
+      stage.style.setProperty("--pull-y-scale", "1");
+      pullDistance = 0;
+    }
+
+    function updatePage() {
+      const page = pages[activeIndex];
+      const number = String(activeIndex + 1).padStart(2, "0");
+      const total = String(pages.length).padStart(2, "0");
+      titleNode.textContent = page.title;
+      explanation.textContent = page.content || `No selectable text is available on this ${label.toLowerCase()}.`;
+      copyNumber.textContent = `${label.toUpperCase()} ${number}`;
+      topMeta.textContent = `${label} ${number} / ${total}`;
+      stepLabel.textContent = `${number} / ${total}`;
+      progress.style.width = `${((activeIndex + 1) / pages.length) * 100}%`;
+      previousButton.disabled = activeIndex === 0;
+      nextButton.disabled = activeIndex === pages.length - 1;
+      image.alt = `${label} ${activeIndex + 1}: ${page.title}`;
+      if (page.image) {
+        image.hidden = false;
+        fallback.hidden = true;
+        if (image.src !== page.image) image.src = page.image;
+      } else {
+        image.removeAttribute("src");
+        image.hidden = true;
+        fallback.hidden = false;
+        fallback.querySelector("strong").textContent = page.title;
+        fallback.querySelector("span").textContent = page.content || "No preview image is available.";
+      }
+      explanation.scrollTop = 0;
+    }
+
+    function clearMotionClasses() {
+      viewer.classList.remove("is-leaving-next", "is-leaving-prev", "is-entering-next", "is-entering-prev", "no-motion");
+    }
+
+    function transition(direction) {
+      if (transitioning) return;
+      const nextIndex = activeIndex + direction;
+      if (nextIndex < 0 || nextIndex >= pages.length) {
+        springBack();
+        return;
+      }
+      transitioning = true;
+      consumedGesture = true;
+      viewer.classList.add(direction > 0 ? "is-leaving-next" : "is-leaving-prev");
+      window.setTimeout(() => {
+        viewer.classList.add("no-motion");
+        viewer.classList.remove("is-leaving-next", "is-leaving-prev");
+        viewer.classList.add(direction > 0 ? "is-entering-next" : "is-entering-prev");
+        activeIndex = nextIndex;
+        updatePage();
+        void viewer.offsetWidth;
+        viewer.classList.remove("no-motion");
+        window.requestAnimationFrame(() => {
+          viewer.classList.remove("is-entering-next", "is-entering-prev");
+        });
+      }, 175);
+      window.setTimeout(() => {
+        clearMotionClasses();
+        transitioning = false;
+        springBack();
+        releaseGestureAfterQuiet();
+      }, TRANSITION_MS);
+    }
+
+    function releaseGestureAfterQuiet() {
+      window.clearTimeout(gestureTimer);
+      const elapsed = performance.now() - lastInputAt;
+      const remaining = Math.max(0, GESTURE_QUIET_MS - elapsed);
+      gestureTimer = window.setTimeout(() => {
+        if (!transitioning && performance.now() - lastInputAt >= GESTURE_QUIET_MS) {
+          consumedGesture = false;
+        } else if (!transitioning) {
+          releaseGestureAfterQuiet();
+        }
+      }, remaining + 5);
+    }
+
+    function settleAfterIdle() {
+      window.clearTimeout(springTimer);
+      springTimer = window.setTimeout(() => {
+        if (transitioning) return;
+        if (Math.abs(pullDistance) >= THRESHOLD) transition(Math.sign(pullDistance));
+        else springBack();
+      }, 230);
+    }
+
+    function scrollExplanationCanContinue(target, direction) {
+      const scroller = target.closest(".explanation");
+      if (!scroller || scroller.scrollHeight <= scroller.clientHeight + 2) return false;
+      return direction > 0
+        ? scroller.scrollTop + scroller.clientHeight < scroller.scrollHeight - 2
+        : scroller.scrollTop > 2;
+    }
+
+    viewer.addEventListener("wheel", (event) => {
+      const multiplier = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 380 : 1;
+      const delta = event.deltaY * multiplier;
+      if (scrollExplanationCanContinue(event.target, delta)) return;
+      event.preventDefault();
+      lastInputAt = performance.now();
+      if (transitioning || consumedGesture) {
+        if (consumedGesture) releaseGestureAfterQuiet();
+        return;
+      }
+      pullDistance += delta;
+      setPull(pullDistance);
+      settleAfterIdle();
+    }, { passive:false });
+
+    stage.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" || transitioning) return;
+      pointerStart = { id:event.pointerId, y:event.clientY };
+      stage.setPointerCapture(event.pointerId);
+    });
+    stage.addEventListener("pointermove", (event) => {
+      if (!pointerStart || pointerStart.id !== event.pointerId || transitioning) return;
+      event.preventDefault();
+      const delta = pointerStart.y - event.clientY;
+      pullDistance = delta;
+      setPull(pullDistance);
+    });
+    stage.addEventListener("pointerup", (event) => {
+      if (!pointerStart || pointerStart.id !== event.pointerId) return;
+      pointerStart = null;
+      lastInputAt = performance.now();
+      if (Math.abs(pullDistance) >= THRESHOLD) transition(Math.sign(pullDistance));
+      else { springBack(); settleAfterIdle(); }
+    });
+    stage.addEventListener("pointercancel", () => { pointerStart = null; springBack(); });
+
+    previousButton.addEventListener("click", () => transition(-1));
+    nextButton.addEventListener("click", () => transition(1));
+    window.addEventListener("keydown", (event) => {
+      if (event.target.closest?.("button, input, textarea, select") || window.getSelection()?.toString()) return;
+      if (["ArrowDown", "PageDown", " ", "ArrowRight"].includes(event.key)) {
+        event.preventDefault(); transition(1);
+      } else if (["ArrowUp", "PageUp", "ArrowLeft"].includes(event.key)) {
+        event.preventDefault(); transition(-1);
+      }
+    });
+    updatePage();
+  </script>
+</body>
+</html>'''
+    rendered = (
+        template.replace("__PAGES__", slides_json)
+        .replace("__START__", str(start_index))
+        .replace("__DECK__", html.escape(deck_name))
+        .replace("__SINGULAR__", html.escape(page_label.lower()))
+        .replace("__LABEL_JSON__", json.dumps(page_label.lower()))
+    )
+    components.html(rendered, height=850, scrolling=False)
+
+
+def _render_fullscreen_pdf_reader(document: LibraryDocument, *, focus_locator: str = "") -> None:
+    """Show a scroll-driven PDF page beside its selectable explanation."""
+    modified_ns = document.stored_path.stat().st_mtime_ns
+    page_count = _pdf_page_count(str(document.stored_path), modified_ns)
+    if page_count < 1:
+        st.warning("This PDF does not contain any pages.")
+        return
+
+    page_key = f"fullscreen_library_pdf_page_{document.id}"
+    focus_page = _locator_number(focus_locator, "page")
+    focus_key = f"fullscreen_library_pdf_focus_{document.id}_{focus_page}"
+    if focus_page and not st.session_state.get(focus_key, False):
+        st.session_state[page_key] = focus_page
+        st.session_state[focus_key] = True
+    try:
+        page_number = int(st.session_state.get(page_key, 1))
+    except (TypeError, ValueError):
+        page_number = 1
+    page_number = min(max(page_number, 1), page_count)
+    st.session_state[page_key] = page_number
+
+    pages = []
+    for number in range(1, page_count + 1):
+        text = _pdf_page_text(str(document.stored_path), modified_ns, number).strip()
+        pages.append(
+            {
+                "title": next(
+                    (line.strip() for line in text.splitlines() if line.strip()),
+                    f"Page {number}",
+                ),
+                "content": text,
+                "image": _pdf_page_image(str(document.stored_path), modified_ns, number),
+            }
+        )
+    _render_elastic_presentation(
+        pages,
+        page_label="Page",
+        deck_name=document.original_name,
+        initial_page=page_number,
+        key=f"pdf-{document.id}",
+    )
+
+
+@st.cache_data(show_spinner=False)
+def _powerpoint_slide_text_records(path: str, modified_ns: int) -> list[dict[str, str]]:
+    """Extract readable text for PPT/PPTX slides; convert legacy PPT locally."""
+    del modified_ns
+    source = Path(path)
+    if source.suffix.lower() == ".pptx":
+        from pptx import Presentation
+
+        deck = Presentation(source)
+        records: list[dict[str, str]] = []
+        for number, slide in enumerate(deck.slides, start=1):
+            parts: list[str] = []
+            for shape in slide.shapes:
+                if getattr(shape, "has_text_frame", False) and str(shape.text).strip():
+                    parts.append(str(shape.text).strip())
+                elif getattr(shape, "has_table", False):
+                    table_text = " | ".join(
+                        cell.text.strip()
+                        for row in shape.table.rows
+                        for cell in row.cells
+                        if cell.text.strip()
+                    )
+                    if table_text:
+                        parts.append(table_text)
+            title = parts[0].splitlines()[0] if parts else f"Slide {number}"
+            records.append({"title": title, "content": "\n\n".join(parts)})
+        return records
+
+    from ..pdf_processor import PDFProcessor
+
+    with tempfile.TemporaryDirectory(prefix="library-ppt-text-") as directory:
+        converted = PDFProcessor._convert_legacy_ppt(source, Path(directory) / "converted")
+        import fitz
+
+        with fitz.open(converted) as pdf:
+            records = []
+            for number, page in enumerate(pdf, start=1):
+                content = str(page.get_text("text")).strip()
+                title = next((line.strip() for line in content.splitlines() if line.strip()), f"Slide {number}")
+                records.append({"title": title, "content": content})
+            return records
+
+
+@st.cache_data(show_spinner=False)
+def _legacy_ppt_fullscreen_data(
+    path: str, modified_ns: int
+) -> tuple[list[dict[str, str]], dict[int, bytes]]:
+    """Convert a legacy PPT once to provide both slide text and slide images."""
+    del modified_ns
+    from ..pdf_processor import PDFProcessor
+    import fitz
+
+    source = Path(path)
+    with tempfile.TemporaryDirectory(prefix="library-ppt-fullscreen-") as directory:
+        converted = PDFProcessor._convert_legacy_ppt(source, Path(directory) / "converted")
+        records: list[dict[str, str]] = []
+        images: dict[int, bytes] = {}
+        with fitz.open(converted) as pdf:
+            for number, page in enumerate(pdf, start=1):
+                content = str(page.get_text("text")).strip()
+                title = next((line.strip() for line in content.splitlines() if line.strip()), f"Slide {number}")
+                records.append({"title": title, "content": content})
+                images[number] = page.get_pixmap(
+                    matrix=fitz.Matrix(1.5, 1.5), alpha=False
+                ).tobytes("png")
+        return records, images
+
+
+def _render_fullscreen_powerpoint(document: LibraryDocument, *, focus_locator: str = "") -> None:
+    """Show a scroll-driven PowerPoint slide beside its explanation."""
+    modified_ns = document.stored_path.stat().st_mtime_ns
+    try:
+        if document.stored_path.suffix.lower() == ".ppt":
+            records, images = _legacy_ppt_fullscreen_data(
+                str(document.stored_path), modified_ns
+            )
+        else:
+            records = _powerpoint_slide_text_records(str(document.stored_path), modified_ns)
+            images = _powerpoint_slide_images(str(document.stored_path), modified_ns)
+    except Exception as exc:
+        st.error(f"Could not prepare this presentation: {exc}")
+        return
+    if not records:
+        st.info("This presentation does not contain any readable slides.")
+        return
+
+    page_key = f"fullscreen_library_ppt_slide_{document.id}"
+    focus_slide = _locator_number(focus_locator, "slide")
+    focus_key = f"fullscreen_library_ppt_focus_{document.id}_{focus_slide}"
+    if focus_slide and not st.session_state.get(focus_key, False):
+        st.session_state[page_key] = focus_slide
+        st.session_state[focus_key] = True
+    try:
+        slide_number = int(st.session_state.get(page_key, 1))
+    except (TypeError, ValueError):
+        slide_number = 1
+    slide_number = min(max(slide_number, 1), len(records))
+    st.session_state[page_key] = slide_number
+    pages = [
+        {
+            **record,
+            "image": images.get(number, b""),
+        }
+        for number, record in enumerate(records, start=1)
+    ]
+    _render_elastic_presentation(
+        pages,
+        page_label="Slide",
+        deck_name=document.original_name,
+        initial_page=slide_number,
+        key=f"ppt-{document.id}",
+    )
+
+
 def _is_summary_pdf(document: LibraryDocument) -> bool:
     return document.stored_path.suffix.lower() == ".pdf" and "summary" in document.original_name.casefold()
 
@@ -664,16 +1205,18 @@ def _render_pdf_voice_control(document: LibraryDocument, *, full_page: bool) -> 
         page_count = _pdf_page_count(str(document.stored_path), modified_ns)
         if page_count < 1:
             return
-        page_key = f"current_library_pdf_page_{document.id}"
+        page_key = (
+            f"fullscreen_library_pdf_page_{document.id}"
+            if full_page else f"current_library_pdf_page_{document.id}"
+        )
         selected_page = int(st.session_state.get(page_key, 1))
         selected_page = min(max(selected_page, 1), page_count)
         if full_page and page_count > 1:
             selected_page = st.selectbox(
-                "Narration page",
+                "Page to read",
                 list(range(1, page_count + 1)),
-                index=selected_page - 1,
                 format_func=lambda page: f"Page {page}",
-                key=f"library_voice_pdf_page_{document.id}",
+                key=page_key,
             )
         page_text = _pdf_page_text(str(document.stored_path), modified_ns, selected_page)
         _render_voice_narration(
@@ -709,6 +1252,28 @@ def _powerpoint_slide_images(path: str, modified_ns: int) -> dict[int, bytes]:
         image_dir = Path(directory) / "slide_images"
         image_dir.mkdir()
         images = PDFProcessor._render_powerpoint_previews(Path(path), image_dir)
+        if not images and Path(path).suffix.lower() == ".pptx":
+            from pptx import Presentation
+
+            deck = Presentation(path)
+            for number, slide in enumerate(deck.slides, start=1):
+                parts: list[str] = []
+                for shape in slide.shapes:
+                    if getattr(shape, "has_text_frame", False) and str(shape.text).strip():
+                        parts.append(str(shape.text).strip())
+                    elif getattr(shape, "has_table", False):
+                        table_text = " | ".join(
+                            cell.text.strip()
+                            for row in shape.table.rows
+                            for cell in row.cells
+                            if cell.text.strip()
+                        )
+                        if table_text:
+                            parts.append(table_text)
+                title = parts[0].splitlines()[0] if parts else f"Slide {number}"
+                preview_path = image_dir / f"slide_{number:03d}_preview.png"
+                PDFProcessor._make_text_preview(preview_path, number, title, "\n".join(parts))
+                images[number] = preview_path
         return {number: image.read_bytes() for number, image in images.items()}
 
 
@@ -1089,6 +1654,15 @@ def _render_slide_document(
         }
         </style>""",
     )
+    if full_page:
+        st.html(
+            """<style>
+            .lecture-slide-summary {
+              font-size: clamp(1.35rem, 1.8vw, 1.8rem);
+              line-height: 1.68;
+            }
+            </style>""",
+        )
     def render_slide() -> None:
         navigation = st.container(key="library_slide_navigation")
         previous_column, title_column, next_column = navigation.columns(
@@ -1225,7 +1799,10 @@ def _render_document_content(
     suffix = document.stored_path.suffix.lower()
     try:
         if suffix == ".pdf":
-            _render_pdf(document, full_page=full_page, focus_locator=focus_locator)
+            if full_page:
+                _render_fullscreen_pdf_reader(document, focus_locator=focus_locator)
+            else:
+                _render_pdf(document, full_page=False, focus_locator=focus_locator)
             _render_pdf_voice_control(document, full_page=full_page)
         elif suffix in AUDIO_SUFFIXES:
             _render_audio_document(
@@ -1254,13 +1831,16 @@ def _render_document_content(
             st.code(text, language=language or None)
             if truncated:
                 st.caption("Preview limited to the first 750 KB.")
-        elif suffix == ".pptx":
-            _render_powerpoint_preview(document, focus_locator=focus_locator)
-        elif suffix == ".ppt":
-            st.info("Legacy PPT files cannot be previewed directly. Use File actions (⋯) to download or organize it.")
+        elif suffix in {".ppt", ".pptx"}:
+            if full_page:
+                _render_fullscreen_powerpoint(document, focus_locator=focus_locator)
+            elif suffix == ".pptx":
+                _render_powerpoint_preview(document, focus_locator=focus_locator)
+            else:
+                st.info("Legacy PPT files need LibreOffice for a slide preview. Use File actions (⋯) to download or organize it.")
         else:
             st.info("This file type has no inline preview. Use File actions (⋯) to download or organize it.")
-    except OSError as exc:
+    except (OSError, ValueError, RuntimeError) as exc:
         st.error(f"Could not open this file: {exc}")
 
 
@@ -1384,7 +1964,40 @@ def render_full_library_document(
         st.error(str(exc))
         return
 
-    st.title(f"{file_icon(document.original_name)} {document.original_name}")
+    st.html(
+        """<style>
+        [data-testid="stAppViewContainer"] .main .block-container {
+          max-width: none !important; width: 100% !important;
+          padding: 1rem 2rem 3rem;
+        }
+        [data-testid="stHeader"], footer { display: none; }
+        .fullscreen-page-label { text-align: center; font-weight: 650; padding: .25rem; }
+        .st-key-fullscreen_document_text [data-testid="stMarkdownContainer"] {
+          font-size: clamp(1.3rem, 1.65vw, 1.75rem); line-height: 1.65;
+        }
+        .st-key-fullscreen_document_text h3 { font-size: clamp(1.5rem, 1.9vw, 2rem); }
+        </style>""",
+    )
+    with st.container(key="full_library_document"):
+        back, heading, download = st.columns([1, 6, 1], vertical_alignment="center")
+        if back.button("← Library", key=f"full_library_back_{document.id}"):
+            st.query_params.clear()
+            st.rerun()
+        heading.markdown(f"### {file_icon(document.original_name)} {document.original_name}")
+        if document.size_bytes <= 100 * 1024 * 1024:
+            try:
+                download.download_button(
+                    "Download",
+                    data=document.stored_path.read_bytes(),
+                    file_name=document.original_name,
+                    mime=document.media_type,
+                    key=f"fullscreen_download_{document.id}",
+                    width="stretch",
+                )
+            except OSError as exc:
+                download.caption(f"Download unavailable: {exc}")
+        else:
+            download.caption("File is too large for an in-browser download.")
     st.caption(
         f"{document.subject_name} / {document.folder_name or 'Subject root'} · "
         f"{format_size(document.size_bytes)}"

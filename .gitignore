@@ -36,6 +36,7 @@ jobs/
 /library/*.sqlite3-shm
 /library/*.sqlite3-wal
 /library/*.sqlite3-journal
+/library/.preview_cache/
 /library/subjects/**/derived/
 /library/**/*.part
 database/*

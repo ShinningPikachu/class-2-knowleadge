@@ -5,6 +5,7 @@ project_root="$(cd "$(dirname "$0")/.." && pwd)"
 package_root="$project_root/macos"
 sdk_path="${MACOS_SDK_PATH:-/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk}"
 cache_root="${TMPDIR:-/private/tmp}/class-knowledge-native-build"
+scratch_root="$cache_root/swift-build"
 
 mkdir -p "$cache_root/swift-modules" "$cache_root/clang-modules" "$cache_root/swiftpm-cache" "$cache_root/swiftpm-config"
 
@@ -15,14 +16,17 @@ CLANG_MODULE_CACHE_PATH="$cache_root/clang-modules" \
 swift build \
   --cache-path "$cache_root/swiftpm-cache" \
   --config-path "$cache_root/swiftpm-config" \
-  --scratch-path .build \
+  --scratch-path "$scratch_root" \
   --disable-sandbox
 
-binary_path="$package_root/.build/out/Products/Debug/ClassKnowledgeApp"
+# Keep both SwiftPM products and the development app outside the checkout.
+# Synced File Provider folders add Finder metadata that makes codesign reject
+# SwiftPM resource bundles before the app packaging step can strip it.
+binary_path="$scratch_root/out/Products/Debug/ClassKnowledgeApp"
 if [[ ! -f "$binary_path" ]]; then
-  binary_path="$package_root/.build/debug/ClassKnowledgeApp"
+  binary_path="$scratch_root/debug/ClassKnowledgeApp"
 fi
-app_path="$package_root/Build/Class Knowledge.app"
+app_path="$cache_root/Class Knowledge.app"
 contents="$app_path/Contents"
 rm -rf "$app_path"
 mkdir -p "$contents/MacOS"

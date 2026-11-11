@@ -1,3 +1,4 @@
+import AppKit
 import AVKit
 import PDFKit
 import QuickLookUI
@@ -6,6 +7,7 @@ import UniformTypeIdentifiers
 
 struct LibraryWorkspaceView: View {
     @EnvironmentObject private var model: AppModel
+    @Environment(\.openWindow) private var openWindow
     @State private var showingNewSubject = false
     @State private var showingFolderName = false
     @State private var folderName = ""
@@ -472,6 +474,12 @@ struct LibraryWorkspaceView: View {
                         }
                         Spacer()
                         Button {
+                            openWindow(id: "library-document", value: document.id)
+                        } label: {
+                            Image(systemName: "arrow.up.left.and.arrow.down.right")
+                        }
+                        .help("Open full screen")
+                        Button {
                             NSWorkspace.shared.activateFileViewerSelecting([document.fileURL])
                         } label: {
                             Image(systemName: "folder")
@@ -511,7 +519,7 @@ struct LibraryWorkspaceView: View {
                     }
                     .padding(14)
                     Divider()
-                    DocumentPreview(document: document, bundle: model.lectureBundle)
+                    DocumentPreview(document: document, bundle: model.lectureBundle, fullScreen: false)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             } else {
@@ -576,6 +584,7 @@ struct LibraryWorkspaceView: View {
 struct DocumentPreview: View {
     let document: LibraryDocument
     let bundle: NativeLectureBundle
+    let fullScreen: Bool
     @State private var text = ""
     @State private var loadError: String?
     @State private var mediaPlayer: AVPlayer?
@@ -605,14 +614,11 @@ struct DocumentPreview: View {
                     }
                 }
             } else if bundle.kind == "slides", !bundle.slides.isEmpty {
-                LectureSlidesPreview(document: document, bundle: bundle)
+                LectureSlidesPreview(document: document, bundle: bundle, fullScreen: fullScreen)
             } else if bundle.kind == "audio", !bundle.paragraphs.isEmpty {
                 AudioTranscriptView(url: document.fileURL, paragraphs: bundle.paragraphs, isVideo: isVideo)
             } else if suffix == "pdf" {
-                VStack(spacing: 0) {
-                    PDFDocumentView(url: document.fileURL)
-                    PDFVoiceControl(document: document)
-                }
+                FullScreenPDFPageView(url: document.fileURL)
             } else if isMedia {
                 if let mediaPlayer, mediaPlayerDocumentID == document.id {
                     NativeMediaPlayer(player: mediaPlayer)
@@ -641,29 +647,220 @@ struct DocumentPreview: View {
     }
 }
 
+struct FullScreenDocumentWindow: View {
+    @EnvironmentObject private var model: AppModel
+    let documentID: String?
+    @State private var requestedFullScreen = false
+
+    var body: some View {
+        Group {
+            if let documentID,
+               let document = model.selectedDocument,
+               document.id == documentID {
+                FullScreenDocumentView(document: document, bundle: model.lectureBundle)
+            } else if documentID != nil {
+                ProgressView("Opening document…")
+            } else {
+                ContentUnavailableView("No document selected", systemImage: "doc")
+            }
+        }
+        .frame(minWidth: 1200, minHeight: 760)
+        .task(id: documentID) {
+            guard let documentID,
+                  model.selectedDocument?.id != documentID else { return }
+            await model.openDocument(documentID)
+        }
+        .onAppear {
+            guard !requestedFullScreen else { return }
+            requestedFullScreen = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                NSApp.keyWindow?.toggleFullScreen(nil)
+            }
+        }
+    }
+}
+
+private struct FullScreenDocumentView: View {
+    @Environment(\.dismiss) private var dismiss
+    let document: LibraryDocument
+    let bundle: NativeLectureBundle
+
+    private var isPDF: Bool { document.fileURL.pathExtension.lowercased() == "pdf" }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(document.originalName)
+                        .font(.headline)
+                        .lineLimit(1)
+                    Text(document.folderName.isEmpty ? document.subjectName : "\(document.subjectName) / \(document.folderName)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Button("Close") { dismiss() }
+                    .keyboardShortcut(.escape, modifiers: [])
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+            Divider()
+            Group {
+                if isPDF && bundle.kind != "slides" {
+                    FullScreenPDFPageView(url: document.fileURL)
+                } else {
+                    DocumentPreview(document: document, bundle: bundle, fullScreen: true)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(nsColor: .windowBackgroundColor))
+    }
+}
+
+private struct FullScreenPDFPageView: View {
+    let url: URL
+    @State private var index = 0
+    @State private var document: PDFDocument?
+    @State private var image: NSImage?
+    @State private var pageImages: [Int: NSImage] = [:]
+    private var count: Int { document?.pageCount ?? 0 }
+    private var text: String { document?.page(at: index)?.string ?? "No selectable text is available." }
+
+    var body: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 12) {
+                HStack {
+                    Button { turn(-1) } label: { Image(systemName: "chevron.left") }
+                        .disabled(index == 0)
+                    Text("Page \(index + 1) of \(max(count, 1)) · Scroll to turn")
+                        .monospacedDigit()
+                    Button { turn(1) } label: { Image(systemName: "chevron.right") }
+                        .disabled(index >= count - 1)
+                    Spacer()
+                }
+                HStack(spacing: 16) {
+                    ElasticPresentationStage(index: Binding(get: { index }, set: { selectPage($0) }), count: count) {
+                        if let image {
+                            Image(nsImage: image).resizable().scaledToFit()
+                        }
+                    }
+                    .frame(width: geometry.size.width * 0.6)
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Page \(index + 1) · explanation").font(.headline)
+                            Text(text).textSelection(.enabled)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    }
+                    .background(PresentationScrollRegion(isText: true))
+                }
+            }
+            .padding(14)
+        }
+        .background(PresentationScrollRegion())
+        .onAppear { load() }
+        .onChange(of: url) { _, _ in index = 0; load() }
+
+    }
+    private func load() { pageImages = [:]; document = PDFDocument(url: url); renderPage() }
+    private func renderPage() {
+        image = cachedImage(index)
+        preloadPages()
+    }
+    private func cachedImage(_ page: Int) -> NSImage? {
+        if let cached = pageImages[page] { return cached }
+        let result = document?.page(at: page)?.thumbnail(of: NSSize(width: 1400, height: 1000), for: .cropBox)
+        if let result { pageImages[page] = result }
+        return result
+    }
+    private func preloadPages() {
+        for page in [index - 1, index + 1] where (0..<count).contains(page) { _ = cachedImage(page) }
+        pageImages = pageImages.filter { abs($0.key - index) <= 1 }
+    }
+    private func turn(_ step: Int) {
+        guard (0..<count).contains(index + step) else { return }
+        withAnimation(.spring(response: 0.30, dampingFraction: 0.92)) { selectPage(index + step) }
+    }
+    private func selectPage(_ target: Int) {
+        guard (0..<count).contains(target) else { return }
+        let nextImage = cachedImage(target)
+        image = nextImage
+        index = target
+        DispatchQueue.main.async { preloadPages() }
+    }
+}
+
 struct PDFDocumentView: NSViewRepresentable {
     let url: URL
     var pageNumber: Int? = nil
+    var onPageChange: ((Int) -> Void)? = nil
+    var scrollToPage: Int? = nil
+
+    final class Coordinator: NSObject {
+        weak var view: PDFView?
+        var onPageChange: ((Int) -> Void)?
+        var lastRequestedPage: Int?
+
+        init(onPageChange: ((Int) -> Void)?) {
+            self.onPageChange = onPageChange
+        }
+
+        @objc func pageChanged(_ notification: Notification) {
+            guard let view, let page = view.currentPage, let document = view.document else { return }
+            let number = document.index(for: page) + 1
+            guard number > 0 else { return }
+            DispatchQueue.main.async { [weak self] in self?.onPageChange?(number) }
+        }
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(onPageChange: onPageChange) }
 
     func makeNSView(context: Context) -> PDFView {
         let view = PDFView()
         view.autoScales = true
-        view.displayMode = .singlePageContinuous
+        view.displayMode = pageNumber == nil ? .singlePageContinuous : .singlePage
         view.displayDirection = .vertical
         view.document = PDFDocument(url: url)
         if let pageNumber, let page = view.document?.page(at: max(0, pageNumber - 1)) {
             view.go(to: page)
         }
+        context.coordinator.view = view
+        NotificationCenter.default.addObserver(
+            context.coordinator,
+            selector: #selector(Coordinator.pageChanged(_:)),
+            name: .PDFViewPageChanged,
+            object: view
+        )
         return view
     }
 
     func updateNSView(_ view: PDFView, context: Context) {
+        let displayMode: PDFDisplayMode = pageNumber == nil ? .singlePageContinuous : .singlePage
+        if view.displayMode != displayMode { view.displayMode = displayMode }
+        if !view.autoScales { view.autoScales = true }
+        context.coordinator.onPageChange = onPageChange
         if view.document?.documentURL != url {
             view.document = PDFDocument(url: url)
+            context.coordinator.lastRequestedPage = nil
         }
         if let pageNumber, let page = view.document?.page(at: max(0, pageNumber - 1)), view.currentPage !== page {
             view.go(to: page)
         }
+        if let scrollToPage,
+           scrollToPage != context.coordinator.lastRequestedPage,
+           let page = view.document?.page(at: max(0, scrollToPage - 1)) {
+            context.coordinator.lastRequestedPage = scrollToPage
+            view.go(to: page)
+        } else if scrollToPage == nil {
+            context.coordinator.lastRequestedPage = nil
+        }
+    }
+
+    static func dismantleNSView(_ view: PDFView, coordinator: Coordinator) {
+        NotificationCenter.default.removeObserver(coordinator, name: .PDFViewPageChanged, object: view)
     }
 }
 

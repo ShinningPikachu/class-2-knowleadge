@@ -21,5 +21,12 @@ struct ClassKnowledgeApp: App {
                 .disabled(!model.isConnected)
             }
         }
+
+        WindowGroup("Library Document", id: "library-document", for: String.self) { $documentID in
+            FullScreenDocumentWindow(documentID: documentID)
+                .environmentObject(model)
+        }
+        .defaultSize(width: 1600, height: 1000)
+        .windowStyle(.hiddenTitleBar)
     }
 }

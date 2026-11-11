@@ -16,11 +16,11 @@ In **Settings → App startup**, enable **Open Class Knowledge when I sign in** 
 
 ## Build and run from this checkout
 
-To build a `.app` in the repository without installing it, run:
+To build a checkout `.app` in the temporary build cache without installing it, run:
 
 ```sh
 ./scripts/build_macos_app.sh
-open "macos/Build/Class Knowledge.app"
+open "${TMPDIR:-/private/tmp}/class-knowledge-native-build/Class Knowledge.app"
 ```
 
 The checkout build is labeled **Class Knowledge Dev** and uses separate macOS preferences. The installed daily-use app remains **Class Knowledge**.

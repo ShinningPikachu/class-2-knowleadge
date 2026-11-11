@@ -330,6 +330,25 @@ class NativeBackend:
                 translations.setdefault(str(number), {}).setdefault(language, text)
         return translations
 
+    def _presentation_preview_slides(self, document: Any) -> list[dict[str, Any]]:
+        """Create a reusable slide preview for imported PowerPoint files."""
+        from src.pdf_processor import PDFProcessor
+
+        cache_id = hashlib.sha256(
+            f"{document.sha256}:native-presentation-preview-v1".encode("utf-8")
+        ).hexdigest()
+        preview_dir = self.library.root / ".preview_cache" / cache_id
+        slides_path = preview_dir / "slides.json"
+        cached = self._read_json(slides_path)
+        cached_slides = [item for item in cached.get("slides", []) if isinstance(item, dict)]
+        if cached_slides:
+            return cached_slides
+
+        preview_dir.mkdir(parents=True, exist_ok=True)
+        config = self.PipelineConfig(enable_ocr=False)
+        payload = PDFProcessor(config).process(document.stored_path, slides_path)
+        return [item for item in payload.get("slides", []) if isinstance(item, dict)]
+
     def _lecture_bundle(self, document: Any) -> dict[str, Any]:
         suffix = document.stored_path.suffix.lower()
         related = self._related_documents(document)
@@ -339,6 +358,13 @@ class NativeBackend:
             slides_path = self._find_related_artifact(related, ("slides", "extracted")) or self._result_path(source_job, "slides_path")
             slide_payload = self._read_json(slides_path)
             slides = [item for item in slide_payload.get("slides", []) if isinstance(item, dict)]
+            if suffix in {".ppt", ".pptx"} and not slides:
+                try:
+                    slides = self._presentation_preview_slides(document)
+                except Exception:
+                    # Keep Quick Look available when a local PowerPoint
+                    # renderer or a usable slide conversion is unavailable.
+                    slides = []
             is_deck = suffix in {".ppt", ".pptx"} or (
                 suffix == ".pdf" and slides and "notes" not in document.original_name.casefold()
                 and (source_job is not None or "slides" in re.sub(r"[^a-z0-9]+", "_", document.original_name.casefold()))

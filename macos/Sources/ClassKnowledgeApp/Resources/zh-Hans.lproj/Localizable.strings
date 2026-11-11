@@ -143,6 +143,10 @@
 "This folder is empty" = "此文件夹为空";
 "Import files here or drag documents into this folder." = "在此导入文件，或将文档拖到此文件夹中。";
 "Show in Finder" = "在 Finder 中显示";
+"Open full screen" = "全屏打开";
+"Close" = "关闭";
+"Page content" = "页面内容";
+"No selectable text is available on this page." = "此页面没有可选择的文本。";
 "Rename…" = "重命名…";
 "Delete…" = "删除…";
 "File actions" = "文件操作";
@@ -237,6 +241,8 @@
 "Translate…" = "翻译…";
 "Deep review" = "深入审核";
 "Slide and lecture note" = "幻灯片与课堂笔记";
+"Slide content" = "幻灯片内容";
+"No selectable text is available for this slide." = "此幻灯片没有可选择的文本。";
 "Note language" = "笔记语言";
 "%@ translation" = "%@ 翻译";
 "Deep review · %@ · %lld%%" = "深入审核 · %@ · %lld%%";
