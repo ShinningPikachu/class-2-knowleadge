@@ -73,7 +73,7 @@
     {
       "slide": 8,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 8 introduces a running example contrasting the use of one unified model against multiple separate models to represent organizational structures such as faculties, departments, and services. This comparison serves as a foundational scenario for evaluating different modeling strategies within the course context.",
+      "summary": "One model and an ensemble of several models are compared on the same music-classification example.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -82,7 +82,7 @@
     {
       "slide": 9,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 9 introduces a running example involving organizational units such as faculties, departments, and services to explore the modeling decision between using one unified model versus multiple distinct models. This section specifically highlights \"M1\" as the initial reference point for comparing these alternative modeling strategies within the context of the course's ongoing case study.",
+      "summary": "Model M1 provides the first prediction in the running music-classification example.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -91,7 +91,7 @@
     {
       "slide": 10,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 10 introduces a running example contrasting the use of a single model against multiple models (M1 and M2) within an organizational context involving faculties, departments, and services. This section sets up a comparison to explore how different modeling approaches apply to these structural entities.",
+      "summary": "Model M2 adds a second prediction to compare with M1.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -100,7 +100,7 @@
     {
       "slide": 11,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 11 introduces a running example contrasting the use of one unified model against multiple distinct models (labeled M1, M2, and M3) within an organizational context involving faculties, departments, and services. This section sets up a comparison to explore how different modeling approaches handle these structural entities.",
+      "summary": "Model M3 completes the set of three predictions used to illustrate an ensemble.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -127,7 +127,7 @@
     {
       "slide": 14,
       "title": "Use multiple models",
-      "summary": "The lecture emphasizes the strategic use of multiple models across different organizational levels, specifically faculties, departments, and services. This approach suggests that a single model is insufficient for addressing the diverse needs within these distinct units, necessitating a tailored application of various frameworks to ensure comprehensive coverage and effectiveness throughout the institution.",
+      "summary": "Using multiple models allows their predictions to be combined in an ensemble.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -145,7 +145,7 @@
     {
       "slide": 16,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 16 introduces a voting example concerning music preferences involving three options labeled M1, M2, and M3. This scenario is presented within the context of organizational structures such as faculties, departments, or services.",
+      "summary": "The music example uses predictions from M1, M2, and M3 to introduce voting.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -163,7 +163,7 @@
     {
       "slide": 18,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 18 introduces the organizational hierarchy of \"Faculteit, departement, dienst\" (Faculty, Department, Service) in the context of voting procedures.",
+      "summary": "Voting combines predictions from several base classifiers; the majority label becomes the ensemble output.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -172,7 +172,7 @@
     {
       "slide": 19,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 19 demonstrates how ensemble voting improves classification accuracy for categories like \"Faculteit,\" \"departement,\" and \"dienst\". The data shows a clear performance increase as the number of classifiers grows: a single classifier achieves 0.800 accuracy, which rises to 0.896 with three classifiers, 0.942 with five, 0.988 with eleven, and reaches 0.999 with twenty-one classifiers. This progression illustrates that aggregating predictions from multiple models significantly enhances reliability compared to relying on a single classifier.",
+      "summary": "In this example, majority-vote accuracy rises from 0.800 for one classifier to 0.999 for 21. The gain depends on the classifiers making different errors.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -199,7 +199,7 @@
     {
       "slide": 22,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 22 introduces the organizational hierarchy of \"Faculteit, departement, dienst\" (Faculty, Department, Service) and proposes a stacking example applied to music.",
+      "summary": "Stacking trains a meta-model to combine base-model predictions. The music example begins with those predictions.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -208,7 +208,7 @@
     {
       "slide": 23,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 23 introduces a stacking example involving the terms \"Faculteit,\" \"departement,\" and \"dienst\" within the context of music. The slide text presents these organizational concepts alongside musical notation symbols (\"? ? + +\"), suggesting a structural analogy or specific application of stacking principles to this domain.",
+      "summary": "The music example adds base-model predictions that the stacking meta-model can combine.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -217,7 +217,7 @@
     {
       "slide": 24,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 24 introduces a stacking example involving the terms \"Faculteit,\" \"departement,\" and \"dienst\" within a music context. The slide visually represents this concept using question marks alongside positive and negative symbols.",
+      "summary": "Agreement and disagreement among base-model predictions give a stacking meta-model information for its final decision.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -226,7 +226,7 @@
     {
       "slide": 25,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 25 introduces a stacking ensemble example applied to a music dataset, illustrating how predictions from diverse base models—Decision Tree (DT), Linear model, and k-Nearest Neighbors (kNN)—are combined. The slide displays the individual outputs of these three classifiers alongside their aggregated results, demonstrating the mechanism by which stacking integrates multiple algorithmic perspectives to generate a final prediction.",
+      "summary": "The lecture introduces a stacking ensemble example applied to a music dataset, illustrating how predictions from diverse base models—Decision Tree (DT), Linear model, and k-Nearest Neighbors (kNN)—are combined. The slide displays the individual outputs of these three classifiers alongside their aggregated results, demonstrating the mechanism by which stacking integrates multiple algorithmic perspectives to generate a final prediction.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -271,7 +271,7 @@
     {
       "slide": 30,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 30 introduces a bagging example applied to music data. The slide title lists organizational terms such as faculty, department, and service, which appear alongside the technical topic of ensemble learning.",
+      "summary": "Bagging example using music data.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -280,7 +280,7 @@
     {
       "slide": 31,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 31: Bagging example using music data.",
+      "summary": "Bagging example using music data.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -289,7 +289,7 @@
     {
       "slide": 32,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 32 introduces a specific bagging example applied to the \"music M1\" dataset. The slide title lists organizational terms such as faculty, department, and service, which appear alongside this technical illustration.",
+      "summary": "The first bagged model, M1, supplies one prediction for the music example.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -298,7 +298,7 @@
     {
       "slide": 33,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 33 introduces a bagging example applied to music data, specifically referencing models M1 and M2. The slide title also lists organizational terms such as \"Faculteit,\" \"departement,\" and \"dienst,\" though the provided sources do not offer further definitions or context for these terms within this specific section.",
+      "summary": "The music example compares predictions from bagged models M1 and M2.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -307,7 +307,7 @@
     {
       "slide": 34,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 34 introduces a bagging example applied to music data, labeled with identifiers M1, M2, and M3. The slide title also lists organizational terms \"Faculteit, departement, dienst,\".",
+      "summary": "A third bagged model, M3, adds another vote to the music classification example.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -316,7 +316,7 @@
     {
       "slide": 35,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 35 introduces a bagging example applied to music data, illustrated by three models labeled M1, M2, and M3. The slide title references organizational terms such as faculty, department, and service, though the visual content focuses exclusively on the ensemble learning scenario.",
+      "summary": "The bagged models M1, M2, and M3 can combine their predictions by voting.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -352,7 +352,7 @@
     {
       "slide": 39,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 39 introduces a Random Forest classification example applied to music data, specifically identifying the genre \"Jazz\". The slide title lists organizational terms such as faculty, department, and service, which appear alongside this technical illustration.",
+      "summary": "A random forest applies an ensemble of decision trees to a music-classification example.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -361,7 +361,7 @@
     {
       "slide": 40,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 40 presents a Random Forest classification example for identifying the music genre \"Jazz\". The model utilizes specific audio features, such as energy and beats per minute (BPM), to make its determination. A key decision rule highlighted in this example is that a BPM value less than 125 contributes to classifying the track as Jazz.",
+      "summary": "The lecture presents a Random Forest classification example for identifying the music genre \"Jazz\". The model utilizes specific audio features, such as energy and beats per minute (BPM), to make its determination. A key decision rule highlighted in this example is that a BPM value less than 125 contributes to classifying the track as Jazz.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -370,7 +370,7 @@
     {
       "slide": 41,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 41 presents a Random Forest classification example for identifying the music genre \"Jazz\" using specific audio features. The model evaluates decision paths based on Energy and Beats Per Minute (BPM), where the second split specifically distinguishes genres by checking if BPM is less than 125, followed by a further condition of BPM being less than 95.",
+      "summary": "The lecture presents a Random Forest classification example for identifying the music genre \"Jazz\" using specific audio features. The model evaluates decision paths based on Energy and Beats Per Minute (BPM), where the second split specifically distinguishes genres by checking if BPM is less than 125, followed by a further condition of BPM being less than 95.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -379,7 +379,7 @@
     {
       "slide": 42,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 42 presents a Random Forest classification example applied to identifying the music genre \"Jazz\". The model utilizes specific decision rules based on features such as Beats Per Minute (BPM) and Energy, including thresholds like BPM < 125 and BPM < 95. The slide outlines three distinct feature pairings—Energy/BPM, BPM/Genre, and Energy/Genre—that contribute to the final classification output of \"Jazz.\"",
+      "summary": "The lecture presents a Random Forest classification example applied to identifying the music genre \"Jazz\". The model utilizes specific decision rules based on features such as Beats Per Minute (BPM) and Energy, including thresholds like BPM < 125 and BPM < 95. The slide outlines three distinct feature pairings—Energy/BPM, BPM/Genre, and Energy/Genre—that contribute to the final classification output of \"Jazz.\"",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -388,7 +388,7 @@
     {
       "slide": 43,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 43 presents a Random Forest classification example for identifying the music genre \"Jazz\" using features such as Energy and Beats Per Minute (BPM). The decision logic involves evaluating relationships between these variables, specifically applying thresholds where BPM is less than 125 and further refined to BPM less than 95 to confirm the Jazz classification. This illustrates how the algorithm combines multiple feature comparisons to reach a final genre prediction.",
+      "summary": "The lecture presents a Random Forest classification example for identifying the music genre \"Jazz\" using features such as Energy and Beats Per Minute (BPM). The decision logic involves evaluating relationships between these variables, specifically applying thresholds where BPM is less than 125 and further refined to BPM less than 95 to confirm the Jazz classification. This illustrates how the algorithm combines multiple feature comparisons to reach a final genre prediction.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -397,7 +397,7 @@
     {
       "slide": 44,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 44 presents a Random Forest classification example for identifying the music genre \"Jazz\" using features such as Energy and Beats Per Minute (BPM). The decision process involves evaluating specific thresholds, notably checking if BPM is less than 125 and subsequently if it is less than 95, to determine the final genre classification. This illustrates how Random Forests utilize multiple feature combinations and conditional splits to reach a prediction.",
+      "summary": "The lecture presents a Random Forest classification example for identifying the music genre \"Jazz\" using features such as Energy and Beats Per Minute (BPM). The decision process involves evaluating specific thresholds, notably checking if BPM is less than 125 and subsequently if it is less than 95, to determine the final genre classification. This illustrates how Random Forests utilize multiple feature combinations and conditional splits to reach a prediction.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -424,7 +424,7 @@
     {
       "slide": 47,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 47 presents a Random Forest classification example for identifying the music genre \"Jazz\". The decision rule illustrated requires two simultaneous conditions: the audio energy must be greater than 3, and the beats per minute (BPM) must be less than 130. This specific combination of thresholds serves as a single decision path within the ensemble model to categorize the input data.",
+      "summary": "The lecture presents a Random Forest classification example for identifying the music genre \"Jazz\". The decision rule illustrated requires two simultaneous conditions: the audio energy must be greater than 3, and the beats per minute (BPM) must be less than 130. This specific combination of thresholds serves as a single decision path within the ensemble model to categorize the input data.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -433,7 +433,7 @@
     {
       "slide": 48,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 48 presents a Random Forest classification example for identifying the music genre \"Jazz\". The decision rule illustrated requires that a track's energy level exceeds 3 while its beats per minute (BPM) remain below 130. This specific combination of thresholds serves as the criteria for assigning the Jazz label within this model instance.",
+      "summary": "The lecture presents a Random Forest classification example for identifying the music genre \"Jazz\". The decision rule illustrated requires that a track's energy level exceeds 3 while its beats per minute (BPM) remain below 130. This specific combination of thresholds serves as the criteria for assigning the Jazz label within this model instance.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -442,7 +442,7 @@
     {
       "slide": 49,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 49 presents a Random Forest classification example for identifying the music genre \"Jazz\" using audio features. The decision process involves splitting data based on Energy and Beats Per Minute (BPM), specifically evaluating conditions where BPM is less than 130 or less than 90 to determine the final genre classification.",
+      "summary": "The lecture presents a Random Forest classification example for identifying the music genre \"Jazz\" using audio features. The decision process involves splitting data based on Energy and Beats Per Minute (BPM), specifically evaluating conditions where BPM is less than 130 or less than 90 to determine the final genre classification.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -460,7 +460,7 @@
     {
       "slide": 51,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 51 presents a Random Forest classification example for identifying the music genre \"Jazz\" using features such as Energy and Beats Per Minute (BPM). The model evaluates relationships between these variables, specifically applying decision rules where Jazz is identified when BPM is less than 130 or further refined to less than 90. This illustrates how the algorithm splits data based on feature thresholds to determine the target class.",
+      "summary": "The lecture presents a Random Forest classification example for identifying the music genre \"Jazz\" using features such as Energy and Beats Per Minute (BPM). The model evaluates relationships between these variables, specifically applying decision rules where Jazz is identified when BPM is less than 130 or further refined to less than 90. This illustrates how the algorithm splits data based on feature thresholds to determine the target class.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -532,7 +532,7 @@
     {
       "slide": 59,
       "title": "Learn from previous",
-      "summary": "The core principle of this section is to learn from previous mistakes within the context of faculties, departments, and services. This approach emphasizes using past errors as a foundation for improvement across these organizational units.",
+      "summary": "Boosting trains successive learners to focus on examples that previous learners classified incorrectly.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -568,7 +568,7 @@
     {
       "slide": 63,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 63: AdaBoost example using music data.",
+      "summary": "AdaBoost example using music data.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -577,7 +577,7 @@
     {
       "slide": 64,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Faculteit, departement, dienst …",
+      "summary": "The first AdaBoost weak learner, h1, separates the BPM-energy examples. Misclassified points receive more weight in the next round.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -586,7 +586,7 @@
     {
       "slide": 65,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 65 presents an AdaBoost example using a music dataset where the first weak learner's error rate is $\\varepsilon_1 = 5/26$. This error yields a weight coefficient of $\\alpha_1 \\approx 0.72$, calculated via the formula $\\frac{1}{2} \\ln\\left(\\frac{1 - \\varepsilon_1}{\\varepsilon_1}\\right)$. Consequently, the updated strong classifier function becomes $F(x) = 0.72 h_1(x)$, incorporating the weighted contribution of the first hypothesis $h_1$.",
+      "summary": "The lecture presents an AdaBoost example using a music dataset where the first weak learner's error rate is $\\varepsilon_1 = 5/26$. This error yields a weight coefficient of $\\alpha_1 \\approx 0.72$, calculated via the formula $\\frac{1}{2} \\ln\\left(\\frac{1 - \\varepsilon_1}{\\varepsilon_1}\\right)$. Consequently, the updated strong classifier function becomes $F(x) = 0.72 h_1(x)$, incorporating the weighted contribution of the first hypothesis $h_1$.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -595,7 +595,7 @@
     {
       "slide": 66,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 66 presents an AdaBoost example applied to music classification, visualizing the decision boundary of the first weak learner, $h_1(x)$, across BPM and Energy features. The plot indicates a threshold where the model predicts positive outcomes (marked with '+') for lower values and negative outcomes (marked with '-') for higher values, yielding a specific function value of $F(x) = 0.72$. This visualization illustrates how AdaBoost iteratively constructs a strong classifier by combining weak hypotheses based on feature space distributions.",
+      "summary": "The lecture presents an AdaBoost example applied to music classification, visualizing the decision boundary of the first weak learner, $h_1(x)$, across BPM and Energy features. The plot indicates a threshold where the model predicts positive outcomes (marked with '+') for lower values and negative outcomes (marked with '-') for higher values, yielding a specific function value of $F(x) = 0.72$. This visualization illustrates how AdaBoost iteratively constructs a strong classifier by combining weak hypotheses based on feature space distributions.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -604,7 +604,7 @@
     {
       "slide": 67,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 67 presents an AdaBoost example applied to music classification, visualizing the decision boundary of the first weak learner, $h_1$, across BPM and Energy features. The diagram indicates a specific output value of $F(x) = 0.72$ for this stage, with positive and negative class predictions distributed along the axes.",
+      "summary": "The lecture presents an AdaBoost example applied to music classification, visualizing the decision boundary of the first weak learner, $h_1$, across BPM and Energy features. The diagram indicates a specific output value of $F(x) = 0.72$ for this stage, with positive and negative class predictions distributed along the axes.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -613,7 +613,7 @@
     {
       "slide": 68,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 68 illustrates an AdaBoost example applied to music classification using BPM and Energy features, showing the updated strong classifier $F(x) = 0.72 h_1(x) + 1.87 h_2(x)$. The weight for the second weak learner, $\\alpha_2 \\approx 1.87$, is derived from its error rate $\\varepsilon_2 = 1/42$ using the formula $\\frac{1}{2} \\ln\\left(\\frac{1-\\varepsilon_2}{\\varepsilon_2}\\right)$. The slide visually contrasts the predictions of $h_1$ and $h_2$ across data points, highlighting how the algorithm combines these hypotheses to improve classification accuracy.",
+      "summary": "The lecture illustrates an AdaBoost example applied to music classification using BPM and Energy features, showing the updated strong classifier $F(x) = 0.72 h_1(x) + 1.87 h_2(x)$. The weight for the second weak learner, $\\alpha_2 \\approx 1.87$, is derived from its error rate $\\varepsilon_2 = 1/42$ using the formula $\\frac{1}{2} \\ln\\left(\\frac{1-\\varepsilon_2}{\\varepsilon_2}\\right)$. The slide visually contrasts the predictions of $h_1$ and $h_2$ across data points, highlighting how the algorithm combines these hypotheses to improve classification accuracy.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -640,7 +640,7 @@
     {
       "slide": 71,
       "title": "– Continuous search method",
-      "summary": "Slide 71 introduces the continuous search method, specifically identifying Gradient Descent as the technique used for this purpose.",
+      "summary": "The lecture introduces the continuous search method, specifically identifying Gradient Descent as the technique used for this purpose.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -649,7 +649,7 @@
     {
       "slide": 72,
       "title": "– Continuous search method",
-      "summary": "Slide 72 introduces the continuous search method, specifically identifying Gradient Descent as the technique applied to the linear function $y=2x$.",
+      "summary": "The lecture introduces the continuous search method, specifically identifying Gradient Descent as the technique applied to the linear function $y=2x$.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -658,7 +658,7 @@
     {
       "slide": 73,
       "title": "– Continuous search method",
-      "summary": "Slide 73 introduces the continuous search method, specifically identifying Gradient Descent as the technique used. The slide visually associates this method with the linear equations $y=2x$ and $y=4$, alongside variable markers labeled \"X,\" to illustrate the context of optimization in a continuous space.",
+      "summary": "The lecture introduces the continuous search method, specifically identifying Gradient Descent as the technique used. The slide visually associates this method with the linear equations $y=2x$ and $y=4$, alongside variable markers labeled \"X,\" to illustrate the context of optimization in a continuous space.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -676,7 +676,7 @@
     {
       "slide": 75,
       "title": "– Continuous search method",
-      "summary": "Slide 75 introduces the continuous search method, specifically identifying Gradient Descent as the technique used to navigate continuous spaces. The slide visually associates this method with a set of linear equations ($y=2x$, $y=4$, $y=-x+10$, and $y=1.5x+2$) plotted against an X-axis, illustrating the mathematical context in which such optimization occurs.",
+      "summary": "The lecture introduces the continuous search method, specifically identifying Gradient Descent as the technique used to navigate continuous spaces. The slide visually associates this method with a set of linear equations ($y=2x$, $y=4$, $y=-x+10$, and $y=1.5x+2$) plotted against an X-axis, illustrating the mathematical context in which such optimization occurs.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -703,7 +703,7 @@
     {
       "slide": 78,
       "title": "– Continuous search method",
-      "summary": "Slide 78 introduces the continuous search method, specifically identifying Gradient Descent as the technique used to navigate continuous spaces defined by linear equations such as $y=2x$, $y=4$, $y=-x+10$, and $y=1.5x+2$. The slide visually represents this optimization process using coordinate markers (X) to illustrate how the method operates across these varying functions.",
+      "summary": "The lecture introduces the continuous search method, specifically identifying Gradient Descent as the technique used to navigate continuous spaces defined by linear equations such as $y=2x$, $y=4$, $y=-x+10$, and $y=1.5x+2$. The slide visually represents this optimization process using coordinate markers (X) to illustrate how the method operates across these varying functions.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -730,7 +730,7 @@
     {
       "slide": 81,
       "title": "Change the output labels",
-      "summary": "Slide 81 addresses the requirement to modify output labels, specifically citing examples such as \"Faculteit,\" \"departement,\" and \"dienst\". This instruction indicates that the system's displayed terminology for organizational units must be updated to match these specific terms.",
+      "summary": "Changing output labels changes the names shown for classes, not the underlying predictions.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -820,7 +820,7 @@
     {
       "slide": 91,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 91 introduces the concept of bias in machine learning by visually contrasting the true underlying function, denoted as $f(x)$, with the learned approximation, denoted as $h(x)$. This distinction highlights the discrepancy between the actual data-generating process and the model's prediction, which is a fundamental component of understanding model error. The slide serves as a conceptual foundation for analyzing how well a learned function can represent the true relationship within the data.",
+      "summary": "Bias is the gap between the true underlying function f(x) and the learned approximation h(x).",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -847,7 +847,7 @@
     {
       "slide": 94,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 94 introduces the concept of variance in the context of machine learning, visually contrasting the true underlying function $f(x)$ with a learned function $h(x)$. The slide highlights how the discrepancy between these two functions represents the variance component of model error.",
+      "summary": "The lecture introduces the concept of variance in the context of machine learning, visually contrasting the true underlying function $f(x)$ with a learned function $h(x)$. The slide highlights how the discrepancy between these two functions represents the variance component of model error.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -874,7 +874,7 @@
     {
       "slide": 97,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Faculteit, departement, dienst …",
+      "summary": "Observed points vary around the true function f(x). This random noise is irreducible error that even a correct model cannot predict exactly.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -982,7 +982,7 @@
     {
       "slide": 109,
       "title": "Applications",
-      "summary": "Slide 109 introduces the concept of \"Applications\" within an organizational context, specifically listing examples such as faculties, departments, and services.",
+      "summary": "Applications of ensemble learning.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -1009,7 +1009,7 @@
     {
       "slide": 112,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 112 introduces the topic of motion capture within a context referencing organizational structures such as faculties, departments, and services.",
+      "summary": "Motion capture is presented as an application.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -1018,7 +1018,7 @@
     {
       "slide": 113,
       "title": "Questions?",
-      "summary": "Slide 113 marks the conclusion of the lecture segment by inviting questions from the audience. The slide displays the heading \"Questions?\" alongside the institutional identifiers \"Faculteit, departement, dienst\" and the page number 113, signaling an opportunity for students to seek clarification on the preceding material.",
+      "summary": "Questions?",
       "sources": {
         "slide": true,
         "teacher_audio": false

@@ -35,12 +35,12 @@
     {
       "slide": 6,
       "title": "A simple Python program:",
-      "summary": "Slide 6 introduces a basic Python program using the statement `print('Hello, World!')`. This example serves as a fundamental demonstration within the context of scripting languages. The slide is part of a lecture series dated 6/28 by tim.vandecruys@kuleuven.be."
+      "summary": "`print(\"Hello, World!\")` displays text in a basic Python program."
     },
     {
       "slide": 7,
       "title": "A simple Python program:",
-      "summary": "Slide 7 contrasts a simple Python program, `print('Hello, World!')`, with its more verbose Java equivalent requiring class definitions and boilerplate code. The professor explains that Python is easier to interpret and read because it requires significantly less code to achieve the same result. This simplicity and intuitive grammar make Python a preferred choice for many developers compared to languages like Java."
+      "summary": "The lecture contrasts a simple Python program, `print('Hello, World!')`, with its more verbose Java equivalent requiring class definitions and boilerplate code. The professor explains that Python is easier to interpret and read because it requires significantly less code to achieve the same result. This simplicity and intuitive grammar make Python a preferred choice for many developers compared to languages like Java."
     },
     {
       "slide": 8,
@@ -105,7 +105,7 @@
     {
       "slide": 20,
       "title": "Words",
-      "summary": "The slide indicates this is the 18th of 28 sessions and lists the instructor's contact email as tim.vandecruys@kuleuven.be."
+      "summary": "Words"
     },
     {
       "slide": 21,

@@ -80,12 +80,12 @@
     {
       "slide": 15,
       "title": "The machine learning landscape",
-      "summary": "Slide 15 presents the machine learning landscape by categorizing key concepts into four distinct groups: tasks, techniques, models, and applications. The slide lists specific examples for each category, including reinforcement learning and classification as tasks; neural networks and support vector machines as models; and vision and speech as applications. This overview illustrates the breadth of the field."
+      "summary": "The lecture presents the machine learning landscape by categorizing key concepts into four distinct groups: tasks, techniques, models, and applications. The slide lists specific examples for each category, including reinforcement learning and classification as tasks; neural networks and support vector machines as models; and vision and speech as applications. This overview illustrates the breadth of the field."
     },
     {
       "slide": 16,
       "title": "Related courses",
-      "summary": "Slide 16 lists related courses that complement the current material, including Machine Learning and Inductive Inference, Neural Computing, Support Vector Machines, Genetic Algorithms and Evolutionary Computing, Uncertainty in AI, and Data Mining. These topics represent key adjacent fields within artificial intelligence and computational learning."
+      "summary": "The lecture lists related courses that complement the current material, including Machine Learning and Inductive Inference, Neural Computing, Support Vector Machines, Genetic Algorithms and Evolutionary Computing, Uncertainty in AI, and Data Mining. These topics represent key adjacent fields within artificial intelligence and computational learning."
     },
     {
       "slide": 17,
@@ -235,7 +235,7 @@
     {
       "slide": 46,
       "title": "Relationship between different",
-      "summary": "Slide 46 outlines the relationship between various machine learning supervision settings. It categorizes these approaches into Supervised Learning, Unsupervised Learning, and Weakly supervised Learning. The slide further lists specific weakly supervised paradigms including Predictive learning, Semi-supervised learning, Multi-instance learning, PU-learning, Superset learning, and Constraint-based clustering."
+      "summary": "The lecture outlines the relationship between various machine learning supervision settings. It categorizes these approaches into Supervised Learning, Unsupervised Learning, and Weakly supervised Learning. The slide further lists specific weakly supervised paradigms including Predictive learning, Semi-supervised learning, Multi-instance learning, PU-learning, Superset learning, and Constraint-based clustering."
     },
     {
       "slide": 47,
@@ -250,7 +250,7 @@
     {
       "slide": 49,
       "title": "Format of input data: tabular",
-      "summary": "Slide 49 illustrates the tabular format of input data using a dataset with columns for sepal length, sepal width, petal length, petal width, and class. The example distinguishes between a training set containing known labels like Setosa, Versicolor, and Virginica, and a prediction set where the class values are marked as unknown. This structure demonstrates how features are organized alongside target variables for model learning and subsequent inference."
+      "summary": "The lecture illustrates the tabular format of input data using a dataset with columns for sepal length, sepal width, petal length, petal width, and class. The example distinguishes between a training set containing known labels like Setosa, Versicolor, and Virginica, and a prediction set where the class values are marked as unknown. This structure demonstrates how features are organized alongside target variables for model learning and subsequent inference."
     },
     {
       "slide": 50,
@@ -305,7 +305,7 @@
     {
       "slide": 60,
       "title": "Different views of the landscape",
-      "summary": "Slide 60 outlines three distinct perspectives on the machine learning landscape. Domingos categorizes approaches into \"five tribes\" (Symbolists, Connectionists, Evolutionaries, Bayesians, and Analogizers), while Flach identifies \"three types of models\" (Probabilistic, Geometric, and Logical). In contrast, Bishop argues that all these views are fundamentally Bayesian."
+      "summary": "The lecture outlines three distinct perspectives on the machine learning landscape. Domingos categorizes approaches into \"five tribes\" (Symbolists, Connectionists, Evolutionaries, Bayesians, and Analogizers), while Flach identifies \"three types of models\" (Probabilistic, Geometric, and Logical). In contrast, Bishop argues that all these views are fundamentally Bayesian."
     },
     {
       "slide": 61,

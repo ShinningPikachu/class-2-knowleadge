@@ -100,12 +100,12 @@
     {
       "slide": 19,
       "title": "The data set D: 8 examples",
-      "summary": "Slide 19 introduces the dataset D, which consists of exactly eight examples."
+      "summary": "The lecture introduces the dataset D, which consists of exactly eight examples."
     },
     {
       "slide": 20,
       "title": "Data set in tabular form",
-      "summary": "Slide 20 presents a data set in tabular form containing eight entries with four attributes: Shape, Color, Content volume, and Sick status. The table lists various combinations of shapes (Cylinder, Coupe, Trapezoid), colors, and volumes (10cl, 15cl, 25cl) to indicate whether the subject is sick. Specifically, three entries marked \"Yes\" for being sick are all Coupes or Trapezoids with Orange color and either 10cl or 15cl content, while all other combinations are marked \"No\"."
+      "summary": "The lecture presents a data set in tabular form containing eight entries with four attributes: Shape, Color, Content volume, and Sick status. The table lists various combinations of shapes (Cylinder, Coupe, Trapezoid), colors, and volumes (10cl, 15cl, 25cl) to indicate whether the subject is sick. Specifically, three entries marked \"Yes\" for being sick are all Coupes or Trapezoids with Orange color and either 10cl or 15cl content, while all other combinations are marked \"No\"."
     },
     {
       "slide": 21,
@@ -120,7 +120,7 @@
     {
       "slide": 23,
       "title": "The decision tree",
-      "summary": "Slide 23 introduces the concept of a decision tree using a classification example based on shape and color. The structure distinguishes between \"orange\" and \"non-orange\" categories, indicated by a question mark that suggests a decision point or query is required to determine the outcome."
+      "summary": "The lecture introduces the concept of a decision tree using a classification example based on shape and color. The structure distinguishes between \"orange\" and \"non-orange\" categories, indicated by a question mark that suggests a decision point or query is required to determine the outcome."
     },
     {
       "slide": 24,
@@ -190,17 +190,17 @@
     {
       "slide": 37,
       "title": "37",
-      "summary": "Slide 37 illustrates a decision tree structure where internal nodes perform binary tests in the form of $X < \\dots$ or $Y < \\dots$. The visual representation uses sequences of plus and minus signs to denote the resulting classification outcomes along different branches. This diagram demonstrates how splitting on variables X and Y partitions the data space into distinct regions based on these threshold comparisons."
+      "summary": "The lecture illustrates a decision tree structure where internal nodes perform binary tests in the form of $X < \\dots$ or $Y < \\dots$. The visual representation uses sequences of plus and minus signs to denote the resulting classification outcomes along different branches. This diagram demonstrates how splitting on variables X and Y partitions the data space into distinct regions based on these threshold comparisons."
     },
     {
       "slide": 38,
       "title": "38",
-      "summary": "Slide 38 illustrates a decision tree structure that utilizes comparison tests in the form of $X < \\dots$ or $Y < \\dots$. The specific example provided demonstrates a node evaluating the condition $Y < 4$, which branches into \"yes\" and \"no\" outcomes based on the variable values. This visual representation highlights how such trees partition data using simple inequality thresholds."
+      "summary": "The lecture illustrates a decision tree structure that utilizes comparison tests in the form of $X < \\dots$ or $Y < \\dots$. The specific example provided demonstrates a node evaluating the condition $Y < 4$, which branches into \"yes\" and \"no\" outcomes based on the variable values. This visual representation highlights how such trees partition data using simple inequality thresholds."
     },
     {
       "slide": 39,
       "title": "39",
-      "summary": "Slide 39 illustrates a decision tree that classifies data points as positive (+) or negative (-) using tests of the form $X < \\dots$ or $Y < \\dots$. The specific example shows a root node testing $Y < 4$, which branches to a \"yes\" outcome (positive) and a \"no\" path leading to a secondary test of $X < 3$. This structure demonstrates how sequential threshold comparisons on variables X and Y partition the feature space into distinct classification regions."
+      "summary": "The lecture illustrates a decision tree that classifies data points as positive (+) or negative (-) using tests of the form $X < \\dots$ or $Y < \\dots$. The specific example shows a root node testing $Y < 4$, which branches to a \"yes\" outcome (positive) and a \"no\" path leading to a secondary test of $X < 3$. This structure demonstrates how sequential threshold comparisons on variables X and Y partition the feature space into distinct classification regions."
     },
     {
       "slide": 40,
@@ -240,7 +240,7 @@
     {
       "slide": 47,
       "title": "47",
-      "summary": "Slide 47 outlines the relationship between decision tree size and model performance, specifically comparing accuracy on training data versus accuracy on unseen data. The slide highlights how the size of the tree influences these metrics and introduces the concept of pruning as a method to affect overall accuracy."
+      "summary": "The lecture outlines the relationship between decision tree size and model performance, specifically comparing accuracy on training data versus accuracy on unseen data. The slide highlights how the size of the tree influences these metrics and introduces the concept of pruning as a method to affect overall accuracy."
     },
     {
       "slide": 48,
@@ -250,7 +250,7 @@
     {
       "slide": 49,
       "title": "A generic algorithm",
-      "summary": "Slide 49 introduces the concept of a generic algorithm, highlighting the common structural framework shared by Decision Tree (DT) learners. It further notes that while these learners share this foundational structure, distinct differences exist between specific implementations."
+      "summary": "The lecture introduces the concept of a generic algorithm, highlighting the common structural framework shared by Decision Tree (DT) learners. It further notes that while these learners share this foundational structure, distinct differences exist between specific implementations."
     },
     {
       "slide": 50,
@@ -275,7 +275,7 @@
     {
       "slide": 54,
       "title": "Illustration: effect of type of tests",
-      "summary": "Slide 54 illustrates how different test types affect decision boundaries using a dataset of positive and negative instances. It contrasts \"oblique trees,\" which utilize linear combinations of features in the form $aX+bY<c$, against standard axis-parallel tests defined by individual thresholds like $X<c$ or $Y<c$. This comparison highlights the geometric differences between diagonal splits and orthogonal splits when separating classes."
+      "summary": "The lecture illustrates how different test types affect decision boundaries using a dataset of positive and negative instances. It contrasts \"oblique trees,\" which utilize linear combinations of features in the form $aX+bY<c$, against standard axis-parallel tests defined by individual thresholds like $X<c$ or $Y<c$. This comparison highlights the geometric differences between diagonal splits and orthogonal splits when separating classes."
     },
     {
       "slide": 55,
@@ -335,7 +335,7 @@
     {
       "slide": 66,
       "title": "How much work is it?",
-      "summary": "Slide 66 introduces the topic of computational complexity regarding decision trees, specifically addressing the amount of work required for both learning and using them. The slide poses the central question of quantifying this effort."
+      "summary": "The lecture introduces the topic of computational complexity regarding decision trees, specifically addressing the amount of work required for both learning and using them. The slide poses the central question of quantifying this effort."
     },
     {
       "slide": 67,
@@ -355,7 +355,7 @@
     {
       "slide": 70,
       "title": "Computing the quality of one test",
-      "summary": "Slide 70 demonstrates computing the quality of a single test using a dataset with attributes A, B, and C against positive and negative classes. The slide presents counts for each attribute's distribution across classes, noting that for attribute C, the probability of being positive (ppos) is 0.5 and the probability of being negative (pneg) is 0.5. This calculation relies on the provided frequency table where attribute C appears once in the positive class and once in the negative class out of two total instances."
+      "summary": "The lecture demonstrates computing the quality of a single test using a dataset with attributes A, B, and C against positive and negative classes. The slide presents counts for each attribute's distribution across classes, noting that for attribute C, the probability of being positive (ppos) is 0.5 and the probability of being negative (pneg) is 0.5. This calculation relies on the provided frequency table where attribute C appears once in the positive class and once in the negative class out of two total instances."
     },
     {
       "slide": 71,
@@ -415,7 +415,7 @@
     {
       "slide": 82,
       "title": "Handling missing",
-      "summary": "Slide 82: Handling missing values."
+      "summary": "Handling missing values."
     },
     {
       "slide": 83,
@@ -425,7 +425,7 @@
     {
       "slide": 84,
       "title": "Distribution: illustration",
-      "summary": "Slide 84 illustrates a classification problem using a dataset of weather attributes (Outlook, Humidity, Wind) to predict whether to \"Play\". It demonstrates calculating class probabilities for a new instance [?, high, strong], where the distribution shows 10/14 instances as \"no\" and 4/14 as \"yes\". Based on this majority vote, the slide concludes that the predicted classification for the example is \"no.\""
+      "summary": "The lecture illustrates a classification problem using a dataset of weather attributes (Outlook, Humidity, Wind) to predict whether to \"Play\". It demonstrates calculating class probabilities for a new instance [?, high, strong], where the distribution shows 10/14 instances as \"no\" and 4/14 as \"yes\". Based on this majority vote, the slide concludes that the predicted classification for the example is \"no.\""
     },
     {
       "slide": 85,
@@ -440,7 +440,7 @@
     {
       "slide": 87,
       "title": "Representation power of",
-      "summary": "Slide 87 illustrates the representation power of regression trees by attempting to model the linear target function Y=X. The slide depicts a tree structure using split conditions like X<0.5 and X<1 to produce constant predictions (e.g., Y=0.25, Y=0.75) within specific intervals. This demonstrates that regression trees approximate continuous functions through piecewise constant segments rather than capturing the linear relationship directly."
+      "summary": "The lecture illustrates the representation power of regression trees by attempting to model the linear target function Y=X. The slide depicts a tree structure using split conditions like X<0.5 and X<1 to produce constant predictions (e.g., Y=0.25, Y=0.75) within specific intervals. This demonstrates that regression trees approximate continuous functions through piecewise constant segments rather than capturing the linear relationship directly."
     },
     {
       "slide": 88,
@@ -470,22 +470,22 @@
     {
       "slide": 93,
       "title": "Mauve: motivating example",
-      "summary": "Slide 93 presents a motivating example for Mauve using a target function defined as f(x)=x for 0<x<1 and f(x)=1-x for 1<x<2. The slide notes that a decision tree exists to express this function perfectly, specifically splitting on the condition X<1 to yield Y=X or Y=1-X. It then poses the critical question of whether the M5 algorithm can successfully identify this optimal tree structure."
+      "summary": "The lecture presents a motivating example for Mauve using a target function defined as f(x)=x for 0<x<1 and f(x)=1-x for 1<x<2. The slide notes that a decision tree exists to express this function perfectly, specifically splitting on the condition X<1 to yield Y=X or Y=1-X. It then poses the critical question of whether the M5 algorithm can successfully identify this optimal tree structure."
     },
     {
       "slide": 94,
       "title": "Mauve: motivating example",
-      "summary": "Slide 94 presents a motivating example demonstrating that minimizing average variance does not necessarily yield an optimal split in decision trees. The provided data shows that while the average variance is maximally reduced at a threshold of approximately $c \\approx 0.4$, it fails to decrease for $c=1$, which represents the actual optimal test. This discrepancy highlights the limitation of using average variance minimization as a sole criterion for determining split quality."
+      "summary": "The lecture presents a motivating example demonstrating that minimizing average variance does not necessarily yield an optimal split in decision trees. The provided data shows that while the average variance is maximally reduced at a threshold of approximately $c \\approx 0.4$, it fails to decrease for $c=1$, which represents the actual optimal test. This discrepancy highlights the limitation of using average variance minimization as a sole criterion for determining split quality."
     },
     {
       "slide": 95,
       "title": "Mauve: motivating example",
-      "summary": "Slide 95 presents a motivating example where the M5 algorithm constructs a complex decision tree to model scattered data points. The resulting structure features ten leaf nodes (LM1–LM10), each defined by specific linear regression equations or constant values derived from split conditions such as x ≤ 1.6 and x ≤ 0.51. This visualization demonstrates how M5 partitions the input space to fit local linear models across different regions."
+      "summary": "The lecture presents a motivating example where the M5 algorithm constructs a complex decision tree to model scattered data points. The resulting structure features ten leaf nodes (LM1–LM10), each defined by specific linear regression equations or constant values derived from split conditions such as x ≤ 1.6 and x ≤ 0.51. This visualization demonstrates how M5 partitions the input space to fit local linear models across different regions."
     },
     {
       "slide": 96,
       "title": "Mauve vs. M5’",
-      "summary": "Slide 96 presents an experimental comparison of Mauve and M5' on synthetic data, visualized through multiple plots. The slide includes axis labels ranging from 0.0 to 2.0 and 0.0 to 1.2, alongside a legend identifying \"Mauve,\" \"M5',\" and \"Random splits\"."
+      "summary": "The lecture presents an experimental comparison of Mauve and M5' on synthetic data, visualized through multiple plots. The slide includes axis labels ranging from 0.0 to 2.0 and 0.0 to 1.2, alongside a legend identifying \"Mauve,\" \"M5',\" and \"Random splits\"."
     },
     {
       "slide": 97,
@@ -565,12 +565,12 @@
     {
       "slide": 112,
       "title": "Python: scikit-learn",
-      "summary": "Slide 112 introduces the topic of using the scikit-learn library within the Python programming environment."
+      "summary": "The lecture introduces the topic of using the scikit-learn library within the Python programming environment."
     },
     {
       "slide": 113,
       "title": "Python: scikit-learn",
-      "summary": "Slide 113 introduces the `scikit-learn` library in Python, specifically highlighting that certain methods are defined for `DecisionTreeClassifier` objects. The slide serves as a header indicating the availability of these methods but does not list or describe specific functions within the provided text."
+      "summary": "Methods of `DecisionTreeClassifier` in scikit-learn."
     },
     {
       "slide": 114,

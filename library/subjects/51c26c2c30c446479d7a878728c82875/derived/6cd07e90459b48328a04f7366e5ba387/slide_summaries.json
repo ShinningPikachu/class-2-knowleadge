@@ -10,7 +10,7 @@
     {
       "slide": 1,
       "title": "faculty of arts",
-      "summary": "This lecture introduces Computational Linguistics within the Faculty of Arts. It is the first session of the course, presented by Tim Van de Cruys on Tuesday, 22 September 2026. The slide serves as the title page establishing the course identity and initial meeting details."
+      "summary": "Computational Linguistics"
     },
     {
       "slide": 2,
@@ -50,7 +50,7 @@
     {
       "slide": 9,
       "title": "Applications",
-      "summary": "Slide 9 introduces the topic of applications for large language models, specifically citing ChatGPT as a primary example. This section serves as a heading within the Computational Linguistics lecture series to transition into practical uses of these technologies."
+      "summary": "The lecture introduces the topic of applications for large language models, specifically citing ChatGPT as a primary example. This section serves as a heading within the Computational Linguistics lecture series to transition into practical uses of these technologies."
     },
     {
       "slide": 10,
@@ -100,22 +100,22 @@
     {
       "slide": 19,
       "title": "Language use: an example",
-      "summary": "Slide 19 presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of utterances within computational linguistics."
+      "summary": "The lecture presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of utterances within computational linguistics."
     },
     {
       "slide": 20,
       "title": "Language use: an example",
-      "summary": "Slide 20 presents a joke as an example of language use, featuring the question \"Why did the chicken cross the road?\" followed by the response \"I give up\" and the punchline \"To get to the other side\". This interaction illustrates how meaning in natural language often relies on context and shared cultural knowledge rather than just literal interpretation. The slide serves as a concrete demonstration of linguistic phenomena within the Computational Linguistics course."
+      "summary": "The chicken-crossing-the-road joke illustrates how familiar context helps listeners interpret a punchline."
     },
     {
       "slide": 21,
       "title": "Language use: an example",
-      "summary": "Slide 21 presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how meaning is conveyed through conversational exchange within the context of Computational Linguistics."
+      "summary": "The lecture presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how meaning is conveyed through conversational exchange within the context of Computational Linguistics."
     },
     {
       "slide": 22,
       "title": "Language use: an example",
-      "summary": "Slide 22 presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of utterances within computational linguistics."
+      "summary": "The lecture presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of utterances within computational linguistics."
     },
     {
       "slide": 23,
@@ -125,17 +125,17 @@
     {
       "slide": 24,
       "title": "Language use: an example",
-      "summary": "Slide 24 presents a joke as an example of language use, featuring the exchange: \"Why did the chicken cross the road?\" followed by \"I give up\" and the punchline \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of meaning in computational linguistics."
+      "summary": "The lecture presents a joke as an example of language use, featuring the exchange: \"Why did the chicken cross the road?\" followed by \"I give up\" and the punchline \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of meaning in computational linguistics."
     },
     {
       "slide": 25,
       "title": "Language use: an example",
-      "summary": "Slide 25 presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how meaning is constructed through conversational exchange within the context of Computational Linguistics."
+      "summary": "The lecture presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how meaning is constructed through conversational exchange within the context of Computational Linguistics."
     },
     {
       "slide": 26,
       "title": "Language use: an example",
-      "summary": "Slide 26 presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of utterances within computational linguistics."
+      "summary": "The lecture presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of utterances within computational linguistics."
     },
     {
       "slide": 27,
@@ -150,32 +150,32 @@
     {
       "slide": 29,
       "title": "Slide 29",
-      "summary": "Slide 29"
+      "summary": "A bicycle pictogram is an iconic sign: its shape resembles the object it represents."
     },
     {
       "slide": 30,
       "title": "Slide 30",
-      "summary": "Slide 30"
+      "summary": "Paw prints are indexical signs: the trace points to an animal that passed by."
     },
     {
       "slide": 31,
       "title": "Slide 31",
-      "summary": "Slide 31"
+      "summary": "The radiation trefoil is a conventional warning symbol. Its meaning is learned rather than inferred from resemblance."
     },
     {
       "slide": 32,
       "title": "apple",
-      "summary": "apple"
+      "summary": "The written word “apple” refers to a fruit by linguistic convention; its letters do not resemble the fruit."
     },
     {
       "slide": 33,
       "title": "penguin",
-      "summary": "penguin"
+      "summary": "“Penguin” applies the same symbolic principle to another concrete referent."
     },
     {
       "slide": 34,
       "title": "hypothesis",
-      "summary": "hypothesis"
+      "summary": "“Hypothesis” shows that a symbolic word can refer to an abstract idea, not only a visible object."
     },
     {
       "slide": 35,
@@ -190,7 +190,7 @@
     {
       "slide": 37,
       "title": "Animal vs. human communication",
-      "summary": "Slide 37 outlines key features of human language, including interchangeability, cultural transmission, arbitrariness, discreteness, displacement, and productivity. While some animal systems share these traits, others are considered exclusively human. Interchangeability refers to bi-directional communication where speakers can also hear; cultural transmission indicates language is learned during childhood rather than innate; and arbitrariness means linguistic signs lack an inherent connection to their meanings."
+      "summary": "The lecture outlines key features of human language, including interchangeability, cultural transmission, arbitrariness, discreteness, displacement, and productivity. While some animal systems share these traits, others are considered exclusively human. Interchangeability refers to bi-directional communication where speakers can also hear; cultural transmission indicates language is learned during childhood rather than innate; and arbitrariness means linguistic signs lack an inherent connection to their meanings."
     },
     {
       "slide": 38,
@@ -380,12 +380,12 @@
     {
       "slide": 75,
       "title": "Difficulties",
-      "summary": "Slide 75 outlines difficulties in speech technology, distinguishing between recognition and synthesis challenges. Speech recognition struggles with homophones like \"fish\" versus the non-word \"ghoti,\" as well as phrase ambiguity exemplified by \"The system is trained to wreck a nice peach\". Speech synthesis faces issues with context-dependent pronunciation, specifically differentiating stress patterns for words like \"content\" (adjective vs. noun) and \"address\" (verb vs. noun)."
+      "summary": "The lecture outlines difficulties in speech technology, distinguishing between recognition and synthesis challenges. Speech recognition struggles with homophones like \"fish\" versus the non-word \"ghoti,\" as well as phrase ambiguity exemplified by \"The system is trained to wreck a nice peach\". Speech synthesis faces issues with context-dependent pronunciation, specifically differentiating stress patterns for words like \"content\" (adjective vs. noun) and \"address\" (verb vs. noun)."
     },
     {
       "slide": 76,
       "title": "Difficulties",
-      "summary": "Slide 76 outlines difficulties in speech technology, distinguishing between recognition and synthesis challenges. Speech recognition struggles with homophones like \"fish\" versus the non-word \"ghoti\" (representing \"rough women nation\") and phonetic ambiguities such as \"The system is trained to wreck a nice peach\". Speech synthesis faces issues with stress placement, specifically differentiating adjectives from nouns in words like \"content\" and verbs from nouns in \"address.\""
+      "summary": "The lecture outlines difficulties in speech technology, distinguishing between recognition and synthesis challenges. Speech recognition struggles with homophones like \"fish\" versus the non-word \"ghoti\" (representing \"rough women nation\") and phonetic ambiguities such as \"The system is trained to wreck a nice peach\". Speech synthesis faces issues with stress placement, specifically differentiating adjectives from nouns in words like \"content\" and verbs from nouns in \"address.\""
     },
     {
       "slide": 77,

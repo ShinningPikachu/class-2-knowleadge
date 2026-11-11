@@ -130,7 +130,7 @@
     {
       "slide": 25,
       "title": "Indexing and slicing",
-      "summary": "Slide 25 introduces the topic of indexing and slicing within the context of scripting languages. The slide serves as a section header for lecture material 20/36, presented by Tim Van De Cruys at KU Leuven."
+      "summary": "Indexing and slicing"
     },
     {
       "slide": 26,
@@ -145,7 +145,7 @@
     {
       "slide": 28,
       "title": "Format strings",
-      "summary": "Slide 28 demonstrates two methods for combining text and variables in Python messages. The first approach uses string concatenation with the `+` operator, requiring explicit conversion of numeric variables to strings using `str()`. The second method utilizes the `print()` function's ability to accept multiple comma-separated arguments, which automatically handles spacing and type conversion without manual string casting."
+      "summary": "The lecture demonstrates two methods for combining text and variables in Python messages. The first approach uses string concatenation with the `+` operator, requiring explicit conversion of numeric variables to strings using `str()`. The second method utilizes the `print()` function's ability to accept multiple comma-separated arguments, which automatically handles spacing and type conversion without manual string casting."
     },
     {
       "slide": 29,
@@ -165,7 +165,7 @@
     {
       "slide": 32,
       "title": "List indexing",
-      "summary": "Slide 32 introduces the topic of list indexing within the context of scripting languages. The slide serves as a section header for lecture material dated 26/36, presented by Tim Van de Cruys."
+      "summary": "List indexing"
     },
     {
       "slide": 33,

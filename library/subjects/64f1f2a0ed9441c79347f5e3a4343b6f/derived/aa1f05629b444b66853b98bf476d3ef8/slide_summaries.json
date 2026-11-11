@@ -46,7 +46,7 @@
     {
       "slide": 5,
       "title": "Slide 5",
-      "summary": "Slide 5",
+      "summary": "The BPM-energy scatterplot contains examples from two classes. A classifier must learn how to distinguish them in this feature space.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -55,7 +55,7 @@
     {
       "slide": 6,
       "title": "M1",
-      "summary": "M1, M2",
+      "summary": "Two linear models draw different boundaries through the same labeled data. Their fit to these examples alone does not establish which will generalize better.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -64,7 +64,7 @@
     {
       "slide": 7,
       "title": "M1",
-      "summary": "Slide 7 introduces the comparative evaluation of two models, labeled M1 and M2, by posing the central question of which model performs better.",
+      "summary": "The lecture introduces the comparative evaluation of two models, labeled M1 and M2, by posing the central question of which model performs better.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -73,7 +73,7 @@
     {
       "slide": 8,
       "title": "M1",
-      "summary": "Slide 8 introduces the fundamental challenge of comparing two models, labeled M1 and M2. The core objective is to determine which model performs better and to evaluate the specific quality or goodness of each individual model. This section establishes the necessity of assessment criteria for distinguishing between competing models.",
+      "summary": "The lecture introduces the fundamental challenge of comparing two models, labeled M1 and M2. The core objective is to determine which model performs better and to evaluate the specific quality or goodness of each individual model. This section establishes the necessity of assessment criteria for distinguishing between competing models.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -145,7 +145,7 @@
     {
       "slide": 16,
       "title": "Predicted True",
-      "summary": "Slide 16 introduces the confusion matrix, also known as a contingency table, used to evaluate binary classification models. It specifically identifies the \"True Positive\" (TP) outcome, which occurs when an instance is actually true and correctly predicted as true, illustrated here with a count of 8. This framework organizes predictions into categories based on their alignment with actual values to assess model performance.",
+      "summary": "The lecture introduces the confusion matrix, also known as a contingency table, used to evaluate binary classification models. It specifically identifies the \"True Positive\" (TP) outcome, which occurs when an instance is actually true and correctly predicted as true, illustrated here with a count of 8. This framework organizes predictions into categories based on their alignment with actual values to assess model performance.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -154,7 +154,7 @@
     {
       "slide": 17,
       "title": "Predicted True",
-      "summary": "Slide 17 introduces the confusion matrix, also known as a contingency table, used to evaluate binary classification models. The example provided illustrates specific outcomes where an \"Actually True\" case correctly predicted as true results in a True Positive (TP) count of 8, while an \"Actually False\" case correctly predicted as false yields a True Negative (TN) count of 12. These metrics form the foundation for assessing prediction accuracy within this classification framework.",
+      "summary": "The lecture introduces the confusion matrix, also known as a contingency table, used to evaluate binary classification models. The example provided illustrates specific outcomes where an \"Actually True\" case correctly predicted as true results in a True Positive (TP) count of 8, while an \"Actually False\" case correctly predicted as false yields a True Negative (TN) count of 12. These metrics form the foundation for assessing prediction accuracy within this classification framework.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -163,7 +163,7 @@
     {
       "slide": 18,
       "title": "Predicted True",
-      "summary": "Slide 18 presents a confusion matrix, also known as a contingency table, used to evaluate binary classification performance. The table categorizes predictions into four outcomes based on actual versus predicted labels: True Positive (TP) with 8 instances, False Negative (FN) with 3 instances, and True Negative (TN) with 12 instances. This structure visually organizes the results to distinguish between correct classifications and specific types of errors within the dataset.",
+      "summary": "The lecture presents a confusion matrix, also known as a contingency table, used to evaluate binary classification performance. The table categorizes predictions into four outcomes based on actual versus predicted labels: True Positive (TP) with 8 instances, False Negative (FN) with 3 instances, and True Negative (TN) with 12 instances. This structure visually organizes the results to distinguish between correct classifications and specific types of errors within the dataset.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -181,7 +181,7 @@
     {
       "slide": 20,
       "title": "Predicted True",
-      "summary": "Slide 20 defines a confusion matrix for binary classification, categorizing outcomes into True Positives (8), False Negatives (3), False Positives (4), and True Negatives (12). Accuracy is calculated as the sum of correct predictions divided by the total instances, while the error rate represents incorrect predictions; notably, accuracy equals one minus the error rate. Although the transcript discusses shifting classification boundaries to generate true positive rates and false positives, these specific threshold examples are not reflected in the static values presented on this slide.",
+      "summary": "The lecture defines a confusion matrix for binary classification, categorizing outcomes into True Positives (8), False Negatives (3), False Positives (4), and True Negatives (12). Accuracy is calculated as the sum of correct predictions divided by the total instances, while the error rate represents incorrect predictions; notably, accuracy equals one minus the error rate. Although the transcript discusses shifting classification boundaries to generate true positive rates and false positives, these specific threshold examples are not reflected in the static values presented on this slide.",
       "sources": {
         "slide": true,
         "teacher_audio": true
@@ -190,7 +190,7 @@
     {
       "slide": 21,
       "title": "Multiclass confusion matrix",
-      "summary": "Slide 21 introduces multiclass confusion matrices as a widely used tool for evaluating classification beyond binary scenarios, illustrated by genre prediction results from an optional project using 3-NN and XGBoost. While accuracy is defined as successes (true positives and true negatives) divided by total instances, these matrices provide a deeper view by revealing specific patterns of false positives and false negatives alongside correctly classified items. This detailed breakdown allows for a more nuanced assessment of model performance than aggregate metrics alone.",
+      "summary": "The lecture introduces multiclass confusion matrices as a widely used tool for evaluating classification beyond binary scenarios, illustrated by genre prediction results from an optional project using 3-NN and XGBoost. While accuracy is defined as successes (true positives and true negatives) divided by total instances, these matrices provide a deeper view by revealing specific patterns of false positives and false negatives alongside correctly classified items. This detailed breakdown allows for a more nuanced assessment of model performance than aggregate metrics alone.",
       "sources": {
         "slide": true,
         "teacher_audio": true
@@ -217,7 +217,7 @@
     {
       "slide": 24,
       "title": "– Is 99% accuracy good?",
-      "summary": "Slide 24 introduces the critical question of whether 99% accuracy is sufficient, highlighting that high accuracy alone can be misleading. This section serves as a transition to discuss specific problems associated with relying solely on accuracy as a performance metric in classification tasks.",
+      "summary": "The lecture introduces the critical question of whether 99% accuracy is sufficient, highlighting that high accuracy alone can be misleading. This section serves as a transition to discuss specific problems associated with relying solely on accuracy as a performance metric in classification tasks.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -316,7 +316,7 @@
     {
       "slide": 35,
       "title": "Predicted",
-      "summary": "Slide 35 presents a predicted score example listing specific numerical values paired with positive (+) and negative (-) labels, alongside an introductory reference to the Receiver Operating Characteristic (ROC) curve. The slide displays initial True Positive Rate (TPR) and False Positive Rate (FPR) coordinates of 0.0 and 1.0, respectively, serving as a foundational illustration for calculating classification performance metrics based on these predicted scores.",
+      "summary": "The lecture presents a predicted score example listing specific numerical values paired with positive (+) and negative (-) labels, alongside an introductory reference to the Receiver Operating Characteristic (ROC) curve. The slide displays initial True Positive Rate (TPR) and False Positive Rate (FPR) coordinates of 0.0 and 1.0, respectively, serving as a foundational illustration for calculating classification performance metrics based on these predicted scores.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -325,7 +325,7 @@
     {
       "slide": 36,
       "title": "Predicted",
-      "summary": "Slide 36 illustrates an ROC curve example by listing predicted scores paired with their true labels, where positive (+) and negative (-) instances are distinguished. The data demonstrates how sorting these predictions by score allows for the calculation of True Positive Rate (TPR) and False Positive Rate (FPR), which are plotted to evaluate classifier performance. This specific dataset provides the raw values necessary to trace the curve's progression from a baseline of 0.0 TPR and FPR toward higher rates as the decision threshold varies.",
+      "summary": "The lecture illustrates an ROC curve example by listing predicted scores paired with their true labels, where positive (+) and negative (-) instances are distinguished. The data demonstrates how sorting these predictions by score allows for the calculation of True Positive Rate (TPR) and False Positive Rate (FPR), which are plotted to evaluate classifier performance. This specific dataset provides the raw values necessary to trace the curve's progression from a baseline of 0.0 TPR and FPR toward higher rates as the decision threshold varies.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -334,7 +334,7 @@
     {
       "slide": 37,
       "title": "Predicted",
-      "summary": "Slide 37 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The data is sorted by descending predicted score to demonstrate how True Positive Rate (TPR) and False Positive Rate (FPR) are calculated at various thresholds, starting from the origin point where both rates equal zero. This visualization shows the progression of classification performance as the decision threshold changes across the ranked predictions.",
+      "summary": "The lecture illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The data is sorted by descending predicted score to demonstrate how True Positive Rate (TPR) and False Positive Rate (FPR) are calculated at various thresholds, starting from the origin point where both rates equal zero. This visualization shows the progression of classification performance as the decision threshold changes across the ranked predictions.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -352,7 +352,7 @@
     {
       "slide": 39,
       "title": "Predicted",
-      "summary": "Slide 39 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using a dataset of predicted scores and binary labels. The example demonstrates how sorting predictions by score allows for the calculation of specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.6 with FPR=0.4 or TPR=0.6 with FPR=0.0, which are then plotted to visualize model performance across different thresholds.",
+      "summary": "The lecture illustrates the construction of a Receiver Operating Characteristic (ROC) curve using a dataset of predicted scores and binary labels. The example demonstrates how sorting predictions by score allows for the calculation of specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.6 with FPR=0.4 or TPR=0.6 with FPR=0.0, which are then plotted to visualize model performance across different thresholds.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -361,7 +361,7 @@
     {
       "slide": 40,
       "title": "Predicted",
-      "summary": "Slide 40 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using a dataset of predicted scores and binary labels. The example demonstrates how sorting these predictions by score allows for the calculation of specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.6 with FPR=0.4 or TPR=0.8 with FPR=0.4. These calculated points are then plotted on a graph with FPR on the x-axis and TPR on the y-axis to visualize model performance across different classification thresholds.",
+      "summary": "The lecture illustrates the construction of a Receiver Operating Characteristic (ROC) curve using a dataset of predicted scores and binary labels. The example demonstrates how sorting these predictions by score allows for the calculation of specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.6 with FPR=0.4 or TPR=0.8 with FPR=0.4. These calculated points are then plotted on a graph with FPR on the x-axis and TPR on the y-axis to visualize model performance across different classification thresholds.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -370,7 +370,7 @@
     {
       "slide": 41,
       "title": "Predicted",
-      "summary": "Slide 41 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The slide demonstrates how sorting these predictions by score allows for the calculation of specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.8 with FPR=0.6 or TPR=0.6 with FPR=0.4. These calculated points are then plotted on a graph with FPR on the x-axis and TPR on the y-axis to visualize the classifier's performance across different thresholds.",
+      "summary": "The lecture illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The slide demonstrates how sorting these predictions by score allows for the calculation of specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.8 with FPR=0.6 or TPR=0.6 with FPR=0.4. These calculated points are then plotted on a graph with FPR on the x-axis and TPR on the y-axis to visualize the classifier's performance across different thresholds.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -379,7 +379,7 @@
     {
       "slide": 42,
       "title": "Predicted",
-      "summary": "Slide 42 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The data is sorted by score to calculate specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.8 with FPR=0.6 or TPR=1.0 with FPR=0.6. These calculated points are plotted on a graph with FPR on the x-axis and TPR on the y-axis to visualize classifier performance across different thresholds.",
+      "summary": "The lecture illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The data is sorted by score to calculate specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.8 with FPR=0.6 or TPR=1.0 with FPR=0.6. These calculated points are plotted on a graph with FPR on the x-axis and TPR on the y-axis to visualize classifier performance across different thresholds.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -388,7 +388,7 @@
     {
       "slide": 43,
       "title": "Predicted",
-      "summary": "Slide 43 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The data is sorted by score to calculate specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as FPR=0.6 with TPR=0.8, which are then plotted on a graph ranging from (0.0, 0.0) to (1.0, 1.0). This visualization demonstrates how varying classification thresholds impact model performance metrics.",
+      "summary": "The lecture illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The data is sorted by score to calculate specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as FPR=0.6 with TPR=0.8, which are then plotted on a graph ranging from (0.0, 0.0) to (1.0, 1.0). This visualization demonstrates how varying classification thresholds impact model performance metrics.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -469,7 +469,7 @@
     {
       "slide": 52,
       "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
-      "summary": "Slide 52 introduces the problem of linear interpolation within Precision-Recall (PR) space, citing Goadrich et al. (ILP 2004). The slide presents a specific data point where True Positives and False Positives are both 500, resulting in a Recall (TPR) of 0.50 and a Precision of 0.06. This example illustrates the challenges or specific behaviors encountered when applying linear interpolation methods to PR curves compared to ROC space.",
+      "summary": "The lecture introduces the problem of linear interpolation within Precision-Recall (PR) space, citing Goadrich et al. (ILP 2004). The slide presents a specific data point where True Positives and False Positives are both 500, resulting in a Recall (TPR) of 0.50 and a Precision of 0.06. This example illustrates the challenges or specific behaviors encountered when applying linear interpolation methods to PR curves compared to ROC space.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -478,7 +478,7 @@
     {
       "slide": 53,
       "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
-      "summary": "Slide 53 introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation within Precision-Recall (PR) space. The slide presents a specific data point where True Positives and False Positives are both 500, resulting in a Recall of 0.50 and a Precision of 0.50. This example serves to illustrate the challenges or behaviors encountered when applying linear interpolation methods to PR curves compared to other evaluation spaces.",
+      "summary": "The lecture introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation within Precision-Recall (PR) space. The slide presents a specific data point where True Positives and False Positives are both 500, resulting in a Recall of 0.50 and a Precision of 0.50. This example serves to illustrate the challenges or behaviors encountered when applying linear interpolation methods to PR curves compared to other evaluation spaces.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -487,7 +487,7 @@
     {
       "slide": 54,
       "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
-      "summary": "Slide 54 introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation in Precision-Recall space using a specific dataset. The provided data contrasts two operating points: one with 500 true positives and 500 false positives yielding 0.50 recall and precision, and another with 1000 true positives and 9000 false positives resulting in perfect recall but only 0.10 precision. This example illustrates how interpolation behaves when transitioning between these distinct performance metrics.",
+      "summary": "The lecture introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation in Precision-Recall space using a specific dataset. The provided data contrasts two operating points: one with 500 true positives and 500 false positives yielding 0.50 recall and precision, and another with 1000 true positives and 9000 false positives resulting in perfect recall but only 0.10 precision. This example illustrates how interpolation behaves when transitioning between these distinct performance metrics.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -496,7 +496,7 @@
     {
       "slide": 55,
       "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
-      "summary": "Slide 55 introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation within Precision-Recall (PR) space. The slide presents a specific dataset comparing two operating points: one with 500 True Positives and 500 False Positives yielding 0.50 Recall and 0.50 Precision, and another with 1000 True Positives and 9000 False Positives resulting in perfect Recall (1.00) but low Precision (0.10). This data illustrates the trade-offs encountered when interpolating between these performance metrics.",
+      "summary": "The lecture introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation within Precision-Recall (PR) space. The slide presents a specific dataset comparing two operating points: one with 500 True Positives and 500 False Positives yielding 0.50 Recall and 0.50 Precision, and another with 1000 True Positives and 9000 False Positives resulting in perfect Recall (1.00) but low Precision (0.10). This data illustrates the trade-offs encountered when interpolating between these performance metrics.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -514,7 +514,7 @@
     {
       "slide": 57,
       "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
-      "summary": "Slide 57 introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation in Precision-Recall space using a specific dataset. The slide presents three operating points with corresponding True Positives, False Positives, and calculated metrics including TPR, FPR, Recall, and Precision to illustrate how these values change across different thresholds. This data serves as the basis for analyzing the behavior of interpolation methods within this evaluation framework.",
+      "summary": "The lecture introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation in Precision-Recall space using a specific dataset. The slide presents three operating points with corresponding True Positives, False Positives, and calculated metrics including TPR, FPR, Recall, and Precision to illustrate how these values change across different thresholds. This data serves as the basis for analyzing the behavior of interpolation methods within this evaluation framework.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -523,7 +523,7 @@
     {
       "slide": 58,
       "title": "Interpolation in PR space",
-      "summary": "Slide 58 illustrates interpolation in Precision-Recall space using a dataset containing 20 positives and 2000 negatives. It presents specific data points where increasing True Positives (TP) from 5 to 10 results in rising Recall but declining Precision, demonstrating the inherent trade-off between these metrics as False Positives (FP) accumulate.",
+      "summary": "The lecture illustrates interpolation in Precision-Recall space using a dataset containing 20 positives and 2000 negatives. It presents specific data points where increasing True Positives (TP) from 5 to 10 results in rising Recall but declining Precision, demonstrating the inherent trade-off between these metrics as False Positives (FP) accumulate.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -532,7 +532,7 @@
     {
       "slide": 59,
       "title": "Interpolation in PR space",
-      "summary": "Slide 59 illustrates interpolation in Precision-Recall space using a dataset containing 20 positives and 2000 negatives. It presents specific data points where increasing True Positives (TP) from 5 to 10 results in rising Recall but declining Precision, demonstrating the inherent trade-off between these metrics as False Positives (FP) accumulate.",
+      "summary": "The lecture illustrates interpolation in Precision-Recall space using a dataset containing 20 positives and 2000 negatives. It presents specific data points where increasing True Positives (TP) from 5 to 10 results in rising Recall but declining Precision, demonstrating the inherent trade-off between these metrics as False Positives (FP) accumulate.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -541,7 +541,7 @@
     {
       "slide": 60,
       "title": "Problem 2: Changes in skew",
-      "summary": "Slide 60 introduces \"Problem 2: Changes in skew\" as a distinct topic heading.",
+      "summary": "The lecture introduces \"Problem 2: Changes in skew\" as a distinct topic heading.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -568,7 +568,7 @@
     {
       "slide": 63,
       "title": "– Two models",
-      "summary": "Slide 63 presents a comparison between two models: M1 with precision and recall both at 0.80, and M2 with precision at 0.60 and recall at 0.90. The slide highlights that determining which model is superior depends on the specific situation, as there is no single general answer when metrics trade off against each other. This scenario illustrates Problem 4, emphasizing the complexity of comparing models using two distinct evaluation metrics.",
+      "summary": "The lecture presents a comparison between two models: M1 with precision and recall both at 0.80, and M2 with precision at 0.60 and recall at 0.90. The slide highlights that determining which model is superior depends on the specific situation, as there is no single general answer when metrics trade off against each other. This scenario illustrates Problem 4, emphasizing the complexity of comparing models using two distinct evaluation metrics.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -640,7 +640,7 @@
     {
       "slide": 71,
       "title": "– Root mean squared error: 𝑅𝑀𝑆𝐸=",
-      "summary": "Slide 71 defines three metrics for evaluating regression models with real-valued outputs: Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), and Relative Error. RMSE and MAE quantify the average magnitude of prediction errors, while Relative Error compares model performance against a baseline that always predicts the mean. A Relative Error score of 1 indicates the model performs no better than this baseline, whereas a score of 0 represents a perfect prediction.",
+      "summary": "The lecture defines three metrics for evaluating regression models with real-valued outputs: Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), and Relative Error. RMSE and MAE quantify the average magnitude of prediction errors, while Relative Error compares model performance against a baseline that always predicts the mean. A Relative Error score of 1 indicates the model performs no better than this baseline, whereas a score of 0 represents a perfect prediction.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -658,7 +658,7 @@
     {
       "slide": 73,
       "title": "– Predict the price of stocks",
-      "summary": "Slide 73 illustrates diverse applications for deploying predictive models, including forecasting stock prices, assessing cancer risk, classifying emails as spam, and determining if a song fits a specific playlist. These examples demonstrate the broad utility of machine learning across financial, medical, communication, and entertainment domains. The slide concludes by framing these scenarios within the context of preparing to deploy a model.",
+      "summary": "The lecture illustrates diverse applications for deploying predictive models, including forecasting stock prices, assessing cancer risk, classifying emails as spam, and determining if a song fits a specific playlist. These examples demonstrate the broad utility of machine learning across financial, medical, communication, and entertainment domains. The slide concludes by framing these scenarios within the context of preparing to deploy a model.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -829,7 +829,7 @@
     {
       "slide": 92,
       "title": "– BPM values: 50 70 80 100 110 120 130 140 160 180 190 240",
-      "summary": "Slide 92 illustrates the transformation of continuous Beats Per Minute (BPM) data into discrete categories through binning. The professor explains that raw values, such as those ranging from 50 to 240, can be grouped into equal-width buckets like [50,100) or alternatively organized so that each resulting discrete feature maintains specific distribution properties. This process effectively converts continuous measurements into structured intervals for analysis.",
+      "summary": "The lecture illustrates the transformation of continuous Beats Per Minute (BPM) data into discrete categories through binning. The professor explains that raw values, such as those ranging from 50 to 240, can be grouped into equal-width buckets like [50,100) or alternatively organized so that each resulting discrete feature maintains specific distribution properties. This process effectively converts continuous measurements into structured intervals for analysis.",
       "sources": {
         "slide": true,
         "teacher_audio": true
@@ -1009,7 +1009,7 @@
     {
       "slide": 112,
       "title": "Questions?",
-      "summary": "Slide 112 marks the conclusion of the lecture segment by inviting students to ask questions.",
+      "summary": "The lecture marks the conclusion of the lecture segment by inviting students to ask questions.",
       "sources": {
         "slide": true,
         "teacher_audio": false

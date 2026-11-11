@@ -145,17 +145,17 @@
     {
       "slide": 28,
       "title": "Vectors",
-      "summary": "Slide 28 introduces the topic of vectors within the Computational Linguistics course, identified as slide 18 of 46."
+      "summary": "The lecture introduces the topic of vectors within the Computational Linguistics course, identified as of 46."
     },
     {
       "slide": 29,
       "title": "Vectors",
-      "summary": "Slide 29 introduces the topic of vectors within the Computational Linguistics course, identified as slide 18 of 46."
+      "summary": "The lecture introduces the topic of vectors within the Computational Linguistics course, identified as of 46."
     },
     {
       "slide": 30,
       "title": "Vectors",
-      "summary": "Slide 30 introduces the topic of vectors within the Computational Linguistics course, identified as slide 18 of 46."
+      "summary": "The lecture introduces the topic of vectors within the Computational Linguistics course, identified as of 46."
     },
     {
       "slide": 31,
@@ -235,12 +235,12 @@
     {
       "slide": 46,
       "title": "Feed-forward",
-      "summary": "Slide 46 defines a feed-forward multi-layer perceptron with two hidden layers, where the output $y$ is computed through sequential transformations: $h_1 = g(xW_1 + b_1)$ and $h_2 = g(h_1W_2 + b_2)$, followed by $y = h_2W_3$. The architecture utilizes weight matrices $W_1, W_2, W_3$ of sizes [3×4], [4×4], and [4×2] respectively, along with bias vectors $b_1, b_2$ of size 4. The function $g(\\cdot)$ represents an elementwise non-linear activation applied at each hidden layer."
+      "summary": "The lecture defines a feed-forward multi-layer perceptron with two hidden layers, where the output $y$ is computed through sequential transformations: $h_1 = g(xW_1 + b_1)$ and $h_2 = g(h_1W_2 + b_2)$, followed by $y = h_2W_3$. The architecture utilizes weight matrices $W_1, W_2, W_3$ of sizes [3×4], [4×4], and [4×2] respectively, along with bias vectors $b_1, b_2$ of size 4. The function $g(\\cdot)$ represents an elementwise non-linear activation applied at each hidden layer."
     },
     {
       "slide": 47,
       "title": "Feed-forward",
-      "summary": "Slide 47 defines a feed-forward architecture as a multi-layer perceptron with two hidden layers, mathematically expressed through sequential transformations involving weights (W), biases (b), and an activation function (g). The network parameters, denoted as θ, include W1, W2, W3, b1, and b2. The slide explicitly identifies the use of multiple hidden layers as the defining characteristic of deep learning."
+      "summary": "The lecture defines a feed-forward architecture as a multi-layer perceptron with two hidden layers, mathematically expressed through sequential transformations involving weights (W), biases (b), and an activation function (g). The network parameters, denoted as θ, include W1, W2, W3, b1, and b2. The slide explicitly identifies the use of multiple hidden layers as the defining characteristic of deep learning."
     },
     {
       "slide": 48,
@@ -330,27 +330,27 @@
     {
       "slide": 65,
       "title": "Word similarity",
-      "summary": "Word similarity"
+      "summary": "A word-embedding plot places semantically related words near one another in vector space."
     },
     {
       "slide": 66,
       "title": "Word similarity",
-      "summary": "Word similarity"
+      "summary": "The magnified cluster shows year labels ordered along a path, a pattern that emerges from similarities in word use."
     },
     {
       "slide": 67,
       "title": "Word similarity",
-      "summary": "Word similarity"
+      "summary": "Place names cluster in the embedding space because they appear in related linguistic contexts."
     },
     {
       "slide": 68,
       "title": "Word similarity",
-      "summary": "Word similarity"
+      "summary": "Entertainment-related words form another local cluster, illustrating topical similarity in the embedding."
     },
     {
       "slide": 69,
       "title": "Word similarity",
-      "summary": "Word similarity"
+      "summary": "Verb forms group together in this region, showing that embeddings can reflect grammatical patterns as well as topics."
     },
     {
       "slide": 70,
@@ -365,7 +365,7 @@
     {
       "slide": 72,
       "title": "Computing analogies",
-      "summary": "Slide 72 introduces the topic of computing analogies within the Computational Linguistics course. The slide serves as a section header indicating this is lecture segment 43 of 46, presented by Tim Van De Cruys."
+      "summary": "Computing analogies"
     },
     {
       "slide": 73,
@@ -375,12 +375,12 @@
     {
       "slide": 74,
       "title": "Computing analogies",
-      "summary": "Slide 74 introduces the topic of computing analogies within the Computational Linguistics course. The slide serves as a section header, identifying the subject matter and providing the instructor's contact information, but it."
+      "summary": "Computing analogies"
     },
     {
       "slide": 75,
       "title": "Computing analogies",
-      "summary": "Slide 75 demonstrates that embedding matrices automatically capture relational information, enabling networks to solve analogies like \"France is to Paris as Italy is to Rome\" by identifying consistent vector directions. While the model successfully handles country-capital pairs and comparative adjectives, it does not always produce optimal results, such as associating France with tapas instead of sushi. These examples from Mikolov et al. (2013) illustrate that rich 300-dimensional spaces encode semantic relationships, though this raises broader questions regarding network interpretability."
+      "summary": "The lecture demonstrates that embedding matrices automatically capture relational information, enabling networks to solve analogies like \"France is to Paris as Italy is to Rome\" by identifying consistent vector directions. While the model successfully handles country-capital pairs and comparative adjectives, it does not always produce optimal results, such as associating France with tapas instead of sushi. These examples from Mikolov et al. (2013) illustrate that rich 300-dimensional spaces encode semantic relationships, though this raises broader questions regarding network interpretability."
     },
     {
       "slide": 76,

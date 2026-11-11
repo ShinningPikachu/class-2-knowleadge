@@ -181,7 +181,7 @@
     {
       "slide": 20,
       "title": "Processing morphology: tasks",
-      "summary": "This section outlines the core tasks in processing morphology, which are categorized into three primary approaches: rule-based morphological processing, data-driven morphological processing, and morphologically-informed subword tokenization. These methods represent the fundamental strategies used within Natural Language Processing to analyze and handle word structure. The slide serves as a structural overview introducing these specific techniques before they are explored in subsequent sections.",
+      "summary": "Morphological processing includes rule-based methods, data-driven methods, and subword tokenization informed by word structure.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -316,7 +316,7 @@
     {
       "slide": 35,
       "title": "Data-driven morphological processing",
-      "summary": "Slide 35 presents the outline for the lecture on morphological processing, positioning data-driven approaches as a key topic following rule-based methods. The agenda introduces morphology and its associated tasks before detailing data-driven techniques and morphologically-informed subword tokenization, concluding with a summary of these NLP concepts.",
+      "summary": "The lecture presents the outline for the lecture on morphological processing, positioning data-driven approaches as a key topic following rule-based methods. The agenda introduces morphology and its associated tasks before detailing data-driven techniques and morphologically-informed subword tokenization, concluding with a summary of these NLP concepts.",
       "sources": {
         "slide": true,
         "teacher_audio": false

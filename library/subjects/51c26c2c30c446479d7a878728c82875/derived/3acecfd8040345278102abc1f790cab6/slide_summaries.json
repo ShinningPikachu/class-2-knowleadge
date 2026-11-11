@@ -127,7 +127,7 @@
     {
       "slide": 14,
       "title": "Recurrent neural network",
-      "summary": "Slide 14 introduces the recurrent neural network (RNN) architecture specifically applied to language modeling. The visual representation depicts a sequence of inputs (\"I\", \"am\", \"think\", \"would\") processed through hidden states ($a_0$ to $a_m$) using weight matrices $U$, $W$, and $V$ to generate outputs ($y$). This structure illustrates how RNNs maintain temporal dependencies by passing information from previous time steps to subsequent ones within a sequence.",
+      "summary": "The lecture introduces the recurrent neural network (RNN) architecture specifically applied to language modeling. The visual representation depicts a sequence of inputs (\"I\", \"am\", \"think\", \"would\") processed through hidden states ($a_0$ to $a_m$) using weight matrices $U$, $W$, and $V$ to generate outputs ($y$). This structure illustrates how RNNs maintain temporal dependencies by passing information from previous time steps to subsequent ones within a sequence.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -136,7 +136,7 @@
     {
       "slide": 15,
       "title": "Recurrent neural network",
-      "summary": "Slide 15 introduces the Recurrent Neural Network (RNN) as a language model architecture. The visual representation depicts the network's internal state transitions, showing how inputs like \"starting,\" \"watching,\" and \"not\" are processed through weight matrices ($W$, $U$) to generate outputs such as \"am\" and \"I\". This diagram illustrates the core mechanism where previous activations influence current predictions within a sequence.",
+      "summary": "The lecture introduces the Recurrent Neural Network (RNN) as a language model architecture. The visual representation depicts the network's internal state transitions, showing how inputs like \"starting,\" \"watching,\" and \"not\" are processed through weight matrices ($W$, $U$) to generate outputs such as \"am\" and \"I\". This diagram illustrates the core mechanism where previous activations influence current predictions within a sequence.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -208,7 +208,7 @@
     {
       "slide": 23,
       "title": "Recurrent neural network",
-      "summary": "Slide 23 illustrates an encoder-decoder recurrent neural network architecture performing sequence-to-sequence translation. The diagram depicts the French input sequence \"je le la television\" being processed through weight matrices (W, U, V) and biases (b0, b1) to generate the English output \"I am watching television,\" demonstrating how RNNs map variable-length source sequences to target sequences in computational linguistics.",
+      "summary": "The lecture illustrates an encoder-decoder recurrent neural network architecture performing sequence-to-sequence translation. The diagram depicts the French input sequence \"je le la television\" being processed through weight matrices (W, U, V) and biases (b0, b1) to generate the English output \"I am watching television,\" demonstrating how RNNs map variable-length source sequences to target sequences in computational linguistics.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -217,7 +217,7 @@
     {
       "slide": 24,
       "title": "Recurrent neural network",
-      "summary": "Slide 24 introduces the recurrent neural network architecture, specifically highlighting an encoder-decoder configuration. The diagram illustrates the flow of input sequences (represented by French words like \"je,\" \"regarde,\" \"cherche,\" and \"viens\") through weight matrices (U, V) and biases (b1, b2) to generate outputs. This visual representation demonstrates how recurrent networks process sequential data within a computational linguistics context.",
+      "summary": "The lecture introduces the recurrent neural network architecture, specifically highlighting an encoder-decoder configuration. The diagram illustrates the flow of input sequences (represented by French words like \"je,\" \"regarde,\" \"cherche,\" and \"viens\") through weight matrices (U, V) and biases (b1, b2) to generate outputs. This visual representation demonstrates how recurrent networks process sequential data within a computational linguistics context.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -226,7 +226,7 @@
     {
       "slide": 25,
       "title": "Recurrent neural network",
-      "summary": "Slide 25 introduces the Recurrent Neural Network (RNN) within an encoder-decoder architecture, visually depicting the flow of input $x$ and output $y$ through weight matrices ($W$, $U$, $V$) and biases ($b_2$, $b_3$). The slide includes French example tokens (\"je\", \"regarde\", \"le\", \"la\", \"un\") to illustrate sequence processing.",
+      "summary": "The lecture introduces the Recurrent Neural Network (RNN) within an encoder-decoder architecture, visually depicting the flow of input $x$ and output $y$ through weight matrices ($W$, $U$, $V$) and biases ($b_2$, $b_3$). The slide includes French example tokens (\"je\", \"regarde\", \"le\", \"la\", \"un\") to illustrate sequence processing.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -235,7 +235,7 @@
     {
       "slide": 26,
       "title": "Recurrent neural network",
-      "summary": "Slide 26 introduces the Recurrent Neural Network (RNN) within an encoder-decoder architecture, illustrating a sequence-to-sequence translation task. The diagram depicts input tokens (\"je regarde la la montre télévision météo\") being processed through weight matrices (U, V, W) and biases (b3, b4) to generate output representations (x, y). This visual example demonstrates how RNNs handle sequential data in computational linguistics by encoding source sentences into a context vector for decoding.",
+      "summary": "The lecture introduces the Recurrent Neural Network (RNN) within an encoder-decoder architecture, illustrating a sequence-to-sequence translation task. The diagram depicts input tokens (\"je regarde la la montre télévision météo\") being processed through weight matrices (U, V, W) and biases (b3, b4) to generate output representations (x, y). This visual example demonstrates how RNNs handle sequential data in computational linguistics by encoding source sentences into a context vector for decoding.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -325,7 +325,7 @@
     {
       "slide": 36,
       "title": "Recurrent neural network",
-      "summary": "Slide 36 introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence processing through English and French examples like \"I am watching television\" and \"je regarde\". The diagram depicts the network's internal structure with weight matrices (W, U, V) and biases (b1, b2) that process input sequences to generate outputs, highlighting the mechanism for handling temporal dependencies in computational linguistics tasks.",
+      "summary": "The lecture introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence processing through English and French examples like \"I am watching television\" and \"je regarde\". The diagram depicts the network's internal structure with weight matrices (W, U, V) and biases (b1, b2) that process input sequences to generate outputs, highlighting the mechanism for handling temporal dependencies in computational linguistics tasks.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -334,7 +334,7 @@
     {
       "slide": 37,
       "title": "Recurrent neural network",
-      "summary": "Slide 37 introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence modeling for tasks like machine translation. The example demonstrates how an English input sequence (\"I am watching television\") is processed to generate a corresponding French output sequence (\"je regarde\"), highlighting the network's ability to handle variable-length inputs and outputs through recurrent connections.",
+      "summary": "The lecture introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence modeling for tasks like machine translation. The example demonstrates how an English input sequence (\"I am watching television\") is processed to generate a corresponding French output sequence (\"je regarde\"), highlighting the network's ability to handle variable-length inputs and outputs through recurrent connections.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -343,7 +343,7 @@
     {
       "slide": 38,
       "title": "Recurrent neural network",
-      "summary": "Slide 38 introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence modeling for tasks like machine translation. The visual example demonstrates how an RNN processes a temporal input sequence (\"I am watching television\") to generate a corresponding output sequence (\"je regarde la télévision\"), highlighting the network's ability to handle variable-length data through recurrent connections.",
+      "summary": "The lecture introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence modeling for tasks like machine translation. The visual example demonstrates how an RNN processes a temporal input sequence (\"I am watching television\") to generate a corresponding output sequence (\"je regarde la télévision\"), highlighting the network's ability to handle variable-length data through recurrent connections.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -505,7 +505,7 @@
     {
       "slide": 56,
       "title": "Bi-directional encoding",
-      "summary": "Slide 56 introduces the concept of bi-directional encoding within the Transformer architecture, illustrated by the example sentence \"I am watching television\". The slide visually represents this mechanism through repeated references to the transformer model, indicating its capacity to process context from both directions simultaneously.",
+      "summary": "The lecture introduces the concept of bi-directional encoding within the Transformer architecture, illustrated by the example sentence \"I am watching television\". The slide visually represents this mechanism through repeated references to the transformer model, indicating its capacity to process context from both directions simultaneously.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -541,7 +541,7 @@
     {
       "slide": 60,
       "title": "Transformer: self-attention",
-      "summary": "Slide 60 introduces the concept of self-attention within the Transformer architecture as part of a Computational Linguistics lecture. The slide text includes the example phrase \"I am television watching,\" which likely illustrates a sequence or token arrangement relevant to attention mechanisms. Consequently, the material serves primarily as a section header.",
+      "summary": "Self-attention in the Transformer architecture.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -559,7 +559,7 @@
     {
       "slide": 62,
       "title": "Transformer: self-attention",
-      "summary": "Slide 62 introduces the concept of self-attention within the Transformer architecture, featuring the example phrase \"I am television watching\" to illustrate token relationships.",
+      "summary": "The lecture introduces the concept of self-attention within the Transformer architecture, featuring the example phrase \"I am television watching\" to illustrate token relationships.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -568,7 +568,7 @@
     {
       "slide": 63,
       "title": "Transformer: self-attention",
-      "summary": "Slide 63 introduces the concept of self-attention within Transformer architectures, illustrated by the example sentence \"I am television watching\". The slide displays associated numerical values (15, 96, 11, 33/51) alongside this text.",
+      "summary": "The lecture introduces the concept of self-attention within Transformer architectures, illustrated by the example sentence \"I am television watching\". The slide displays associated numerical values (15, 96, 11, 33/51) alongside this text.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -586,7 +586,7 @@
     {
       "slide": 65,
       "title": "Transformer: self-attention",
-      "summary": "Slide 65 introduces the concept of self-attention within Transformers, illustrated by a specific example sentence: \"I am television watching\". The slide displays a sequence of numerical values (.08, .52, .34, .06) associated with this text, likely representing attention weights or probabilities for the tokens.",
+      "summary": "The lecture introduces the concept of self-attention within Transformers, illustrated by a specific example sentence: \"I am television watching\". The slide displays a sequence of numerical values (.08, .52, .34, .06) associated with this text, likely representing attention weights or probabilities for the tokens.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -595,7 +595,7 @@
     {
       "slide": 66,
       "title": "Transformer: self-attention",
-      "summary": "Slide 66: Transformer self-attention, illustrated by the sentence “I am television watching.”",
+      "summary": "Transformer self-attention, illustrated by the sentence “I am television watching.”",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -604,7 +604,7 @@
     {
       "slide": 67,
       "title": "Transformer: self-attention",
-      "summary": "Slide 67 introduces the concept of self-attention within the Transformer architecture as part of a Computational Linguistics lecture. The slide text includes the example phrase \"I am television watching,\" which likely illustrates a sequence or token arrangement relevant to attention mechanisms.",
+      "summary": "The lecture introduces the concept of self-attention within the Transformer architecture as part of a Computational Linguistics lecture. The slide text includes the example phrase \"I am television watching,\" which likely illustrates a sequence or token arrangement relevant to attention mechanisms.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -631,7 +631,7 @@
     {
       "slide": 70,
       "title": "BERT",
-      "summary": "Slide 70 introduces the BERT model using the example sentence \"I am television watching,\" which is formatted with special tokens [CLS] and [SEP]. This slide serves as a visual representation of how input text is structured for BERT processing within the Computational Linguistics course.",
+      "summary": "BERT input surrounds a sentence with special tokens such as [CLS] and [SEP].",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -667,7 +667,7 @@
     {
       "slide": 74,
       "title": "BERT",
-      "summary": "Slide 74 introduces BERT as a model specifically designed for Natural Language Processing (NLP) tasks within the context of the Computational Linguistics course. The slide serves as a section header indicating the transition to this topic, noting the current lecture progress at 38 out of 51 slides and providing the instructor's contact information.",
+      "summary": "BERT",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -676,7 +676,7 @@
     {
       "slide": 75,
       "title": "BERT",
-      "summary": "Slide 75 introduces the BERT model by referencing its performance results on the GLUE Multi-Task Benchmark, as established by Wang et al. in 2018. This benchmark serves as a standard evaluation framework within computational linguistics for assessing natural language understanding capabilities across diverse tasks. The slide highlights these specific results to contextualize BERT's effectiveness relative to prior models.",
+      "summary": "The lecture introduces the BERT model by referencing its performance results on the GLUE Multi-Task Benchmark, as established by Wang et al. in 2018. This benchmark serves as a standard evaluation framework within computational linguistics for assessing natural language understanding capabilities across diverse tasks. The slide highlights these specific results to contextualize BERT's effectiveness relative to prior models.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -703,7 +703,7 @@
     {
       "slide": 78,
       "title": "Transformer for Language Generation",
-      "summary": "Slide 78 illustrates a Transformer model performing language generation, displaying the input sequence \"I am television watching\" alongside special tokens like `<start>` and `[SEP]`. The output demonstrates the model's prediction of the next token in the sequence, specifically generating \"am television watching . I\". This example highlights how the architecture processes sequential text data to predict subsequent words within a computational linguistics context.",
+      "summary": "The lecture illustrates a Transformer model performing language generation, displaying the input sequence \"I am television watching\" alongside special tokens like `<start>` and `[SEP]`. The output demonstrates the model's prediction of the next token in the sequence, specifically generating \"am television watching . I\". This example highlights how the architecture processes sequential text data to predict subsequent words within a computational linguistics context.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -712,7 +712,7 @@
     {
       "slide": 79,
       "title": "Transformer for Language Generation",
-      "summary": "Slide 79 illustrates the input sequence structure for a Transformer model performing language generation, specifically showing the tokenization of the phrase \"I am television watching\". The example demonstrates the inclusion of special tokens, such as `<start>` and `[SEP]`, alongside the word tokens to format the input for the model. This visual representation highlights how raw text is converted into a structured sequence of tokens required for computational processing in language generation tasks.",
+      "summary": "The lecture illustrates the input sequence structure for a Transformer model performing language generation, specifically showing the tokenization of the phrase \"I am television watching\". The example demonstrates the inclusion of special tokens, such as `<start>` and `[SEP]`, alongside the word tokens to format the input for the model. This visual representation highlights how raw text is converted into a structured sequence of tokens required for computational processing in language generation tasks.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -730,7 +730,7 @@
     {
       "slide": 81,
       "title": "Transformer for Language Generation",
-      "summary": "Slide 81 illustrates the application of a Transformer model for language generation using the specific input sequence \"I am television watching\" followed by start and separator tokens. The example demonstrates how the model processes this text to generate subsequent tokens, such as the period and the pronoun \"I,\" within the context of a computational linguistics lecture.",
+      "summary": "The lecture illustrates the application of a Transformer model for language generation using the specific input sequence \"I am television watching\" followed by start and separator tokens. The example demonstrates how the model processes this text to generate subsequent tokens, such as the period and the pronoun \"I,\" within the context of a computational linguistics lecture.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -739,7 +739,7 @@
     {
       "slide": 82,
       "title": "Transformer for Language Generation",
-      "summary": "Slide 82 illustrates the application of a Transformer model for language generation using the specific input sequence \"I am television watching\" combined with special tokens `<start>` and `[SEP]`. The example demonstrates how the model processes this structured text to generate subsequent tokens, such as the period and the pronoun \"I\", within the context of computational linguistics.",
+      "summary": "The lecture illustrates the application of a Transformer model for language generation using the specific input sequence \"I am television watching\" combined with special tokens `<start>` and `[SEP]`. The example demonstrates how the model processes this structured text to generate subsequent tokens, such as the period and the pronoun \"I\", within the context of computational linguistics.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -901,7 +901,7 @@
     {
       "slide": 100,
       "title": "Encoder-decoder",
-      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example where the input \"je regarde la télévision\" is processed to generate the output sequence \"<start> I am television watching\". This demonstration highlights how the model maps source language tokens to target language tokens, including the use of a special start token to initiate generation. The slide serves as a concrete visualization of the sequential mapping process fundamental to encoder-decoder systems in computational linguistics.",
+      "summary": "An encoder-decoder model maps the French input “je regarde la télévision” to an English output sequence, using a start token to begin generation.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -946,7 +946,7 @@
     {
       "slide": 105,
       "title": "T5",
-      "summary": "Slide 105 introduces T5, referencing the seminal 2020 paper by Raffel et al. titled \"Exploring the limits of transfer learning with a unified text-to-text transformer\". This model represents a key development in computational linguistics where diverse natural language processing tasks are framed as a single text-to-text problem to maximize transfer learning capabilities.",
+      "summary": "The lecture introduces T5, referencing the seminal 2020 paper by Raffel et al. titled \"Exploring the limits of transfer learning with a unified text-to-text transformer\". This model represents a key development in computational linguistics where diverse natural language processing tasks are framed as a single text-to-text problem to maximize transfer learning capabilities.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -955,7 +955,7 @@
     {
       "slide": 106,
       "title": "T5",
-      "summary": "Slide 106 introduces T5, referencing the seminal 2020 paper by Raffel et al. titled \"Exploring the limits of transfer learning with a unified text-to-text transformer\". This model represents a key development in computational linguistics where diverse natural language processing tasks are framed as a single text-to-text problem to maximize transfer learning capabilities. The slide serves as a citation marker for this foundational work within the course context.",
+      "summary": "T5 frames varied NLP tasks as text-to-text problems, allowing one model architecture to handle them.",
       "sources": {
         "slide": true,
         "teacher_audio": false

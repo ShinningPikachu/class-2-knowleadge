@@ -64,7 +64,7 @@
     {
       "slide": 7,
       "title": "Adversarial Search",
-      "summary": "Adversarial search addresses decision-making in environments involving multiple agents with conflicting goals, where an agent's outcome depends on the actions of opponents. Unlike single-agent search, this paradigm requires anticipating and countering adversarial moves to maximize utility under competitive conditions. The provided sources introduce this fundamental concept.",
+      "summary": "Adversarial search handles decisions involving agents with conflicting goals. Choosing an action requires anticipating opponents’ responses and comparing the resulting utilities.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -73,7 +73,7 @@
     {
       "slide": 8,
       "title": "Single-Agent Trees",
-      "summary": "Slide 8 introduces the concept of Single-Agent Trees, visually represented by a sequence of numerical values (8, 2, 0, 2, 6, 4, 6) and ellipses indicating continuation.",
+      "summary": "The lecture introduces the concept of Single-Agent Trees, visually represented by a sequence of numerical values (8, 2, 0, 2, 6, 4, 6) and ellipses indicating continuation.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -91,7 +91,7 @@
     {
       "slide": 10,
       "title": "Tic-Tac-Toe Game Tree",
-      "summary": "Slide 10 introduces the concept of a Tic-Tac-Toe game tree, which represents the sequence of possible moves and resulting board states in the game.",
+      "summary": "The lecture introduces the concept of a Tic-Tac-Toe game tree, which represents the sequence of possible moves and resulting board states in the game.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -145,7 +145,7 @@
     {
       "slide": 16,
       "title": "Minimax Example",
-      "summary": "Slide 16 presents a specific Minimax example featuring a game tree with the numerical values 12, 8, 5, 2, 3, 2, 14, 4, 6, 3, 2, 2, and 3. These figures represent the terminal node utilities used to demonstrate the backward induction process where MAX and MIN players select optimal moves.",
+      "summary": "The lecture presents a specific Minimax example featuring a game tree with the numerical values 12, 8, 5, 2, 3, 2, 14, 4, 6, 3, 2, 2, and 3. These figures represent the terminal node utilities used to demonstrate the backward induction process where MAX and MIN players select optimal moves.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -163,7 +163,7 @@
     {
       "slide": 18,
       "title": "Alpha-Beta Quiz",
-      "summary": "Slide 18 introduces an interactive quiz on the Alpha-Beta pruning algorithm, directing students to access it via the URL http://PollEv.com/tias.",
+      "summary": "The lecture introduces an interactive quiz on the Alpha-Beta pruning algorithm, directing students to access it via the URL http://PollEv.com/tias.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -172,7 +172,7 @@
     {
       "slide": 19,
       "title": "Alpha-Beta Quiz 2",
-      "summary": "Slide 19 introduces the second quiz on the Alpha-Beta pruning algorithm, directing students to access the interactive poll at http://PollEv.com/tias.",
+      "summary": "The lecture introduces the second quiz on the Alpha-Beta pruning algorithm, directing students to access the interactive poll at http://PollEv.com/tias.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -181,7 +181,7 @@
     {
       "slide": 20,
       "title": "Alpha-Beta Quiz 2",
-      "summary": "Slide 20 presents an Alpha-Beta pruning quiz featuring a game tree with specific leaf values (10, 10, 10, 0, 2, 2) and unknown nodes marked by question marks. The slide requires determining the final alpha ($\\alpha$) and beta ($\\beta$) values at various decision points to identify which branches are pruned during the search process.",
+      "summary": "The lecture presents an Alpha-Beta pruning quiz featuring a game tree with specific leaf values (10, 10, 10, 0, 2, 2) and unknown nodes marked by question marks. The slide requires determining the final alpha ($\\alpha$) and beta ($\\beta$) values at various decision points to identify which branches are pruned during the search process.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -253,7 +253,7 @@
     {
       "slide": 28,
       "title": "Pacman with Depth-2 Lookahead",
-      "summary": "Slide 28 introduces the concept of \"Pacman with Depth-2 Lookahead,\" indicating a scenario where the agent evaluates moves two steps into the future.",
+      "summary": "The lecture introduces the concept of \"Pacman with Depth-2 Lookahead,\" indicating a scenario where the agent evaluates moves two steps into the future.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -262,7 +262,7 @@
     {
       "slide": 29,
       "title": "Pacman with Depth-10 Lookahead",
-      "summary": "Slide 29 introduces the concept of a Pacman agent utilizing a depth-10 lookahead strategy. This specific configuration indicates that the search algorithm explores the game tree ten moves ahead to evaluate potential future states before selecting an action.",
+      "summary": "The lecture introduces the concept of a Pacman agent utilizing a depth-10 lookahead strategy. This specific configuration indicates that the search algorithm explores the game tree ten moves ahead to evaluate potential future states before selecting an action.",
       "sources": {
         "slide": true,
         "teacher_audio": false

@@ -50,12 +50,12 @@
     {
       "slide": 9,
       "title": "Video of Demo Contours GBFS (Empty)",
-      "summary": "Slide 9 presents a video demonstration titled \"Demo Contours GBFS (Empty)\". The source material indicates this segment is intended to show the behavior of the Generalized Best-First Search (GBFS) algorithm specifically within an empty contour scenario."
+      "summary": "Video demonstration of generalized best-first search on an empty contour."
     },
     {
       "slide": 10,
       "title": "Video of Demo Contours GBFS (Pacman Small Maze)",
-      "summary": "Slide 10 presents a video demonstration of the Greedy Best-First Search (GBFS) algorithm visualizing its search contours within a small Pacman maze. This segment illustrates how the algorithm expands nodes based on heuristic estimates to navigate the environment."
+      "summary": "The lecture presents a video demonstration of the Greedy Best-First Search (GBFS) algorithm visualizing its search contours within a small Pacman maze. This segment illustrates how the algorithm expands nodes based on heuristic estimates to navigate the environment."
     },
     {
       "slide": 11,
@@ -105,7 +105,7 @@
     {
       "slide": 20,
       "title": "Admissible Heuristics",
-      "summary": "Slide 20: Admissible Heuristics."
+      "summary": "Admissible Heuristics."
     },
     {
       "slide": 21,
@@ -145,7 +145,7 @@
     {
       "slide": 28,
       "title": "Comparison",
-      "summary": "Slide 28 compares three search strategies based on their evaluation functions: Greedy Best-First Search uses the heuristic estimate $h$, Uniform Cost Search relies solely on the path cost $g$, and A* combines both using the sum $g+h$. This distinction highlights how each algorithm prioritizes nodes during the search process."
+      "summary": "The lecture compares three search strategies based on their evaluation functions: Greedy Best-First Search uses the heuristic estimate $h$, Uniform Cost Search relies solely on the path cost $g$, and A* combines both using the sum $g+h$. This distinction highlights how each algorithm prioritizes nodes during the search process."
     },
     {
       "slide": 29,
@@ -170,7 +170,7 @@
     {
       "slide": 33,
       "title": "8 Puzzle I",
-      "summary": "Slide 33 introduces the \"Number of tiles misplaced\" heuristic for the 8 Puzzle, noting its admissibility. Data from Andrew Moore demonstrates that using this heuristic (A*TILES) drastically reduces average nodes expanded compared to Uniform Cost Search (UCS) as optimal path length increases from 4 to 12 steps. For instance, at 12 steps, A*TILES expands only 227 nodes versus 3.6 million for UCS."
+      "summary": "The lecture introduces the \"Number of tiles misplaced\" heuristic for the 8 Puzzle, noting its admissibility. Data from Andrew Moore demonstrates that using this heuristic (A*TILES) drastically reduces average nodes expanded compared to Uniform Cost Search (UCS) as optimal path length increases from 4 to 12 steps. For instance, at 12 steps, A*TILES expands only 227 nodes versus 3.6 million for UCS."
     },
     {
       "slide": 34,
@@ -190,12 +190,12 @@
     {
       "slide": 37,
       "title": "Optimality of A* Graph Search (w. closed set loop breaking)",
-      "summary": "Slide 37: Optimality of A* Graph Search (with a closed set for loop breaking)."
+      "summary": "Optimality of A* Graph Search (with a closed set for loop breaking)."
     },
     {
       "slide": 38,
       "title": "A* Graph Search Gone Wrong?",
-      "summary": "Slide 38 illustrates a scenario where A* Graph Search fails to find the optimal path because node C is prematurely added to the 'closed' set. Although a shorter path to C exists via node B, the algorithm rejects it since C was already visited through a longer route from A. Consequently, the search tree expands suboptimal paths, such as reaching G with a cost of 6 instead of the optimal cost of 5, demonstrating how loop-breaking mechanisms can prevent re-evaluating better routes in graph search."
+      "summary": "The lecture illustrates a scenario where A* Graph Search fails to find the optimal path because node C is prematurely added to the 'closed' set. Although a shorter path to C exists via node B, the algorithm rejects it since C was already visited through a longer route from A. Consequently, the search tree expands suboptimal paths, such as reaching G with a cost of 6 instead of the optimal cost of 5, demonstrating how loop-breaking mechanisms can prevent re-evaluating better routes in graph search."
     },
     {
       "slide": 39,
@@ -205,7 +205,7 @@
     {
       "slide": 40,
       "title": "A* Graph Search Gone Wrong?",
-      "summary": "Slide 40 contrasts two state space graphs for A* graph search to illustrate the impact of heuristic consistency. The first graph uses an inconsistent heuristic (h=4 at node C), while the second modifies this value to h=2, rendering the heuristic consistent. The slide concludes by assigning an exercise to write out the resulting A* search tree based on these configurations."
+      "summary": "The lecture contrasts two state space graphs for A* graph search to illustrate the impact of heuristic consistency. The first graph uses an inconsistent heuristic (h=4 at node C), while the second modifies this value to h=2, rendering the heuristic consistent. The slide concludes by assigning an exercise to write out the resulting A* search tree based on these configurations."
     },
     {
       "slide": 41,

@@ -7,7 +7,7 @@
     {
       "slide": 1,
       "title": "Machine Translation",
-      "summary": "Slide 1: Machine Translation.",
+      "summary": "Machine Translation",
       "sources": {
         "notes_pdf": true
       }
@@ -15,7 +15,7 @@
     {
       "slide": 2,
       "title": "Lecture Outline",
-      "summary": "Slide 2: The lecture moves from the task definition and supervised training to decoding, evaluation, current performance, low-resource languages, gender bias, and open challenges.",
+      "summary": "The lecture moves from the task definition and supervised training to decoding, evaluation, current performance, low-resource languages, gender bias, and open challenges.",
       "sources": {
         "notes_pdf": true
       }
@@ -23,7 +23,7 @@
     {
       "slide": 3,
       "title": "Machine Translation Definition",
-      "summary": "Slide 3: Machine translation maps text from a source language to a target language. The English-to-Dutch example shows that the goal is a translated sentence, not a word-for-word gloss.",
+      "summary": "Machine translation maps text from a source language to a target language. The English-to-Dutch example shows that the goal is a translated sentence, not a word-for-word gloss.",
       "sources": {
         "notes_pdf": true
       }
@@ -31,7 +31,7 @@
     {
       "slide": 4,
       "title": "Information Access",
-      "summary": "Slide 4: Machine translation improves access to material written in languages a reader may not know. The slide frames information access as one practical reason to build MT systems.",
+      "summary": "Machine translation improves access to material written in languages a reader may not know. The slide frames information access as one practical reason to build MT systems.",
       "sources": {
         "notes_pdf": true
       }
@@ -39,7 +39,7 @@
     {
       "slide": 5,
       "title": "Computer-Assisted Translation",
-      "summary": "Slide 5: Computer-assisted translation uses MT to support a human translator. A draft can speed up work, while the person checks meaning, terminology, and style.",
+      "summary": "Computer-assisted translation uses MT to support a human translator. A draft can speed up work, while the person checks meaning, terminology, and style.",
       "sources": {
         "notes_pdf": true
       }
@@ -47,7 +47,7 @@
     {
       "slide": 6,
       "title": "Speech-to-Speech Translation",
-      "summary": "Slide 6: Speech-to-speech translation links speech recognition, translation, and speech output so speakers of different languages can interact more directly.",
+      "summary": "Speech-to-speech translation links speech recognition, translation, and speech output so speakers of different languages can interact more directly.",
       "sources": {
         "notes_pdf": true
       }
@@ -55,7 +55,7 @@
     {
       "slide": 7,
       "title": "Image Translation",
-      "summary": "Slide 7: Image translation can recognize text in a scene and render it in another language. This is useful in travel, but accuracy depends on recognizing the text and preserving its context.",
+      "summary": "Image translation can recognize text in a scene and render it in another language. This is useful in travel, but accuracy depends on recognizing the text and preserving its context.",
       "sources": {
         "notes_pdf": true
       }
@@ -63,7 +63,7 @@
     {
       "slide": 8,
       "title": "Word Order Differences",
-      "summary": "Slide 8: Languages differ in word order: English commonly uses subject-verb-object, Japanese often places the object before the verb, and Arabic commonly places the verb first. A translator must reorder constituents while preserving who did what to whom.",
+      "summary": "Languages differ in word order: English commonly uses subject-verb-object, Japanese often places the object before the verb, and Arabic commonly places the verb first. A translator must reorder constituents while preserving who did what to whom.",
       "sources": {
         "notes_pdf": true
       }
@@ -71,7 +71,7 @@
     {
       "slide": 9,
       "title": "Lexical Ambiguity: Bank",
-      "summary": "Slide 9: The English word bank can map to different Dutch words depending on meaning, including a financial institution, a river edge, or a verb. Translation therefore requires word-sense selection from context.",
+      "summary": "The English word bank can map to different Dutch words depending on meaning, including a financial institution, a river edge, or a verb. Translation therefore requires word-sense selection from context.",
       "sources": {
         "notes_pdf": true
       }
@@ -79,7 +79,7 @@
     {
       "slide": 10,
       "title": "Morphological Differences",
-      "summary": "Slide 10: The dog example highlights that languages divide lexical and grammatical categories differently. French forms can mark grammatical gender where English uses one noun; translation must preserve the intended referent and follow target-language morphology.",
+      "summary": "The dog example highlights that languages divide lexical and grammatical categories differently. French forms can mark grammatical gender where English uses one noun; translation must preserve the intended referent and follow target-language morphology.",
       "sources": {
         "notes_pdf": true
       }
@@ -87,7 +87,7 @@
     {
       "slide": 11,
       "title": "Lexical Gaps",
-      "summary": "Slide 11: A lexical gap occurs when a language lacks a single word with the same meaning and scope as a source word. The German examples require a phrase or explanation in English, so a translator must preserve the concept rather than force a one-word match.",
+      "summary": "A lexical gap occurs when a language lacks a single word with the same meaning and scope as a source word. The German examples require a phrase or explanation in English, so a translator must preserve the concept rather than force a one-word match.",
       "sources": {
         "notes_pdf": true
       }
@@ -95,7 +95,7 @@
     {
       "slide": 12,
       "title": "Pro-Drop Languages",
-      "summary": "Slide 12: Spanish can omit a subject pronoun when verb morphology and context make the subject recoverable. English normally requires an explicit subject, so MT must infer and express information that is absent from the source string.",
+      "summary": "Spanish can omit a subject pronoun when verb morphology and context make the subject recoverable. English normally requires an explicit subject, so MT must infer and express information that is absent from the source string.",
       "sources": {
         "notes_pdf": true
       }
@@ -103,7 +103,7 @@
     {
       "slide": 13,
       "title": "Supervised MT",
-      "summary": "Slide 13: This outline marks the transition to supervised machine translation, where the system learns from parallel examples.",
+      "summary": "This outline marks the transition to supervised machine translation, where the system learns from parallel examples.",
       "sources": {
         "notes_pdf": true
       }
@@ -111,7 +111,7 @@
     {
       "slide": 14,
       "title": "Parallel Training Corpus",
-      "summary": "Slide 14: A parallel corpus pairs source and target sentences. The Santa-and-elves example shows how aligned sentence pairs provide supervised examples for training an MT model.",
+      "summary": "A parallel corpus pairs source and target sentences. The Santa-and-elves example shows how aligned sentence pairs provide supervised examples for training an MT model.",
       "sources": {
         "notes_pdf": true
       }
@@ -119,7 +119,7 @@
     {
       "slide": 15,
       "title": "Sentence Alignment",
-      "summary": "Slide 15: Sentence alignment links corresponding sentences in two versions of a text. It is a preparatory step because training examples need source and target units that express the same content.",
+      "summary": "Sentence alignment links corresponding sentences in two versions of a text. It is a preparatory step because training examples need source and target units that express the same content.",
       "sources": {
         "notes_pdf": true
       }
@@ -127,7 +127,7 @@
     {
       "slide": 16,
       "title": "Non-One-to-One Alignment",
-      "summary": "Slide 16: The Little Prince example shows that translations do not always align sentence by sentence. A sentence may split, merge, or correspond to a span of different length in the other language.",
+      "summary": "The Little Prince example shows that translations do not always align sentence by sentence. A sentence may split, merge, or correspond to a span of different length in the other language.",
       "sources": {
         "notes_pdf": true
       }
@@ -135,7 +135,7 @@
     {
       "slide": 17,
       "title": "Alignment Methods",
-      "summary": "Slide 17: Alignment can score candidate spans using length or multilingual embedding similarity, then use dynamic programming to select a consistent sequence of span pairs. The slide’s method allows groups of up to two sentences.",
+      "summary": "Alignment can score candidate spans using length or multilingual embedding similarity, then use dynamic programming to select a consistent sequence of span pairs. The slide’s method allows groups of up to two sentences.",
       "sources": {
         "notes_pdf": true
       }
@@ -143,7 +143,7 @@
     {
       "slide": 18,
       "title": "Conditional Sequence Modeling",
-      "summary": "Slide 18: A supervised neural MT model receives tokenized source and target sequences and learns P(target sequence | source sequence). Training raises the probability of the reference target given its source.",
+      "summary": "A supervised neural MT model receives tokenized source and target sequences and learns P(target sequence | source sequence). Training raises the probability of the reference target given its source.",
       "sources": {
         "notes_pdf": true
       }
@@ -151,7 +151,7 @@
     {
       "slide": 19,
       "title": "Encoder-Decoder Transformer",
-      "summary": "Slide 19: The encoder-decoder Transformer represents the source with an encoder and generates the target with a decoder. The decoder conditions on the encoded source while producing target tokens.",
+      "summary": "The encoder-decoder Transformer represents the source with an encoder and generates the target with a decoder. The decoder conditions on the encoded source while producing target tokens.",
       "sources": {
         "notes_pdf": true
       }
@@ -159,7 +159,7 @@
     {
       "slide": 20,
       "title": "Self-Attention Review",
-      "summary": "Slide 20: Self-attention lets each token representation use information from other positions in the same sequence. MT uses this within the encoder and decoder to build contextual representations.",
+      "summary": "Self-attention lets each token representation use information from other positions in the same sequence. MT uses this within the encoder and decoder to build contextual representations.",
       "sources": {
         "notes_pdf": true
       }
@@ -167,7 +167,7 @@
     {
       "slide": 21,
       "title": "Cross-Attention",
-      "summary": "Slide 21: Cross-attention lets decoder positions consult the encoded source. In the diagram, the keys and values come from encoder outputs, allowing each generated target token to use relevant source information.",
+      "summary": "Cross-attention lets decoder positions consult the encoded source. In the diagram, the keys and values come from encoder outputs, allowing each generated target token to use relevant source information.",
       "sources": {
         "notes_pdf": true
       }
@@ -175,7 +175,7 @@
     {
       "slide": 22,
       "title": "Encoder-Decoder Transformer Blocks",
-      "summary": "Slide 22: The encoder and decoder are stacks of Transformer blocks. Encoder self-attention processes the source; decoder self-attention uses prior target tokens, and cross-attention links the decoder to the source representation.",
+      "summary": "The encoder and decoder are stacks of Transformer blocks. Encoder self-attention processes the source; decoder self-attention uses prior target tokens, and cross-attention links the decoder to the source representation.",
       "sources": {
         "notes_pdf": true
       }
@@ -183,7 +183,7 @@
     {
       "slide": 23,
       "title": "Attention Weights in Translation",
-      "summary": "Slide 23: The attention visualization links positions in a French source sentence to positions used while translating into English. Attention weights show internal information flow; they are not guaranteed to be human-readable word alignments.",
+      "summary": "The attention visualization links positions in a French source sentence to positions used while translating into English. Attention weights show internal information flow; they are not guaranteed to be human-readable word alignments.",
       "sources": {
         "notes_pdf": true
       }
@@ -191,7 +191,7 @@
     {
       "slide": 24,
       "title": "Training Objective",
-      "summary": "Slide 24: Training predicts the next target token and uses cross-entropy loss. Teacher forcing supplies the correct earlier target tokens during training, while inference must condition on the model’s own generated history.",
+      "summary": "Training predicts the next target token and uses cross-entropy loss. Teacher forcing supplies the correct earlier target tokens during training, while inference must condition on the model’s own generated history.",
       "sources": {
         "notes_pdf": true
       }
@@ -199,7 +199,7 @@
     {
       "slide": 25,
       "title": "Beam Search",
-      "summary": "Slide 25: This outline marks the decoding section. The trained model assigns probabilities to continuations; a decoding algorithm selects one output sequence.",
+      "summary": "This outline marks the decoding section. The trained model assigns probabilities to continuations; a decoding algorithm selects one output sequence.",
       "sources": {
         "notes_pdf": true
       }
@@ -207,7 +207,7 @@
     {
       "slide": 26,
       "title": "Greedy Decoding",
-      "summary": "Slide 26: Greedy decoding selects the highest-probability next token at each step. A locally best token can lead to a sequence with lower total probability than another path, motivating beam search.",
+      "summary": "Greedy decoding selects the highest-probability next token at each step. A locally best token can lead to a sequence with lower total probability than another path, motivating beam search.",
       "sources": {
         "notes_pdf": true
       }
@@ -215,7 +215,7 @@
     {
       "slide": 27,
       "title": "Search Tree for Language Modeling",
-      "summary": "Slide 27: The search tree represents alternative token sequences. Each branch adds a token, and a path corresponds to one partial translation.",
+      "summary": "The search tree represents alternative token sequences. Each branch adds a token, and a path corresponds to one partial translation.",
       "sources": {
         "notes_pdf": true
       }
@@ -223,7 +223,7 @@
     {
       "slide": 28,
       "title": "Beam Width",
-      "summary": "Slide 28: Beam search keeps the best k partial sequences at each step instead of exploring every sequence. The beam width k controls the memory and search effort; pruning can discard a path that would later become best.",
+      "summary": "Beam search keeps the best k partial sequences at each step instead of exploring every sequence. The beam width k controls the memory and search effort; pruning can discard a path that would later become best.",
       "sources": {
         "notes_pdf": true
       }
@@ -231,7 +231,7 @@
     {
       "slide": 29,
       "title": "Beam Search with k = 2",
-      "summary": "Slide 29: With k = 2, the decoder carries two candidate sequences forward at each step. The illustration shows a bounded search, not an exhaustive guarantee of the globally best sequence.",
+      "summary": "With k = 2, the decoder carries two candidate sequences forward at each step. The illustration shows a bounded search, not an exhaustive guarantee of the globally best sequence.",
       "sources": {
         "notes_pdf": true
       }
@@ -239,7 +239,7 @@
     {
       "slide": 30,
       "title": "Evaluation",
-      "summary": "Slide 30: This outline marks the evaluation section, which compares machine-generated translations with human judgments or reference translations.",
+      "summary": "This outline marks the evaluation section, which compares machine-generated translations with human judgments or reference translations.",
       "sources": {
         "notes_pdf": true
       }
@@ -247,7 +247,7 @@
     {
       "slide": 31,
       "title": "Adequacy and Fluency",
-      "summary": "Slide 31: Adequacy asks whether the translation preserves the source meaning. Fluency asks whether it reads naturally and grammatically in the target language; these qualities can diverge.",
+      "summary": "Adequacy asks whether the translation preserves the source meaning. Fluency asks whether it reads naturally and grammatically in the target language; these qualities can diverge.",
       "sources": {
         "notes_pdf": true
       }
@@ -255,7 +255,7 @@
     {
       "slide": 32,
       "title": "Human Evaluation",
-      "summary": "Slide 32: Human evaluation can rate fluency and adequacy, rank candidate translations, or post-edit a draft and measure the effort. It assesses quality directly but takes time and trained reviewers.",
+      "summary": "Human evaluation can rate fluency and adequacy, rank candidate translations, or post-edit a draft and measure the effort. It assesses quality directly but takes time and trained reviewers.",
       "sources": {
         "notes_pdf": true
       }
@@ -263,7 +263,7 @@
     {
       "slide": 33,
       "title": "Automatic Evaluation",
-      "summary": "Slide 33: Automatic metrics compare a candidate with one or more human reference translations. The lecture groups them into surface-overlap measures such as chrF and BLEU, and embedding-based measures.",
+      "summary": "Automatic metrics compare a candidate with one or more human reference translations. The lecture groups them into surface-overlap measures such as chrF and BLEU, and embedding-based measures.",
       "sources": {
         "notes_pdf": true
       }
@@ -271,7 +271,7 @@
     {
       "slide": 34,
       "title": "chrF Metric",
-      "summary": "Slide 34: chrF compares character n-gram overlap between a hypothesis and reference. It averages precision and recall over character n-gram lengths up to k, which can give partial credit for morphological similarity.",
+      "summary": "chrF compares character n-gram overlap between a hypothesis and reference. It averages precision and recall over character n-gram lengths up to k, which can give partial credit for morphological similarity.",
       "sources": {
         "notes_pdf": true
       }
@@ -279,7 +279,7 @@
     {
       "slide": 35,
       "title": "chrF Formula",
-      "summary": "Slide 35: chrF combines character n-gram precision P and recall R with a beta-weighted F-score: chrFβ = (1 + β²)PR / (β²P + R). β controls the relative weight of recall; β = 1 gives equal weight, while larger β favors recall.",
+      "summary": "chrF combines character n-gram precision P and recall R with a beta-weighted F-score: chrFβ = (1 + β²)PR / (β²P + R). β controls the relative weight of recall; β = 1 gives equal weight, while larger β favors recall.",
       "sources": {
         "notes_pdf": true
       }
@@ -287,7 +287,7 @@
     {
       "slide": 36,
       "title": "chrF Example: Precision",
-      "summary": "Slide 36: In the example, k = 2 and β = 2. The hypothesis has 17 unigrams and 16 bigrams; the reference has 18 unigrams and 17 bigrams. There are 17 matching unigrams and 13 matching bigrams, giving character precision (1 + 13/16) / 2 = 0.906. The comma counts as a character.",
+      "summary": "In the example, k = 2 and β = 2. The hypothesis has 17 unigrams and 16 bigrams; the reference has 18 unigrams and 17 bigrams. There are 17 matching unigrams and 13 matching bigrams, giving character precision (1 + 13/16) / 2 = 0.906. The comma counts as a character.",
       "sources": {
         "notes_pdf": true
       }
@@ -295,7 +295,7 @@
     {
       "slide": 37,
       "title": "chrF Example: Recall",
-      "summary": "Slide 37: The recall calculation uses the reference as denominator: unigram recall is 17/18 = 0.944 and bigram recall is 13/17 = 0.765. Their average is 0.855.",
+      "summary": "The recall calculation uses the reference as denominator: unigram recall is 17/18 = 0.944 and bigram recall is 13/17 = 0.765. Their average is 0.855.",
       "sources": {
         "notes_pdf": true
       }
@@ -303,7 +303,7 @@
     {
       "slide": 38,
       "title": "chrF Example: F-score",
-      "summary": "Slide 38: Combining the example’s P = 0.906 and R = 0.855 with β = 2 gives chrFβ ≈ 0.86. This is an overlap score for this reference and candidate, not a direct measure of meaning.",
+      "summary": "Combining the example’s P = 0.906 and R = 0.855 with β = 2 gives chrFβ ≈ 0.86. This is an overlap score for this reference and candidate, not a direct measure of meaning.",
       "sources": {
         "notes_pdf": true
       }
@@ -311,7 +311,7 @@
     {
       "slide": 39,
       "title": "BLEU Metric",
-      "summary": "Slide 39: BLEU measures modified word n-gram precision for n-grams of lengths one through four and applies a brevity penalty when a candidate is too short. Corpus aggregation makes it useful for comparisons, but the score depends on reference wording.",
+      "summary": "BLEU measures modified word n-gram precision for n-grams of lengths one through four and applies a brevity penalty when a candidate is too short. Corpus aggregation makes it useful for comparisons, but the score depends on reference wording.",
       "sources": {
         "notes_pdf": true
       }
@@ -319,7 +319,7 @@
     {
       "slide": 40,
       "title": "BLEU N-gram Overlap",
-      "summary": "Slide 40: The illustration aligns n-grams between a reference and a candidate with different phrasing. Matching spans contribute overlap; paraphrased spans can fail to match even when they convey similar meaning.",
+      "summary": "The illustration aligns n-grams between a reference and a candidate with different phrasing. Matching spans contribute overlap; paraphrased spans can fail to match even when they convey similar meaning.",
       "sources": {
         "notes_pdf": true
       }
@@ -327,7 +327,7 @@
     {
       "slide": 41,
       "title": "Limits of chrF and BLEU",
-      "summary": "Slide 41: chrF and BLEU do not directly capture synonymy, meaning, word order beyond their n-gram patterns, or discourse across sentences. A fluent and adequate paraphrase can score poorly against one reference.",
+      "summary": "chrF and BLEU do not directly capture synonymy, meaning, word order beyond their n-gram patterns, or discourse across sentences. A fluent and adequate paraphrase can score poorly against one reference.",
       "sources": {
         "notes_pdf": true
       }
@@ -335,7 +335,7 @@
     {
       "slide": 42,
       "title": "Embedding-Based Evaluation",
-      "summary": "Slide 42: Embedding-based metrics represent the candidate and reference in contextual vector spaces. A learned evaluator can predict human ratings or compare semantic representations, aiming to recognize similarity beyond exact word overlap.",
+      "summary": "Embedding-based metrics represent the candidate and reference in contextual vector spaces. A learned evaluator can predict human ratings or compare semantic representations, aiming to recognize similarity beyond exact word overlap.",
       "sources": {
         "notes_pdf": true
       }
@@ -343,7 +343,7 @@
     {
       "slide": 43,
       "title": "BERTScore",
-      "summary": "Slide 43: BERTScore matches each reference token to its most similar candidate token and each candidate token to its most similar reference token. Recall averages the best similarity per reference token; precision averages the best similarity per candidate token.",
+      "summary": "BERTScore matches each reference token to its most similar candidate token and each candidate token to its most similar reference token. Recall averages the best similarity per reference token; precision averages the best similarity per candidate token.",
       "sources": {
         "notes_pdf": true
       }
@@ -351,7 +351,7 @@
     {
       "slide": 44,
       "title": "State of the Art and Open Challenges",
-      "summary": "Slide 44: This outline introduces the final part on current MT quality and open challenges.",
+      "summary": "This outline introduces the final part on current MT quality and open challenges.",
       "sources": {
         "notes_pdf": true
       }
@@ -359,7 +359,7 @@
     {
       "slide": 45,
       "title": "Translation Quality Tiers",
-      "summary": "Slide 45: The slide uses human-targeted edit rate (HTER) to describe how much post-editing a translation needs. The listed tiers move from publishable with little editing to triagable output useful only for locating relevant material; they are illustrative bands, not universal quality thresholds.",
+      "summary": "The slide uses human-targeted edit rate (HTER) to describe how much post-editing a translation needs. The listed tiers move from publishable with little editing to triagable output useful only for locating relevant material; they are illustrative bands, not universal quality thresholds.",
       "sources": {
         "notes_pdf": true
       }
@@ -367,7 +367,7 @@
     {
       "slide": 46,
       "title": "Quality by Language Pair and Domain",
-      "summary": "Slide 46: The examples show that MT quality varies by language pair, domain, and text type. The table reports assessments for the listed examples; it is not a permanent ranking of those languages or a current benchmark.",
+      "summary": "The examples show that MT quality varies by language pair, domain, and text type. The table reports assessments for the listed examples; it is not a permanent ranking of those languages or a current benchmark.",
       "sources": {
         "notes_pdf": true
       }
@@ -375,7 +375,7 @@
     {
       "slide": 47,
       "title": "Low-Resource Machine Translation",
-      "summary": "Slide 47: Neural MT depends on large parallel corpora, which exist for only a fraction of language pairs. This data imbalance creates a low-resource problem even when methods work well for high-resource languages.",
+      "summary": "Neural MT depends on large parallel corpora, which exist for only a fraction of language pairs. This data imbalance creates a low-resource problem even when methods work well for high-resource languages.",
       "sources": {
         "notes_pdf": true
       }
@@ -383,7 +383,7 @@
     {
       "slide": 48,
       "title": "Backtranslation",
-      "summary": "Slide 48: Backtranslation augments training data by translating monolingual text to create synthetic source-target pairs. The synthetic pairs increase training material but can also introduce errors from the model that generated them.",
+      "summary": "Backtranslation augments training data by translating monolingual text to create synthetic source-target pairs. The synthetic pairs increase training material but can also introduce errors from the model that generated them.",
       "sources": {
         "notes_pdf": true
       }
@@ -391,7 +391,7 @@
     {
       "slide": 49,
       "title": "Multilingual Models",
-      "summary": "Slide 49: A multilingual model handles multiple translation directions in one system. It shares parameters across language pairs and can reuse learned representations.",
+      "summary": "A multilingual model handles multiple translation directions in one system. It shares parameters across language pairs and can reuse learned representations.",
       "sources": {
         "notes_pdf": true
       }
@@ -399,7 +399,7 @@
     {
       "slide": 50,
       "title": "Cross-Lingual Transfer",
-      "summary": "Slide 50: Training one model on hundreds of language pairs can enable transfer between related languages, such as Spanish and Catalan. The slide reports competitive results for some pairs, not a guarantee for every language.",
+      "summary": "Training one model on hundreds of language pairs can enable transfer between related languages, such as Spanish and Catalan. The slide reports competitive results for some pairs, not a guarantee for every language.",
       "sources": {
         "notes_pdf": true
       }
@@ -407,7 +407,7 @@
     {
       "slide": 51,
       "title": "Low-Resource Challenges",
-      "summary": "Slide 51: Low-resource translation remains difficult because models need data and language properties such as rich morphology or different word order increase the challenge. The slide’s list names obstacles rather than offering a single solution.",
+      "summary": "Low-resource translation remains difficult because models need data and language properties such as rich morphology or different word order increase the challenge. The slide’s list names obstacles rather than offering a single solution.",
       "sources": {
         "notes_pdf": true
       }
@@ -415,7 +415,7 @@
     {
       "slide": 52,
       "title": "AmericasNLP Shared Task",
-      "summary": "Slide 52: The AmericasNLP shared task studies polysynthetic languages. The reported results show that baselines can be hard to beat and that LLM help depends on having sufficient target-side resources; retain this as a result from that task, not a universal rule.",
+      "summary": "The AmericasNLP shared task studies polysynthetic languages. The reported results show that baselines can be hard to beat and that LLM help depends on having sufficient target-side resources; retain this as a result from that task, not a universal rule.",
       "sources": {
         "notes_pdf": true
       }
@@ -423,7 +423,7 @@
     {
       "slide": 53,
       "title": "Grammatical Gender Across Languages",
-      "summary": "Slide 53: Some languages mark grammatical gender on nouns or other words, while others such as English, Turkish, Basque, and Finnish do not use the same grammatical-gender system. Translation may need to add distinctions not marked in the source.",
+      "summary": "Some languages mark grammatical gender on nouns or other words, while others such as English, Turkish, Basque, and Finnish do not use the same grammatical-gender system. Translation may need to add distinctions not marked in the source.",
       "sources": {
         "notes_pdf": true
       }
@@ -431,7 +431,7 @@
     {
       "slide": 54,
       "title": "Gender Ambiguity in Translation",
-      "summary": "Slide 54: The English sentence “The doctor asked for help” does not specify the doctor’s gender. Spanish requires a gendered noun form in the examples, so both la doctora and el doctor can be grammatical translations without more context.",
+      "summary": "The English sentence “The doctor asked for help” does not specify the doctor’s gender. Spanish requires a gendered noun form in the examples, so both la doctora and el doctor can be grammatical translations without more context.",
       "sources": {
         "notes_pdf": true
       }
@@ -439,7 +439,7 @@
     {
       "slide": 55,
       "title": "Gendered Translation Choices",
-      "summary": "Slide 55: The example shows a translation system choosing one gendered form where the English source leaves gender unspecified. A single output can hide ambiguity; systems may default to a common or stereotyped association.",
+      "summary": "The example shows a translation system choosing one gendered form where the English source leaves gender unspecified. A single output can hide ambiguity; systems may default to a common or stereotyped association.",
       "sources": {
         "notes_pdf": true
       }
@@ -447,7 +447,7 @@
     {
       "slide": 56,
       "title": "Gender Bias Example",
-      "summary": "Slide 56: This screenshot documents an earlier MT output that selected a gendered translation. It is evidence for the lecture’s bias discussion at that time, not a claim about every current system.",
+      "summary": "This screenshot documents an earlier MT output that selected a gendered translation. It is evidence for the lecture’s bias discussion at that time, not a claim about every current system.",
       "sources": {
         "notes_pdf": true
       }
@@ -455,7 +455,7 @@
     {
       "slide": 57,
       "title": "Gender in Context",
-      "summary": "Slide 57: Context can determine which person a gendered expression refers to, and the target language may require an explicit gender choice. The example illustrates how an MT system can still make a stereotyped or unsupported choice.",
+      "summary": "Context can determine which person a gendered expression refers to, and the target language may require an explicit gender choice. The example illustrates how an MT system can still make a stereotyped or unsupported choice.",
       "sources": {
         "notes_pdf": true
       }
@@ -463,7 +463,7 @@
     {
       "slide": 58,
       "title": "Gender Bias Example",
-      "summary": "Slide 58: This screenshot continues the gender-bias examples. Evaluate the translated roles against the source context; the example shows why a plausible sentence can still encode the wrong gender assignment.",
+      "summary": "This screenshot continues the gender-bias examples. Evaluate the translated roles against the source context; the example shows why a plausible sentence can still encode the wrong gender assignment.",
       "sources": {
         "notes_pdf": true
       }
@@ -471,7 +471,7 @@
     {
       "slide": 59,
       "title": "Gender Bias Evaluation",
-      "summary": "Slide 59: A gender-bias evaluation can create matched stereotypical and non-stereotypical examples, test the system on both, and compare gender translation accuracy. Balanced examples help separate model behavior from the wording of one sentence.",
+      "summary": "A gender-bias evaluation can create matched stereotypical and non-stereotypical examples, test the system on both, and compare gender translation accuracy. Balanced examples help separate model behavior from the wording of one sentence.",
       "sources": {
         "notes_pdf": true
       }
@@ -479,7 +479,7 @@
     {
       "slide": 60,
       "title": "Non-Stereotypical Example",
-      "summary": "Slide 60: This non-stereotypical example uses a female doctor. It tests whether the system follows the source evidence instead of defaulting to a gender stereotype.",
+      "summary": "This non-stereotypical example uses a female doctor. It tests whether the system follows the source evidence instead of defaulting to a gender stereotype.",
       "sources": {
         "notes_pdf": true
       }
@@ -487,7 +487,7 @@
     {
       "slide": 61,
       "title": "Stereotypical Example",
-      "summary": "Slide 61: This stereotypical example uses a male doctor. Comparing it with the matched non-stereotypical case helps reveal whether translation accuracy depends on the gender-role association.",
+      "summary": "This stereotypical example uses a male doctor. Comparing it with the matched non-stereotypical case helps reveal whether translation accuracy depends on the gender-role association.",
       "sources": {
         "notes_pdf": true
       }
@@ -495,7 +495,7 @@
     {
       "slide": 62,
       "title": "Gender Translation Accuracy Results",
-      "summary": "Slide 62: The chart compares stereotypical and non-stereotypical translation accuracy for Google Translate across eight languages and displays their gap. The visible differences show that performance varies by language and example type; avoid treating this single evaluation as a general ranking of systems.",
+      "summary": "The chart compares stereotypical and non-stereotypical translation accuracy for Google Translate across eight languages and displays their gap. The visible differences show that performance varies by language and example type; avoid treating this single evaluation as a general ranking of systems.",
       "sources": {
         "notes_pdf": true
       }
@@ -503,7 +503,7 @@
     {
       "slide": 63,
       "title": "Gender Bias Mitigation",
-      "summary": "Slide 63: Gender bias remains an open MT challenge. The slide mentions controlled text generation as one mitigation approach and points to the Gender Inclusive Translation Technologies workshop; neither removes the need to measure performance on varied examples.",
+      "summary": "Gender bias remains an open MT challenge. The slide mentions controlled text generation as one mitigation approach and points to the Gender Inclusive Translation Technologies workshop; neither removes the need to measure performance on varied examples.",
       "sources": {
         "notes_pdf": true
       }
@@ -511,7 +511,7 @@
     {
       "slide": 64,
       "title": "Open Challenges",
-      "summary": "Slide 64: The open-challenge list includes low-resource MT, gender bias, document-level context, decoding efficiency, rare words, and domain shift. These challenges concern coverage, context, search cost, and generalization.",
+      "summary": "The open-challenge list includes low-resource MT, gender bias, document-level context, decoding efficiency, rare words, and domain shift. These challenges concern coverage, context, search cost, and generalization.",
       "sources": {
         "notes_pdf": true
       }
@@ -519,7 +519,7 @@
     {
       "slide": 65,
       "title": "Summary",
-      "summary": "Slide 65: This outline marks the lecture’s closing summary.",
+      "summary": "This outline marks the lecture’s closing summary.",
       "sources": {
         "notes_pdf": true
       }
@@ -527,7 +527,7 @@
     {
       "slide": 66,
       "title": "Lecture Summary",
-      "summary": "Slide 66: The summary recaps encoder-decoder neural MT, beam search, automatic evaluation and its limits, variation by language and domain, low-resource strategies, gender bias, and open challenges.",
+      "summary": "The summary recaps encoder-decoder neural MT, beam search, automatic evaluation and its limits, variation by language and domain, low-resource strategies, gender bias, and open challenges.",
       "sources": {
         "notes_pdf": true
       }
@@ -535,7 +535,7 @@
     {
       "slide": 67,
       "title": "Course Reminder",
-      "summary": "Slide 67: Course Reminder.",
+      "summary": "Course reminder",
       "sources": {
         "notes_pdf": true
       }
@@ -543,7 +543,7 @@
     {
       "slide": 68,
       "title": "Acknowledgments",
-      "summary": "Slide 68: Acknowledgments.",
+      "summary": "Acknowledgments",
       "sources": {
         "notes_pdf": true
       }
@@ -551,7 +551,7 @@
     {
       "slide": 69,
       "title": "References I",
-      "summary": "Slide 69: References I.",
+      "summary": "References I",
       "sources": {
         "notes_pdf": true
       }
@@ -559,7 +559,7 @@
     {
       "slide": 70,
       "title": "References II",
-      "summary": "Slide 70: References II.",
+      "summary": "References II",
       "sources": {
         "notes_pdf": true
       }

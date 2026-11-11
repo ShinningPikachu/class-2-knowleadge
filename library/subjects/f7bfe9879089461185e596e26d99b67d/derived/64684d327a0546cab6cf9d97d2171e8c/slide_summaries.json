@@ -46,7 +46,7 @@
     {
       "slide": 5,
       "title": "Experimenta",
-      "summary": "Slide 5 presents experimental data comparing two conditions, labeled A and B, involving the phonetic sequence /s/ /o/ /l/ /d/ /ier/. The slide displays specific time measurements in seconds for each condition: Condition A records a duration of 0.383628 s, while Condition B records 0.140272 s. Both conditions share identical boundary values of -0.8545 and 0.8741, suggesting a comparison of temporal dynamics within the same experimental framework.",
+      "summary": "The lecture presents experimental data comparing two conditions, labeled A and B, involving the phonetic sequence /s/ /o/ /l/ /d/ /ier/. The slide displays specific time measurements in seconds for each condition: Condition A records a duration of 0.383628 s, while Condition B records 0.140272 s. Both conditions share identical boundary values of -0.8545 and 0.8741, suggesting a comparison of temporal dynamics within the same experimental framework.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -73,7 +73,7 @@
     {
       "slide": 8,
       "title": "Experimenta",
-      "summary": "Slide 8 introduces \"Experimenta,\" specifically focusing on the perceptual, physiologic, and acoustic aspects of ORL 8. The professor's instruction to \"Listen\" emphasizes that these concepts are fundamentally grounded in auditory perception and require active listening to understand the relationship between physical sound properties and human physiological response.",
+      "summary": "The lecture introduces \"Experimenta,\" specifically focusing on the perceptual, physiologic, and acoustic aspects of ORL 8. The professor's instruction to \"Listen\" emphasizes that these concepts are fundamentally grounded in auditory perception and require active listening to understand the relationship between physical sound properties and human physiological response.",
       "sources": {
         "slide": true,
         "teacher_audio": true
@@ -82,7 +82,7 @@
     {
       "slide": 9,
       "title": "Relation between acoustics and physiology",
-      "summary": "Slide 9 illustrates the relationship between acoustics and physiology by plotting F1 versus F2 frequencies for vowels, highlighting significant variation among speakers as shown in the Peterson and Barney (1952) study. The professor clarifies that while individuals produce the same vowel sound, their fundamental frequency differs physiologically based on vocal fold vibration rates; for example, a male's 100 Hz voice corresponds to 100 vibrations per second. This physiological source mechanism, driven by air pressure through the vocal folds, underpins the acoustic variations observed across different speakers.",
+      "summary": "The lecture illustrates the relationship between acoustics and physiology by plotting F1 versus F2 frequencies for vowels, highlighting significant variation among speakers as shown in the Peterson and Barney (1952) study. The professor clarifies that while individuals produce the same vowel sound, their fundamental frequency differs physiologically based on vocal fold vibration rates; for example, a male's 100 Hz voice corresponds to 100 vibrations per second. This physiological source mechanism, driven by air pressure through the vocal folds, underpins the acoustic variations observed across different speakers.",
       "sources": {
         "slide": true,
         "teacher_audio": true
@@ -100,7 +100,7 @@
     {
       "slide": 11,
       "title": "17",
-      "summary": "Slide 17 presents the first and second formants (F1 and F2) for eight cardinal American-English vowels, citing Borden and Harris (1984). The professor clarifies that these vowel positions are mapped onto a quadrilateral chart rather than a triangle, organized by the openness or closeness of the sounds. This geometric representation serves as a guide within the International Phonetic Alphabet to assist transcribers in accurately locating and distinguishing various vowel qualities.",
+      "summary": "The lecture presents the first and second formants (F1 and F2) for eight cardinal American-English vowels, citing Borden and Harris (1984). The professor clarifies that these vowel positions are mapped onto a quadrilateral chart rather than a triangle, organized by the openness or closeness of the sounds. This geometric representation serves as a guide within the International Phonetic Alphabet to assist transcribers in accurately locating and distinguishing various vowel qualities.",
       "sources": {
         "slide": true,
         "teacher_audio": true

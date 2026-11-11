@@ -46,7 +46,7 @@
     {
       "slide": 5,
       "title": "CSP Examples",
-      "summary": "Slide 5 introduces practical Constraint Satisfaction Problem (CSP) examples, specifically directing students to an interactive notebook demonstrating map coloring. The provided link accesses a CPMpy environment where users can explore this classic problem instance directly in a browser-based lab setting.",
+      "summary": "The lecture introduces practical Constraint Satisfaction Problem (CSP) examples, specifically directing students to an interactive notebook demonstrating map coloring. The provided link accesses a CPMpy environment where users can explore this classic problem instance directly in a browser-based lab setting.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -73,7 +73,7 @@
     {
       "slide": 8,
       "title": "Example: N-Queens",
-      "summary": "Slide 8 introduces the N-Queens problem as a concrete example of constraint satisfaction formulation. It outlines \"Formulation 1\" by identifying the necessary components: the variables representing queen positions, their respective domains, and the constraints required to ensure no two queens attack each other. The slide lists these structural elements but does not provide specific definitions or detailed examples for them in this section.",
+      "summary": "The lecture introduces the N-Queens problem as a concrete example of constraint satisfaction formulation. It outlines \"Formulation 1\" by identifying the necessary components: the variables representing queen positions, their respective domains, and the constraints required to ensure no two queens attack each other. The slide lists these structural elements but does not provide specific definitions or detailed examples for them in this section.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -82,7 +82,7 @@
     {
       "slide": 9,
       "title": "Example: N-Queens",
-      "summary": "Slide 9 introduces the N-Queens problem as a concrete example of Constraint Satisfaction Problem formulation, specifically outlining \"Formulation 2\". This approach structures the problem by defining specific variables, their corresponding domains, and distinguishing between implicit and explicit constraints.",
+      "summary": "The lecture introduces the N-Queens problem as a concrete example of Constraint Satisfaction Problem formulation, specifically outlining \"Formulation 2\". This approach structures the problem by defining specific variables, their corresponding domains, and distinguishing between implicit and explicit constraints.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -109,7 +109,7 @@
     {
       "slide": 12,
       "title": "Example: Cryptarithmetic",
-      "summary": "Slide 12 introduces the cryptarithmetic problem as a constraint satisfaction example, structuring it around three core components: variables, domains, and constraints. The slide explicitly lists these categories but does not provide specific values or definitions for them in this view, instead indicating the presence of variables labeled X1, X2, and X3 within the constraints section.",
+      "summary": "The lecture introduces the cryptarithmetic problem as a constraint satisfaction example, structuring it around three core components: variables, domains, and constraints. The slide explicitly lists these categories but does not provide specific values or definitions for them in this view, instead indicating the presence of variables labeled X1, X2, and X3 within the constraints section.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -127,7 +127,7 @@
     {
       "slide": 14,
       "title": "Varieties of CSPs and Constraints",
-      "summary": "Slide 14 introduces the topic \"Varieties of CSPs and Constraints,\" serving as a section header to categorize different types of Constraint Satisfaction Problems and their associated constraints.",
+      "summary": "Varieties of CSPs and constraints",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -181,7 +181,7 @@
     {
       "slide": 20,
       "title": "Search Methods",
-      "summary": "Slide 20 introduces the topic of Search Methods by posing a specific inquiry into the behavior of Breadth-First Search (BFS). The slide illustrates this concept using a sequence of state representations, including empty sets and configurations labeled with parameters such as WA=g, WA=r, and NT=g.",
+      "summary": "The lecture introduces the topic of Search Methods by posing a specific inquiry into the behavior of Breadth-First Search (BFS). The slide illustrates this concept using a sequence of state representations, including empty sets and configurations labeled with parameters such as WA=g, WA=r, and NT=g.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -190,7 +190,7 @@
     {
       "slide": 21,
       "title": "Search Methods",
-      "summary": "Slide 21 introduces the topic of search methods by posing two specific questions regarding the behavior of Breadth-First Search (BFS) and Depth-First Search (DFS). The slide serves as a transition point, prompting an exploration of how these distinct algorithms would operate in the upcoming demonstration.",
+      "summary": "How would breadth-first and depth-first search behave on the same problem?",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -226,7 +226,7 @@
     {
       "slide": 25,
       "title": "Backtracking Example",
-      "summary": "Slide 25: Backtracking Example.",
+      "summary": "Backtracking Example.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -280,7 +280,7 @@
     {
       "slide": 31,
       "title": "Demo",
-      "summary": "Slide 31 presents a demonstration of Constraint Satisfaction Problem (CSP) backtracking, accessible via the provided CMU course link.",
+      "summary": "The lecture presents a demonstration of Constraint Satisfaction Problem (CSP) backtracking, accessible via the provided CMU course link.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -325,7 +325,7 @@
     {
       "slide": 36,
       "title": "Demo",
-      "summary": "Slide 36 presents a demonstration of Constraint Satisfaction Problem (CSP) backtracking, accessible via the provided CMU course link.",
+      "summary": "The lecture presents a demonstration of Constraint Satisfaction Problem (CSP) backtracking, accessible via the provided CMU course link.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -361,7 +361,7 @@
     {
       "slide": 40,
       "title": "Ordering",
-      "summary": "Slide 40: Ordering.",
+      "summary": "Ordering.",
       "sources": {
         "slide": true,
         "teacher_audio": false

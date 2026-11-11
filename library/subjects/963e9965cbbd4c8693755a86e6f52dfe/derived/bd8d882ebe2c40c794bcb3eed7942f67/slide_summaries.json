@@ -15,7 +15,7 @@
     {
       "slide": 2,
       "title": "What would an ‘unbiased’ algorithm be?",
-      "summary": "Slide 2: What would an ‘unbiased’ algorithm be?"
+      "summary": "What would an ‘unbiased’ algorithm be?"
     },
     {
       "slide": 3,
@@ -25,12 +25,12 @@
     {
       "slide": 4,
       "title": "Utility?",
-      "summary": "Slide 4 introduces the concept of utility by distinguishing between scenarios with a clear utility function and those where the utility function is not so clear. This contrast highlights the varying degrees of definability in utility functions within decision-making contexts."
+      "summary": "The lecture introduces the concept of utility by distinguishing between scenarios with a clear utility function and those where the utility function is not so clear. This contrast highlights the varying degrees of definability in utility functions within decision-making contexts."
     },
     {
       "slide": 5,
       "title": "Slide 5",
-      "summary": "Slide 5"
+      "summary": "A game agent must rank outcomes such as collecting rewards and avoiding hazards. Its utility function determines which actions it prefers."
     },
     {
       "slide": 6,
@@ -50,7 +50,7 @@
     {
       "slide": 9,
       "title": "Further reading on implications of AI",
-      "summary": "Slide 9 provides a curated list of further reading on the implications of AI, including Stuart Russell's work on long-term futures and lethal autonomous weapons, alongside books by Russell and Nick Bostrom. The resources also cover Moshe Vardi's analysis of jobs, Asilomar panel discussions, research priorities from futureoflife.org, and reports from Stanford, the EU High Level Expert Group, and the Obama Whitehouse. Additionally, it references the 23 Asilomar AI principles for beneficial AI."
+      "summary": "The lecture provides a curated list of further reading on the implications of AI, including Stuart Russell's work on long-term futures and lethal autonomous weapons, alongside books by Russell and Nick Bostrom. The resources also cover Moshe Vardi's analysis of jobs, Asilomar panel discussions, research priorities from futureoflife.org, and reports from Stanford, the EU High Level Expert Group, and the Obama Whitehouse. Additionally, it references the 23 Asilomar AI principles for beneficial AI."
     },
     {
       "slide": 10,
@@ -60,7 +60,7 @@
     {
       "slide": 11,
       "title": "Fundamentals of Artificial Intelligence",
-      "summary": "Slide 11 introduces the topic \"Fundamentals of Artificial Intelligence\" for Lecture 02 of the 2026-27 academic year, presented by Prof. Tias Guns. The lecture focuses on Agents and utilizes slides originally developed for CS188 at Berkeley."
+      "summary": "The lecture introduces the topic \"Fundamentals of Artificial Intelligence\" for Lecture 02 of the 2026-27 academic year, presented by Prof. Tias Guns. The lecture focuses on Agents and utilizes slides originally developed for CS188 at Berkeley."
     },
     {
       "slide": 12,
@@ -75,12 +75,12 @@
     {
       "slide": 14,
       "title": "Environment types",
-      "summary": "Slide 14 introduces environment types using examples such as Pacman, Backgammon, Taxi, and MS CoPilot Chat. These environments are categorized by three fundamental properties: whether they are fully or partially observable, deterministic or stochastic, and static or dynamic."
+      "summary": "The lecture introduces environment types using examples such as Pacman, Backgammon, Taxi, and MS CoPilot Chat. These environments are categorized by three fundamental properties: whether they are fully or partially observable, deterministic or stochastic, and static or dynamic."
     },
     {
       "slide": 15,
       "title": "Slide 15",
-      "summary": "Slide 15"
+      "summary": "Food recommendations change when an assistant knows the user’s preferences and constraints. Relevant user context affects which action is useful."
     },
     {
       "slide": 16,
@@ -90,17 +90,17 @@
     {
       "slide": 17,
       "title": "Environment types",
-      "summary": "Slide 17 classifies environments using criteria such as observability, determinism, and known physics across examples like Pacman, Backgammon, Taxi, and MS CoPilot Chat. Pacman is identified as partially observable and stochastic due to unpredictable ghost behavior, while Backgammon is fully observable despite involving dice. The lecture contrasts these with the Taxi environment, which is partially observable, and notes that real-world physics (like tire friction) are often unknown or difficult to model precisely."
+      "summary": "The lecture classifies environments using criteria such as observability, determinism, and known physics across examples like Pacman, Backgammon, Taxi, and MS CoPilot Chat. Pacman is identified as partially observable and stochastic due to unpredictable ghost behavior, while Backgammon is fully observable despite involving dice. The lecture contrasts these with the Taxi environment, which is partially observable, and notes that real-world physics (like tire friction) are often unknown or difficult to model precisely."
     },
     {
       "slide": 18,
       "title": "Example agent designs",
-      "summary": "Slide 18 presents a conceptual framework for example agent designs, illustrating the core components and their interactions. The diagram identifies the central Agent, which connects to an external Environment through Sensors that provide Percepts and Actuators that execute Actions. This structure defines the fundamental loop where an agent perceives its surroundings and acts upon them."
+      "summary": "The lecture presents a conceptual framework for example agent designs, illustrating the core components and their interactions. The diagram identifies the central Agent, which connects to an external Environment through Sensors that provide Percepts and Actuators that execute Actions. This structure defines the fundamental loop where an agent perceives its surroundings and acts upon them."
     },
     {
       "slide": 19,
       "title": "Simple re'ex agents",
-      "summary": "Simple re'ex agents"
+      "summary": "Simple reflex agents"
     },
     {
       "slide": 20,
@@ -320,7 +320,7 @@
     {
       "slide": 63,
       "title": "Example: route-?nding in Romania",
-      "summary": "Slide 63 introduces the \"route-finding in Romania\" example, which serves as a standard problem domain for illustrating search algorithms. The slide text explicitly states this title. Consequently, the content is limited to identifying this scenario as the designated example without elaboration on its mechanics or solution."
+      "summary": "The lecture introduces the \"route-finding in Romania\" example, which serves as a standard problem domain for illustrating search algorithms. The slide text explicitly states this title. Consequently, the content is limited to identifying this scenario as the designated example without elaboration on its mechanics or solution."
     },
     {
       "slide": 64,
@@ -335,12 +335,12 @@
     {
       "slide": 66,
       "title": "Crea=ng the search tree",
-      "summary": "Slide 66 introduces the concept of creating a search tree, specifically highlighting the distinction between the frontier and the explored set. The slide text identifies these two components as central to the process of constructing the search tree structure."
+      "summary": "The lecture introduces the concept of creating a search tree, specifically highlighting the distinction between the frontier and the explored set. The slide text identifies these two components as central to the process of constructing the search tree structure."
     },
     {
       "slide": 67,
       "title": "Crea=ng the search tree",
-      "summary": "Slide 67 introduces the concept of creating a search tree, specifically highlighting the distinction between the frontier and the explored set. The slide text identifies these two components as central to the process of constructing the search structure."
+      "summary": "The lecture introduces the concept of creating a search tree, specifically highlighting the distinction between the frontier and the explored set. The slide text identifies these two components as central to the process of constructing the search structure."
     },
     {
       "slide": 68,

@@ -118,7 +118,7 @@
     {
       "slide": 13,
       "title": "Transformer",
-      "summary": "Slide 13 introduces the Transformer architecture as a key topic within neural language modeling, citing Jurafsky and Martin (2026) as the primary reference. The slide serves as a section header for this specific model, identified by the course instructor Tim Van De Cruys at KU Leuven.",
+      "summary": "Transformer architecture",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -154,7 +154,7 @@
     {
       "slide": 17,
       "title": "An attention head",
-      "summary": "Slide 17 introduces the concept of an attention head using the repeated phrase \"the star astronomer watched\" to illustrate how query (q), key (k), and value (v) vectors are processed. The slide visually represents multiple instances of these q, k, and v components associated with the input sequence.",
+      "summary": "The lecture introduces the concept of an attention head using the repeated phrase \"the star astronomer watched\" to illustrate how query (q), key (k), and value (v) vectors are processed. The slide visually represents multiple instances of these q, k, and v components associated with the input sequence.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -172,7 +172,7 @@
     {
       "slide": 19,
       "title": "Visual representation",
-      "summary": "Slide 19 introduces the topic of visual representation within the context of Neural Language Modeling, referencing Jurafsky and Martin (2026) as the primary source. This section serves as a structural marker for the lecture series, identified as slide 17 of 53, and is presented by tim.vandecruys@kuleuven.be.",
+      "summary": "Visual representation",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -262,7 +262,7 @@
     {
       "slide": 29,
       "title": "Visual representation",
-      "summary": "Slide 29 presents a visual representation within the context of Neural Language Modeling, referencing Jurafsky and Martin (2026) as the source material. This specific slide serves as the 27th in a series of 53 and is part of a lecture delivered by Tim Van De Cruys at KU Leuven.",
+      "summary": "Visual representation",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -271,7 +271,7 @@
     {
       "slide": 30,
       "title": "Language modeling head",
-      "summary": "Slide 30 introduces the language modeling head within the context of neural language modeling, referencing Jurafsky and Martin (2026) as the primary source.",
+      "summary": "Language modeling head",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -352,7 +352,7 @@
     {
       "slide": 39,
       "title": "Summarization",
-      "summary": "Slide 39 introduces the topic of summarization within the context of neural language modeling, referencing Jurafsky and Martin (2026) as the primary source material. This section serves as a structural marker in the lecture series, identified by the course email tim.vandecruys@kuleuven.be and positioned as slide 37 of 53 in the referenced text.",
+      "summary": "Summarization",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -388,7 +388,7 @@
     {
       "slide": 43,
       "title": "Visual representation",
-      "summary": "Slide 43 presents a visual representation within the context of Neural Language Modeling, referencing Jurafsky and Martin (2026) as the source material. This specific slide serves as a citation marker for section 41/53 of the course content, attributed to tim.vandecruys@kuleuven.be.",
+      "summary": "Visual representation",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -397,7 +397,7 @@
     {
       "slide": 44,
       "title": "Finetuning",
-      "summary": "Slide 44 introduces the topic of finetuning within the context of neural language modeling, referencing Jurafsky and Martin (2026) as the primary source material.",
+      "summary": "Finetuning",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -442,7 +442,7 @@
     {
       "slide": 49,
       "title": "Bi-directional attention",
-      "summary": "Slide 49 introduces the concept of bi-directional attention, distinguishing it from causal self-attention layers. The material presents these two architectures as distinct components within neural language modeling, referencing Jurafsky and Martin (2026) for further context.",
+      "summary": "The lecture introduces the concept of bi-directional attention, distinguishing it from causal self-attention layers. The material presents these two architectures as distinct components within neural language modeling, referencing Jurafsky and Martin (2026) for further context.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -460,7 +460,7 @@
     {
       "slide": 51,
       "title": "Next sentence prediction",
-      "summary": "Slide 51 introduces the topic of next sentence prediction within the context of neural language modeling, referencing Jurafsky and Martin (2026).",
+      "summary": "Next sentence prediction",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -496,7 +496,7 @@
     {
       "slide": 55,
       "title": "Sequence labeling",
-      "summary": "Slide 55 introduces the topic of sequence labeling within the context of neural language modeling, referencing Jurafsky and Martin (2026) pages 52–53.",
+      "summary": "Sequence labeling",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -505,7 +505,7 @@
     {
       "slide": 56,
       "title": "Different classification configurations",
-      "summary": "Slide 56 introduces the topic of different classification configurations, referencing the work of Devlin et al. (2019). As this is the final slide in the Neural Language Modeling series by Tim Van De Cruys, it serves as a concluding reference point for these architectural variations.",
+      "summary": "The lecture introduces the topic of different classification configurations, referencing the work of Devlin et al. (2019). As this is the final slide in the Neural Language Modeling series by Tim Van De Cruys, it serves as a concluding reference point for these architectural variations.",
       "sources": {
         "slide": true,
         "teacher_audio": false

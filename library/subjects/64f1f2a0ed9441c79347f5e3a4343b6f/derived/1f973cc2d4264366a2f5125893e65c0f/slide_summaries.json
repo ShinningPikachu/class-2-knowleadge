@@ -118,7 +118,7 @@
     {
       "slide": 13,
       "title": "13",
-      "summary": "Slide 13 presents a two-dimensional visualization of various classifiers, utilizing source code from the Scikit-Learn documentation to illustrate their decision boundaries.",
+      "summary": "The lecture presents a two-dimensional visualization of various classifiers, utilizing source code from the Scikit-Learn documentation to illustrate their decision boundaries.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -145,7 +145,7 @@
     {
       "slide": 16,
       "title": "16",
-      "summary": "Slide 16 introduces the concept of measuring the expressiveness, also referred to as \"capacity,\" of a hypothesis space. This metric evaluates how complex or flexible a model's set of possible functions is in representing data patterns.",
+      "summary": "The lecture introduces the concept of measuring the expressiveness, also referred to as \"capacity,\" of a hypothesis space. This metric evaluates how complex or flexible a model's set of possible functions is in representing data patterns.",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -226,7 +226,7 @@
     {
       "slide": 25,
       "title": "25",
-      "summary": "Slide 25 introduces PAC-learning as a framework for determining the amount of data required for successful learning. It highlights sample complexity, which quantifies this data requirement, and emphasizes its fundamental relationship with model capacity. This section establishes the theoretical link between how much information is needed to learn effectively and the inherent complexity or size of the hypothesis space being used.",
+      "summary": "The lecture introduces PAC-learning as a framework for determining the amount of data required for successful learning. It highlights sample complexity, which quantifies this data requirement, and emphasizes its fundamental relationship with model capacity. This section establishes the theoretical link between how much information is needed to learn effectively and the inherent complexity or size of the hypothesis space being used.",
       "sources": {
         "slide": true,
         "teacher_audio": false

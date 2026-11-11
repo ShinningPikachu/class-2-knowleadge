@@ -352,7 +352,7 @@
     {
       "slide": 39,
       "title": "Recurrent neural network",
-      "summary": "Slide 39 introduces the Recurrent Neural Network (RNN) architecture, specifically highlighting an encoder-decoder configuration. The diagram illustrates key components including input vectors ($x$), output vectors ($y$), and weight matrices ($W$, $V$, $U$) alongside bias terms ($b_2$, $b_3$).",
+      "summary": "The lecture introduces the Recurrent Neural Network (RNN) architecture, specifically highlighting an encoder-decoder configuration. The diagram illustrates key components including input vectors ($x$), output vectors ($y$), and weight matrices ($W$, $V$, $U$) alongside bias terms ($b_2$, $b_3$).",
       "sources": {
         "slide": true,
         "teacher_audio": false
@@ -370,7 +370,7 @@
     {
       "slide": 41,
       "title": "Recurrent neural network",
-      "summary": "Slide 41 illustrates a recurrent neural network configured as an encoder-decoder architecture, featuring weight matrices (W, V, U) and bias terms (b5, b4). The diagram demonstrates the model processing the French input sequence \"je regarde la télévision\" to generate the output tokens \"télévision,\" \"et,\" \"mais,\" and a final \"<stop>\" token. This visual example highlights how the network encodes an input sentence and sequentially decodes it into a target representation within computational linguistics applications.",
+      "summary": "The lecture illustrates a recurrent neural network configured as an encoder-decoder architecture, featuring weight matrices (W, V, U) and bias terms (b5, b4). The diagram demonstrates the model processing the French input sequence \"je regarde la télévision\" to generate the output tokens \"télévision,\" \"et,\" \"mais,\" and a final \"<stop>\" token. This visual example highlights how the network encodes an input sentence and sequentially decodes it into a target representation within computational linguistics applications.",
       "sources": {
         "slide": true,
         "teacher_audio": false

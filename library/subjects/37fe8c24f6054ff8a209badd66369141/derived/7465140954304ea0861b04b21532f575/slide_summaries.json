@@ -30,12 +30,12 @@
     {
       "slide": 5,
       "title": "Introduction",
-      "summary": "Slide 5 introduces the topic of Natural Language Processing (NLP) with the title \"Introduction\" and the subtitle \"Natural language processing: all-in-one\". The slide includes a retrieval date of 19/08/2024 and is labeled as section 4."
+      "summary": "Natural language processing: introduction."
     },
     {
       "slide": 6,
       "title": "Introduction",
-      "summary": "Slide 6 introduces the topic of Natural Language Processing (NLP) with the title \"Introduction\" and the subtitle \"Natural language processing: all-in-one\". The slide includes a retrieval date of 19/08/2024 and is labeled as section 5, titled \"NLP: Introduction\"."
+      "summary": "Natural language processing: introduction."
     },
     {
       "slide": 7,
@@ -55,22 +55,22 @@
     {
       "slide": 10,
       "title": "State of NLP",
-      "summary": "Slide 10 presents the course outline for \"State of NLP,\" which covers an introduction, general challenges, representing words and sentences, a course overview, and practical information. This slide serves as a structural roadmap for the lecture series, listing these key topics."
+      "summary": "The course outline covers NLP challenges, word and sentence representation, and practical information."
     },
     {
       "slide": 11,
       "title": "State of NLP",
-      "summary": "Slide 11, titled \"State of NLP,\" presents an overview of NLP progress as of 2012, attributed to Dan Jurafsky. As part of the \"NLP: Introduction\" series, this slide serves as a historical reference point for the field's development at that time."
+      "summary": "State of NLP: a historical overview of progress in the field."
     },
     {
       "slide": 12,
       "title": "State of NLP",
-      "summary": "Slide 12 presents the \"State of NLP,\" specifically highlighting NLP progress in 2025. This content is adapted from Dan Jurafsky's work on NLP introductions."
+      "summary": "The lecture presents the \"State of NLP,\" specifically highlighting NLP progress in 2025. This content is adapted from Dan Jurafsky's work on NLP introductions."
     },
     {
       "slide": 13,
       "title": "State of NLP",
-      "summary": "Slide 13 presents a benchmark comparison of progress in Natural Language Processing (NLP) and Computer Vision (CV) from 2015, citing Kiela et al. (2021). The figure plots performance where -1 represents initial levels and 0 indicates human performance, highlighting benchmarks like MNIST and ImageNet for CV versus BlueSquad and SQuAD 2 for NLP. While some tasks are considered mostly solved, others such as dialogue, summarization, and question answering continue to show significant progress toward human-level capabilities."
+      "summary": "The lecture presents a benchmark comparison of progress in Natural Language Processing (NLP) and Computer Vision (CV) from 2015, citing Kiela et al. (2021). The figure plots performance where -1 represents initial levels and 0 indicates human performance, highlighting benchmarks like MNIST and ImageNet for CV versus BlueSquad and SQuAD 2 for NLP. While some tasks are considered mostly solved, others such as dialogue, summarization, and question answering continue to show significant progress toward human-level capabilities."
     },
     {
       "slide": 14,
@@ -90,7 +90,7 @@
     {
       "slide": 17,
       "title": "General challenges",
-      "summary": "Slide 17 presents the course outline, listing \"General challenges\" as a key topic alongside Introduction, State of NLP, Representing words and sentences, Course overview, and Practical information."
+      "summary": "The lecture presents the course outline, listing \"General challenges\" as a key topic alongside Introduction, State of NLP, Representing words and sentences, Course overview, and Practical information."
     },
     {
       "slide": 18,
@@ -120,7 +120,7 @@
     {
       "slide": 23,
       "title": "General challenges",
-      "summary": "Slide 23 identifies the emergence of recent neologisms as a general challenge in Natural Language Processing. The slide specifically lists four examples of these new terms: \"Deepfake,\" \"Prompt engineer,\" \"Situationship,\" and \"Enshittification\". These entries highlight the difficulty NLP systems face in adapting to rapidly evolving vocabulary within the field."
+      "summary": "The lecture identifies the emergence of recent neologisms as a general challenge in Natural Language Processing. The slide specifically lists four examples of these new terms: \"Deepfake,\" \"Prompt engineer,\" \"Situationship,\" and \"Enshittification\". These entries highlight the difficulty NLP systems face in adapting to rapidly evolving vocabulary within the field."
     },
     {
       "slide": 24,
@@ -135,17 +135,17 @@
     {
       "slide": 26,
       "title": "General challenges",
-      "summary": "Slide 26 introduces general challenges in Natural Language Processing, specifically highlighting the Law of Zipf. This principle describes the relationship between word frequency and rank, illustrated here using data from Shakespeare's *Rome and Juliet*. The slide presents this concept as a foundational issue within the NLP introduction context."
+      "summary": "The lecture introduces general challenges in Natural Language Processing, specifically highlighting the Law of Zipf. This principle describes the relationship between word frequency and rank, illustrated here using data from Shakespeare's *Rome and Juliet*. The slide presents this concept as a foundational issue within the NLP introduction context."
     },
     {
       "slide": 27,
       "title": "Representing words and sentences",
-      "summary": "Slide 27 introduces the topic of representing words and sentences within the course outline. This section follows the introduction, state of NLP, and general challenges, preceding the course overview and practical information. As part of the \"NLP: Introduction\" module, it establishes word and sentence representation as a core component of the curriculum."
+      "summary": "The lecture introduces the topic of representing words and sentences within the course outline. This section follows the introduction, state of NLP, and general challenges, preceding the course overview and practical information. As part of the \"NLP: Introduction\" module, it establishes word and sentence representation as a core component of the curriculum."
     },
     {
       "slide": 28,
       "title": "Representing words and sentences",
-      "summary": "Slide 28 introduces a \"Toy corpus\" for representing words and sentences using a specific vocabulary: {sky, wings, engine, helicopter, drone, rocket, goose, eagle, bee}. The slide lists various example sentences combining these terms to describe entities in the sky, their attributes like having wings, and classifications such as engines that take pictures or are useful. This collection serves as a foundational dataset for demonstrating natural language processing concepts within the course introduction."
+      "summary": "The lecture introduces a \"Toy corpus\" for representing words and sentences using a specific vocabulary: {sky, wings, engine, helicopter, drone, rocket, goose, eagle, bee}. The slide lists various example sentences combining these terms to describe entities in the sky, their attributes like having wings, and classifications such as engines that take pictures or are useful. This collection serves as a foundational dataset for demonstrating natural language processing concepts within the course introduction."
     },
     {
       "slide": 29,
@@ -155,7 +155,7 @@
     {
       "slide": 30,
       "title": "Representing words and sentences",
-      "summary": "Slide 30 introduces the \"Bag of words\" method for representing phrases and sentences in Natural Language Processing. This approach treats text as an unordered collection of individual words, disregarding grammar and word order. The slide illustrates this concept using the example sentence \"Mary ate a pizza,\" which is decomposed into its constituent words: Mary, ate, a, and pizza."
+      "summary": "The lecture introduces the \"Bag of words\" method for representing phrases and sentences in Natural Language Processing. This approach treats text as an unordered collection of individual words, disregarding grammar and word order. The slide illustrates this concept using the example sentence \"Mary ate a pizza,\" which is decomposed into its constituent words: Mary, ate, a, and pizza."
     },
     {
       "slide": 31,
@@ -165,7 +165,7 @@
     {
       "slide": 32,
       "title": "Representing words and sentences",
-      "summary": "Slide 32 illustrates the representation of words and sentences using a Transformer model, denoted as f(). The visual content contrasts individual word tokens with phrase-level representations, incorporating specific examples such as \"Mary,\" \"ate,\" \"a,\" and \"pizza\". Additionally, the slide highlights the use of special tokens like CLS to aggregate information for sentence-level tasks within the NLP introduction context."
+      "summary": "The lecture illustrates the representation of words and sentences using a Transformer model, denoted as f(). The visual content contrasts individual word tokens with phrase-level representations, incorporating specific examples such as \"Mary,\" \"ate,\" \"a,\" and \"pizza\". Additionally, the slide highlights the use of special tokens like CLS to aggregate information for sentence-level tasks within the NLP introduction context."
     },
     {
       "slide": 33,
@@ -175,12 +175,12 @@
     {
       "slide": 34,
       "title": "Course overview",
-      "summary": "Slide 34 presents the course outline, which covers an introduction to NLP, the current state of the field, general challenges, and methods for representing words and sentences. The overview also includes practical information regarding the course structure. This slide serves as a roadmap for the introductory module on Natural Language Processing."
+      "summary": "The course outline covers NLP, its current state, general challenges, and ways to represent words and sentences."
     },
     {
       "slide": 35,
       "title": "Course overview",
-      "summary": "Slide 35 outlines the course structure, beginning with four fundamental topics: introduction, segmentation and tokenization, language modelling, and neural language modelling. The overview concludes by identifying neural machine translation as a foundational application of these concepts. This slide serves as a high-level roadmap for the NLP curriculum presented in the lecture."
+      "summary": "The course covers tokenization, language modelling, neural language modelling, and neural machine translation."
     },
     {
       "slide": 36,
@@ -195,12 +195,12 @@
     {
       "slide": 38,
       "title": "Course overview",
-      "summary": "Slide 38 outlines the course overview, specifically introducing Section 3 on Language Modelling and its probabilistic foundations. This content is part of the broader \"NLP: Introduction\" module, which appears as item 29 in the sequence. The slide serves as a structural header to define these key topics."
+      "summary": "Language modelling studies probabilistic descriptions of text."
     },
     {
       "slide": 39,
       "title": "Course overview",
-      "summary": "Slide 39 outlines the fourth course topic, Neural Language Modelling, which covers language modelling using both Recurrent Neural Networks (RNNs) and Transformers. This section is part of the \"NLP: Introduction\" lecture series presented by Tim Van de Cruys."
+      "summary": "The lecture outlines the fourth course topic, Neural Language Modelling, which covers language modelling using both Recurrent Neural Networks (RNNs) and Transformers. This section is part of the \"NLP: Introduction\" lecture series presented by Tim Van de Cruys."
     },
     {
       "slide": 40,
@@ -215,17 +215,17 @@
     {
       "slide": 42,
       "title": "Course overview",
-      "summary": "Slide 42 introduces morphological analysis as the seventh topic in the course overview, defining it as the process of analyzing the internal structure of words. The slide illustrates this concept using the specific example of the word \"independently\". This content is part of the broader NLP: Introduction module."
+      "summary": "The lecture introduces morphological analysis as the seventh topic in the course overview, defining it as the process of analyzing the internal structure of words. The slide illustrates this concept using the specific example of the word \"independently\". This content is part of the broader NLP: Introduction module."
     },
     {
       "slide": 43,
       "title": "Course overview",
-      "summary": "Slide 43 introduces \"Syntactic parsing\" as the eighth topic in the course overview, defined as the analysis of sentence structure. The slide illustrates this concept using the example sentence \"Who developed the algorithm for the black hole image,\" annotated with dependency labels such as nsubj, root, det, obj, case, compound, and obl. This content appears within the broader context of an NLP introduction."
+      "summary": "The lecture introduces \"Syntactic parsing\" as the eighth topic in the course overview, defined as the analysis of sentence structure. The slide illustrates this concept using the example sentence \"Who developed the algorithm for the black hole image,\" annotated with dependency labels such as nsubj, root, det, obj, case, compound, and obl. This content appears within the broader context of an NLP introduction."
     },
     {
       "slide": 44,
       "title": "Course overview",
-      "summary": "Slide 44 presents the course overview, specifically highlighting Section 9 on Semantics and the topic of Word Sense Disambiguation. This slide also references page 35 as the starting point for the \"NLP: Introduction\" material."
+      "summary": "The lecture presents the course overview, specifically highlighting Section 9 on Semantics and the topic of Word Sense Disambiguation. This slide also references page 35 as the starting point for the \"NLP: Introduction\" material."
     },
     {
       "slide": 45,
@@ -235,12 +235,12 @@
     {
       "slide": 46,
       "title": "Course overview",
-      "summary": "Slide 46 presents a course overview that lists \"Discourse Coreference resolution\" as item 10 and identifies the total count of topics as 36 under the heading \"NLP: Introduction\"."
+      "summary": "The lecture presents a course overview that lists \"Discourse Coreference resolution\" as item 10 and identifies the total count of topics as 36 under the heading \"NLP: Introduction\"."
     },
     {
       "slide": 47,
       "title": "Course overview",
-      "summary": "Slide 47 presents a course overview highlighting two specific topics: Question Answering, listed as item 11, and the Introduction to Natural Language Processing (NLP), listed as item 37."
+      "summary": "The lecture presents a course overview highlighting two specific topics: Question Answering, listed as item 11, and the Introduction to Natural Language Processing (NLP), listed as item 37."
     },
     {
       "slide": 48,
@@ -250,7 +250,7 @@
     {
       "slide": 49,
       "title": "Course overview",
-      "summary": "Slide 49 introduces a guest lecture on \"Conversational Agents\" by Thomas Winters, a Post-doc at DTAI, KU Leuven. This session covers text generation and LLM-based conversational agents but is explicitly noted as fun and informative material that is not part of the official course content."
+      "summary": "The lecture introduces a guest lecture on \"Conversational Agents\" by Thomas Winters, a Post-doc at DTAI, KU Leuven. This session covers text generation and LLM-based conversational agents but is explicitly noted as fun and informative material that is not part of the official course content."
     },
     {
       "slide": 50,
@@ -260,7 +260,7 @@
     {
       "slide": 51,
       "title": "Practical information",
-      "summary": "Slide 51 presents the \"Practical information\" section within the course outline for an NLP introduction. The slide lists the full course structure, which includes topics on the state of NLP, general challenges, representing words and sentences, and a course overview."
+      "summary": "The lecture presents the \"Practical information\" section within the course outline for an NLP introduction. The slide lists the full course structure, which includes topics on the state of NLP, general challenges, representing words and sentences, and a course overview."
     },
     {
       "slide": 52,
@@ -320,7 +320,7 @@
     {
       "slide": 63,
       "title": "Practical information",
-      "summary": "Slide 63 lists key references for further study, including Jurafsky and Martin's 2024 textbook on speech and language processing, StanfordNLP's CS224n course materials, and Marvin Minsky's work on commonsense interfaces. It also cites recent research on semantic role labeling, benchmarking challenges like Dynabench and GlobalBench, and generalization issues in open-domain question answering. These sources provide foundational and contemporary perspectives on natural language processing."
+      "summary": "The lecture lists key references for further study, including Jurafsky and Martin's 2024 textbook on speech and language processing, StanfordNLP's CS224n course materials, and Marvin Minsky's work on commonsense interfaces. It also cites recent research on semantic role labeling, benchmarking challenges like Dynabench and GlobalBench, and generalization issues in open-domain question answering. These sources provide foundational and contemporary perspectives on natural language processing."
     }
   ]
 }

@@ -10,7 +10,7 @@
     {
       "slide": 1,
       "title": "Warm-up: http://PollEv.com/tias",
-      "summary": "Warm-up: http://PollEv.com/tias"
+      "summary": "Warm-up poll"
     },
     {
       "slide": 2,
@@ -40,7 +40,7 @@
     {
       "slide": 7,
       "title": "AI is having real-world impact",
-      "summary": "Slide 7 asserts that artificial intelligence is currently generating significant real-world impact. The presentation identifies three primary domains where this influence is evident: public imagination, the economy, and politics."
+      "summary": "The lecture asserts that artificial intelligence is currently generating significant real-world impact. The presentation identifies three primary domains where this influence is evident: public imagination, the economy, and politics."
     },
     {
       "slide": 8,
@@ -115,7 +115,7 @@
     {
       "slide": 22,
       "title": "Maximize Your",
-      "summary": "Slide 22 presents the core principle of maximizing expected utility."
+      "summary": "The lecture presents the core principle of maximizing expected utility."
     },
     {
       "slide": 23,
@@ -150,7 +150,7 @@
     {
       "slide": 29,
       "title": "Pac-Man as an Agent",
-      "summary": "Slide 29 introduces the concept of \"Pac-Man as an Agent\" by outlining its core components: sensors, actuators, environment, percepts, and actions. The slide visually maps these elements to define how the agent interacts with its surroundings, noting that Pac-Man is a registered trademark used here for educational purposes."
+      "summary": "The lecture introduces the concept of \"Pac-Man as an Agent\" by outlining its core components: sensors, actuators, environment, percepts, and actions. The slide visually maps these elements to define how the agent interacts with its surroundings, noting that Pac-Man is a registered trademark used here for educational purposes."
     },
     {
       "slide": 30,
@@ -165,7 +165,7 @@
     {
       "slide": 32,
       "title": "AI",
-      "summary": "Slide 32 outlines key components of Artificial Intelligence, including rational agents focused on reasoning and decisions, physically embodied robots, and machine learning which involves learning decisions that can be independent. The slide also identifies natural language processing, computer vision, and human-AI interaction as essential domains within the field."
+      "summary": "The lecture outlines key components of Artificial Intelligence, including rational agents focused on reasoning and decisions, physically embodied robots, and machine learning which involves learning decisions that can be independent. The slide also identifies natural language processing, computer vision, and human-AI interaction as essential domains within the field."
     },
     {
       "slide": 33,
@@ -215,7 +215,7 @@
     {
       "slide": 42,
       "title": "peter.claes@kuleuven.be",
-      "summary": "peter.claes@kuleuven.be"
+      "summary": "Instructor contact information"
     },
     {
       "slide": 43,
@@ -250,22 +250,22 @@
     {
       "slide": 49,
       "title": "What Can AI Do?",
-      "summary": "Slide 49 presents a quiz asking which tasks AI can currently perform, ranging from winning at chess and Go to driving safely or constructing buildings. The professor confirms that AI agents have recently succeeded in discovering and proving new mathematical theorems using significant compute resources. Additionally, he notes that AI can already perform fairly simple surgical operations depending on complexity and has demonstrated real-time translation capabilities between spoken Chinese and English."
+      "summary": "The lecture presents a quiz asking which tasks AI can currently perform, ranging from winning at chess and Go to driving safely or constructing buildings. The professor confirms that AI agents have recently succeeded in discovering and proving new mathematical theorems using significant compute resources. Additionally, he notes that AI can already perform fairly simple surgical operations depending on complexity and has demonstrated real-time translation capabilities between spoken Chinese and English."
     },
     {
       "slide": 50,
       "title": "What Can AI Do?",
-      "summary": "Slide 50 presents a quiz asking which specific tasks AI can currently perform, ranging from beating humans at chess and Go to physical challenges like unloading dishwashers or driving in San Francisco. The slide highlights Google's AlphaGo defeating Lee Sedol in 2016 as a key milestone while noting a \"tiny plot twist\" in 2023. The professor introduces this section by contrasting the historical limitation of AI to research labs with its current widespread public accessibility through tools like Google's AI mode and Gemini."
+      "summary": "The lecture presents a quiz asking which specific tasks AI can currently perform, ranging from beating humans at chess and Go to physical challenges like unloading dishwashers or driving in San Francisco. The slide highlights Google's AlphaGo defeating Lee Sedol in 2016 as a key milestone while noting a \"tiny plot twist\" in 2023. The professor introduces this section by contrasting the historical limitation of AI to research labs with its current widespread public accessibility through tools like Google's AI mode and Gemini."
     },
     {
       "slide": 51,
       "title": "What Can AI Do?",
-      "summary": "Slide 51 presents a series of questions to evaluate current AI capabilities across diverse domains, ranging from strategic games like chess and Go to complex physical tasks such as driving in San Francisco or unloading dishwashers. The list also includes intellectual challenges like proving mathematical theorems, creative endeavors like writing funny stories, and practical applications including real-time translation and online grocery shopping. A specific quiz question asks which of these tasks, exemplified by buying groceries at Colruyt, can be accomplished at present."
+      "summary": "The lecture presents a series of questions to evaluate current AI capabilities across diverse domains, ranging from strategic games like chess and Go to complex physical tasks such as driving in San Francisco or unloading dishwashers. The list also includes intellectual challenges like proving mathematical theorems, creative endeavors like writing funny stories, and practical applications including real-time translation and online grocery shopping. A specific quiz question asks which of these tasks, exemplified by buying groceries at Colruyt, can be accomplished at present."
     },
     {
       "slide": 52,
       "title": "What Can AI Do?",
-      "summary": "Slide 52 presents a series of questions to evaluate current AI capabilities across diverse domains, ranging from strategic games like chess and Go to complex physical tasks such as driving in San Francisco or unloading dishwashers. The slide also lists intellectual and creative challenges, including proving mathematical theorems, performing surgery, real-time translation, and writing funny stories. It concludes with a specific quiz asking which of these tasks, exemplified by buying groceries at Colruyt, can be accomplished at present."
+      "summary": "The lecture presents a series of questions to evaluate current AI capabilities across diverse domains, ranging from strategic games like chess and Go to complex physical tasks such as driving in San Francisco or unloading dishwashers. The slide also lists intellectual and creative challenges, including proving mathematical theorems, performing surgery, real-time translation, and writing funny stories. It concludes with a specific quiz asking which of these tasks, exemplified by buying groceries at Colruyt, can be accomplished at present."
     },
     {
       "slide": 53,
@@ -275,17 +275,17 @@
     {
       "slide": 54,
       "title": "What Can AI Do?",
-      "summary": "Slide 54 presents a series of questions to evaluate current AI capabilities across diverse domains, ranging from strategic games like chess and Go to complex physical tasks such as driving in San Francisco or unloading dishwashers. It also queries AI's ability to perform cognitive feats like proving mathematical theorems, translating languages in real time, creating art, and writing funny stories. The slide concludes with a specific quiz asking which of these tasks, including buying groceries at Colruyt, can be accomplished by AI at present."
+      "summary": "The lecture presents a series of questions to evaluate current AI capabilities across diverse domains, ranging from strategic games like chess and Go to complex physical tasks such as driving in San Francisco or unloading dishwashers. It also queries AI's ability to perform cognitive feats like proving mathematical theorems, translating languages in real time, creating art, and writing funny stories. The slide concludes with a specific quiz asking which of these tasks, including buying groceries at Colruyt, can be accomplished by AI at present."
     },
     {
       "slide": 55,
       "title": "What Can AI Do?",
-      "summary": "Slide 55 presents a series of questions to evaluate current AI capabilities across diverse domains, ranging from strategic games like chess and Go to complex physical tasks such as driving in San Francisco or unloading dishwashers. The list also includes intellectual challenges like proving mathematical theorems, creative endeavors like writing funny stories, and practical applications including real-time translation and online grocery shopping. The slide concludes with a specific quiz asking which of these tasks, exemplified by buying groceries at Colruyt, can be performed by AI at present."
+      "summary": "The lecture presents a series of questions to evaluate current AI capabilities across diverse domains, ranging from strategic games like chess and Go to complex physical tasks such as driving in San Francisco or unloading dishwashers. The list also includes intellectual challenges like proving mathematical theorems, creative endeavors like writing funny stories, and practical applications including real-time translation and online grocery shopping. The slide concludes with a specific quiz asking which of these tasks, exemplified by buying groceries at Colruyt, can be performed by AI at present."
     },
     {
       "slide": 56,
       "title": "What Can AI Do?",
-      "summary": "Slide 56 presents a series of questions evaluating current AI capabilities across diverse domains, including strategic games like chess and Go, physical tasks such as driving and unloading dishwashers, and intellectual challenges like proving mathematical theorems or writing funny stories. The slide contrasts these general abilities with specific real-world scenarios, concluding with a quiz asking which tasks, such as buying groceries at Colruyt, can be performed by AI at present."
+      "summary": "The lecture presents a series of questions evaluating current AI capabilities across diverse domains, including strategic games like chess and Go, physical tasks such as driving and unloading dishwashers, and intellectual challenges like proving mathematical theorems or writing funny stories. The slide contrasts these general abilities with specific real-world scenarios, concluding with a quiz asking which tasks, such as buying groceries at Colruyt, can be performed by AI at present."
     },
     {
       "slide": 57,
@@ -310,12 +310,12 @@
     {
       "slide": 61,
       "title": "Bias in algorithms, in data, in use...",
-      "summary": "Slide 61: Bias in algorithms, data, and use."
+      "summary": "Bias in algorithms, data, and use."
     },
     {
       "slide": 62,
       "title": "What would an ‘unbiased’ algorithm be?",
-      "summary": "Slide 62: What would an ‘unbiased’ algorithm be?"
+      "summary": "What would an ‘unbiased’ algorithm be?"
     },
     {
       "slide": 63,
@@ -325,17 +325,17 @@
     {
       "slide": 64,
       "title": "Maximize Your",
-      "summary": "Slide 64 presents the core principle of maximizing expected utility."
+      "summary": "The lecture presents the core principle of maximizing expected utility."
     },
     {
       "slide": 65,
       "title": "Utility?",
-      "summary": "Slide 65 introduces the concept of utility by distinguishing between scenarios with a clear utility function and those where the utility function is not so clear. This slide serves as a categorical comparison to highlight the varying degrees of definability in utility functions within the course material."
+      "summary": "Some agent tasks have a clear utility function; for others, defining what counts as a good outcome is harder."
     },
     {
       "slide": 66,
       "title": "Slide 66",
-      "summary": "Slide 66"
+      "summary": "In the Pacman game, an agent must choose actions to collect rewards and avoid hazards. A utility function makes these priorities explicit."
     },
     {
       "slide": 67,
@@ -345,7 +345,7 @@
     {
       "slide": 68,
       "title": "Further reading on implications of AI",
-      "summary": "Slide 68 provides a curated list of resources regarding the implications of artificial intelligence, including Stuart Russell's work on long-term futures and lethal autonomous weapons. Key references include books by Russell and Nick Bostrom, materials on AI and employment by Moshe Vardi, and reports from Stanford, the EU High Level Expert Group, and the Obama White House. The list also features research priorities for beneficial AI and the 23 Asilomar AI principles."
+      "summary": "The lecture provides a curated list of resources regarding the implications of artificial intelligence, including Stuart Russell's work on long-term futures and lethal autonomous weapons. Key references include books by Russell and Nick Bostrom, materials on AI and employment by Moshe Vardi, and reports from Stanford, the EU High Level Expert Group, and the Obama White House. The list also features research priorities for beneficial AI and the 23 Asilomar AI principles."
     },
     {
       "slide": 69,

@@ -20,7 +20,7 @@
     {
       "slide": 3,
       "title": "Introduction",
-      "summary": "Slide 3 introduces a toy corpus for Natural Language Processing (NLP) tokenization, defining a specific vocabulary including sky, wings, engine, helicopter, drone, rocket, goose, eagle, and bee. The slide presents various sentences describing these entities' relationships and attributes to illustrate how vocabulary is determined within this context. This example serves as the foundational dataset for exploring tokenization concepts in the lecture."
+      "summary": "The lecture introduces a toy corpus for Natural Language Processing (NLP) tokenization, defining a specific vocabulary including sky, wings, engine, helicopter, drone, rocket, goose, eagle, and bee. The slide presents various sentences describing these entities' relationships and attributes to illustrate how vocabulary is determined within this context. This example serves as the foundational dataset for exploring tokenization concepts in the lecture."
     },
     {
       "slide": 4,
@@ -35,12 +35,12 @@
     {
       "slide": 6,
       "title": "Regular expressions",
-      "summary": "Slide 6 presents the outline for the lecture on regular expressions within the context of NLP tokenization. The agenda covers an introduction, basics, and applications of regular expressions, followed by detailed sections on word tokenization, normalization, sentence segmentation, and subword tokenization including BPE and its limitations. The slide concludes with a summary of these topics under the broader theme of NLP tokenization."
+      "summary": "The lecture presents the outline for the lecture on regular expressions within the context of NLP tokenization. The agenda covers an introduction, basics, and applications of regular expressions, followed by detailed sections on word tokenization, normalization, sentence segmentation, and subword tokenization including BPE and its limitations. The slide concludes with a summary of these topics under the broader theme of NLP tokenization."
     },
     {
       "slide": 7,
       "title": "Regular expressions",
-      "summary": "Slide 7 presents the outline for the lecture on regular expressions within the context of NLP tokenization. The agenda covers an introduction, basics, and applications of regular expressions, followed by detailed sections on word tokenization, normalization, sentence segmentation, and subword tokenization including BPE and its limitations. The slide concludes with a summary of these topics under the broader theme of NLP tokenization."
+      "summary": "The lecture presents the outline for the lecture on regular expressions within the context of NLP tokenization. The agenda covers an introduction, basics, and applications of regular expressions, followed by detailed sections on word tokenization, normalization, sentence segmentation, and subword tokenization including BPE and its limitations. The slide concludes with a summary of these topics under the broader theme of NLP tokenization."
     },
     {
       "slide": 8,
@@ -65,7 +65,7 @@
     {
       "slide": 12,
       "title": "Regular expressions",
-      "summary": "Slide 12 defines regular expression patterns as convenient aliases for common character classes used in NLP tokenization. The slide lists specific pairs where `\\d` matches any digit, `\\w` matches alphanumeric characters or underscores, and `\\s` matches whitespace, alongside their negated counterparts `\\D`, `\\W`, and `\\S`. Examples provided include \"Latitude 59\" for digits, \"Blue moon\" for non-digits, \"Daiyu\" for alphanumerics, and \"Look!\" for non-alphanumeric characters."
+      "summary": "The lecture defines regular expression patterns as convenient aliases for common character classes used in NLP tokenization. The slide lists specific pairs where `\\d` matches any digit, `\\w` matches alphanumeric characters or underscores, and `\\s` matches whitespace, alongside their negated counterparts `\\D`, `\\W`, and `\\S`. Examples provided include \"Latitude 59\" for digits, \"Blue moon\" for non-digits, \"Daiyu\" for alphanumerics, and \"Look!\" for non-alphanumeric characters."
     },
     {
       "slide": 13,
@@ -85,7 +85,7 @@
     {
       "slide": 16,
       "title": "Regular expressions",
-      "summary": "Slide 16 presents an outline for the topic of Regular Expressions within the context of NLP tokenization. The agenda covers an introduction, basics, and applications, specifically detailing word tokenization, normalization, sentence segmentation, and subword tokenization including BPE and its limitations. This slide serves as a structural overview leading to a summary of these concepts."
+      "summary": "Regular expressions support tokenization, normalization, and sentence segmentation; the unit also covers BPE subword tokenization."
     },
     {
       "slide": 17,
@@ -140,12 +140,12 @@
     {
       "slide": 27,
       "title": "Regular expressions",
-      "summary": "Slide 27 illustrates regular expression applications within the ELIZA program using substitution patterns. The examples demonstrate matching user inputs containing keywords like \"depressed,\" \"sad,\" \"all,\" or \"always\" and replacing them with specific responses, utilizing backreferences (e.g., \\1) to echo captured emotional states. These patterns serve as a practical demonstration of text processing techniques relevant to Natural Language Processing tokenization."
+      "summary": "The lecture illustrates regular expression applications within the ELIZA program using substitution patterns. The examples demonstrate matching user inputs containing keywords like \"depressed,\" \"sad,\" \"all,\" or \"always\" and replacing them with specific responses, utilizing backreferences (e.g., \\1) to echo captured emotional states. These patterns serve as a practical demonstration of text processing techniques relevant to Natural Language Processing tokenization."
     },
     {
       "slide": 28,
       "title": "Word tokenzation and normalization and sentence segmentation",
-      "summary": "Slide 28 outlines the core components of text preprocessing, specifically word tokenization, word normalization, and sentence segmentation. The section further introduces subword tokenization techniques, including Byte Pair Encoding (BPE), while noting their associated limitations. This content serves as a structural overview within the broader NLP tokenization module."
+      "summary": "The lecture outlines the core components of text preprocessing, specifically word tokenization, word normalization, and sentence segmentation. The section further introduces subword tokenization techniques, including Byte Pair Encoding (BPE), while noting their associated limitations. This content serves as a structural overview within the broader NLP tokenization module."
     },
     {
       "slide": 29,
@@ -170,7 +170,7 @@
     {
       "slide": 33,
       "title": "Word tokenzation and normalization and sentence segmentation",
-      "summary": "Slide 33 demonstrates word tokenization in NLTK using a custom regular expression pattern from Bird and Loper (2004) to handle complex text structures. The provided regex specifically preserves abbreviations like \"U.S.A.\", hyphenated words such as \"poster-print\", currency values like \"$12.40\", and ellipses as single tokens, while treating punctuation marks as separate entities. This approach ensures accurate segmentation of the input string into meaningful linguistic units for further processing."
+      "summary": "The lecture demonstrates word tokenization in NLTK using a custom regular expression pattern from Bird and Loper (2004) to handle complex text structures. The provided regex specifically preserves abbreviations like \"U.S.A.\", hyphenated words such as \"poster-print\", currency values like \"$12.40\", and ellipses as single tokens, while treating punctuation marks as separate entities. This approach ensures accurate segmentation of the input string into meaningful linguistic units for further processing."
     },
     {
       "slide": 34,
@@ -205,7 +205,7 @@
     {
       "slide": 40,
       "title": "Word tokenzation and normalization and sentence segmentation",
-      "summary": "Slide 40 outlines the upcoming topics on word tokenization, normalization, and sentence segmentation within the broader context of NLP tokenization. The agenda further includes subword tokenization, Byte Pair Encoding (BPE), and the limitations of subword approaches before concluding with a summary."
+      "summary": "The lecture outlines the upcoming topics on word tokenization, normalization, and sentence segmentation within the broader context of NLP tokenization. The agenda further includes subword tokenization, Byte Pair Encoding (BPE), and the limitations of subword approaches before concluding with a summary."
     },
     {
       "slide": 41,
@@ -215,12 +215,12 @@
     {
       "slide": 42,
       "title": "Subword tokenization",
-      "summary": "Slide 42 presents the outline for subword tokenization, listing it as a key topic following word tokenization, normalization, and sentence segmentation. The slide indicates that the section will cover Byte Pair Encoding (BPE) and address the limitations of subword tokenization before concluding with a summary."
+      "summary": "The lecture presents the outline for subword tokenization, listing it as a key topic following word tokenization, normalization, and sentence segmentation. The slide indicates that the section will cover Byte Pair Encoding (BPE) and address the limitations of subword tokenization before concluding with a summary."
     },
     {
       "slide": 43,
       "title": "Subword tokenization",
-      "summary": "Slide 43 introduces subword tokenization as a specific level within the broader context of NLP tokenization. The slide content identifies this concept alongside the general topic of tokenization levels."
+      "summary": "The lecture introduces subword tokenization as a specific level within the broader context of NLP tokenization. The slide content identifies this concept alongside the general topic of tokenization levels."
     },
     {
       "slide": 44,
@@ -230,7 +230,7 @@
     {
       "slide": 45,
       "title": "Subword tokenization",
-      "summary": "Slide 45 presents the \"Subword tokenization\" section within a broader outline covering NLP tokenization topics, including word tokenization, normalization, sentence segmentation, and Byte Pair Encoding (BPE). The slide also lists subsequent points on subword tokenization limitations and a summary."
+      "summary": "The lecture presents the \"Subword tokenization\" section within a broader outline covering NLP tokenization topics, including word tokenization, normalization, sentence segmentation, and Byte Pair Encoding (BPE). The slide also lists subsequent points on subword tokenization limitations and a summary."
     },
     {
       "slide": 46,
@@ -245,7 +245,7 @@
     {
       "slide": 48,
       "title": "Subword tokenization",
-      "summary": "Slide 48 illustrates subword tokenization using a Byte Pair Encoding (BPE) learner on a corpus containing words like \"low,\" \"lowest,\" and \"newer\". The process begins with an initial vocabulary of individual characters, including letters and the underscore symbol. This example demonstrates how BPE operates within NLP tokenization by starting from character-level units before merging them into subword tokens based on frequency."
+      "summary": "The lecture illustrates subword tokenization using a Byte Pair Encoding (BPE) learner on a corpus containing words like \"low,\" \"lowest,\" and \"newer\". The process begins with an initial vocabulary of individual characters, including letters and the underscore symbol. This example demonstrates how BPE operates within NLP tokenization by starting from character-level units before merging them into subword tokens based on frequency."
     },
     {
       "slide": 49,
@@ -255,12 +255,12 @@
     {
       "slide": 50,
       "title": "Subword tokenization",
-      "summary": "Slide 50 illustrates Byte Pair Encoding (BPE) subword tokenization using a corpus containing words like \"lowest\" and \"newer\". The process begins with a vocabulary of individual characters and specific subunits such as \"er,\" \"er_,\" and \"ne\". It highlights the third merge step, where the characters 'n' and 'e' are combined to form the new token \"ne.\""
+      "summary": "The lecture illustrates Byte Pair Encoding (BPE) subword tokenization using a corpus containing words like \"lowest\" and \"newer\". The process begins with a vocabulary of individual characters and specific subunits such as \"er,\" \"er_,\" and \"ne\". It highlights the third merge step, where the characters 'n' and 'e' are combined to form the new token \"ne.\""
     },
     {
       "slide": 51,
       "title": "Subword tokenization",
-      "summary": "Slide 51 illustrates the Byte Pair Encoding (BPE) token learner process through a sequence of merges expanding the vocabulary. Starting with individual characters and basic pairs like \"ne\" and \"er\", the algorithm iteratively combines frequent adjacent tokens, such as merging \"lo\" and \"w\" to form \"low\". This progression demonstrates how BPE constructs subword units by repeatedly adding new merged pairs to the vocabulary list."
+      "summary": "The lecture illustrates the Byte Pair Encoding (BPE) token learner process through a sequence of merges expanding the vocabulary. Starting with individual characters and basic pairs like \"ne\" and \"er\", the algorithm iteratively combines frequent adjacent tokens, such as merging \"lo\" and \"w\" to form \"low\". This progression demonstrates how BPE constructs subword units by repeatedly adding new merged pairs to the vocabulary list."
     },
     {
       "slide": 52,
@@ -270,7 +270,7 @@
     {
       "slide": 53,
       "title": "Subword tokenization",
-      "summary": "Slide 53 presents an outline for the topic of subword tokenization within the broader context of NLP tokenization. The agenda covers foundational concepts, word-level processing including normalization and sentence segmentation, and specific subword methods such as Byte Pair Encoding (BPE). Additionally, the slide indicates that the limitations of subword tokenization will be addressed before concluding with a summary."
+      "summary": "The lecture presents an outline for the topic of subword tokenization within the broader context of NLP tokenization. The agenda covers foundational concepts, word-level processing including normalization and sentence segmentation, and specific subword methods such as Byte Pair Encoding (BPE). Additionally, the slide indicates that the limitations of subword tokenization will be addressed before concluding with a summary."
     },
     {
       "slide": 54,
@@ -310,7 +310,7 @@
     {
       "slide": 61,
       "title": "Summary",
-      "summary": "Slide 61 serves as a reference list summarizing key literature on NLP tokenization. It cites foundational works such as Jurafsky and Martin's textbook, the NLTK toolkit, and seminal papers on subword units, byte-pair encoding, and character-level translation. The references also include recent studies addressing cross-lingual fairness, domain adaptation, and the cost implications of tokenization in commercial language models."
+      "summary": "The lecture serves as a reference list summarizing key literature on NLP tokenization. It cites foundational works such as Jurafsky and Martin's textbook, the NLTK toolkit, and seminal papers on subword units, byte-pair encoding, and character-level translation. The references also include recent studies addressing cross-lingual fairness, domain adaptation, and the cost implications of tokenization in commercial language models."
     }
   ]
 }

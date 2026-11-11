@@ -85,7 +85,7 @@
     {
       "slide": 16,
       "title": "Difficulties",
-      "summary": "This slide introduces difficulties in machine translation using the French phrase \"je bois du lait\" as a specific example. The source material presents this sentence to illustrate challenges inherent in translating between languages within computational linguistics."
+      "summary": "The French phrase “je bois du lait” illustrates a translation difficulty: a system must map meaning across languages rather than merely replace individual words."
     },
     {
       "slide": 17,
@@ -115,7 +115,7 @@
     {
       "slide": 22,
       "title": "Difficulties",
-      "summary": "The slide indicates this is page 47 of 48 and lists the instructor's contact information, but it."
+      "summary": "Question-answering"
     },
     {
       "slide": 23,
@@ -160,7 +160,7 @@
     {
       "slide": 31,
       "title": "Supervised classifiers",
-      "summary": "Slide 31 introduces the category of supervised classifiers within computational linguistics. The slide explicitly lists four specific algorithms: Naive Bayes, logistic regression, support vector machines, and K-nearest neighbours."
+      "summary": "The lecture introduces the category of supervised classifiers within computational linguistics. The slide explicitly lists four specific algorithms: Naive Bayes, logistic regression, support vector machines, and K-nearest neighbours."
     },
     {
       "slide": 32,
@@ -235,7 +235,7 @@
     {
       "slide": 46,
       "title": "Bag of words for sentiment analysis",
-      "summary": "Slide 46 illustrates the Bag of Words approach for sentiment analysis using a positive review of a Bond movie. The example text, \"This is one of the best Bond movies I have ever seen...\", is processed to yield a specific count representation denoted as c 18/52. This notation reflects the resulting feature vector or token statistics derived from the input sentence within the computational linguistics framework."
+      "summary": "The lecture illustrates the Bag of Words approach for sentiment analysis using a positive review of a Bond movie. The example text, \"This is one of the best Bond movies I have ever seen...\", is processed to yield a specific count representation denoted as c 18/52. This notation reflects the resulting feature vector or token statistics derived from the input sentence within the computational linguistics framework."
     },
     {
       "slide": 47,
@@ -245,12 +245,12 @@
     {
       "slide": 48,
       "title": "Bag of words for sentiment analysis",
-      "summary": "Slide 48 presents a Bag of Words example for sentiment analysis, calculating the score γ as 20 out of 52 based on a text containing positive terms like \"best,\" \"superbly,\" and \"great\". The slide illustrates how specific words are counted within a document to derive this numerical representation."
+      "summary": "The lecture presents a Bag of Words example for sentiment analysis, calculating the score γ as 20 out of 52 based on a text containing positive terms like \"best,\" \"superbly,\" and \"great\". The slide illustrates how specific words are counted within a document to derive this numerical representation."
     },
     {
       "slide": 49,
       "title": "Bag of words for sentiment analysis",
-      "summary": "Slide 49 illustrates the Bag of Words representation for sentiment analysis using a specific feature vector example. The notation γ( best 1 superbly 1 interesting 1 twists 1 great 1 ) = c 21/52 demonstrates how individual word counts are aggregated to calculate a class probability or score, where the value 21/52 represents the computed result for this set of terms."
+      "summary": "The lecture illustrates the Bag of Words representation for sentiment analysis using a specific feature vector example. The notation γ( best 1 superbly 1 interesting 1 twists 1 great 1 ) = c 21/52 demonstrates how individual word counts are aggregated to calculate a class probability or score, where the value 21/52 represents the computed result for this set of terms."
     },
     {
       "slide": 50,
@@ -430,7 +430,7 @@
     {
       "slide": 85,
       "title": "Beyond accuracy",
-      "summary": "Slide 85 introduces the confusion matrix to evaluate classification beyond simple accuracy, defining True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN). It presents formulas for Precision ($P$), Recall ($R$), and the F1 score. The slide illustrates that an \"always-not toxic\" baseline can achieve 95% accuracy while yielding 0% recall and F1 for the toxic class, demonstrating why accuracy alone is insufficient."
+      "summary": "The lecture introduces the confusion matrix to evaluate classification beyond simple accuracy, defining True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN). It presents formulas for Precision ($P$), Recall ($R$), and the F1 score. The slide illustrates that an \"always-not toxic\" baseline can achieve 95% accuracy while yielding 0% recall and F1 for the toxic class, demonstrating why accuracy alone is insufficient."
     },
     {
       "slide": 86,

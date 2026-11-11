@@ -10,7 +10,7 @@
     {
       "slide": 1,
       "title": "faculty of arts",
-      "summary": "This lecture, titled \"Conditions and repetition,\" is the third session in the Scripting Languages course for the Faculty of Arts. It is presented by Tim Van de Cruys on Wednesday, October 7, 2026. The slide serves as the title page introducing these specific topics."
+      "summary": "Conditions and repetition"
     },
     {
       "slide": 2,
@@ -20,7 +20,7 @@
     {
       "slide": 3,
       "title": "Making decisions: flow charts",
-      "summary": "This slide introduces the topic of making decisions using flow charts within the context of scripting languages. It serves as a section header for lecture material dated 3/24, presented by Tim Van De Cruys at KU Leuven."
+      "summary": "Flow charts represent decisions by showing which path follows each condition."
     },
     {
       "slide": 4,
@@ -120,7 +120,7 @@
     {
       "slide": 23,
       "title": "List comprehensions",
-      "summary": "Slide 23 introduces list comprehensions as a scripting language feature. The slide provides the specific code example `[i for i in range(10)]` to demonstrate this syntax."
+      "summary": "The lecture introduces list comprehensions as a scripting language feature. The slide provides the specific code example `[i for i in range(10)]` to demonstrate this syntax."
     },
     {
       "slide": 24,

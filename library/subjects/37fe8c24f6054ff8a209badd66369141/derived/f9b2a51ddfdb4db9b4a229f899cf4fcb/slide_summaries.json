@@ -35,7 +35,7 @@
     {
       "slide": 6,
       "title": "N-grams",
-      "summary": "Slide 6 presents the outline for the N-grams section within the context of Natural Language Processing and language modeling. The agenda covers five key topics: an introduction to N-grams, generation via sampling, evaluation methods, smoothing techniques, and a final summary. This slide serves as a structural overview."
+      "summary": "N-gram language models are studied through sampling, evaluation, and smoothing."
     },
     {
       "slide": 7,
@@ -105,7 +105,7 @@
     {
       "slide": 20,
       "title": "Generation: sampling",
-      "summary": "Slide 20 presents the \"Generation: sampling\" section within the broader language modeling outline, which also includes introduction, n-grams, evaluation, smoothing, and summary."
+      "summary": "The lecture presents the \"Generation: sampling\" section within the broader language modeling outline, which also includes introduction, n-grams, evaluation, smoothing, and summary."
     },
     {
       "slide": 21,
@@ -115,7 +115,7 @@
     {
       "slide": 22,
       "title": "Generation: sampling",
-      "summary": "Slide 22 presents a visualization of language model generation through sampling based on probabilities. This concept is attributed to Jurafsky and Martin (2025) within the context of language modeling."
+      "summary": "The lecture presents a visualization of language model generation through sampling based on probabilities. This concept is attributed to Jurafsky and Martin (2025) within the context of language modeling."
     },
     {
       "slide": 23,
@@ -135,17 +135,17 @@
     {
       "slide": 26,
       "title": "Generation: sampling",
-      "summary": "Slide 26 illustrates sentence generation using N-gram models trained on Shakespeare text, demonstrating a progression from unigrams producing probable words to bigrams forming coherent sequences and trigrams memorizing actual sentences. The professor notes that while higher-order n-grams improve modeling accuracy, they increasingly rely on analyzing and reproducing the training data. This section also briefly mentions sampling methods like temperature and top-k as alternatives to standard generation, with a detailed trade-off between deterministic and creative sampling reserved for future discussion."
+      "summary": "The lecture illustrates sentence generation using N-gram models trained on Shakespeare text, demonstrating a progression from unigrams producing probable words to bigrams forming coherent sequences and trigrams memorizing actual sentences. The professor notes that while higher-order n-grams improve modeling accuracy, they increasingly rely on analyzing and reproducing the training data. This section also briefly mentions sampling methods like temperature and top-k as alternatives to standard generation, with a detailed trade-off between deterministic and creative sampling reserved for future discussion."
     },
     {
       "slide": 27,
       "title": "Generation: sampling",
-      "summary": "Slide 27 presents examples of sentences generated through sampling using N-gram models trained on the Wall Street Journal (WSJ) corpus. This content is sourced from Jurafsky and Martin (2025) within the context of language modeling in natural language processing. The slide serves to illustrate the output capabilities of these statistical generation methods."
+      "summary": "The lecture presents examples of sentences generated through sampling using N-gram models trained on the Wall Street Journal (WSJ) corpus. This content is sourced from Jurafsky and Martin (2025) within the context of language modeling in natural language processing. The slide serves to illustrate the output capabilities of these statistical generation methods."
     },
     {
       "slide": 28,
       "title": "Evaluation",
-      "summary": "Slide 28 presents the evaluation outline for the language modeling lecture, listing key topics including introduction, n-grams, generation via sampling, evaluation, smoothing, and a summary. This slide serves as a structural overview of the course content."
+      "summary": "Language-model evaluation and smoothing follow the introduction to n-grams and sampling."
     },
     {
       "slide": 29,
@@ -195,7 +195,7 @@
     {
       "slide": 38,
       "title": "Evaluation",
-      "summary": "Slide 38 defines the evaluation of bi-gram language models using Perplexity, denoted as PP(W). The formula calculates perplexity as the N-th root of the inverse probability of a sequence W, which simplifies via the chain rule to the product of inverse conditional probabilities P(wi|wi−1) for bigrams. This metric quantifies how well the model predicts a test set by measuring the uncertainty of the predicted word sequence."
+      "summary": "The lecture defines the evaluation of bi-gram language models using Perplexity, denoted as PP(W). The formula calculates perplexity as the N-th root of the inverse probability of a sequence W, which simplifies via the chain rule to the product of inverse conditional probabilities P(wi|wi−1) for bigrams. This metric quantifies how well the model predicts a test set by measuring the uncertainty of the predicted word sequence."
     },
     {
       "slide": 39,
@@ -205,7 +205,7 @@
     {
       "slide": 40,
       "title": "Smoothing",
-      "summary": "Slide 40 presents the outline for the smoothing topic within the language modeling module. The agenda covers an introduction, n-grams, generation via sampling, evaluation, smoothing techniques, and a summary."
+      "summary": "The lecture presents the outline for the smoothing topic within the language modeling module. The agenda covers an introduction, n-grams, generation via sampling, evaluation, smoothing techniques, and a summary."
     },
     {
       "slide": 41,
@@ -225,7 +225,7 @@
     {
       "slide": 44,
       "title": "Smoothing",
-      "summary": "Slide 44 introduces smoothing as a technique to address sparse statistics in language modeling, illustrated by the conditional counts following \"denied the\" (e.g., 3 allegations, 2 reports). The slide adapts an example from Dan Klein and summarizes the core concept of smoothing with the phrase \"Steal from the rich to give to the poor,\" indicating a redistribution of probability mass from frequent events to rare or unseen ones."
+      "summary": "The lecture introduces smoothing as a technique to address sparse statistics in language modeling, illustrated by the conditional counts following \"denied the\" (e.g., 3 allegations, 2 reports). The slide adapts an example from Dan Klein and summarizes the core concept of smoothing with the phrase \"Steal from the rich to give to the poor,\" indicating a redistribution of probability mass from frequent events to rare or unseen ones."
     },
     {
       "slide": 45,
@@ -235,7 +235,7 @@
     {
       "slide": 46,
       "title": "Smoothing",
-      "summary": "Slide 46 introduces Add-one (Laplace) smoothing as a technique to address zero probabilities in language modeling. It contrasts the Maximum Likelihood Estimate (MLE), which calculates probability based solely on observed counts, with Laplace smoothing, which adds one to every count in the numerator and adjusts the denominator by adding the vocabulary size $V$. This adjustment ensures that unseen word sequences receive a non-zero probability."
+      "summary": "The lecture introduces Add-one (Laplace) smoothing as a technique to address zero probabilities in language modeling. It contrasts the Maximum Likelihood Estimate (MLE), which calculates probability based solely on observed counts, with Laplace smoothing, which adds one to every count in the numerator and adjusts the denominator by adding the vocabulary size $V$. This adjustment ensures that unseen word sequences receive a non-zero probability."
     },
     {
       "slide": 47,
@@ -290,7 +290,7 @@
     {
       "slide": 57,
       "title": "Summary",
-      "summary": "Slide 57 provides a reference list for the lecture on language modeling, citing foundational and contemporary works in natural language processing. Key sources include Shannon's 1948 mathematical theory of communication, Jurafsky and Martin's 2025 textbook, and recent papers on hierarchical story generation, stylistic control, and neural text degeneration. These references support the course material."
+      "summary": "The lecture provides a reference list for the lecture on language modeling, citing foundational and contemporary works in natural language processing. Key sources include Shannon's 1948 mathematical theory of communication, Jurafsky and Martin's 2025 textbook, and recent papers on hierarchical story generation, stylistic control, and neural text degeneration. These references support the course material."
     }
   ]
 }

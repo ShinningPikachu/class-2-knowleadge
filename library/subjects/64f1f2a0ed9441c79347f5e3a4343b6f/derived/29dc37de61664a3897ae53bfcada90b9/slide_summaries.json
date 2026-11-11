@@ -25,32 +25,32 @@
     {
       "slide": 4,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 4 introduces an example problem concerning the terms \"Faculteit,\" \"departement,\" and \"dienst\". The slide structure indicates that this problem is illustrated through both positive and negative examples."
+      "summary": "Positive and negative examples define a binary classification task: learn a rule that separates the two groups."
     },
     {
       "slide": 5,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 5 introduces an example problem centered on the terms \"Faculteit,\" \"departement,\" and \"dienst\". The slide outlines a classification task that requires distinguishing between positive and negative examples. It poses the specific question of how to classify a given example within this context."
+      "summary": "A new example must be assigned a label using the pattern learned from positive and negative training cases."
     },
     {
       "slide": 6,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 6 introduces an example classification problem involving positive and negative examples. The specific task asks how to classify a \"solid red circle in a polygon\"."
+      "summary": "The lecture introduces an example classification problem involving positive and negative examples. The specific task asks how to classify a \"solid red circle in a polygon\"."
     },
     {
       "slide": 7,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 7 presents an example classification problem distinguishing between positive and negative cases. The positive example is defined as a solid red circle located within any polygon, while the negative example specifies a solid red circle situated inside a regular polygon. The slide poses the question of how to classify these specific geometric configurations based on the provided criteria."
+      "summary": "The lecture presents an example classification problem distinguishing between positive and negative cases. The positive example is defined as a solid red circle located within any polygon, while the negative example specifies a solid red circle situated inside a regular polygon. The slide poses the question of how to classify these specific geometric configurations based on the provided criteria."
     },
     {
       "slide": 8,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 8 presents an example classification problem involving geometric shapes. It contrasts positive examples, such as a solid red circle inside any polygon, with negative examples where the circle is restricted to a regular polygon. The slide poses the specific question of how to classify these instances based on the distinction between general and regular polygons."
+      "summary": "The lecture presents an example classification problem involving geometric shapes. It contrasts positive examples, such as a solid red circle inside any polygon, with negative examples where the circle is restricted to a regular polygon. The slide poses the specific question of how to classify these instances based on the distinction between general and regular polygons."
     },
     {
       "slide": 9,
       "title": "Traditional programming",
-      "summary": "Slide 9 contrasts traditional programming with supervised machine learning by illustrating their distinct input-output flows. In traditional programming, a computer combines data and a program to produce an output. Conversely, in supervised learning, the computer uses data and the desired output to generate the program itself."
+      "summary": "The lecture contrasts traditional programming with supervised machine learning by illustrating their distinct input-output flows. In traditional programming, a computer combines data and a program to produce an output. Conversely, in supervised learning, the computer uses data and the desired output to generate the program itself."
     },
     {
       "slide": 10,
@@ -70,12 +70,12 @@
     {
       "slide": 13,
       "title": "- Music playlist consisting of songs used as background music",
-      "summary": "Slide 13 introduces a running example centered on a music playlist composed of songs utilized as background music. This specific scenario serves as the foundational context for subsequent discussions within the lecture series."
+      "summary": "The lecture introduces a running example centered on a music playlist composed of songs utilized as background music. This specific scenario serves as the foundational context for subsequent discussions within the lecture series."
     },
     {
       "slide": 14,
       "title": "- Music playlist consisting of songs used as background music",
-      "summary": "Slide 14 introduces a running example involving a music playlist composed of songs used as background music. The specific objective for this example is to automatically add new songs to the existing playlist."
+      "summary": "The lecture introduces a running example involving a music playlist composed of songs used as background music. The specific objective for this example is to automatically add new songs to the existing playlist."
     },
     {
       "slide": 15,
@@ -85,7 +85,7 @@
     {
       "slide": 16,
       "title": "- Music playlist consisting of songs used as background music",
-      "summary": "Slide 16 introduces a running example of automatically building a background music playlist by filtering songs based on features like BPM and energy levels. The process requires five steps: data collection, preprocessing, feature construction, model building, and evaluation. A hypothesis space divides the feature space into positive and negative regions to classify new songs, such as determining if a track with 125 BPM fits the desired low-energy criteria."
+      "summary": "The lecture introduces a running example of automatically building a background music playlist by filtering songs based on features like BPM and energy levels. The process requires five steps: data collection, preprocessing, feature construction, model building, and evaluation. A hypothesis space divides the feature space into positive and negative regions to classify new songs, such as determining if a track with 125 BPM fits the desired low-energy criteria."
     },
     {
       "slide": 17,
@@ -105,7 +105,7 @@
     {
       "slide": 20,
       "title": "- Which features can describe a song?",
-      "summary": "Slide 20 introduces the topic of feature construction by posing the question of which features can describe a song."
+      "summary": "The lecture introduces the topic of feature construction by posing the question of which features can describe a song."
     },
     {
       "slide": 21,
@@ -120,7 +120,7 @@
     {
       "slide": 23,
       "title": "- Boolean (1/0 ; True/False)",
-      "summary": "Slide 23 outlines five feature types: Boolean (e.g., Instrumental={True, False}), Nominal with no value relationship (e.g., Genre), Linear/Ordered with structured values (e.g., Energy={Low, Medium, High}), Numerical integers (e.g., BPM), and Hierarchical features with partial IS-A ordering. The professor clarifies that nominal categories like music genres lack inherent order, whereas ordered features like energy levels possess a defined structure from low to high."
+      "summary": "The lecture outlines five feature types: Boolean (e.g., Instrumental={True, False}), Nominal with no value relationship (e.g., Genre), Linear/Ordered with structured values (e.g., Energy={Low, Medium, High}), Numerical integers (e.g., BPM), and Hierarchical features with partial IS-A ordering. The professor clarifies that nominal categories like music genres lack inherent order, whereas ordered features like energy levels possess a defined structure from low to high."
     },
     {
       "slide": 24,
@@ -155,37 +155,37 @@
     {
       "slide": 30,
       "title": "Representing models",
-      "summary": "Slide 30 introduces the topic of representing models within an organizational context. The slide explicitly lists \"Faculteit\" (Faculty), \"departement\" (Department), and \"dienst\" (Service) as key entities involved in this representation."
+      "summary": "Representing models"
     },
     {
       "slide": 31,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 31 presents a visualization of the hypothesis space for Business Process Management (BPM), plotting Energy values ranging from 0 to 200 against four discrete points labeled 1 through 4. The diagram illustrates a distribution of positive and negative indicators across these energy levels."
+      "summary": "The lecture presents a visualization of the hypothesis space for Business Process Management (BPM), plotting Energy values ranging from 0 to 200 against four discrete points labeled 1 through 4. The diagram illustrates a distribution of positive and negative indicators across these energy levels."
     },
     {
       "slide": 32,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 32 presents a diagram of the hypothesis space for Business Process Management (BPM), plotting Energy values from 0 to 200 against four distinct hypotheses. The visual data displays a sequence of positive and negative labels corresponding to these hypotheses, specifically noting Hypothesis 1 with associated label assignments."
+      "summary": "The lecture presents a diagram of the hypothesis space for Business Process Management (BPM), plotting Energy values from 0 to 200 against four distinct hypotheses. The visual data displays a sequence of positive and negative labels corresponding to these hypotheses, specifically noting Hypothesis 1 with associated label assignments."
     },
     {
       "slide": 33,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 33 presents a hypothesis space visualization plotting BPM Energy against four hypotheses, marked with positive (+), negative (-), and unknown (?) labels. The diagram illustrates the distribution of these labels across the energy spectrum for Hypothesis 1, distinguishing between confirmed positive and negative outcomes alongside uncertain cases."
+      "summary": "The lecture presents a hypothesis space visualization plotting BPM Energy against four hypotheses, marked with positive (+), negative (-), and unknown (?) labels. The diagram illustrates the distribution of these labels across the energy spectrum for Hypothesis 1, distinguishing between confirmed positive and negative outcomes alongside uncertain cases."
     },
     {
       "slide": 34,
       "title": "Set of legal hypotheses: in this example only straight lines",
-      "summary": "Slide 34 defines the set of legal hypotheses for this specific example as restricted to straight lines only. The slide visualizes the hypothesis space using a graph with BPM and Energy axes, displaying data points marked as positive (+), negative (-), or unknown (?). It specifically illustrates \"Hypothesis 1\" within this constrained space of linear functions."
+      "summary": "The lecture defines the set of legal hypotheses for this specific example as restricted to straight lines only. The slide visualizes the hypothesis space using a graph with BPM and Energy axes, displaying data points marked as positive (+), negative (-), or unknown (?). It specifically illustrates \"Hypothesis 1\" within this constrained space of linear functions."
     },
     {
       "slide": 35,
       "title": "Set of legal hypotheses: in this example only straight lines",
-      "summary": "Slide 35 defines the set of legal hypotheses for this specific example as being restricted to only straight lines. The slide visualizes the hypothesis space using a graph with BPM and Energy axes, displaying data points marked with positive (+), negative (-), and unknown (?) labels. It illustrates two distinct candidate models, labeled Hypothesis 1 and Hypothesis 2, which represent potential straight-line fits within this constrained space."
+      "summary": "The lecture defines the set of legal hypotheses for this specific example as being restricted to only straight lines. The slide visualizes the hypothesis space using a graph with BPM and Energy axes, displaying data points marked with positive (+), negative (-), and unknown (?) labels. It illustrates two distinct candidate models, labeled Hypothesis 1 and Hypothesis 2, which represent potential straight-line fits within this constrained space."
     },
     {
       "slide": 36,
       "title": "Set of legal hypotheses: in this example only straight lines",
-      "summary": "Slide 36 defines the set of legal hypotheses for this specific example as being restricted to straight lines. The slide visualizes a hypothesis space containing three distinct linear candidates, labeled Hypothesis 1, Hypothesis 2, and Hypothesis 3. These hypotheses are plotted against axes representing BPM and Energy, illustrating how different straight-line models fit the provided data points."
+      "summary": "The lecture defines the set of legal hypotheses for this specific example as being restricted to straight lines. The slide visualizes a hypothesis space containing three distinct linear candidates, labeled Hypothesis 1, Hypothesis 2, and Hypothesis 3. These hypotheses are plotted against axes representing BPM and Energy, illustrating how different straight-line models fit the provided data points."
     },
     {
       "slide": 37,
@@ -275,27 +275,27 @@
     {
       "slide": 54,
       "title": "A real example of learning a model:",
-      "summary": "Slide 54 introduces the k-nearest neighbors (kNN) algorithm as a concrete example of learning a model. The slide explicitly identifies kNN to illustrate how a machine learning model can be constructed and applied in practice."
+      "summary": "The lecture introduces the k-nearest neighbors (kNN) algorithm as a concrete example of learning a model. The slide explicitly identifies kNN to illustrate how a machine learning model can be constructed and applied in practice."
     },
     {
       "slide": 55,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Faculteit, departement, dienst …"
+      "summary": "Unfamiliar objects set up an instance-based classification task: infer which examples belong to the invented category “tufa.”"
     },
     {
       "slide": 56,
       "title": "Tufa",
-      "summary": "Slide 56 presents an example of tufa attributed to Josh Tenenbaum and prompts viewers to identify additional instances of this feature. The slide includes administrative text referencing a faculty, department, or service."
+      "summary": "The highlighted “tufa” examples suggest a visual category; classifying new objects requires judging their similarity to the examples."
     },
     {
       "slide": 57,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Faculteit, departement, dienst …"
+      "summary": "Additional highlighted candidates test whether the inferred “tufa” category generalizes beyond the first examples."
     },
     {
       "slide": 58,
       "title": "- If it walks like a duck and quacks like a duck, then it’s probably a duck",
-      "summary": "Slide 58 introduces instance-based learning intuitively using the analogy that if something behaves like a duck, it is likely a duck. The slide illustrates this concept with a scatter plot of BPM and Energy data points labeled as positive (+) or negative (-), where an unknown query point (?) surrounded by positive instances is classified as \"Probably a positive\". This demonstrates how classification relies on the characteristics of nearby stored examples."
+      "summary": "The lecture introduces instance-based learning intuitively using the analogy that if something behaves like a duck, it is likely a duck. The slide illustrates this concept with a scatter plot of BPM and Energy data points labeled as positive (+) or negative (-), where an unknown query point (?) surrounded by positive instances is classified as \"Probably a positive\". This demonstrates how classification relies on the characteristics of nearby stored examples."
     },
     {
       "slide": 59,
@@ -305,12 +305,12 @@
     {
       "slide": 60,
       "title": "- If it walks like a duck and quacks like a duck, then it’s probably a duck",
-      "summary": "Slide 60 introduces instance-based learning through the analogy that if an entity behaves like a duck, it is likely a duck. The slide visually represents this concept using a dataset of positive and negative instances plotted against BPM and Energy axes to classify unknown cases as probably positive or negative based on their proximity to known examples."
+      "summary": "The lecture introduces instance-based learning through the analogy that if an entity behaves like a duck, it is likely a duck. The slide visually represents this concept using a dataset of positive and negative instances plotted against BPM and Energy axes to classify unknown cases as probably positive or negative based on their proximity to known examples."
     },
     {
       "slide": 61,
       "title": "- Recommender systems",
-      "summary": "Slide 61 highlights the practical importance of nearest neighbor methods by listing diverse applications such as recommender systems, medical case comparison, web and image search, news articles, plagiarism detection, weather forecasting, and Retrieval Augmented Generation (RAG). The slide emphasizes that despite appearing trivial, understanding these techniques is essential due to their widespread utility across these critical domains."
+      "summary": "The lecture highlights the practical importance of nearest neighbor methods by listing diverse applications such as recommender systems, medical case comparison, web and image search, news articles, plagiarism detection, weather forecasting, and Retrieval Augmented Generation (RAG). The slide emphasizes that despite appearing trivial, understanding these techniques is essential due to their widespread utility across these critical domains."
     },
     {
       "slide": 62,
@@ -330,82 +330,82 @@
     {
       "slide": 65,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 65 presents an example of a 1-Nearest Neighbor (1-NN) classification applied to BPM Energy data. The visual content displays a sequence of positive (+) and negative (-) class labels plotted against numerical values ranging from 0 to 200, illustrating the distribution of these categories within the dataset."
+      "summary": "The lecture presents an example of a 1-Nearest Neighbor (1-NN) classification applied to BPM Energy data. The visual content displays a sequence of positive (+) and negative (-) class labels plotted against numerical values ranging from 0 to 200, illustrating the distribution of these categories within the dataset."
     },
     {
       "slide": 66,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 66 presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to BPM Energy data, visualized across a scale from 0 to 200. The diagram displays four distinct rows containing sequences of positive (+), negative (-), and unknown (?) symbols, alongside a labeled queue ranging from 'a' to 'z'."
+      "summary": "The lecture presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to BPM Energy data, visualized across a scale from 0 to 200. The diagram displays four distinct rows containing sequences of positive (+), negative (-), and unknown (?) symbols, alongside a labeled queue ranging from 'a' to 'z'."
     },
     {
       "slide": 67,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 67 presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to BPM Energy data, visualized with a queue labeled 'a' through 'z'. The slide displays a sequence of positive and negative values alongside a distance metric indicating \"Dist a 10 ?\"."
+      "summary": "The lecture presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to BPM Energy data, visualized with a queue labeled 'a' through 'z'. The slide displays a sequence of positive and negative values alongside a distance metric indicating \"Dist a 10 ?\"."
     },
     {
       "slide": 68,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 68 presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to BPM Energy data, visualized with a queue labeled 'a' through 'z'. The slide displays a sequence of positive and negative values alongside energy measurements ranging from 0 to 200. It specifically highlights a calculation for \"Dist b\" resulting in the value 8, illustrating how distance is determined within this dataset context."
+      "summary": "The lecture presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to BPM Energy data, visualized with a queue labeled 'a' through 'z'. The slide displays a sequence of positive and negative values alongside energy measurements ranging from 0 to 200. It specifically highlights a calculation for \"Dist b\" resulting in the value 8, illustrating how distance is determined within this dataset context."
     },
     {
       "slide": 69,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 69 presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to a dataset involving BPM and Energy metrics. The visual content displays a queue labeled with letters 'a' through 'z' alongside binary classification symbols (+/-), illustrating a specific instance where the distance for item 'c' is calculated as 3."
+      "summary": "The lecture presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to a dataset involving BPM and Energy metrics. The visual content displays a queue labeled with letters 'a' through 'z' alongside binary classification symbols (+/-), illustrating a specific instance where the distance for item 'c' is calculated as 3."
     },
     {
       "slide": 70,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 70 presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to BPM Energy data, visualized with a queue labeled 'a' through 'z'. The diagram displays a sequence of positive and negative values alongside a numerical scale ranging from 0 to 200. It specifically highlights a query point 'e' with a distance value of 2, indicated by a question mark, illustrating the classification or retrieval process within this dataset."
+      "summary": "The lecture presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to BPM Energy data, visualized with a queue labeled 'a' through 'z'. The diagram displays a sequence of positive and negative values alongside a numerical scale ranging from 0 to 200. It specifically highlights a query point 'e' with a distance value of 2, indicated by a question mark, illustrating the classification or retrieval process within this dataset."
     },
     {
       "slide": 71,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 71 presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to a dataset involving BPM and Energy metrics. The visual data displays a sequence of positive and negative classifications alongside a queue labeled with letters from 'a' to 'z'. A specific query point, marked as 'e', is highlighted with a distance value of 2, illustrating the calculation process for determining the nearest neighbor in this classification context."
+      "summary": "The lecture presents an example of the 1-Nearest Neighbor (1-NN) algorithm applied to a dataset involving BPM and Energy metrics. The visual data displays a sequence of positive and negative classifications alongside a queue labeled with letters from 'a' to 'z'. A specific query point, marked as 'e', is highlighted with a distance value of 2, illustrating the calculation process for determining the nearest neighbor in this classification context."
     },
     {
       "slide": 72,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 72 illustrates a 1-Nearest Neighbor (1-NN) classification example using BPM Energy data points labeled as positive (+) or negative (-). The diagram identifies 'e' as the nearest neighbor to the query point '?', with a distance of 2. Consequently, the algorithm assigns the label of 'e', which is negative (-), to the unknown instance."
+      "summary": "The lecture illustrates a 1-Nearest Neighbor (1-NN) classification example using BPM Energy data points labeled as positive (+) or negative (-). The diagram identifies 'e' as the nearest neighbor to the query point '?', with a distance of 2. Consequently, the algorithm assigns the label of 'e', which is negative (-), to the unknown instance."
     },
     {
       "slide": 73,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 73 presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to Business Process Management (BPM) energy data. The visual displays a sequence of positive (+) and negative (-) values across four rows, culminating in a query point marked with a question mark (?). A queue labeled with letters from 'a' through 'z' is listed below the data matrix, likely representing the dataset elements used for the classification or prediction task."
+      "summary": "The lecture presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to Business Process Management (BPM) energy data. The visual displays a sequence of positive (+) and negative (-) values across four rows, culminating in a query point marked with a question mark (?). A queue labeled with letters from 'a' through 'z' is listed below the data matrix, likely representing the dataset elements used for the classification or prediction task."
     },
     {
       "slide": 74,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 74 presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to Business Process Mining (BPM). The slide displays a dataset containing energy values, binary classifications (+/-), and a queue of items labeled 'a' through 'z'. It specifically highlights a distance calculation for item 'a', noting a value of 10 with an unknown result indicated by a question mark."
+      "summary": "The lecture presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to Business Process Mining (BPM). The slide displays a dataset containing energy values, binary classifications (+/-), and a queue of items labeled 'a' through 'z'. It specifically highlights a distance calculation for item 'a', noting a value of 10 with an unknown result indicated by a question mark."
     },
     {
       "slide": 75,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 75 presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to BPM Energy data, visualized with positive and negative class markers across a numerical range. The slide includes a queue labeled with letters 'a' through 'z' and lists specific distance values for items 'b' (8) and 'a' (10), ending with an unknown query point marked by a question mark."
+      "summary": "The lecture presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to BPM Energy data, visualized with positive and negative class markers across a numerical range. The slide includes a queue labeled with letters 'a' through 'z' and lists specific distance values for items 'b' (8) and 'a' (10), ending with an unknown query point marked by a question mark."
     },
     {
       "slide": 76,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 76 presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to BPM Energy data, visualized with positive and negative class markers across a queue labeled 'a' through 'z'. The slide illustrates distance calculations for specific instances, showing distances of 3, 8, and 10 for items c, b, and a respectively, relative to an unknown query point."
+      "summary": "The lecture presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to BPM Energy data, visualized with positive and negative class markers across a queue labeled 'a' through 'z'. The slide illustrates distance calculations for specific instances, showing distances of 3, 8, and 10 for items c, b, and a respectively, relative to an unknown query point."
     },
     {
       "slide": 77,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 77 presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to a dataset involving BPM, Energy, and Queue metrics. The slide displays data points labeled with positive (+) and negative (-) classes alongside a queue sequence from 'a' to 'z'. It specifically illustrates distance calculations for a query point, listing distances of 3 to points 'c' and 'd', and 8 to point 'b', to determine the nearest neighbors."
+      "summary": "The lecture presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to a dataset involving BPM, Energy, and Queue metrics. The slide displays data points labeled with positive (+) and negative (-) classes alongside a queue sequence from 'a' to 'z'. It specifically illustrates distance calculations for a query point, listing distances of 3 to points 'c' and 'd', and 8 to point 'b', to determine the nearest neighbors."
     },
     {
       "slide": 78,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 78 presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to a BPM Energy dataset. The visual data includes a queue labeled with letters 'a' through 'z' and specific distance calculations for items 'e', 'c', and 'd'."
+      "summary": "The lecture presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to a BPM Energy dataset. The visual data includes a queue labeled with letters 'a' through 'z' and specific distance calculations for items 'e', 'c', and 'd'."
     },
     {
       "slide": 79,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 79 presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to a BPM Energy dataset. The visual data includes a queue labeled with letters 'a' through 'z' and specific distance calculations for neighbors e, f, and d, which are listed as 2, 3, and 3 respectively."
+      "summary": "The lecture presents an example of the 3-Nearest Neighbors (3-NN) algorithm applied to a BPM Energy dataset. The visual data includes a queue labeled with letters 'a' through 'z' and specific distance calculations for neighbors e, f, and d, which are listed as 2, 3, and 3 respectively."
     },
     {
       "slide": 80,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 80 illustrates a 3-Nearest Neighbors (3-NN) classification example using BPM Energy data. The process identifies the three closest neighbors to the query point as 'e' (distance 2), 'c' (distance 3), and 'd' (distance 4). By combining the labels of these specific neighbors, the algorithm determines the final classification result is positive (+)."
+      "summary": "The lecture illustrates a 3-Nearest Neighbors (3-NN) classification example using BPM Energy data. The process identifies the three closest neighbors to the query point as 'e' (distance 2), 'c' (distance 3), and 'd' (distance 4). By combining the labels of these specific neighbors, the algorithm determines the final classification result is positive (+)."
     },
     {
       "slide": 81,
@@ -415,7 +415,7 @@
     {
       "slide": 82,
       "title": "What distances are possible?",
-      "summary": "Slide 82 poses the question \"What distances are possible?\" and lists the terms \"Faculteit,\" \"departement,\" and \"dienst\"."
+      "summary": "What distances are possible?"
     },
     {
       "slide": 83,
@@ -430,7 +430,7 @@
     {
       "slide": 85,
       "title": "- Value difference metric: attribute values are close if they make similar",
-      "summary": "The value difference metric defines attribute values as \"close\" when they result in similar predictions. This approach is specifically designed to handle datasets containing mixed continuous and discrete attributes. The slide lists examples such as faculty, department, and service units while categorizing this concept under more advanced measures."
+      "summary": "The value difference metric treats attribute values as close when they lead to similar predictions, which helps compare mixed continuous and discrete attributes."
     },
     {
       "slide": 86,
@@ -445,7 +445,7 @@
     {
       "slide": 88,
       "title": "How can we combine",
-      "summary": "Slide 88 poses the central question of how to combine neighbors' labels within a hierarchical structure. The slide specifically lists \"Faculteit,\" \"departement,\" and \"dienst\" as examples of these organizational levels."
+      "summary": "For classification, neighbors’ labels can be combined by majority vote; for regression, their target values can be averaged."
     },
     {
       "slide": 89,
@@ -455,7 +455,7 @@
     {
       "slide": 90,
       "title": "- Average of the nearest neighbors",
-      "summary": "Slide 90 introduces the method of using the average of the nearest neighbors to predict real values within the k-Nearest Neighbors (kNN) framework. This approach distinguishes regression tasks, which output continuous numerical results, from classification tasks that typically assign discrete categories. The core mechanism involves calculating the mean of the target values from the identified nearest neighbors to generate the final prediction."
+      "summary": "The lecture introduces the method of using the average of the nearest neighbors to predict real values within the k-Nearest Neighbors (kNN) framework. This approach distinguishes regression tasks, which output continuous numerical results, from classification tasks that typically assign discrete categories. The core mechanism involves calculating the mean of the target values from the identified nearest neighbors to generate the final prediction."
     },
     {
       "slide": 91,
@@ -480,37 +480,37 @@
     {
       "slide": 95,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 95 introduces the terms \"Faculteit,\" \"departement,\" and \"dienst\" as organizational units. The slide explicitly directs the audience to examine these concepts from a geometric perspective."
+      "summary": "Three labeled examples occupy positions in a two-dimensional feature space. Their distances will determine nearest-neighbor predictions."
     },
     {
       "slide": 96,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 96 introduces the terms \"Faculteit,\" \"departement,\" and \"dienst\" while proposing to examine these concepts geometrically."
+      "summary": "Fading one point isolates a pair of examples so their geometric relationship can be examined first."
     },
     {
       "slide": 97,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 97 introduces the terms \"Faculteit,\" \"departement,\" and \"dienst\" while proposing to examine these concepts geometrically."
+      "summary": "The line connecting two examples sets up their perpendicular bisector: points on that boundary are equally distant from both examples."
     },
     {
       "slide": 98,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 98 introduces the terms \"Faculteit,\" \"departement,\" and \"dienst\" as a lead-in to a geometric perspective on these organizational structures. The slide explicitly states, \"Let's look at this geometrically,\" indicating that the subsequent analysis will visualize the relationships between these entities using geometric concepts."
+      "summary": "The perpendicular bisector splits the plane into two regions, each nearer to one of the two examples."
     },
     {
       "slide": 99,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 99 introduces the terms \"Faculteit,\" \"departement,\" and \"dienst\" while proposing to examine these concepts from a geometric perspective. The slide text explicitly states the intention to analyze the relationship between these organizational units geometrically."
+      "summary": "Adding the third example creates more pairwise boundaries and starts subdividing the feature space."
     },
     {
       "slide": 100,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 100 introduces the terms \"Faculteit,\" \"departement,\" and \"dienst\" while proposing a geometric perspective to analyze these concepts. The slide explicitly states, \"Let's look at this geometrically,\" indicating that the subsequent discussion will interpret these organizational structures through a spatial or visual framework."
+      "summary": "The three examples partition the plane into nearest-neighbor regions; crossing a boundary changes which example is closest."
     },
     {
       "slide": 101,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 101 introduces a geometric perspective on the concepts of \"Faculteit,\" \"departement,\" and \"dienst\" by utilizing a Voronoi diagram. The slide explicitly directs the analysis to visualize these organizational structures through this specific geometric framework."
+      "summary": "A Voronoi diagram gives each training example a cell of points closer to it than to any other example. For 1-nearest-neighbor classification, the cell inherits that example’s label."
     },
     {
       "slide": 102,
@@ -535,17 +535,17 @@
     {
       "slide": 106,
       "title": "What should we worry",
-      "summary": "Slide 106 introduces the topic of potential concerns when utilizing the k-Nearest Neighbors (kNN) algorithm. The slide explicitly poses the question, \"What should we worry about when using kNN\"?"
+      "summary": "The lecture introduces the topic of potential concerns when utilizing the k-Nearest Neighbors (kNN) algorithm. The slide explicitly poses the question, \"What should we worry about when using kNN\"?"
     },
     {
       "slide": 107,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 107 presents the terms \"Faculteit, departement, dienst\" and poses the question of whether this sequence constitutes a correct example."
+      "summary": "Is this a correct example?"
     },
     {
       "slide": 108,
       "title": "Faculteit, departement, dienst …",
-      "summary": "Slide 108 addresses the challenge of calculating distances across multiple scales, specifically questioning which metric applies when variables differ significantly. It highlights that BPM and Energy operate on different domains or scales, noting that BPM values are higher than those for Energy. This discrepancy creates a problem in determining the appropriate distance measure for such heterogeneous data."
+      "summary": "The lecture addresses the challenge of calculating distances across multiple scales, specifically questioning which metric applies when variables differ significantly. It highlights that BPM and Energy operate on different domains or scales, noting that BPM values are higher than those for Energy. This discrepancy creates a problem in determining the appropriate distance measure for such heterogeneous data."
     },
     {
       "slide": 109,
@@ -560,12 +560,12 @@
     {
       "slide": 111,
       "title": "Duration",
-      "summary": "Slide 111 presents two musical examples illustrating duration and classification. The first example has a duration of 210 seconds, is in D Major with a tempo of 137 BPM, and belongs to the Disco-pop class. The second example, labeled as Problem 2, features a duration of 174 seconds, is in A-flat major with a tempo of 186 BPM, and is classified as Punk."
+      "summary": "The lecture presents two musical examples illustrating duration and classification. The first example has a duration of 210 seconds, is in D Major with a tempo of 137 BPM, and belongs to the Disco-pop class. The second example, labeled as Problem 2, features a duration of 174 seconds, is in A-flat major with a tempo of 186 BPM, and is classified as Punk."
     },
     {
       "slide": 112,
       "title": "Duration",
-      "summary": "Slide 112 presents an illustration for \"Problem 2\" comparing three musical examples by duration, key, tempo (BPM), and genre classification. The first example is a 210-second Disco-pop track in D Major at 137 BPM. The second is a 174-second Punk track in A-flat major at 186 BPM, while the third shares the same duration and key as the second but has an unknown genre at 160 BPM."
+      "summary": "The lecture presents an illustration for \"Problem 2\" comparing three musical examples by duration, key, tempo (BPM), and genre classification. The first example is a 210-second Disco-pop track in D Major at 137 BPM. The second is a 174-second Punk track in A-flat major at 186 BPM, while the third shares the same duration and key as the second but has an unknown genre at 160 BPM."
     },
     {
       "slide": 113,
@@ -600,7 +600,7 @@
     {
       "slide": 119,
       "title": "Questions?",
-      "summary": "Slide 119 serves as a concluding prompt inviting questions from the audience. The slide displays the heading \"Questions?\" alongside the text \"Faculteit, departement, dienst,\" indicating the relevant faculty or departmental context for inquiries."
+      "summary": "Questions?"
     }
   ]
 }

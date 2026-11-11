@@ -217,7 +217,7 @@
     {
       "slide": 24,
       "title": "Counting words",
-      "summary": "Slide 24 introduces the task of counting words using a specific Python string variable containing an excerpt from Vladimir Nabokov's *The Gift*. The example text is a complex, multi-clause sentence describing a visual scene involving light, mirrors, and moving boughs, serving as the dataset for demonstrating word-counting operations in scripting languages.",
+      "summary": "The lecture introduces the task of counting words using a specific Python string variable containing an excerpt from Vladimir Nabokov's *The Gift*. The example text is a complex, multi-clause sentence describing a visual scene involving light, mirrors, and moving boughs, serving as the dataset for demonstrating word-counting operations in scripting languages.",
       "sources": {
         "slide": true,
         "teacher_audio": false

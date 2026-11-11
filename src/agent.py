@@ -29,7 +29,7 @@ class LectureAgent:
     """Generate grounded, per-slide study notes with a local Ollama model."""
 
     CHECKPOINT_SCHEMA_VERSION = 1
-    SLIDE_PROMPT_VERSION = "lecture-slide-synthesis-v6"
+    SLIDE_PROMPT_VERSION = "lecture-slide-synthesis-v7"
     SYNTHESIS_PROMPT_VERSION = "lecture-synthesis-v1"
     SUMMARY_PROMPT_VERSION = "lecture-material-summary-v2"
 
@@ -43,8 +43,10 @@ examples only when the supplied source supports them. Identify important exam
 concepts only when they are stated, emphasized, defined, contrasted, repeated,
 or otherwise supported by the sources.
 
-Never invent information, examples, formulas, citations, or claims. Do not use
-outside knowledge to fill gaps. Normal lecture notes contain one concise, integrated
+Never invent information, examples, formulas, citations, or claims. You may add one
+standard background definition or relationship when it is needed to understand a
+substantive slide and is not already explained nearby; distinguish it from a claim
+about what the teacher said. Normal lecture notes contain one concise, integrated
 slide-specific explanation. A Deep Review may add concept and exam-point sections,
 but its main explanation must remain integrated. Treat OCR text as potentially
 imperfect and do not infer a diagram's meaning unless the slide text or transcript
@@ -56,7 +58,9 @@ text. Cover the slide's essential concepts and incorporate relevant teacher cont
 clarifications, reasoning, examples, qualifications, and emphasis. Mention an idea
 only once when both sources repeat it. Do not copy the slide bullet by bullet or
 transcribe the recording. Do not write source labels such as "the slide says" or
-"the professor explains" unless a genuine source disagreement must be identified."""
+"the professor explains" unless a genuine source disagreement must be identified.
+Start with the concept itself, without a slide number or phrases such as "this slide".
+For a title-only or administrative page, give only its useful title."""
 
     def __init__(
         self,
@@ -689,7 +693,10 @@ write from that source. Do not omit a central slide concept merely because it is
 Do not write a slide-text section, transcript section, source labels, or commentary
 about missing sources. Treat transcript paragraphs marked temporal_fallback as uncertain
 and use them only when their content is consistent with this slide. Remove logistics,
-repetition, speculation, and material belonging to other slides. Do not return any
+repetition, speculation, and material belonging to other slides. Start with the concept,
+not "Slide N", "this slide", or "the lecture". If a standard background concept is
+essential and not explained in nearby notes, add it once without attributing it to
+the teacher. For a title-only page, return just the title. Do not return any
 other sections or fields.
 
 SOURCES:
@@ -704,7 +711,8 @@ In 1–3 short sentences (maximum 90 words), synthesize the slide's essential me
 with every useful teacher clarification, rationale, example, qualification, or emphasis.
 Write one natural explanation without source labels or repeated ideas. Paraphrase the
 slide instead of copying it. Treat temporal_fallback transcript material as uncertain
-and use it only when consistent with the slide.
+and use it only when consistent with the slide. Start with the concept, never a slide
+number or "this slide". For a title-only page, write just its title.
 
 ## Important concepts
 - Grounded concept or "- No additional concepts stated."
@@ -768,8 +776,11 @@ bullet-by-bullet copying. Treat temporal_fallback transcript material as uncerta
 retain it only when consistent with the slide. Explain source-supported concepts,
 relationships, qualifications, and important details more deeply than the baseline
 draft. Keep the concise summary slide-specific and no longer than 90 words.
-Do not improve the draft using outside knowledge. If evidence is absent, state that
-plainly. Return only the corrected Markdown with exactly these headings:
+Allow only a standard background definition or relationship needed to understand a
+substantive slide, and only when it has not already been explained nearby. Do not add
+specific unsupported examples or claims about the teacher. If the page contains only
+a title, use that title alone; never describe missing sources. Start with the concept,
+without a slide number or "this slide". Return only the corrected Markdown with exactly these headings:
 
 ## Concise summary
 ## Important concepts
