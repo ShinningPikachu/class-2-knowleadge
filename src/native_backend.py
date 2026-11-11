@@ -331,7 +331,7 @@ class NativeBackend:
         return translations
 
     def _presentation_preview_slides(self, document: Any) -> list[dict[str, Any]]:
-        """Create a reusable slide preview for imported PowerPoint files."""
+        """Create a reusable slide preview for imported presentation files."""
         from src.pdf_processor import PDFProcessor
 
         cache_id = hashlib.sha256(
@@ -349,6 +349,17 @@ class NativeBackend:
         payload = PDFProcessor(config).process(document.stored_path, slides_path)
         return [item for item in payload.get("slides", []) if isinstance(item, dict)]
 
+    def _manual_slide_summaries_path(self, document: Any) -> Path:
+        """Find private, slide-specific explanations saved with a library deck."""
+        artifact_key = document.folder_id or document.id
+        return (
+            self.library.subjects_root
+            / document.subject_id
+            / "derived"
+            / artifact_key
+            / "slide_summaries.json"
+        )
+
     def _lecture_bundle(self, document: Any) -> dict[str, Any]:
         suffix = document.stored_path.suffix.lower()
         related = self._related_documents(document)
@@ -358,12 +369,14 @@ class NativeBackend:
             slides_path = self._find_related_artifact(related, ("slides", "extracted")) or self._result_path(source_job, "slides_path")
             slide_payload = self._read_json(slides_path)
             slides = [item for item in slide_payload.get("slides", []) if isinstance(item, dict)]
-            if suffix in {".ppt", ".pptx"} and not slides:
+            is_named_pdf_deck = suffix == ".pdf" and "slides" in re.sub(
+                r"[^a-z0-9]+", "_", document.original_name.casefold()
+            ) and "notes" not in document.original_name.casefold()
+            if not slides and (suffix in {".ppt", ".pptx"} or is_named_pdf_deck):
                 try:
                     slides = self._presentation_preview_slides(document)
                 except Exception:
-                    # Keep Quick Look available when a local PowerPoint
-                    # renderer or a usable slide conversion is unavailable.
+                    # Keep Quick Look available if local slide extraction fails.
                     slides = []
             is_deck = suffix in {".ppt", ".pptx"} or (
                 suffix == ".pdf" and slides and "notes" not in document.original_name.casefold()
@@ -378,6 +391,9 @@ class NativeBackend:
                     is_deck = False
             if is_deck and slides:
                 summaries_path = self._find_related_artifact(related, ("slide", "summaries")) or self._result_path(source_job, "slide_summaries_path")
+                if summaries_path is None:
+                    manual_summaries = self._manual_slide_summaries_path(document)
+                    summaries_path = manual_summaries if manual_summaries.is_file() else None
                 summary_payload = self._read_json(summaries_path)
                 summaries = {
                     str(int(item["slide"])): str(item.get("summary", "")).strip()
@@ -438,7 +454,7 @@ class NativeBackend:
                 return {
                     "kind": "slides",
                     "source_job": _job_summary(source_job) if source_job else None,
-                    "lecture_name": str(source_job.result.get("lecture_name", source_job.payload.get("lecture_name", "Lecture"))) if source_job else "Lecture",
+                    "lecture_name": str(source_job.result.get("lecture_name", source_job.payload.get("lecture_name", document.folder_name or "Lecture"))) if source_job else (document.folder_name or "Lecture"),
                     "slides": safe_slides,
                     "paragraphs": [],
                     "translations": {},

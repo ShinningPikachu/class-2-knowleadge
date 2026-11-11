@@ -515,6 +515,8 @@ struct LibraryWorkspaceView: View {
                             Image(systemName: "ellipsis.circle")
                         }
                         .menuStyle(.borderlessButton)
+                        .menuIndicator(.hidden)
+                        .fixedSize()
                         .help("File actions")
                     }
                     .padding(14)

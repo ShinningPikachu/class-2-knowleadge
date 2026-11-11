@@ -57,7 +57,8 @@ struct LectureSlidesPreview: View {
     }
 
     private var noteHeading: String {
-        note.isEmpty ? "Slide content" : "Slide and lecture note"
+        if note.isEmpty { return "Slide content" }
+        return bundle.sourceJob == nil ? "Slide explanation" : "Slide and lecture note"
     }
 
     var body: some View {

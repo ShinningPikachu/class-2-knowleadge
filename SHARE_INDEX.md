@@ -2,20 +2,9 @@
 
 This catalog links to the source materials stored in this repository. Clone the repository to use the full local Class Knowledge app.
 
-Subjects: **8** · Library documents: **112**
+Subjects: **6** · Library documents: **107**
 
 ## Subject library
-
-### Cognitive Science
-
-Archived lecture source materials and final notes.
-
-**Lecture 01: Cognitive Science - Chapter 1**
-
-- [Notes.pdf](library/subjects/af5a28523e5b4869a1444c9910bad8af/files/58368446baab44509dbd8ceab50219f6/e78bdfb1c31a4dd095b827c04c782d31_Notes.pdf) · 42.0 KB
-- [Recording.m4a](library/subjects/af5a28523e5b4869a1444c9910bad8af/files/58368446baab44509dbd8ceab50219f6/b4b37fea636242d9ae80c4593ab51dfc_Recording.m4a) · 35.3 MB
-- [Slides.original.pdf](library/subjects/af5a28523e5b4869a1444c9910bad8af/files/58368446baab44509dbd8ceab50219f6/0f2c4f73607c4097ae472f67c5c372c9_Slides.original.pdf) · 1.5 MB
-- [Slides.pdf](library/subjects/af5a28523e5b4869a1444c9910bad8af/files/58368446baab44509dbd8ceab50219f6/e43eec6be40b4f38987d0dc4dedc7cd7_Slides.pdf) · 1.5 MB
 
 ### Foundations of Computational Linguistics
 
@@ -88,16 +77,6 @@ Archived lecture source materials and final notes.
 - [Recording.m4a](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/files/28d02895917b4a48ba9d446f9eeb2bf2/f2dedc6147cb46b4aee34e2d102a6b5e_Recording.m4a) · 47.4 MB
 - [Slides.pdf](library/subjects/963e9965cbbd4c8693755a86e6f52dfe/files/28d02895917b4a48ba9d446f9eeb2bf2/9a11eceef1104c808f09e159e77795e8_Slides.pdf) · 10.4 MB
 
-### Genetic Algorithms and Evolutionary Computing
-
-Archived lecture source materials and final notes.
-
-**Lecture 01: Evolutionary Algorithms - Session 1**
-
-- [Notes.pdf](library/subjects/1c84969538944072a37b89d6857007c8/files/9f236e8efc6041a38d467f1b18d1044a/a220983a4e634ac6bb153965080a3ef4_Notes.pdf) · 42.8 KB
-- [Recording.m4a](library/subjects/1c84969538944072a37b89d6857007c8/files/9f236e8efc6041a38d467f1b18d1044a/1b9ea39567984b9faf2ad3e49a929f2f_Recording.m4a) · 50.6 MB
-- [Slides.pdf](library/subjects/1c84969538944072a37b89d6857007c8/files/9f236e8efc6041a38d467f1b18d1044a/6a39ed75d0fb4e4dbb420e5aa5c2cab3_Slides.pdf) · 16.0 MB
-
 ### Machine Learning and Inductive Inference
 
 **Lecture 01**
@@ -168,6 +147,11 @@ Archived lecture source materials and final notes.
 - [Recording.m4a](library/subjects/37fe8c24f6054ff8a209badd66369141/files/7e772c3f9d7943d099b07ce3096bc48c/a31bff21b7a34c1383e95c12ed786bad_Recording.m4a) · 45.1 MB
 - [Slides.original.pdf](library/subjects/37fe8c24f6054ff8a209badd66369141/files/7e772c3f9d7943d099b07ce3096bc48c/13f154df08f549a9a114bd75508b54e8_Slides.original.pdf) · 2.6 MB
 - [Slides.pdf](library/subjects/37fe8c24f6054ff8a209badd66369141/files/7e772c3f9d7943d099b07ce3096bc48c/4645f175a763462f899165150844f810_Slides.pdf) · 2.6 MB
+
+**Lecture 6: POS tagging (30 Oct)**
+
+- [Notes.pdf](library/subjects/37fe8c24f6054ff8a209badd66369141/files/9803c7dcafde4d90ad3745ef3da6d1b9/9533b8642a1744a8ba9cdf9c6fcb730b_Notes.pdf) · 18.2 KB
+- [Slides.pdf](library/subjects/37fe8c24f6054ff8a209badd66369141/files/9803c7dcafde4d90ad3745ef3da6d1b9/268fc05ac16d4ef6b79821f676cee1ae_Slides.pdf) · 2.0 MB
 
 **Lecture 7: Morphological processing (5 Nov)**
 
@@ -245,8 +229,3 @@ Archived lecture source materials and final notes.
 - [Notes.pdf](library/subjects/f7bfe9879089461185e596e26d99b67d/files/e904f91e307c4278a994f0e51964a7b2/fcae89b26abb4a2c987b2f1922a6cb7c_Notes.pdf) · 62.2 KB
 - [Recording.m4a](library/subjects/f7bfe9879089461185e596e26d99b67d/files/e904f91e307c4278a994f0e51964a7b2/16f926b237b24edcab2791ba66270b0b_Recording.m4a) · 88.4 MB
 - [Slides.pdf](library/subjects/f7bfe9879089461185e596e26d99b67d/files/e904f91e307c4278a994f0e51964a7b2/e6d8933e34234966903726e873958caf_Slides.pdf) · 2.2 MB
-
-## Other course files
-
-- [audio/KU Leuven Aula Rosalind Franklin.m4a](audio/KU%20Leuven%20Aula%20Rosalind%20Franklin.m4a) · 56.6 MB
-- [audio/Neural Computing.m4a](audio/Neural%20Computing.m4a) · 31.3 MB

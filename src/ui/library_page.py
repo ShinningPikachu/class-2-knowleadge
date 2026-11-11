@@ -330,12 +330,43 @@ def _lecture_slide_bundle(
     )
     slide_payload = _load_json_file(slides_path)
     slides = [item for item in slide_payload.get("slides", []) if isinstance(item, dict)]
+    normalized_name = re.sub(r"[^a-z0-9]+", "_", document.original_name.casefold())
+    if not slides and document.stored_path.suffix.lower() == ".pdf" and "slides" in normalized_name and "notes" not in normalized_name:
+        cache_id = hashlib.sha256(
+            f"{document.sha256}:native-presentation-preview-v1".encode("utf-8")
+        ).hexdigest()
+        preview_dir = library.root / ".preview_cache" / cache_id
+        preview_path = preview_dir / "slides.json"
+        slide_payload = _load_json_file(preview_path)
+        slides = [item for item in slide_payload.get("slides", []) if isinstance(item, dict)]
+        if not slides:
+            try:
+                from ..config import PipelineConfig
+                from ..pdf_processor import PDFProcessor
+
+                preview_dir.mkdir(parents=True, exist_ok=True)
+                slide_payload = PDFProcessor(PipelineConfig(enable_ocr=False)).process(
+                    document.stored_path, preview_path
+                )
+                slides = [item for item in slide_payload.get("slides", []) if isinstance(item, dict)]
+            except Exception:
+                slides = []
     if not slides or not _is_slide_deck(document, slides, source_job):
         return None
 
     summaries_path = _find_related_artifact(related, ("slide", "summaries")) or _result_path(
         source_job, "slide_summaries_path"
     )
+    if summaries_path is None:
+        artifact_key = document.folder_id or document.id
+        manual_summaries = (
+            library.subjects_root
+            / document.subject_id
+            / "derived"
+            / artifact_key
+            / "slide_summaries.json"
+        )
+        summaries_path = manual_summaries if manual_summaries.is_file() else None
     summaries_payload = _load_json_file(summaries_path)
     summaries = {
         int(item["slide"]): str(item.get("summary", "")).strip()
