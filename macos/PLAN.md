@@ -25,7 +25,7 @@ Replace the Streamlit browser interface with a fully native macOS application wh
 ## Completion criteria
 
 - The app opens as a native macOS window without opening a browser.
-- All four workspaces and their existing user-visible capabilities are available from native controls.
+- All five study workspaces and their existing user-visible capabilities are available from native controls.
 - The app reads and updates the existing project data without destructive migration.
 - Background jobs, their progress, and safe recovery continue to work when the window closes or the app restarts.
 - The project includes reproducible build/run instructions and a distributable `.app` build path.
@@ -36,7 +36,7 @@ Replace the Streamlit browser interface with a fully native macOS application wh
 - [x] Confirm current implementation is Streamlit backed by reusable Python domain services.
 - [x] Select native SwiftUI frontend plus a private local Python child process as the implementation path.
 - [x] Build native app shell and JSONL IPC foundation.
-- [x] Implement Library, Agent, Lecture Notes, and Job Queue workflows in native views.
+- [x] Implement Library, Agent, Lecture Notes, Job Queue, and Share workflows in native views.
 - [x] Add workspace selection, editable processing settings, result previews, local voice playback, and launch-at-login controls.
 - [x] Build and verify an ad-hoc signed `.app` bundle.
 - [x] Verify the backend and native UI against a disposable workspace; run the existing Python test suite.

@@ -5,6 +5,7 @@ import UniformTypeIdentifiers
 
 struct SettingsWorkspaceView: View {
     @EnvironmentObject private var model: AppModel
+    @AppStorage("classKnowledgeUILanguage") private var interfaceLanguage = "en"
     @State private var launchAtLogin = false
     @State private var savedNotice: String?
     @State private var launchStatus: String?
@@ -18,6 +19,20 @@ struct SettingsWorkspaceView: View {
                         .font(.largeTitle.weight(.semibold))
                     Text("Choose where local data lives and configure the on-device models.")
                         .foregroundStyle(.secondary)
+                }
+
+                GroupBox("Language") {
+                    HStack {
+                        Text("Interface language")
+                        Spacer()
+                        Picker("Interface language", selection: $interfaceLanguage) {
+                            Text("English").tag("en")
+                            Text("简体中文").tag("zh-Hans")
+                        }
+                        .labelsHidden()
+                        .frame(width: 180)
+                    }
+                    .padding(.top, 8)
                 }
 
                 GroupBox("Workspace") {
@@ -207,14 +222,18 @@ struct SettingsWorkspaceView: View {
                         Text("macOS starts the app after you sign in. The local job queue only runs while the app is open.")
                             .font(.callout)
                             .foregroundStyle(.secondary)
-                        if let launchStatus { Text(launchStatus).font(.caption).foregroundStyle(.secondary) }
+                        if let launchStatus {
+                            Text(LocalizedStringKey(launchStatus))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                     .padding(.top, 8)
                 }
 
                 HStack {
                     if let savedNotice {
-                        Label(savedNotice, systemImage: "checkmark.circle.fill")
+                        Label(LocalizedStringKey(savedNotice), systemImage: "checkmark.circle.fill")
                             .font(.callout)
                             .foregroundStyle(.green)
                     }

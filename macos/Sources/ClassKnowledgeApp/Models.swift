@@ -5,6 +5,7 @@ enum WorkspaceArea: String, CaseIterable, Identifiable {
     case agent = "Agent"
     case lectureNotes = "Lecture Notes"
     case jobQueue = "Job Queue"
+    case sharing = "Share"
     case settings = "Settings"
 
     var id: String { rawValue }
@@ -15,6 +16,7 @@ enum WorkspaceArea: String, CaseIterable, Identifiable {
         case .agent: "sparkles"
         case .lectureNotes: "waveform.and.note"
         case .jobQueue: "tray.full"
+        case .sharing: "square.and.arrow.up"
         case .settings: "gearshape"
         }
     }
@@ -92,6 +94,41 @@ struct WorkspaceSnapshot: Decodable {
     let counts: JobCounts
     let agentActive: Bool
     let ollamaAgentActive: Bool
+}
+
+struct SharingFile: Decodable, Identifiable {
+    let path: String
+    let sizeBytes: Int
+    let filter: String
+
+    var id: String { path }
+
+    var displaySize: String {
+        ByteCountFormatter.string(fromByteCount: Int64(sizeBytes), countStyle: .file)
+    }
+}
+
+struct SharingStatus: Decodable {
+    let repositoryRoot: String
+    let indexPath: String
+    let subjectCount: Int
+    let documentCount: Int
+    let libraryBytes: Int
+    let looseFileCount: Int
+    let looseBytes: Int
+    let totalFileCount: Int
+    let totalBytes: Int
+    let largeFileCount: Int
+    let blockedFileCount: Int
+    let largeFiles: [SharingFile]
+    let blockedFiles: [SharingFile]
+    let gitAvailable: Bool
+    let gitLfsInstalled: Bool
+    let pendingFileCount: Int?
+
+    var totalDisplaySize: String {
+        ByteCountFormatter.string(fromByteCount: Int64(totalBytes), countStyle: .file)
+    }
 }
 
 struct NativeSettings: Codable {

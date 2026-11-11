@@ -19,7 +19,7 @@ struct WorkspaceSetupView: View {
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 520)
             if let message = model.workspaceSetupMessage {
-                Text(message)
+            Text(LocalizedStringKey(message))
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

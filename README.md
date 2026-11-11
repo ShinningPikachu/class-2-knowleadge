@@ -1,11 +1,12 @@
 # Class Knowledge Library
 
-An offline-first subject library, document assistant, lecture-note generator, and background job queue tuned for a 32 GB local machine. The Streamlit application has four workspaces:
+An offline-first subject library, document assistant, lecture-note generator, and background job queue tuned for a 32 GB local machine. The application has five workspaces:
 
 - **Library** — use a desktop-style two-pane file explorer with a folder sidebar and icon grid, drag local files directly onto the subject root or any folder to upload them, drag existing file tiles into any folder to move them, recognize file types from simple PDF/audio/Markdown/PowerPoint icons, click files to preview their contents, double-click a file to open its full-page view in a new browser tab, remove or rename files and folders, and search extracted text from the magnifier field at the top. A lecture recording opens with its cleaned, synchronized transcript timeline; class slides and concise notes are linked as one lecture set. Slide summaries and PDF pages can be explained aloud through an offline local voice, and lecture summary PDFs can also be played as one narration.
 - **Agent** — explicitly activate a grounded assistant to ask questions across every subject or within one selected subject, with document/page/slide citations. Choose private, offline Ollama with a compact Light/Balanced/Deep selector, or an installed and signed-in Codex CLI for an optional cloud-backed provider. Codex is found automatically; select the account default or GPT-5.3 Codex, then choose Low, Medium, High, or Extra high reasoning. Codex receives only the question and retrieved excerpts, runs in an empty read-only workspace, and cannot edit the library. It can list, rename, and move documents or create a subject through conversational requests; every write action is previewed and requires confirmation.
 - **Lecture Notes** — drag a recording from Voice Memos or Finder and/or a slide deck (`.pdf`, `.pptx`, or `.ppt`) into the source area, or choose files, then queue them for background processing. The learner-facing recording, class deck, concise notes PDF, and a general summary PDF are saved automatically into one lecture folder; processing JSON and transcript files stay behind the combined previews instead of cluttering the file explorer.
 - **Job Queue** — see what is planned, running, waiting, saved for later, completed, failed, or cancelled; stop active work safely; resume it from checkpoints with a new priority; restart a failed task with the same saved parameters; open a live processing log; preview or download stored transcripts; request an on-demand translation of finished notes; and inspect or unload Ollama models.
+- **Share** — review repository content and Git LFS readiness, checkpoint the library catalog, and generate a readable GitHub index.
 
 Lecture tasks are selected by priority (`High`, `Normal`, then `Low`) and creation time. **Stop safely · do later** is distinct from permanent cancellation: Whisper finishes its current chunk and stores the partial transcript, while an in-flight Qwen response finishes and is checkpointed before the task moves to **Later**. **Resume from checkpoints** returns it to the priority queue and reuses the same run folder, completed transcript chunks, cleanup batches, final transcript, and every completed slide note. If the application itself restarts during a task, that task is also recovered into **Later** instead of being marked failed. If a cleanup response fails its safety checks twice, that batch is retried automatically in smaller ordered pieces; a later retry of that cleanup failure also resumes its verified checkpoints. Whisper transcription can run while the interactive Qwen agent is active. Transcript cleanup and lecture-note generation use Qwen, so they wait between model calls while the interactive agent remains activated, then resume automatically after the agent is deactivated. Automatic model cleanup is enabled by default. Qwen stays warm while the interactive agent is activated, and lecture jobs hand resident models directly to queued work that uses the same Ollama host and model. Models are unloaded after completion, deferral, failure, cancellation, agent deactivation, or restart recovery only when no active or queued consumer still needs them. This releases unused model memory without causing avoidable unload/reload cycles or terminating the Ollama server.
 
@@ -57,11 +58,12 @@ The pipeline is deliberately simple and inspectable:
 class-2-knowleadge/
 ├── app.py
 ├── requirements.txt
-├── library/                # created at runtime; subject catalog and original files
+├── library/                # shareable subject catalog and original files
 ├── jobs/                   # created at runtime; persistent queue and staged inputs
 ├── models/                 # optional local model files
-├── audio/                  # reserved local audio workspace
-├── pdf/                    # reserved local slide workspace
+├── audio/                  # shareable standalone recordings
+├── pdf/                    # shareable standalone slide decks
+├── reviewed/               # shareable reviewed notes and revisions
 ├── database/               # reserved local Chroma workspace
 ├── runs/                   # created at runtime; one auditable folder per lecture
 └── src/
@@ -80,7 +82,7 @@ class-2-knowleadge/
     ├── library_agent.py    # source-grounded library Q&A
     ├── jobs.py             # priority queue, safe defer/resume, cancellation, and Qwen coordination
     ├── lecture_library.py  # completed-run handoff to a subject
-    ├── ui/                 # focused Library, Agent, and Lecture page modules
+    ├── ui/                 # focused Library, Agent, Lecture, and Share page modules
     └── config.py
 ```
 
@@ -142,14 +144,30 @@ streamlit run app.py
 
 Then open the local URL Streamlit prints. The server is explicitly bound to `127.0.0.1` so the local-file controls are not exposed to other machines by default.
 
+## Share course materials through GitHub
+
+The **Share** workspace prepares the repository's content for sharing. The subject database and original documents in `library/`, plus loose source files in `audio/`, `pdf/`, and reviewed notes in `reviewed/`, are included in Git. Processing runs, job queues, generated caches, local models, and machine-specific app settings stay local. Use **Refresh share index** after library changes to checkpoint the SQLite catalog and update [`SHARE_INDEX.md`](SHARE_INDEX.md), a readable catalog with links to the files.
+
+Lecture audio and video use Git LFS rules in [`.gitattributes`](.gitattributes). Install Git LFS before staging recordings:
+
+```bash
+brew install git-lfs
+git lfs install
+git status --short
+```
+
+Review the changed files, then commit and push the repository as usual. Friends who clone it should have Git LFS enabled to download the media. For invited friends, set the GitHub repository to private and invite them. Files above 100 MiB are blocked in ordinary Git and need Git LFS; GitHub Free currently includes 10 GiB of LFS storage and 10 GiB of monthly download bandwidth. See [GitHub's large-file guidance](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github) and [Git LFS billing](https://docs.github.com/en/billing/concepts/product-billing/git-lfs) for current limits and usage.
+
 ## Native macOS app
 
-The SwiftUI macOS app presents the Library, Agent, Lecture Notes, Job Queue, and Settings in a native window without starting a browser. It uses the same Python services, local models, and project data through a private child process. Build and open it from the repository root:
+The SwiftUI macOS app presents the Library, Agent, Lecture Notes, Job Queue, Share, and Settings in a native window without starting a browser. It uses the same Python services, local models, and project data through a private child process. Build and open it from the repository root:
 
 ```bash
 ./scripts/build_macos_app.sh
 open "macos/Build/Class Knowledge.app"
 ```
+
+The checkout build is labeled **Class Knowledge Dev** and uses separate macOS preferences. The installed daily-use app remains **Class Knowledge**.
 
 To install a stable copy in `~/Applications` and open it:
 

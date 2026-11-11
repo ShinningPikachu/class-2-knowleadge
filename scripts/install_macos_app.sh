@@ -39,6 +39,10 @@ fi
 trap cleanup EXIT
 
 /usr/bin/ditto --norsrc --noextattr --noqtn "$source_app" "$staging_app"
+/usr/libexec/PlistBuddy -c 'Set :CFBundleIdentifier local.classknowledge.library' "$staging_app/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c 'Set :CFBundleName Class Knowledge' "$staging_app/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c 'Set :CFBundleDisplayName Class Knowledge' "$staging_app/Contents/Info.plist"
+/usr/bin/codesign --force --deep --sign - "$staging_app"
 /usr/bin/codesign --verify --deep --strict "$staging_app"
 
 if [[ -e "$installed_app" ]]; then

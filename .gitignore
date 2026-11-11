@@ -28,21 +28,21 @@ macos/Build/
 native_settings.json
 *.json.part
 
-# Runtime and local data
+# Runtime and local processing data
 runs/
 jobs/
-library/
-audio/*
-!audio/.gitkeep
-pdf/*
-!pdf/.gitkeep
+# The library database and original subject files are shared with the repository.
+# Keep transient SQLite journals and generated previews out of Git.
+/library/*.sqlite3-shm
+/library/*.sqlite3-wal
+/library/*.sqlite3-journal
+/library/subjects/**/derived/
+/library/**/*.part
 database/*
 !database/.gitkeep
 models/*
 !models/.gitkeep
-
-# Local slide-by-slide review outputs (notes, PDFs, and audit records)
-/reviewed/
+# audio/, pdf/, and reviewed/ contain user-owned course materials and are shareable.
 
 # 本机 socket 通道（DSH 插件用）
 .native_backend.sock

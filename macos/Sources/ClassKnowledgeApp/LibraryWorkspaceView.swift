@@ -37,15 +37,22 @@ struct LibraryWorkspaceView: View {
     }
 
     var body: some View {
-        HStack(spacing: 0) {
-            subjectPane
-                .frame(minWidth: 190, idealWidth: 220, maxWidth: 260)
-            Divider()
-            contentsPane
-                .frame(minWidth: 240, idealWidth: 300, maxWidth: 370)
-            Divider()
-            previewPane
-                .frame(minWidth: 360, maxWidth: .infinity)
+        GeometryReader { geometry in
+            let availableWidth = geometry.size.width
+            let subjectWidth = min(260, max(170, availableWidth * 0.27))
+            let contentsWidth = min(370, max(220, availableWidth * 0.39))
+
+            HStack(spacing: 0) {
+                subjectPane
+                    .frame(width: subjectWidth)
+                Divider()
+                contentsPane
+                    .frame(width: contentsWidth)
+                Divider()
+                previewPane
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color(nsColor: .windowBackgroundColor))
         .sheet(isPresented: $showingNewSubject) {
@@ -162,8 +169,16 @@ struct LibraryWorkspaceView: View {
 
             List(selection: $model.selectedSubjectID) {
                 ForEach(model.snapshot?.subjects ?? []) { subject in
-                    Label(subject.name, systemImage: "books.vertical")
-                        .lineLimit(1)
+                    Label {
+                        Text(subject.name)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    } icon: {
+                        Image(systemName: "books.vertical")
+                    }
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        .clipped()
                         .tag(subject.id as String?)
                         .help(subject.name)
                         .contextMenu {
@@ -500,11 +515,22 @@ struct LibraryWorkspaceView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             } else {
-                ContentUnavailableView(
-                    "Select a file",
-                    systemImage: "doc.text.magnifyingglass",
-                    description: Text("Choose a file to preview it here.")
-                )
+                VStack(spacing: 12) {
+                    Image(systemName: "doc.text.magnifyingglass")
+                        .font(.system(size: 34))
+                        .foregroundStyle(.tertiary)
+                    Text("Select a file")
+                        .font(.title2.weight(.semibold))
+                        .multilineTextAlignment(.center)
+                    Text("Choose a file to preview it here.")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: 300)
+                }
+                .padding(24)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }
         }
     }

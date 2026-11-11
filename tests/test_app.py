@@ -129,7 +129,7 @@ class StreamlitAppTest(unittest.TestCase):
                 workspace = next(item for item in app.radio if item.label == "Workspace")
                 self.assertEqual(
                     workspace.options,
-                    ["Library", "Agent", "Lecture Notes", "Job Queue"],
+                    ["Library", "Agent", "Lecture Notes", "Job Queue", "Share"],
                 )
 
                 workspace.set_value("Agent").run()

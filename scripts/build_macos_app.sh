@@ -27,6 +27,8 @@ contents="$app_path/Contents"
 rm -rf "$app_path"
 mkdir -p "$contents/MacOS"
 cp "$binary_path" "$contents/MacOS/ClassKnowledgeApp"
+mkdir -p "$contents/Resources"
+cp -R "$package_root/Sources/ClassKnowledgeApp/Resources/zh-Hans.lproj" "$contents/Resources/"
 
 cat > "$contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -38,11 +40,13 @@ cat > "$contents/Info.plist" <<'PLIST'
     <key>CFBundleExecutable</key>
     <string>ClassKnowledgeApp</string>
     <key>CFBundleIdentifier</key>
-    <string>local.classknowledge.library</string>
+    <string>local.classknowledge.library.dev</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>Class Knowledge</string>
+    <string>Class Knowledge Dev</string>
+    <key>CFBundleDisplayName</key>
+    <string>Class Knowledge Dev</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -57,5 +61,7 @@ cat > "$contents/Info.plist" <<'PLIST'
 </plist>
 PLIST
 
+/usr/bin/xattr -cr "$app_path"
 /usr/bin/codesign --force --deep --sign - "$app_path"
+/usr/bin/codesign --verify --deep --strict "$app_path"
 echo "Built $app_path"

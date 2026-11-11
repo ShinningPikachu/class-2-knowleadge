@@ -23,6 +23,8 @@ final class AppModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var importErrors: [ImportError] = []
     @Published var settings = NativeSettings()
+    @Published var sharingStatus: SharingStatus?
+    @Published var isPreparingSharing = false
     @Published var agentMessages: [AgentMessage] = []
     @Published var pendingAgentAction: PendingAgentAction?
     @Published var isAgentResponding = false
@@ -102,6 +104,27 @@ final class AppModel: ObservableObject {
             await loadLibrary()
         } catch {
             statusMessage = error.localizedDescription
+        }
+    }
+
+    func refreshSharing() async {
+        guard isConnected else { return }
+        do {
+            sharingStatus = try await backend.call("sharing.status", as: SharingStatus.self)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func prepareSharing() async {
+        guard isConnected else { return }
+        isPreparingSharing = true
+        defer { isPreparingSharing = false }
+        do {
+            sharingStatus = try await backend.call("sharing.prepare", as: SharingStatus.self)
+            statusMessage = "Share index refreshed"
+        } catch {
+            errorMessage = error.localizedDescription
         }
     }
 

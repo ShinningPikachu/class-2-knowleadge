@@ -24,6 +24,7 @@ from src.ui.common import render_model_settings
 from src.ui.jobs_page import render_jobs
 from src.ui.lecture_page import render_lecture_processor
 from src.ui.library_page import render_full_library_document, render_library
+from src.ui.sharing_page import render_sharing
 
 
 st.set_page_config(page_title="Class Knowledge Library", page_icon="🎓", layout="wide")
@@ -49,7 +50,7 @@ if full_file_id:
     )
     st.stop()
 
-workspace_options = ["Library", "Agent", "Lecture Notes", "Job Queue"]
+workspace_options = ["Library", "Agent", "Lecture Notes", "Job Queue", "Share"]
 requested_workspace = st.session_state.pop("requested_workspace", "")
 if requested_workspace in workspace_options:
     st.session_state["workspace_selector"] = requested_workspace
@@ -67,6 +68,8 @@ if workspace == "Library":
     render_library(library, job_manager)
 elif workspace == "Job Queue":
     render_jobs(job_manager)
+elif workspace == "Share":
+    render_sharing(library, project_path())
 else:
     model_config = render_model_settings(workspace)
     if workspace == "Agent":

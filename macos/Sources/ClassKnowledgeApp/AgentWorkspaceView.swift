@@ -101,43 +101,48 @@ struct AgentWorkspaceView: View {
 
     private var conversation: some View {
         ScrollViewReader { proxy in
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 16) {
+            GeometryReader { geometry in
+                ScrollView {
                     if model.agentMessages.isEmpty {
                         ContentUnavailableView(
                             "Ask a question",
                             systemImage: "text.bubble",
                             description: Text("Try asking about a concept in your subject materials.")
                         )
-                        .padding(.top, 70)
-                    }
-                    ForEach(model.agentMessages) { message in
-                        AgentMessageView(message: message)
-                            .id(message.id)
-                    }
-                    if let action = model.pendingAgentAction {
-                        PendingAgentActionCard(
-                            action: action,
-                            confirm: { Task { await model.confirmAgentAction() } },
-                            cancel: model.cancelAgentAction
-                        )
-                        .id("pending-action")
-                    }
-                    if model.isAgentResponding {
-                        HStack(spacing: 10) {
-                            ProgressView().controlSize(.small)
-                            Text("Working with local sources…")
-                                .foregroundStyle(.secondary)
+                        .padding(22)
+                        .frame(maxWidth: 900, minHeight: geometry.size.height)
+                        .frame(maxWidth: .infinity)
+                    } else {
+                        LazyVStack(alignment: .leading, spacing: 16) {
+                            ForEach(model.agentMessages) { message in
+                                AgentMessageView(message: message)
+                                    .id(message.id)
+                            }
+                            if let action = model.pendingAgentAction {
+                                PendingAgentActionCard(
+                                    action: action,
+                                    confirm: { Task { await model.confirmAgentAction() } },
+                                    cancel: model.cancelAgentAction
+                                )
+                                .id("pending-action")
+                            }
+                            if model.isAgentResponding {
+                                HStack(spacing: 10) {
+                                    ProgressView().controlSize(.small)
+                                    Text("Working with local sources…")
+                                        .foregroundStyle(.secondary)
+                                }
+                                .padding(.leading, 12)
+                            }
                         }
-                        .padding(.leading, 12)
+                        .padding(22)
+                        .frame(maxWidth: 900, alignment: .leading)
+                        .frame(maxWidth: .infinity)
                     }
                 }
-                .padding(22)
-                .frame(maxWidth: 900, alignment: .leading)
-                .frame(maxWidth: .infinity)
-            }
-            .onChange(of: model.agentMessages.count) { _, _ in
-                if let last = model.agentMessages.last { proxy.scrollTo(last.id, anchor: .bottom) }
+                .onChange(of: model.agentMessages.count) { _, _ in
+                    if let last = model.agentMessages.last { proxy.scrollTo(last.id, anchor: .bottom) }
+                }
             }
         }
     }

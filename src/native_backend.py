@@ -476,6 +476,14 @@ class NativeBackend:
                 "ollama_agent_active": self.manager.is_ollama_agent_active(),
                 "config": _serialize(asdict(self.config)),
             }
+        if method == "sharing.status":
+            from src.sharing import collect_sharing_status
+
+            return collect_sharing_status(self.library, self.project_root).to_dict()
+        if method == "sharing.prepare":
+            from src.sharing import prepare_share_snapshot
+
+            return prepare_share_snapshot(self.library, self.project_root).to_dict()
         if method == "settings.get":
             return _serialize(asdict(self.config))
         if method == "settings.update":

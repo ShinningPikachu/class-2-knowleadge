@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "ClassKnowledgeApp",
+    defaultLocalization: "en",
     platforms: [.macOS(.v14)],
     products: [
         .executable(name: "ClassKnowledgeApp", targets: ["ClassKnowledgeApp"]),

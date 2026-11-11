@@ -23,6 +23,8 @@ To build a `.app` in the repository without installing it, run:
 open "macos/Build/Class Knowledge.app"
 ```
 
+The checkout build is labeled **Class Knowledge Dev** and uses separate macOS preferences. The installed daily-use app remains **Class Knowledge**.
+
 The installer accepts `CLASS_KNOWLEDGE_INSTALL_DIR` to choose a different destination. Use `--no-open` to install without launching, which is useful for verification:
 
 ```sh
