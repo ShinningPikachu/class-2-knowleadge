@@ -1,0 +1,560 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 7: Morphological processing (5 Nov)",
+    "section_label": "Slide",
+    "completed": 61,
+    "total": 61,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Natural Language Processing:",
+      "summary": "This lecture introduces the topic of Natural Language Processing, specifically focusing on morphological processing. The course is identified as H02B1A and is presented by Miryam de Lhoneux from the Department of Computer Science at KU Leuven.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "Introduction",
+      "summary": "This lecture introduces the topic of morphological processing in Natural Language Processing (NLP) by outlining its core components. The session covers fundamental morphology, specific processing tasks, and two primary approaches: rule-based and data-driven methods. Additionally, it addresses morphologically-informed subword tokenization before concluding with a summary of these concepts.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 3,
+      "title": "Introduction",
+      "summary": "Morphology is defined as the study of the internal structure of words, a core concept in Natural Language Processing (NLP) known as morphological processing. This slide introduces these principles through the specific example of performing a morphological analysis on the word \"independently.\"",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 4,
+      "title": "Introduction",
+      "summary": "Morphological analysis breaks words like \"independently\" into morphemes, which are the smallest units of meaning. This process distinguishes between the stem (or lemma), which supplies the main meaning, and affixes, which add additional meaning. These concepts form the foundation for morphological processing in Natural Language Processing (NLP).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 5,
+      "title": "Introduction",
+      "summary": "Morphological analysis is essential for natural language understanding, particularly for resolving coreference by identifying number and plurality within sentences. For instance, analyzing \"The dogs chase the cat and they fall\" reveals that \"they\" refers to the plural subject \"dogs,\" not the singular \"cat\". This capability directly supports downstream tasks like question answering, enabling systems to correctly identify that \"the dogs\" are the entities falling based on grammatical agreement.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 6,
+      "title": "Introduction",
+      "summary": "Morphological analysis is essential for Natural Language Processing as it informs understanding tasks like coreference resolution and aids generation tasks such as machine translation. By analyzing word forms, systems can determine grammatical features like number; for instance, identifying \"dogs\" as plural allows the system to correctly resolve the pronoun \"they\" in \"The dogs chase the cat and they fall\". This capability also enables accurate translation, transforming the English source \"The dogs\" into the French target \"Les chiens\" while preserving the plural meaning.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 7,
+      "title": "Introduction",
+      "summary": "Morphological processing indirectly aids text preprocessing and normalization, such as lemmatization for information retrieval. To maximize utility beyond simple word recognition, systems should generalize to finite-state transducers (FSTs), which provide detailed analysis, segmentation, and tagging while enabling the generation of correct lemma inflections. However, a key limitation is that these machines require linguists to define all language possibilities and must be manually updated whenever new vocabulary emerges.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 8,
+      "title": "Introduction",
+      "summary": "Morphology indirectly benefits NLP by improving subword tokenization, contrasting frequency-based methods like GPT-4o's \"nons-ens-ical\" with morphologically informed splits such as \"non-sens-ical\". While standard tokenizers rely on character co-occurrence frequencies that can yield nonsensical boundaries, incorporating morphological structure creates more meaningful units. However, researching these improvements is challenging because validating new tokenizers requires training and comparing entire language models, a resource-intensive process often avoided by large labs in favor of scaling data.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 9,
+      "title": "Morphology",
+      "summary": "This section outlines the core components of morphological processing in Natural Language Processing, beginning with an introduction to morphology and its specific tasks. The curriculum covers two primary approaches: rule-based methods and data-driven techniques, alongside morphologically-informed subword tokenization strategies. A summary concludes this overview of how morphology is processed within NLP systems.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 10,
+      "title": "Morphology",
+      "summary": "Morphemes are the smallest units of meaning, categorized as stems (supplying main meaning) or affixes (adding additional meaning). For this course, stems are treated as identical to lemmas, base forms, roots, and lexemes, despite potential linguistic distinctions. Morphemes further divide into bound types, which cannot stand alone (e.g., -s, -ly, -ed), and free types, which can function independently as words (e.g., \"dog,\" \"walk\") while potentially combining with other morphemes.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 11,
+      "title": "Morphology",
+      "summary": "Inflectional morphemes are bound units that attach to free morphemes to create grammatical distinctions without altering a word's core meaning or Part-of-Speech (POS) tag. As illustrated by adding \"s\" to \"dog\" or \"eat,\" and \"ing\" to \"eat,\" these modifications change the word's form for functions like plurality, third-person singular, or gerunds while maintaining its original grammatical category. This contrasts with derivational morphemes, which also attach to words but generate entirely new terms by changing both the form and the POS tag.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 12,
+      "title": "Morphology",
+      "summary": "Derivational morphemes are bound units used to create new words by altering a word's form, part-of-speech tag, and meaning. Examples include adding \"-ee\" to the verb \"appoint\" to form the noun \"appointee,\" or attaching \"-ize\" and \"-ation\" to the adjective \"global\" to sequentially generate the verb \"globalize\" and noun \"globalization\". These processes demonstrate how derivational morphology enables complex word formation paths, such as transforming \"helpful\" into \"helpfully\" and \"helpfulness.\"",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 13,
+      "title": "Morphology",
+      "summary": "Morphology in NLP focuses on concatenative morphology, which constructs words by combining a stem with one or more affixes. Affixes are categorized as prefixes, such as \"dis-\" in *disestablish*, or suffixes, like \"-ment\" in *establishment*. These elements can be combined sequentially to form complex words, exemplified by *disestablishment*, which integrates both a prefix and a suffix with the stem.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 14,
+      "title": "Morphology",
+      "summary": "While concatenative morphology attaches prefixes or suffixes to string ends, non-concatenative morphology modifies words through internal changes not typical of English. This category includes infixes inserted within a root (e.g., Tagalog *hingi* becoming *humingi*), circumfixes surrounding a stem (e.g., German *sagen* becoming *gesagt*), and reduplication where a word repeats to alter meaning (e.g., Motu *mahuta* becoming *mahutamahuta* for constant action).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 15,
+      "title": "Morphology",
+      "summary": "Morphological typology describes how languages vary in using morphology to encode grammatical and semantic information, forming a continuum from isolating to polysynthetic. Chinese represents an isolating extreme where each morpheme functions as a separate word, whereas Russian is synthetic, packing multiple morphemes into single words like \"vyučili\". English occupies an intermediate analytic position on this spectrum, which extends to Vietnamese at the isolating end and West Greenlandic at the polysynthetic extreme, where one word can express complex concepts like \"it is really good for catching polar bears.\"",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 16,
+      "title": "Morphology",
+      "summary": "Morphological typology classifies languages along a continuum based on the number of morphemes per word. This framework, originally estimated by Greenberg in 1960 and illustrated in a figure by Jurafsky and Martin (2025), serves as a foundational concept for understanding morphological processing in natural language processing.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 17,
+      "title": "Morphology",
+      "summary": "Morphology examines morphological typology, exemplified by the polysynthetic West Greenlandic language where a single word can express complex ideas. The sentence \"Nannu-n-niuti-kkuminar-tu-rujussu-u-vuq\" translates to \"It (a dog) is really good for catching polar bears with,\" demonstrating how multiple morphemes combine to convey meaning, instrumentality, and grammatical features like person and tense. This structural complexity highlights the necessity of specialized morphological processing in Natural Language Processing tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 18,
+      "title": "Morphology",
+      "summary": "Morphological typology classifies languages based on how morphemes convey meaning, distinguishing between agglutinative languages like Turkish, where each morpheme has a single meaning, and fusional languages like Russian, where morphemes may carry multiple meanings. This classification exists along a continuum rather than as rigid categories. In Natural Language Processing, understanding these distinctions is essential for effective morphological processing.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 19,
+      "title": "Morphology",
+      "summary": "Agglutinative and fusional languages exhibit greater morphological complexity than isolating languages, a distinction illustrated by Russian where single morphemes can carry multiple meanings. This complexity creates significant challenges for current NLP models, which are often biased toward isolating languages like English, leaving morphologically rich languages underserved. Consequently, ongoing research focuses on quantifying these difficulties and addressing the resulting inequality in model performance across different language types.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 20,
+      "title": "Processing morphology: tasks",
+      "summary": "This section outlines the core tasks in processing morphology, which are categorized into three primary approaches: rule-based morphological processing, data-driven morphological processing, and morphologically-informed subword tokenization. These methods represent the fundamental strategies used within Natural Language Processing to analyze and handle word structure. The slide serves as a structural overview introducing these specific techniques before they are explored in subsequent sections.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 21,
+      "title": "Processing morphology: tasks",
+      "summary": "Morphological analysis supports natural language understanding through three primary tasks: lemmatization, segmentation, and tagging. Using \"puppies\" as an example, lemmatization extracts the base form \"puppy,\" while segmentation decomposes the word into its lemma and morphological markers like \"s\". Tagging provides a detailed summary including the lemma, part of speech (NOUN), and number (plural). These analyses can be performed in isolation by examining a single word without broader context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 22,
+      "title": "Processing morphology: tasks",
+      "summary": "When processing morphology in isolation, a single input like \"saw\" requires generating multiple analyses because it can function as a noun or a verb with distinct lemmas (e.g., \"see\" for past tense or \"saw\" for present tense). Without contextual information to disambiguate these options, the system must list all valid morphological interpretations. However, when context is available, such as distinguishing between a \"cooler\" containing juice versus \"cooler\" weather, the processor selects the specific part of speech and lemma appropriate to that sentence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 23,
+      "title": "Processing morphology: tasks",
+      "summary": "Morphological analysis requires context to correctly determine a word's lemma and grammatical properties. For instance, the input \"cooler\" resolves to the singular noun \"cooler\" in the sentence about orange juice, but shifts to the comparative adjective \"cool\" when describing weather. This demonstrates that processing morphology involves disambiguating forms based on their surrounding linguistic environment rather than analyzing words in isolation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 24,
+      "title": "Processing morphology: tasks",
+      "summary": "Morphological generation complements analysis tasks by creating appropriate inflected forms from a lemma and its morphological specification, a process particularly useful in machine translation. This involves transforming base words like the English verb \"permaban\" into \"permabanned\" for past participle, the German noun \"Stiefvater\" into \"Stiefväter\" for plural accusative, or the Hungarian \"homeosztázis\" into \"homeosztázisoknak\" for dative plural.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 25,
+      "title": "Processing morphology: tasks",
+      "summary": "Morphological generation involves creating the full inflectional paradigm from a given lemma. For instance, the German verb *schleichen* is processed to produce all its forms, such as *schleiche*, *schleichst*, and *geschlichen*, each tagged with specific grammatical features like person, number, tense, and part of speech. This task systematically expands a single dictionary entry into its complete set of valid surface forms.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 26,
+      "title": "Processing morphology: tasks",
+      "summary": "Morphological generation in context involves producing the correct inflected form of a given lemma based on sentential context, rather than following explicit grammatical instructions like \"past participle\". For instance, given the input \"The dog are barking,\" the system must infer from the verb agreement that the noun should be pluralized to \"dogs\". This task contrasts with generating full inflectional paradigms for keyword matching and was historically addressed using rule-based systems that exploit the regularities of inflectional patterns.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 27,
+      "title": "Rule-based morphological processing",
+      "summary": "Rule-based morphological processing serves as a core topic within the broader outline of NLP morphology, following introductory concepts and task definitions. This section specifically addresses rule-driven approaches to handling word structure, distinguishing them from subsequent data-driven methods and morphologically-informed subword tokenization strategies. As an agenda item in the lecture sequence, it establishes the foundation for understanding how explicit linguistic rules are applied to process morphological variations before exploring alternative computational techniques.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 28,
+      "title": "Rule-based morphological processing",
+      "summary": "Rule-based morphological processing handles English noun inflection by applying specific rules to generate plural forms from singulars. This approach distinguishes between regular patterns, such as adding \"s\" to \"cat\" or \"es\" to \"thrush,\" and irregular cases like \"mouse\" becoming \"mice\" or \"ox\" becoming \"oxen,\" which require unique handling rather than standard algorithmic application.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 29,
+      "title": "Rule-based morphological processing",
+      "summary": "Rule-based morphological processing employs Finite-State Automata (FSA), abstract machines that recognize patterns in input sequences to handle regularities like English nominal inflection while accounting for exceptions such as \"mice\" versus the non-existent \"mouses\". Although constructing FSAs requires manual definition and is less dominant today, they remain efficient for word recognition by validating if an input path exists between initial and final states. Furthermore, FSAs are valuable in modern hybrid neural-symbolic models, where they guide neural networks on possible next states to balance efficiency and accuracy.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 30,
+      "title": "Rule-based morphological processing",
+      "summary": "Rule-based morphological processing relies on a lexicon containing stems for regular nouns and explicit entries for irregular singular and plural forms that do not follow standard rules. While the slide illustrates an FSA for English nominal inflection, the professor clarifies that this approach extends to more complex verbal inflections, requiring lists for past, past participle, and present participle forms alongside their initial states.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 31,
+      "title": "Rule-based morphological processing",
+      "summary": "Rule-based morphological processing employs finite-state transducers (FSTs) to handle English verbal inflection by distinguishing between regular stems like \"walk\" and irregular forms such as \"caught\". While generation requires an FST to transform inputs—for example, combining \"walk\" with a past tense marker to produce \"walked\"—English inflectional morphology remains straightforward enough for simple finite-state automata. In contrast, nominal derivation is noted as more complex, necessitating FSAs with additional states compared to verbal processing.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 32,
+      "title": "Rule-based morphological processing",
+      "summary": "Rule-based morphological processing utilizes Finite State Automata (FSA) to handle language structures, as illustrated by a specific model for English nominal inflection. This approach, referenced from Jurafsky and Martin (2009), demonstrates how deterministic rules can systematically manage word formation within Natural Language Processing systems.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 33,
+      "title": "Rule-based morphological processing",
+      "summary": "Rule-based morphological processing utilizes Finite State Automata (FSAs) for word recognition, as illustrated by the derivation of forms like \"helpfulness,\" \"helpfully,\" and \"helpfulization\". This approach is generalized to Finite State Transducers (FSTs), which support both morphological analysis and generation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 34,
+      "title": "Rule-based morphological processing",
+      "summary": "Rule-based morphological processing using Finite State Automata (FSAs) faces three primary limitations: it requires costly linguistic annotation, necessitates manual updates for new vocabulary, and cannot handle reduplication where arbitrarily long sequences are copied. The professor emphasizes that reduplication is problematic because the sequence length cannot be determined in advance. interested students may consult Chapter 3 of Jurafsky and Martin (2009), noting that these rule-based methods have largely been superseded by more efficient data-driven approaches.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 35,
+      "title": "Data-driven morphological processing",
+      "summary": "Slide 35 presents the outline for the lecture on morphological processing, positioning data-driven approaches as a key topic following rule-based methods. The agenda introduces morphology and its associated tasks before detailing data-driven techniques and morphologically-informed subword tokenization, concluding with a summary of these NLP concepts.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 36,
+      "title": "Data-driven morphological processing",
+      "summary": "Data-driven morphological analysis frames most tasks as word-level tagging problems, allowing direct application of tagging models. This approach simultaneously predicts a word's lemma and its specific morphological features, such as gender, number, tense, and person. For instance, the French word \"chasse\" is analyzed to yield the lemma \"chasser\" along with detailed attributes like third-person singular present indicative mood.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 37,
+      "title": "Data-driven morphological processing",
+      "summary": "Data-driven morphological processing utilizes a multitask architecture to jointly perform part-of-speech tagging, morphology analysis, lemma tagging, and dependency parsing. This integrated approach, proposed by Kondratyuk and Straka (2019), enables the simultaneous execution of these core NLP tasks within a single framework.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 38,
+      "title": "Data-driven morphological processing",
+      "summary": "Data-driven morphological processing, as demonstrated by Kondratyuk and Straka (2019), represents words using transformer outputs which are passed through a feedforward network to a softmax layer. This generates a probability distribution over possible tags, with the final prediction selected via argmax. While this architecture effectively predicts morphological tags, lemmas, and POS tags, multiple tasks can alternatively be executed sequentially, such as performing lemmatization before POS tagging.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 39,
+      "title": "Data-driven morphological processing",
+      "summary": "Data-driven morphological processing frames lemmatization and tagging as word-level sequence tasks, often solved via multi-task learning where a single network jointly predicts outputs. While splitting tags into individual features reduces sparsity, the \"all-in-one\" concatenated tag approach empirically performs best because it avoids generating invalid feature combinations and prevents data skew from irrelevant attributes like mood for non-verbs. Evaluation relies on word-based accuracy, noting that lemmatization is generally more difficult than POS tagging due to higher tag variation and language-specific structural dependencies.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 40,
+      "title": "Data-driven morphological processing",
+      "summary": "Data-driven morphological processing can be modeled using an encoder-decoder architecture rather than relying solely on an encoder architecture. This approach offers an alternative structural framework for handling specific tasks within the domain of natural language processing and morphology.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 41,
+      "title": "Data-driven morphological processing",
+      "summary": "Data-driven morphological processing utilizes neural network architectures designed for sequence processing to handle linguistic forms. This slide presents a visualization of these different architectures, directing students to Lecture 4 for the detailed theoretical background and specific model structures underlying this approach.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 42,
+      "title": "Data-driven morphological processing",
+      "summary": "Data-driven morphological processing employs an encoder-decoder architecture, analogous to machine translation, to perform lemmatization by exploiting character-level information. As proposed by Kanerva et al. (2021), the model encodes input characters alongside POS tags and morphological features, then auto-regressively generates the lemma sequence. This approach reduces sparsity by leveraging surface similarities between inflected forms and base forms, unlike tagging methods that treat lemmatization as a single-output classification task.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 43,
+      "title": "Data-driven morphological processing",
+      "summary": "Data-driven morphological processing addresses morphological generation tasks by applying the encoder-decoder architecture, also known as the sequence-to-sequence paradigm. This approach treats word formation as a transformation problem where an input sequence is encoded and then decoded into the desired morphological output, leveraging data-driven methods rather than rule-based systems.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 44,
+      "title": "Data-driven morphological processing",
+      "summary": "Data-driven morphological processing utilizes sequence-to-sequence models to generate inflected word forms. As demonstrated by Senuma and Aizawa (2017), this approach can transform a verb like \"dun\" into its simple past tense, illustrating how neural architectures handle morphological variations without relying on explicit rule-based systems.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 45,
+      "title": "Data-driven morphological processing",
+      "summary": "Data-driven morphological processing is typically evaluated using word-level accuracy, though the specific metric depends on the task. State-of-the-art performance for morphological analysis generally lags behind POS tagging and exhibits significant variation, ranging from approximately 50% to 95% when sufficient data is available. This approach is highly language-dependent, with further resources and benchmarks available through the SIGMORPHON workshop.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 46,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "Morphologically-informed subword tokenization is a specific topic within the broader scope of morphological processing in natural language processing. This section follows an outline that introduces morphology, defines processing tasks, and distinguishes between rule-based and data-driven approaches before addressing this tokenization method.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 47,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "Morphologically-informed subword tokenization leverages Byte Pair Encoding (BPE) to learn meaningful linguistic units, such as merging \"e\" and \"r\" into the suffix \"er,\" directly from corpus frequencies. While this approach clearly adds value by capturing internal word structure, it remains an open research challenge to optimize these methods without relying on the labor-intensive handcrafting of lexicons.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 48,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "Morphologically-informed subword tokenization leverages Byte Pair Encoding (BPE) by representing its iterative merge operations as a tree structure. In this representation, individual characters serve as leaf nodes, while each internal node signifies a specific merge rule that combines sequences of frequently co-occurring characters into subtrees. This hierarchical process continues until the final token is formed, providing a structured view of vocabulary construction essential for modern large language models.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 49,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "Morphologically-informed subword tokenization aims to construct Byte Pair Encoding (BPE) trees where every subword aligns with exactly one morpheme, avoiding boundary violations. While an idealized tree for \"independently\" would respect these linguistic units, standard BPE merges based on frequency often split morphemes, such as combining the prefix \"in\" with the letter \"d\". This contrast highlights that current frequency-driven methods do not inherently preserve the morphological structure that linguistically informed approaches seek to maintain.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 50,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "Morphologically-informed subword tokenization decomposes words into meaningful linguistic units rather than arbitrary character sequences. The provided example illustrates how the word \"independently\" is segmented into morphemes like \"in,\" \"depend,\" and \"ly\" within a RoBERTa BPE tree generated by the TkTkT library, demonstrating alignment with morphological structure.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 51,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "Morphologically-informed subword tokenization is a promising direction even for morphologically poor languages like English, despite arguments that alignment with morphological boundaries may be unnecessary. However, standard methods like RoBERTa's BPE can fail to respect these boundaries in specific cases. Evaluation typically involves calculating precision, recall, and F1 scores based on how well the tokenization identifies correct morphological boundaries, alongside verifying improvements in downstream tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 52,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "Byte Pair Encoding (BPE) segments text deterministically, which can prevent meaningful morphological splits; for instance, frequent adverbs ending in \"ly\" are often tokenized as single units rather than separating the suffix. Consequently, while the morpheme \"ly\" exists in the vocabulary, it remains underused during segmentation and thus undertrained, lacking a useful vector representation. This failure to decompose words into their constituent parts limits the model's ability to achieve compositional generalization for related terms.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 53,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "BPE-dropout addresses the determinism of subword tokenization by randomly disabling merges, which allows a single input like \"independently\" to yield multiple segmentations during training. Although this random process may occasionally disrupt desirable merges, it prevents under-training vectors by ensuring tokens appear in varied contexts, thereby empirically improving downstream performance. However, because the method relies on randomness rather than linguistic rules, it is not truly morphologically informed despite its effectiveness.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 54,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "Morphologically-informed subword tokenization addresses BPE's tendency to create \"bad merges\" that cross morpheme boundaries, such as merging 'i' and 'd' in a way that prevents recognizing distinct morphemes like 'anti'. The BPE-knockout method (Bauwens and Delobelle, 2024) improves upon random BPE-dropout by specifically disabling these merges based on a handcrafted morphological lexicon. While this approach yields superior downstream performance by preserving morphological structure, it requires an expensive, manually constructed lexicon to identify invalid merges.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 55,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "Morphologically-informed subword tokenization visualizes how Byte Pair Encoding (BPE) decomposes words like \"independently\" into meaningful morphological units, such as the root \"depend\" and suffixes \"ent\" and \"ly\". This specific BPE-knockout tree, generated using Thomas Bauwens' TkTkT library, demonstrates the algorithm's ability to identify these subword structures rather than treating the word as an indivisible token.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 56,
+      "title": "Morphologically-informed subword tokenization",
+      "summary": "Morphologically-informed subword tokenization leverages morphological data to enhance downstream performance, though it currently depends on handcrafted lexicons. When a word like \"optimizer\" splits into multiple subwords, each carrying contextual information, the standard practice is to use the output representation of the first subword rather than mean pooling all vectors. This approach effectively represents the entire word because individual subwords inherently encode information about the full context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 57,
+      "title": "Summary",
+      "summary": "This summary recaps the lecture's progression from an introduction to morphology and its processing tasks, through rule-based and data-driven approaches, to morphologically-informed subword tokenization. It consolidates the key concepts covered in the NLP module on morphological processing, providing a final overview of the structural outline presented throughout the session.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 58,
+      "title": "Summary",
+      "summary": "Morphology is defined as the study of the internal structure of words, with primary processing tasks including tagging and generation. These tasks are addressed through rule-based methods utilizing Finite State Automata (FSAs) as well as neural network-based approaches. Additionally, morphological analysis provides essential information to inform subword tokenization strategies in natural language processing.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 59,
+      "title": "Summary",
+      "summary": "Direct morphological processing is largely irrelevant for English due to its simple morphology and abundant data, which allows models to learn patterns automatically without explicit rules. However, this approach remains valuable for languages with complex morphology where state-of-the-art systems still require improvement. Ultimately, the indirect application of morphology through subword tokenization holds significant promise even for English, offering a more effective path forward than direct rule-based methods.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 60,
+      "title": "Summary",
+      "summary": "This summary slide acknowledges the sources of inspiration for the course materials, noting that the morphology slides were inspired by Jimmy Lin and the processing morphology tasks slides by Kyle Gorman. These credits conclude the section on morphological processing within the NLP curriculum.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 61,
+      "title": "Summary",
+      "summary": "This slide concludes the lecture on morphological processing by listing key references that underpin the course material. The bibliography spans foundational typology works by Greenberg and Fortescue, standard textbooks by Jurafsky and Martin, and recent research on subword regularization, universal lemmatization, and the impact of morphology on multilingual language modeling. These citations collectively support the technical concepts discussed throughout the module regarding how modern NLP systems handle morphological variation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    }
+  ]
+}

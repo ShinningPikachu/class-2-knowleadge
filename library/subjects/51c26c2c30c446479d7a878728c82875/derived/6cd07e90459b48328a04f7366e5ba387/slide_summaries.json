@@ -1,0 +1,396 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 01",
+    "section_label": "Slide",
+    "completed": 77,
+    "total": 77,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "faculty of arts",
+      "summary": "This lecture introduces Computational Linguistics within the Faculty of Arts. It is the first session of the course, presented by Tim Van de Cruys on Tuesday, 22 September 2026. The slide serves as the title page establishing the course identity and initial meeting details."
+    },
+    {
+      "slide": 2,
+      "title": "Modeling language with computers",
+      "summary": "Modeling language with computers involves two perspectives: computational linguistics, the scientific study of linguistic production, comprehension, and acquisition; and natural language processing, the engineering application of computers to perform useful tasks like question answering, sentiment analysis, and machine translation. These fields represent two sides of the same coin, aiming to understand how language works while building practical applications that process or generate human language."
+    },
+    {
+      "slide": 3,
+      "title": "Three paradigms",
+      "summary": "Computational linguistics has evolved through three paradigms: the symbolic approach (1950s–1990s) uses handcrafted rules, dictionaries, and grammars; the statistical approach (late 1990s–2010s) relies on machine learning with large annotated corpora and manual feature engineering; and the neural approach (post-2010) utilizes neural networks on large raw or unannotated data without feature engineering. The key distinction is that while statistical methods require humans to define specific features, neural models automatically learn relevant patterns directly from raw text."
+    },
+    {
+      "slide": 4,
+      "title": "Applications",
+      "summary": "Sentiment analysis is a key application in computational linguistics that involves automatically identifying opinions regarding products, brands, or social issues. This process enables systems to detect and categorize subjective attitudes expressed within text data without human intervention."
+    },
+    {
+      "slide": 5,
+      "title": "Applications",
+      "summary": "Sentiment analysis is a key application in computational linguistics that involves automatically identifying opinions regarding products, brands, or social issues. This process enables systems to detect and classify subjective attitudes expressed within text without human intervention."
+    },
+    {
+      "slide": 6,
+      "title": "Applications",
+      "summary": "Sentiment analysis is a key application in computational linguistics that involves automatically identifying opinions regarding products, brands, or social issues. This process enables systems to detect and categorize subjective attitudes expressed within text without human intervention."
+    },
+    {
+      "slide": 7,
+      "title": "Applications",
+      "summary": "This slide highlights key computational linguistics applications, specifically sentiment analysis and machine translation. Sentiment analysis automatically predicts whether text, such as online star reviews, expresses positive, negative, or neutral opinions by assigning a score. Machine translation, exemplified by tools like Google Translate and DeepL, is another critical application that has been historically significant within the domain."
+    },
+    {
+      "slide": 8,
+      "title": "Applications",
+      "summary": "This slide outlines two primary applications of summarization in computational linguistics: the synthesis of multiple documents and simplification. Synthesis involves combining information from various sources into a single coherent output, while simplification focuses on reducing complexity to enhance readability. These concepts represent key functional areas where summarization techniques are applied within the field."
+    },
+    {
+      "slide": 9,
+      "title": "Applications",
+      "summary": "Slide 9 introduces the topic of applications for large language models, specifically citing ChatGPT as a primary example. This section serves as a heading within the Computational Linguistics lecture series to transition into practical uses of these technologies."
+    },
+    {
+      "slide": 10,
+      "title": "The role of linguistics",
+      "summary": "This slide explores how computational models represent linguistic phenomena, specifically questioning how words are modeled, combined into sentences, and used to construct meaning representations. Using the example \"The man eats an apple,\" it contrasts human understanding of word meanings with the mechanisms language models use to derive sentence-level meaning. Additionally, it investigates how existing linguistic theory can be harnessed to improve natural language processing applications."
+    },
+    {
+      "slide": 11,
+      "title": "Learning Objectives",
+      "summary": "This course aims to establish theoretical knowledge of computational linguistic analysis and natural language processing, including key research questions and applications. Practically, students will develop basic Python programming skills to apply existing algorithms and modules for specific research inquiries. Finally, the curriculum emphasizes critical reflection on the limitations and societal impacts of language technology, specifically addressing issues like bias and interpretability in model training."
+    },
+    {
+      "slide": 12,
+      "title": "Python",
+      "summary": "The course utilizes Python for hands-on programming exercises, where prior knowledge is beneficial but not mandatory. Students without experience will complete a self-study interactive notebook titled \"Introduction to Python for Linguists\" to master basic concepts before practical sessions. These notebooks provide an interactive environment combining executable code with explanatory text, allowing students to experiment with and observe the results of various language and NLP models."
+    },
+    {
+      "slide": 13,
+      "title": "Notebook",
+      "summary": "A notebook is an interactive environment combining text, code, and results, with two primary options: local installation via Jupyter Notebook/Lab or the web-based Google Colab interface requiring a Google account. While local setup allows running models on your own computer, Google Colab executes code on remote servers provided by Google. The professor recommends attempting the local installation for a more engaging experience, though the web interface serves as an alternative if local setup is too difficult."
+    },
+    {
+      "slide": 14,
+      "title": "Python: installation",
+      "summary": "While the standard Python version from python.org is available, it can be cumbersome to install, particularly on Windows. The professor recommends using the Anaconda distribution (anaconda.com) instead, as it is a user-friendly environment pre-installed with modules suitable for data science and machine learning. Anaconda simplifies package management and facilitates the easy installation of Jupyter Notebook or Jupyter Lab, though the specific installer depends on your operating system."
+    },
+    {
+      "slide": 15,
+      "title": "Practical Information",
+      "summary": "Full course materials, including slides and additional reading, are accessible online via Toledo. Lectures are recorded and made available on the platform, provided that infrastructure permits recording. For further inquiries regarding Computational Linguistics, contact tim.vandecruys@kuleuven.be."
+    },
+    {
+      "slide": 16,
+      "title": "Evaluation",
+      "summary": "This course features no exam; evaluation relies entirely on a final project where students apply acquired theoretical and practical knowledge to a self-chosen NLP application or computational linguistic research question. The professor emphasizes that this project integrates both model theory and practical usage, with further details provided in upcoming lectures. Additionally, the course is offered in two versions: a 4 ECTS option and a 6 ECTS option."
+    },
+    {
+      "slide": 17,
+      "title": "Topics",
+      "summary": "This course covers machine learning for language, neural networks, language modeling, grammar models, semantics, attention mechanisms, and transformers. It also addresses machine translation, multimodality, interpretability, bias, and the role of linguistics. While AI students typically follow a 4 ECTS track, Digital Humanities and Linguistics students may take a 6 ECTS version that includes an additional lecture on applications in these fields."
+    },
+    {
+      "slide": 18,
+      "title": "Language use: an example",
+      "summary": "Using the joke \"Why did the chicken cross the road?\", this slide illustrates how language use requires interpreting words within context, such as distinguishing the verb \"cross\" (to go across) from the adjective meaning angry. It further demonstrates that generating correct sentences depends on applying grammatical rules for verb forms, specifically using the infinitive \"cross\" rather than the past tense \"crossed,\" and adhering to standard word order instead of incorrect structures like \"why the chicken did cross.\""
+    },
+    {
+      "slide": 19,
+      "title": "Language use: an example",
+      "summary": "Slide 19 presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of utterances within computational linguistics."
+    },
+    {
+      "slide": 20,
+      "title": "Language use: an example",
+      "summary": "Slide 20 presents a joke as an example of language use, featuring the question \"Why did the chicken cross the road?\" followed by the response \"I give up\" and the punchline \"To get to the other side\". This interaction illustrates how meaning in natural language often relies on context and shared cultural knowledge rather than just literal interpretation. The slide serves as a concrete demonstration of linguistic phenomena within the Computational Linguistics course."
+    },
+    {
+      "slide": 21,
+      "title": "Language use: an example",
+      "summary": "Slide 21 presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how meaning is conveyed through conversational exchange within the context of Computational Linguistics."
+    },
+    {
+      "slide": 22,
+      "title": "Language use: an example",
+      "summary": "Slide 22 presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of utterances within computational linguistics."
+    },
+    {
+      "slide": 23,
+      "title": "Language use: an example",
+      "summary": "This slide uses a riddle to illustrate that understanding language requires segmenting sounds into words, resolving word meanings like \"chicken\" and \"cross,\" and recognizing the specific linguistic situation. The phrase \"I give up\" demonstrates how speakers identify a riddle context to know when to stop guessing and expect an answer. Successfully interpreting such examples demands combining these various types of knowledge to grasp the intended meaning."
+    },
+    {
+      "slide": 24,
+      "title": "Language use: an example",
+      "summary": "Slide 24 presents a joke as an example of language use, featuring the exchange: \"Why did the chicken cross the road?\" followed by \"I give up\" and the punchline \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of meaning in computational linguistics."
+    },
+    {
+      "slide": 25,
+      "title": "Language use: an example",
+      "summary": "Slide 25 presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how meaning is constructed through conversational exchange within the context of Computational Linguistics."
+    },
+    {
+      "slide": 26,
+      "title": "Language use: an example",
+      "summary": "Slide 26 presents a classic joke as an example of language use: \"Why did the chicken cross the road?\" followed by the responses \"I give up\" and \"To get to the other side\". This fragment illustrates how conversational context and expectations shape the interpretation of utterances within computational linguistics."
+    },
+    {
+      "slide": 27,
+      "title": "What is language?",
+      "summary": "Language is defined as a communication system. The slide poses a critical question regarding the key element within such a system, prompting further analysis of its fundamental components in computational linguistics."
+    },
+    {
+      "slide": 28,
+      "title": "What is language?",
+      "summary": "Language is defined as a communication system where the key element is a sign, which pairs a form with a meaning. These signs can be iconic, indexical, or symbolic. Understanding language requires significant knowledge, as illustrated by a joke example where interpreting the exchange depends on recognizing the context of spoken conversation rather than just the literal words."
+    },
+    {
+      "slide": 29,
+      "title": "Slide 29",
+      "summary": "Slide 29"
+    },
+    {
+      "slide": 30,
+      "title": "Slide 30",
+      "summary": "Slide 30"
+    },
+    {
+      "slide": 31,
+      "title": "Slide 31",
+      "summary": "Slide 31"
+    },
+    {
+      "slide": 32,
+      "title": "apple",
+      "summary": "apple"
+    },
+    {
+      "slide": 33,
+      "title": "penguin",
+      "summary": "penguin"
+    },
+    {
+      "slide": 34,
+      "title": "hypothesis",
+      "summary": "hypothesis"
+    },
+    {
+      "slide": 35,
+      "title": "What is language?",
+      "summary": "Language is defined as a communication system where the key element is the sign. A sign consists of the pairing of a form and a meaning, which can be iconic, indexical, or symbolic. This framework establishes the fundamental structure of language within computational linguistics."
+    },
+    {
+      "slide": 36,
+      "title": "What is language?",
+      "summary": "Language is defined as a communication system based on signs, where a sign represents the pairing of a form and a meaning. These signs can be iconic, indexical, or symbolic, with the specific meaning often determined by context and global language structure rather than a direct link between form and meaning."
+    },
+    {
+      "slide": 37,
+      "title": "Animal vs. human communication",
+      "summary": "Slide 37 outlines key features of human language, including interchangeability, cultural transmission, arbitrariness, discreteness, displacement, and productivity. While some animal systems share these traits, others are considered exclusively human. Interchangeability refers to bi-directional communication where speakers can also hear; cultural transmission indicates language is learned during childhood rather than innate; and arbitrariness means linguistic signs lack an inherent connection to their meanings."
+    },
+    {
+      "slide": 38,
+      "title": "Vervet monkey",
+      "summary": "Vervet monkeys use arbitrary signs to signal specific predators, functioning as true communication rather than mere expressions of stress or excitement. These signs possess a stable external reference and include three distinct vocalizations: a short two-syllable coughing sound, a barking or peeping sound, and a continuous clicking 'chutter' sound, each corresponding to a different type of predator."
+    },
+    {
+      "slide": 39,
+      "title": "Vervet monkey",
+      "summary": "Vervet monkeys use arbitrary signs with stable external references to communicate specific predator threats, rather than merely expressing stress. They employ three distinct calls: a short coughing sound for eagles (prompting looking up and seeking shelter), a barking or peeping sound for leopards (triggering escape into trees), and a continuous clicking 'chutter' for snakes (causing them to stand up and look down). These symbolic signals function like words by conveying detailed information that dictates specific escape plans."
+    },
+    {
+      "slide": 40,
+      "title": "Human language: discreteness",
+      "summary": "Discreteness, also known as duality of patterning or double articulation, describes how human language constructs meaningful signs from discrete, meaningless units like sounds. For example, the sounds in \"stop\" can be reorganized to form new words such as \"spot,\" \"tops,\" or \"opts\". This two-level structure contrasts with animal communication systems, which primarily rely on indivisible sign units that cannot be broken down and recombined."
+    },
+    {
+      "slide": 41,
+      "title": "Human language: displacement",
+      "summary": "Displacement is a defining feature of human language that allows speakers to discuss entities or events not present in the immediate space or time. Examples include referencing past occurrences like \"last night,\" distant locations such as \"a man on the moon,\" fictional concepts like \"a unicorn,\" or future dates like \"September 2037\". In contrast, animal communication systems are strictly restricted to the present moment and the immediate environment."
+    },
+    {
+      "slide": 42,
+      "title": "Human language: productivity",
+      "summary": "Human language exhibits productivity, enabling humans to produce and understand an infinite number of novel utterances through creative combinations. This process builds hierarchically from phonemes to morphemes, words, phrases, and sentences, allowing for new terms like \"Brexit\" or extended descriptions. In contrast, animal communication is limited to a single sign per utterance, lacking this generative capacity."
+    },
+    {
+      "slide": 43,
+      "title": "Compositionality",
+      "summary": "Frege's principle of compositionality states that an utterance's meaning derives from individual signs and their specific combination, allowing us to understand novel sentences like \"Jim drives the car\" versus \"The car drives Jim\". This is complemented by co-compositionality, where combined signs mutually influence each other's meaning. For instance, the word \"red\" shifts its specific shade or connotation depending on whether it modifies a rose, wine, or hair."
+    },
+    {
+      "slide": 44,
+      "title": "How to make sense of human speech?",
+      "summary": "Making sense of human speech requires segmenting utterances into basic sound units (phonemes) and meaningful units (morphemes), then composing them into larger structures via syntax. Next, compositional semantics derives meaning from individual words and their combinations, while contextualization ensures full interpretation by accounting for the specific conversational situation. This process transforms isolated sentences into pragmatically meaningful communication, as demonstrated by how context alters the understanding of jokes or complex terms like \"TikTokification.\""
+    },
+    {
+      "slide": 45,
+      "title": "Linguistics",
+      "summary": "Linguistics is the study of language, examining all aspects of human language use and the knowledge required to employ it. It addresses three core questions: how languages are structured, how they are used (sociolinguistics), and how they change over time (diachronic linguistics). While this course primarily focuses on modeling language structure computationally, it generally analyzes language in a synchronic context rather than its historical evolution."
+    },
+    {
+      "slide": 46,
+      "title": "Linguistics",
+      "summary": "Linguistics is the study of language, focusing on all aspects of human language use and the underlying knowledge required to employ it. The discipline investigates three primary questions: how languages are structured, how they are used in practice, and how they change over time."
+    },
+    {
+      "slide": 47,
+      "title": "A brief history of linguistics",
+      "summary": "Linguistics originated in ancient India with Pāṇini's Sanskrit grammar descriptions, which remain relevant today. In Greece and Rome, grammars for Greek and Latin were developed primarily for rhetorical purposes to ensure effective language use. During the Middle Ages, language study formed part of the trivium (grammar, logic, rhetoric) within the seven liberal arts, while the Renaissance shifted focus toward standardizing vernacular languages beyond Greek and Latin."
+    },
+    {
+      "slide": 48,
+      "title": "Birth of linguistics as a science",
+      "summary": "Linguistics emerged as a scientific field through diachronic research comparing historical language forms to identify common roots. In 1786, William Jones recognized shared origins among Sanskrit, Greek, Latin, and other European languages, leading to 19th-century historical and comparative linguistics by figures like the Brothers Grimm. This approach enabled the reconstruction of Proto-Indo-European and its descendant language families, such as Germanic, Romance, Slavic, and Celtic, based on systematic similarities across variants."
+    },
+    {
+      "slide": 49,
+      "title": "The Indo-European Language Family",
+      "summary": "The Indo-European language family illustrates how diverse modern languages evolved from a single common ancestor, Proto-Indo-European, through a branching tree structure. Linguists reconstruct this history by comparing cognates, such as the word for \"father,\" which appears with an F/V sound in Germanic languages (e.g., English) but a P sound in Romance languages (e.g., Latin *pater*). Although the exact pronunciation of Proto-Indo-European remains unknown due to a lack of written attestation, its existence is inferred from these systematic relationships across Western European and other Indo-European branches."
+    },
+    {
+      "slide": 50,
+      "title": "First half of the 20th century",
+      "summary": "In the first half of the 20th century, European Structuralism (Saussure) posited that sign meaning is determined by relationships within a language structure, emphasizing the arbitrariness of signs. Concurrently, American Descriptive Linguistics (Sapir, Whorf, Bloomfield) studied diverse Native American languages to highlight structural differences from European tongues. This research led to linguistic relativity, or the Sapir-Whorf thesis, which asserts that grammatical systems and language use directly influence human thought and perception of reality."
+    },
+    {
+      "slide": 51,
+      "title": "Noam Chomsky",
+      "summary": "Noam Chomsky introduced generative grammar, a formal system of rules generating all grammatical sentences for a language, which significantly influenced computational linguistics. He distinguished between ideal linguistic knowledge (competence) and actual usage (performance), arguing that innate linguistic universals exist within a Language Acquisition Device. This innate system explains the discrepancy between the complexity of natural languages and the ease with which children acquire them from sparse input."
+    },
+    {
+      "slide": 52,
+      "title": "Relevance for our course",
+      "summary": "This course examines computational linguistics through theoretical, practical, and critical lenses, acknowledging its roots in Chomskyan formalization and recent structuralist revisits. It addresses why language is difficult for computers due to its complex interaction of knowledge types and the ubiquitous challenge of ambiguity. Additionally, the curriculum emphasizes understanding model limitations, specifically regarding bias and the lack of interpretability in modern systems."
+    },
+    {
+      "slide": 53,
+      "title": "Levels of linguistic structure",
+      "summary": "Linguistic structure comprises five levels: phonology (basic meaningless sound units), morphology (word construction using suffixes like in \"TikTokification\"), syntax (organizing words into sentences), semantics (combining word meanings into larger sentence meanings), and pragmatics (interpreting utterances within a discourse context). These hierarchical levels are essential for modeling language and resolving the inherent ambiguities found at each stage."
+    },
+    {
+      "slide": 54,
+      "title": "Ambiguity: phonology",
+      "summary": "Phonological ambiguity arises from homophones, which are distinct words that share the same pronunciation, such as \"buy,\" \"by,\" and \"bye\". This type of ambiguity is a critical challenge in speech recognition systems, where acoustic input must be correctly mapped to specific written forms despite identical sounds."
+    },
+    {
+      "slide": 55,
+      "title": "Ambiguity: morphology",
+      "summary": "Morphological ambiguity arises from homonyms or homographs where a single word form represents different parts of speech, such as \"flies\" (noun/verb), \"past\" (preposition/noun), or \"like\" (preposition/verb). This phenomenon complicates both syntactic and semantic analysis, particularly when multiple ambiguities combine within a sentence. The classic examples \"Time flies like an arrow\" and \"Fruit flies like a banana\" demonstrate how identical word sequences can yield entirely different meanings depending on the grammatical interpretation of each term."
+    },
+    {
+      "slide": 56,
+      "title": "Ambiguity: syntax",
+      "summary": "This slide illustrates structural ambiguity in syntax using two sentences: \"John hits the ball with a bat\" and \"John hits the man with a hat\". Both examples share an identical dependency structure consisting of a subject noun phrase (NP-SBJ), a dependent verb (DEP), an object noun phrase (NP-OBJ), and a prepositional phrase (PP) containing another noun phrase. The slide highlights how this specific syntactic arrangement can lead to different interpretations despite the same surface-level grammatical components."
+    },
+    {
+      "slide": 57,
+      "title": "Ambiguity: semantics",
+      "summary": "This slide illustrates semantic ambiguity through the word \"pen,\" which carries distinct meanings depending on context. The examples demonstrate how \"pen\" can refer to a writing instrument, an enclosure for animals, a prison, or the action of writing. These variations highlight how identical lexical forms can possess multiple unrelated definitions within different sentences."
+    },
+    {
+      "slide": 58,
+      "title": "Ambiguity: pragmatics",
+      "summary": "Pragmatic ambiguity arises when context is required to resolve pronoun references or causal relationships, as illustrated by examples where \"His\" refers to Joe's office and \"The first lady\" implies Jill. Additionally, the sentence regarding monkeys not eating bananas demonstrates how the antecedent of \"they\" shifts meaning based on whether the cause is hunger or ripeness. These cases highlight that semantic structure alone is insufficient without pragmatic inference to determine the correct interpretation."
+    },
+    {
+      "slide": 59,
+      "title": "Difficulties",
+      "summary": "Machine translation faces significant difficulties due to differing word orders between languages, specifically the modifier-noun structure in English versus the noun-modifier structure in French. This syntactic divergence is illustrated by translating \"a red house\" to \"une maison rouge\" and the more complex phrase \"almost double the usual oatmeal biscuits\" to \"presque le double des biscuits à l'avoine habituels.\""
+    },
+    {
+      "slide": 60,
+      "title": "Difficulties",
+      "summary": "Machine translation faces significant difficulties because words often possess multiple meanings, creating ambiguity for automated systems. A primary example is the French word \"avocat,\" which can translate to either \"lawyer\" or \"avocado\" depending on context. This polysemy illustrates the core challenge of accurately determining the correct meaning."
+    },
+    {
+      "slide": 61,
+      "title": "Difficulties",
+      "summary": "Machine translation faces significant difficulties because words often possess multiple distinct meanings. A primary example is the French word \"avocat,\" which illustrates this ambiguity as it can translate to either \"lawyer\" or \"avocado\" depending on context. This polysemy presents a core challenge for computational systems attempting to determine the correct interpretation without additional contextual cues."
+    },
+    {
+      "slide": 62,
+      "title": "Difficulties",
+      "summary": "Machine translation faces significant difficulties because words often possess multiple meanings, creating ambiguity for automated systems. A primary example is the French word \"avocat,\" which can translate to either \"lawyer\" or \"avocado\" depending on context. This polysemy illustrates the core challenge of accurately determining the correct semantic interpretation without human guidance."
+    },
+    {
+      "slide": 63,
+      "title": "Difficulties",
+      "summary": "Machine translation faces significant difficulties because a single word can possess multiple distinct meanings depending on context. This ambiguity is illustrated by the French word \"avocat,\" which translates to either \"avocado\" or \"lawyer\" in English, demonstrating the challenge of selecting the correct semantic interpretation without additional contextual cues."
+    },
+    {
+      "slide": 64,
+      "title": "Difficulties",
+      "summary": "Machine translation faces significant difficulties due to lexical ambiguity, where a single source word maps to multiple target meanings depending on context. The slide illustrates this with French terms like \"pied\" (foot/paw) and \"étape\" (journey/step), which require disambiguation based on whether the subject is human or animal. Similarly, words such as \"leg,\" \"jambe,\" and \"patte\" demonstrate how semantic distinctions between humans and animals complicate accurate translation."
+    },
+    {
+      "slide": 65,
+      "title": "Difficulties",
+      "summary": "Machine translation faces difficulties in languages like Spanish where subject pronouns are often omitted. Instead of explicit subjects, verb conjugations indicate the person through specific endings: –o (I), –as (you), –a (he/she/it), –amos (we), and –an (they). This creates ambiguity for systems that must determine whether to translate the third-person singular ending as \"he,\" \"she,\" or \"it\" without an explicit subject pronoun."
+    },
+    {
+      "slide": 66,
+      "title": "Difficulties",
+      "summary": "Machine translation faces significant difficulties with pronoun resolution, as demonstrated by the ambiguous sentence \"The monkeys did not eat the bananas because they were not [adjective]\". In French, the correct gender agreement for the pronoun \"they\" changes based on whether the antecedent is the monkeys (\"ils\") or the bananas (\"elles\"), illustrating how context determines meaning. This example highlights the challenge of disambiguating references without explicit semantic understanding."
+    },
+    {
+      "slide": 67,
+      "title": "Difficulties",
+      "summary": "This slide illustrates machine translation difficulties through English sentences containing the pronoun \"her\" and their German translations, which vary based on grammatical case. The examples show that \"her\" translates to \"sie\" (accusative) in \"I saw her,\" but changes to \"ihr\" (dative) in \"I gave her a present\" and \"ihrem\" (dative genitive) when modifying \"brother\". These variations highlight the challenge of correctly mapping pronouns across languages with different case systems."
+    },
+    {
+      "slide": 68,
+      "title": "Difficulties",
+      "summary": "This slide introduces difficulties in machine translation using the French phrase \"je bois du lait\" as a specific example. The content highlights challenges inherent in translating this sentence. This fragment serves to illustrate a practical case where translation systems may encounter obstacles."
+    },
+    {
+      "slide": 69,
+      "title": "Difficulties",
+      "summary": "Machine translation faces difficulties illustrated by the French phrase \"je bois du lait,\" which translates to \"I drink milk\" in English. This example highlights the challenges computational systems encounter when accurately mapping source language structures and vocabulary to target languages. The slide presents this specific case to demonstrate potential errors or complexities inherent in automated translation processes."
+    },
+    {
+      "slide": 70,
+      "title": "Difficulties",
+      "summary": "Machine translation faces difficulties in resolving ambiguity, as illustrated by the French phrase \"je bois du lait\". This single sentence can be translated into English as either \"I drink milk\" or \"I'm drinking milk,\" highlighting the challenge of determining the correct tense and aspect without additional context."
+    },
+    {
+      "slide": 71,
+      "title": "Difficulties",
+      "summary": "Machine translation faces significant difficulties when processing idiomatic expressions and proverbs, as literal translations often fail to convey the intended meaning. The slide illustrates these challenges with specific examples: \"bone of contention,\" \"kick the bucket,\" and the proverb \"Don't sell the bear's fur before hunting it\". These cases highlight the complexity of translating non-literal language in computational linguistics."
+    },
+    {
+      "slide": 72,
+      "title": "Difficulties",
+      "summary": "Spell-checking faces difficulties when distinguishing between the homophones \"to,\" \"too,\" and \"two\" in sentences like \"This is too hot to drink\". The slide illustrates this challenge by presenting three incorrect variations where these words are swapped, contrasting them with the single correct form. This example highlights that spell-checkers must rely on context rather than just dictionary validation to identify errors involving correctly spelled but misused words."
+    },
+    {
+      "slide": 73,
+      "title": "Difficulties",
+      "summary": "Difficulties"
+    },
+    {
+      "slide": 74,
+      "title": "Difficulties",
+      "summary": "Difficulties"
+    },
+    {
+      "slide": 75,
+      "title": "Difficulties",
+      "summary": "Slide 75 outlines difficulties in speech technology, distinguishing between recognition and synthesis challenges. Speech recognition struggles with homophones like \"fish\" versus the non-word \"ghoti,\" as well as phrase ambiguity exemplified by \"The system is trained to wreck a nice peach\". Speech synthesis faces issues with context-dependent pronunciation, specifically differentiating stress patterns for words like \"content\" (adjective vs. noun) and \"address\" (verb vs. noun)."
+    },
+    {
+      "slide": 76,
+      "title": "Difficulties",
+      "summary": "Slide 76 outlines difficulties in speech technology, distinguishing between recognition and synthesis challenges. Speech recognition struggles with homophones like \"fish\" versus the non-word \"ghoti\" (representing \"rough women nation\") and phonetic ambiguities such as \"The system is trained to wreck a nice peach\". Speech synthesis faces issues with stress placement, specifically differentiating adjectives from nouns in words like \"content\" and verbs from nouns in \"address.\""
+    },
+    {
+      "slide": 77,
+      "title": "Difficulties",
+      "summary": "Speech technology faces significant challenges in both recognition and synthesis due to linguistic ambiguities. Speech recognition struggles with homophones, illustrated by the \"fish vs. ghoti\" example derived from \"rough,\" \"women,\" and \"nation\". Conversely, speech synthesis must accurately distinguish between words like \"content\" and \"address,\" where meaning and pronunciation depend on whether they function as nouns or adjectives/verbs."
+    }
+  ]
+}

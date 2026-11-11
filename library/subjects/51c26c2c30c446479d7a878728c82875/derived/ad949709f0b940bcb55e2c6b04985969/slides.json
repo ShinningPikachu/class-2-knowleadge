@@ -1,0 +1,703 @@
+{
+  "metadata": {
+    "source_file": "Lecture_04_Untitled_Slides.pdf",
+    "created_at": "2026-10-13T20:36:58.752189+00:00",
+    "slide_count": 77,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "faculty of arts",
+      "content": "faculty of arts Computational Linguistics Lecture 3: Language models and word meaning Tim Van de Cruys Tuesday 6 October 2026",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Tokenization",
+      "content": "Tokenization • Text is encoded by a computer as a sequence of characters (string) • Words, spaces, and punctuation are encoded in the same way • We need to define and mark word boundaries: tokenization 2/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Tokenization",
+      "content": "Tokenization What is a word? A consecutive sequence of characters, separated by whitespace (space, newline) and/or punctuation? • Apostrophe? sms’en, gsm’etje, doin’ 3/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Tokenization",
+      "content": "Tokenization What is a word? A consecutive sequence of characters, separated by whitespace (space, newline) and/or punctuation? • Apostrophe? sms’en, gsm’etje, doin’ • Hyphen? self-driving, what-do-you-mean-look 3/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Tokenization",
+      "content": "Tokenization What is a word? A consecutive sequence of characters, separated by whitespace (space, newline) and/or punctuation? • Apostrophe? sms’en, gsm’etje, doin’ • Hyphen? self-driving, what-do-you-mean-look • And if there is no separation? • langeafstandsloper, serotonineheropnameremmer • Chinese script: a sequence of characters without whitespace • Agglutinating languages: Turkish, Basque, Inuit languages 3/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Tokenization",
+      "content": "Tokenization What is a word? • Proper names: San Francisco, New York 4/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Tokenization",
+      "content": "Tokenization What is a word? • Proper names: San Francisco, New York • Fixed expressions: • by and large, once and for all • piece of cake, spill the beans • et cetera, wishful thinking 4/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Tokenization",
+      "content": "Tokenization What is a word? • Proper names: San Francisco, New York • Fixed expressions: • by and large, once and for all • piece of cake, spill the beans • et cetera, wishful thinking • Modern neural models avoid the question: text is split into frequency-based subword units (e.g. byte pair encoding), which may be smaller than words; more on this later in the course 4/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Sentence detection",
+      "content": "Sentence detection • Certain punctuation characters are unambiguous (‘?’, ‘!’) • A dot (‘.’) is very ambiguous • Obama held his final address to the U.N. General Assembly on Wednesday. • Different genres such as the motet, the cantata, etc. developed throughout the centuries. • Context is important to determine where a sentence ends 5/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Language models",
+      "content": "Language models • Symbolic models (rule-based) give a hard, binary model of well-formed sentences • For many natural language processing tasks, a probabilistic model of a language (what is the probability of a string being well-formed?) is more useful • To specify a correct probability distribution, the probability of all sentences in a language must sum to 1 6/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Uses of language models",
+      "content": "Uses of language models • Speech recognition • ‘I ate a tomato’ is more likely than ‘eye eight atom eight oh’ • OCR & Handwriting recognition • More probable sentences are more likely correct readings • Machine translation • More likely sentences are probably better translations • Generation • More likely sentences are probably better natural language generations • Context sensitive spelling correction • ‘Their is a problem wit this sentence’ 7/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Completion prediction",
+      "content": "Completion prediction • Remember the guessing game of lecture 1: a language model predicts the next word in the sentence • Please turn off your mobile ____ • If he loses, he has only himself to ____ • Predictive text input systems can guess what you are typing and provide choices on how to complete it 8/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Statistical language model",
+      "content": "Statistical language model • How to compute the probability of a sentence, e.g. the dog was running across the green field ? • We could count the number of times we attest the sentence, and divide by the total number of sentences in our corpus count(the dog was running across the green field) total number of sentences 9/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Statistical language model",
+      "content": "Statistical language model • How to compute the probability of a sentence, e.g. the dog was running across the green field ? • We could count the number of times we attest the sentence, and divide by the total number of sentences in our corpus count(the dog was running across the green field) total number of sentences = 0 1014 = 0 9/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Statistical language model",
+      "content": "Statistical language model How to compute p(the,dog,was,running,across,the,green,field) ? • We compute the joint probability by decomposing into conditional probabilities • p(the) × p(dog|the) × p(was|the dog) × p(running|the dog was) × p(across|the dog was running) × p(the|the dog was running across) × p(green|the dog was running across the) × p(field|the dog was running across the green) 10/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Statistical language model",
+      "content": "Statistical language model How to compute p(the,dog,was,running,across,the,green,field) ? • We compute the joint probability by decomposing into conditional probabilities • p(the) × p(dog|the) × p(was|the dog) × p(running|the dog was) × p(across|the dog was running) × p(the|the dog was running across) × p(green|the dog was running across the) × p(field|the dog was running across the green) • … using only a limited context 10/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Statistical language model",
+      "content": "Statistical language model How to compute p(the,dog,was,running,across,the,green,field) ? • We compute the joint probability by decomposing into conditional probabilities • p(the) × p(dog|the) × p(was|the dog) × p(running|dog was) × p(across|was running) × p(the|running across) × p(green|across the) × p(field|the green) • … using only a limited context 10/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Estimating probabilities",
+      "content": "Estimating probabilities p(the) = count(the) count(∗) p(dog|the) = count(the,dog) count(the) p(green|across the) = count(across,the,green) count(across,the) 11/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "N-gram models",
+      "content": "N-gram models • Estimate probability of each word given prior context • Multiplication of individual probabilites gives sentence probability • An n-gram model uses only n–1 words of prior context • unigram: p(dog) • bigram: p(dog | the) • trigram: p(green | across the) • ... and so on • N-gram models are based on the Markov assumption • Future behavior of a dynamical system only depends on its recent history • In a kth-order Markov model, the next state only depends on the k most recent states • N-gram model is a (n–1)th-order Markov model. 12/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Smoothing",
+      "content": "Smoothing • As with naive Bayes, we’re multiplying all individual probabilities to get the global probability • If one of the probabilities is zero (because of data sparsity), our entire sentence probability will be zero (even if we have other good evidence that the sentence is in fact well-formed) • We can perform a similar kind of smoothing (add one smoothing) to reassign some probability mass to unseen events • More complicated smoothing schemes exist • Good-Turing • Back-off • Kneser-Ney 13/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Evaluation",
+      "content": "Evaluation Language models • As in the previous lecture: train on one part of the corpus, evaluate on held-out text • A good language model assigns a high probability to the held-out sentences • Standard measure: perplexity • intuitively: the average number of words the model hesitates between at each position • lower is better; a model without any knowledge hesitates between all words of the vocabulary • Intrinsic evaluation: the model is evaluated in itself, not as part of an application such as machine translation or speech recognition (extrinsic evaluation) 14/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Inconveniences",
+      "content": "Inconveniences • Simple and effective approach that can be applied to large text corpora • Still, insufficient model of language: • Long-distance dependencies • Lack of meaning 15/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Long-distance dependencies",
+      "content": "Long-distance dependencies • Limited context is unable to predict long-distance dependencies • Syntactic dependencies • The man that you see standing over there on the corner is tall. • The men that you see standing over there on the corner are tall. • Semantic dependencies • The bird that I was watching during my lunch break flies rapidly. • The man that I was watching during my lunch break talks rapidly. • More complex models of language are needed to handle such dependencies 16/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Lack of meaning",
+      "content": "Lack of meaning • Discrete approach is often used in natural language processing, and works surprisingly well • Still, a very poor representation of word meaning • Atomic word representation p(apple|eat the) p(pear|eat the) 17/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Lack of meaning",
+      "content": "Lack of meaning • Discrete approach is often used in natural language processing, and works surprisingly well • Still, a very poor representation of word meaning • Atomic word representation p(apple|eat the) p(fantastic|positive) p(pear|eat the) p(sensational|positive) 17/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Lack of meaning",
+      "content": "Lack of meaning • Discrete approach is often used in natural language processing, and works surprisingly well • Still, a very poor representation of word meaning • Atomic word representation p(apple|eat the) p(fantastic|positive) p(pear|eat the) p(sensational|positive) 17/46 — Computational Linguistics — tim.vandecruys@kuleuven.be [ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 01 0 0 0 0 ]",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Lack of meaning",
+      "content": "Lack of meaning • Discrete approach is often used in natural language processing, and works surprisingly well • Still, a very poor representation of word meaning • Atomic word representation p(apple|eat the) p(fantastic|positive) p(pear|eat the) p(sensational|positive) 17/46 — Computational Linguistics — tim.vandecruys@kuleuven.be [ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 01 0 0 0 0 ] [ 0 0 0 0 0 01 0 0 0 0 0 0 0 0 0 0 0 0 0 ]",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Vectors",
+      "content": "Vectors 18/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Vectors",
+      "content": "Vectors 18/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Vectors",
+      "content": "Vectors 18/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Introduction",
+      "content": "Introduction • Instead, we want words to have a rich feature structure, representing their properties abstract artefact edible ethyl 2-methylbutyrate apple – – + + pear – – + – car – + – – • Too much work to create feature structures by hand • We want the feature vectors to be created automatically 19/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Distributional similarity",
+      "content": "Distributional similarity • Semantic similarity is based on the distributional hypothesis • Take a word and its contexts: • tasty sooluceps • sweet sooluceps • stale sooluceps • freshly baked sooluceps • By looking at a word’s context, one can infer its meaning 20/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Distributional similarity",
+      "content": "Distributional similarity • Semantic similarity is based on the distributional hypothesis • Take a word and its contexts: • tasty sooluceps • sweet sooluceps • stale sooluceps • freshly baked sooluceps ⇒food • By looking at a word’s context, one can infer its meaning 20/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Distributional similarity",
+      "content": "Distributional similarity • Semantic similarity is based on the distributional hypothesis • Take a word and its contexts: • tasty sooluceps • sweet sooluceps • stale sooluceps • freshly baked sooluceps • By looking at a word’s context, one can infer its meaning 20/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Matrix",
+      "content": "Matrix • captures co-occurrence frequencies of two entities red tasty fast second-hand raspberry 2 1 0 0 strawberry 2 2 0 0 car 1 0 1 2 truck 1 0 1 1 21/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Matrix",
+      "content": "Matrix • captures co-occurrence frequencies of two entities red tasty fast second-hand raspberry 7 9 0 0 strawberry 12 6 0 0 car 7 0 8 4 truck 2 0 3 4 21/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Matrix",
+      "content": "Matrix • captures co-occurrence frequencies of two entities red tasty fast second-hand raspberry 56 98 0 0 strawberry 44 34 0 0 car 23 0 31 39 truck 4 0 18 29 21/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Matrix",
+      "content": "Matrix • captures co-occurrence frequencies of two entities red tasty fast second-hand raspberry 728 592 1 0 strawberry 1035 437 0 2 car 392 0 487 370 truck 104 0 393 293 21/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Neural network: basics",
+      "content": "Neural network: basics • A single neuron works like logistic regression • If you know logistic regression (or maximum entropy models), you’re familiar with the building blocks of neural networks • Reminder: logistic regression model yields probability of an instance belonging to a particular class based on the instance’s features weighted by the model’s parameters 22/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Logistic regression",
+      "content": "Logistic regression • Spam classification: determine whether incoming mail is spam • We take word frequency as features feature fi weight wi pharmacy 0.4 viagra 1.2 best 0.2 offer 0.2 request –0.8 sending –1.7 bias 0.1 23/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Logistic regression",
+      "content": "Logistic regression • Spam classification: determine whether incoming mail is spam • We take word frequency as features x1: “Pharmacy online: viagra best offer!” feature fi weight wi pharmacy 0.4 viagra 1.2 best 0.2 offer 0.2 request –0.8 sending –1.7 bias 0.1 • score(x1) = 0.4 × 1 + 1.2 × 1 + 0.2 × 1 + 0.2 × 1 + (−0.8) × 0 + (−1.7) × 0 + 0.1 = 2.1 • 23/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Logistic regression",
+      "content": "Logistic regression • Spam classification: determine whether incoming mail is spam • We take word frequency as features x2: “Following your request, I am sending you our best offer” feature fi weight wi pharmacy 0.4 viagra 1.2 best 0.2 offer 0.2 request –0.8 sending –1.7 bias 0.1 • score(x1) = 0.4 × 1 + 1.2 × 1 + 0.2 × 1 + 0.2 × 1 + (−0.8) × 0 + (−1.7) × 0 + 0.1 = 2.1 • score(x2) = 0.4 × 0 + 1.2 × 0 + 0.2 × 1 + 0.2 × 1 + (−0.8) × 1 + (−1.7) × 1 + 0.1 = −2.0 23/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Logistic regression",
+      "content": "Logistic regression • Linear scores (range −∞to ∞) difficult to interpret, we’d rather have probabilities • Linear scores are transformed using (non-linear) logistic function exponential function (ex) logistic function ( 1 1+e−x ) • f(score(x1)) = 1 1+e−2.1 = .89 • f(score(x2)) = 1 1+e2.0 = .12 24/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "Neuron = logistic regression",
+      "content": "Neuron = logistic regression • These are the exact computations of a single neuron 1 x1 x2 x3 Σ b w1 w2 w3 bias weights inputs activation function • We can feed an input vector to a bunch of logistic regression functions and get an output vector • which can be fed to another layer of logistic regression functions 25/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "Feed-forward",
+      "content": "Feed-forward Architecture Multi-layer perceptron with 2 hidden layers NNMLP2(x) = y (1) h1 = g(xW1 + b1) (2) h2 = g(h1W2 + b2) (3) y = h2W3 (4) x: vector of size din = 3 y: vector of size dout = 2 h1, h2: vectors of size dhidden = 4 26/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Feed-forward",
+      "content": "Feed-forward Architecture Multi-layer perceptron with 2 hidden layers NNMLP2(x) = y (1) h1 = g(xW1 + b1) (2) h2 = g(h1W2 + b2) (3) y = h2W3 (4) W1, W2, W3: matrices of size [3 × 4], [4 × 4], [4 × 2] b1, b2: ’bias’ vectors of size dhidden = 4 g(·): non-linear activation function (elementwise) 26/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "Feed-forward",
+      "content": "Feed-forward Architecture Multi-layer perceptron with 2 hidden layers NNMLP2(x) = y (1) h1 = g(xW1 + b1) (2) h2 = g(h1W2 + b2) (3) y = h2W3 (4) W1, W2, W3, b1, b2 = parameters of the network (θ) Use of multiple hidden layers: deep learning 26/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Training",
+      "content": "Training Loss function • L(ˆy, y) - the loss of predicting ˆy when true output is y • Set parameters θ in order to minimize loss across different training examples • Compute gradient of parameters with regard to loss function to find minimum, take steps in right direction 27/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Training",
+      "content": "Training Loss function • Categorical cross-entropy loss (negative log-likelihood) • Measure difference between true class distribution y and predicted class distribution ˆy • Use with softmax output (network output normalized to probabilities) 28/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Training",
+      "content": "Training Stochastic gradient descent • Goal: minimize total loss ∑n i=1 L(f(xi; θ), yi) • Estimating gradient over entire training set before taking step is computationally heavy • Compute gradient for small batch of samples from training set →estimate of gradient: stochastic • Learning rate λ: size of step in right direction • Improvements: momentum, adaptive learning rate 29/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Training",
+      "content": "Training Stochastic gradient descent • Size mini-batch: balance between better estimate and faster convergence • Gradients over different parameters (weight matrices, bias terms, embeddings, ...) efficiently calculated using backpropagation algorithm • No need to carry out derivations yourself: automatic tools for gradient computation using computational graphs 30/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Word embeddings",
+      "content": "Word embeddings • Each word i is represented by a small, dense vector vi ∈Rd • d is typically in the range 50–1000 • Matrix of size V (vocabulary size) × d (embedding size) • words are ‘embedded’ in a real-valued, low-dimensional space • Similar words have similar embeddings 31/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "Word embeddings",
+      "content": "Word embeddings • Each word i is represented by a small, dense vector vi ∈Rd • d is typically in the range 50–1000 • Matrix of size V (vocabulary size) × d (embedding size) • words are ‘embedded’ in a real-valued, low-dimensional space • Similar words have similar embeddings d1 d2 d3 … apple –2.34 –1.01 0.33 pear –2.28 –1.20 0.11 car –0.20 1.02 2.44 … 31/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Word embeddings",
+      "content": "Word embeddings • Each word i is represented by a small, dense vector vi ∈Rd • d is typically in the range 50–1000 • Matrix of size V (vocabulary size) × d (embedding size) • words are ‘embedded’ in a real-valued, low-dimensional space • Similar words have similar embeddings 31/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Neural word embeddings",
+      "content": "Neural word embeddings • Word embeddings have been around for quite some time • The term ‘embedding’ was coined within the neural network community, along with new methods to learn them • Idea: Let’s allocate a number of parameters for each word and allow the neural network to automatically learn what the useful values should be • Prediction-based: learn to predict the next word 32/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "Embeddings through language modeling",
+      "content": "Embeddings through language modeling • Predict the next word in a sequence, based on the previous word • One non-linear hidden layer, one softmax layer for classification • Choose parameters that optimize probability of correct word 33/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "Embeddings through language modeling",
+      "content": "Embeddings through language modeling • Predict the next word in a sequence, based on the previous word • One non-linear hidden layer, one softmax layer for classification • Choose parameters that optimize probability of correct word 33/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "Embeddings through error detection",
+      "content": "Embeddings through error detection • Take a correct sentence and create a corrupted counterpart • Train the network to assign a higher score to the correct version of each sentence 34/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Embeddings through error detection",
+      "content": "Embeddings through error detection • Take a correct sentence and create a corrupted counterpart • Train the network to assign a higher score to the correct version of each sentence 34/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Word2vec",
+      "content": "Word2vec • Neural network approaches work well, but large number of parameters makes them computationally heavy • Popular, light-weight approach with less parameters: word2vec • No hidden layer, only softmax classifier • Two different models • Continuous bag of words (CBOW): predict current word based on surrounding words • Skip-gram: predict surrounding words based on context words 35/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "CBOW",
+      "content": "CBOW • Current word wt is predicted from context words • Prediction is made from the sum of context embeddings 36/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "Skip-gram",
+      "content": "Skip-gram • Each context word is predicted from current word • Parameters for each softmax classifier are shared 37/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "Negative sampling",
+      "content": "Negative sampling • Computation of full softmax classifier is still rather expensive • Only compute score for correct context, and a number of wrong contexts • Maximize correct contexts and minimize wrong ones 38/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "Word similarity",
+      "content": "Word similarity belgium jesus red painting netherlands christ yellow sculpture luxembourg saviour white watercolor france resurrection pink printmaking switzerland redeemer purple portraiture brussels prophet green engraving austria apostles beige painter flanders god black watercolors germany crucifixion orange canvases finland saints blueish painted italy angels multicolored portrait 39/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Word similarity",
+      "content": "Word similarity 40/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "Word similarity",
+      "content": "Word similarity 40/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "Word similarity",
+      "content": "Word similarity 40/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "Word similarity",
+      "content": "Word similarity 40/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "Word similarity",
+      "content": "Word similarity 40/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 70,
+      "title": "Computing analogies",
+      "content": "Computing analogies • Questions in the form: a is to b as c is to d • The system is given a, b, and c; it needs to compute d. For example: apple is to apples as car is to ? man is to woman as king is to ? 41/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 71,
+      "title": "Computing analogies",
+      "content": "Computing analogies • task: a is to b as c is to d • idea: direction of the relation should remain the same a −b ≈ c −d man −woman ≈ king −queen queen ≈ king −man + woman dw = argmax d′w∈V cos(d′, c −a + b) 42/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 72,
+      "title": "Computing analogies",
+      "content": "Computing analogies 43/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 73,
+      "title": "Computing analogies",
+      "content": "Computing analogies 43/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 74,
+      "title": "Computing analogies",
+      "content": "Computing analogies 43/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 75,
+      "title": "Computing analogies",
+      "content": "Computing analogies Relationship Example 1 Example 2 Example 3 France - Paris Italy: Rome Japan: Tokyo Florida: Tallahassee big - bigger small: larger cold: colder quick: quicker Sarkozy - France Berlusconi: Italy Merkel: Germany Koizumi: Japan copper - Cu zinc: Zn gold: Au uranium: plutonium Japan - sushi Germany: bratwurst France: tapas USA: pizza from Mikolov et al. (2013) 44/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 76,
+      "title": "Prediction-based vs. count-based",
+      "content": "Prediction-based vs. count-based • Count-based: extract co-occurrence frequencies from corpus • Prediction-based: induce parameters based on prediction of correct word • Initially seen as two different methods, where prediction-based approach works better • Later, emerging evidence and proof that they are actually equivalent or quite similar 45/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 77,
+      "title": "Word embeddings in practice",
+      "content": "Word embeddings in practice • Word embeddings are often used for pretraining • Unsupervised: only requires plain text, so can be trained on a lot of data • Fast algorithms available • It helps a model start from an informed position • Model is initialized with pretrained word embeddings, and then finetuned depending on task 46/46 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

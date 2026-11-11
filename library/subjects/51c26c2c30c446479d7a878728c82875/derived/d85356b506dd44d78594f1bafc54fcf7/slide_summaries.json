@@ -1,0 +1,596 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 5: Machine translation (3 Nov, parts 1–2)",
+    "section_label": "Slide",
+    "completed": 65,
+    "total": 65,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "faculty of arts",
+      "summary": "This lecture introduces the fifth session on machine translation within the Faculty of Arts' Computational Linguistics course. The session is led by Tim Van de Cruys and took place on Tuesday, November 3, 2026.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "Machine translation",
+      "summary": "Machine translation is a difficult task serving as the ultimate test for language understanding because it requires combining multiple knowledge types. Successful translation demands not only linguistic competence in both source and target languages but also specific knowledge about the text's topic and broader cultural context, including values, traditions, and user expectations. This complexity arises from the need to navigate linguistic ambiguities and exceptions while integrating these diverse layers of information to produce accurate translations.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 3,
+      "title": "A long history",
+      "summary": "Warren Weaver's 1949 vision framed machine translation as decoding Russian text treated as coded English to retrieve underlying information, an analogy still relevant today. Five years later, IBM demonstrated the first system in 1954 using simple rule-based word-by-word translation. However, this early approach revealed that machine translation was significantly more complex than initially anticipated.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 4,
+      "title": "Political/commercial interest",
+      "summary": "Machine translation holds significant political and commercial value, driven by the EU's annual spending exceeding one billion euros on translation costs which automation could reduce. Strategic investments include the US utilizing machine translation for intelligence acquisition, while commercially, Google Translate serves over a billion monthly users across nearly 250 languages. Today, these capabilities are seamlessly integrated into browsers, phones, and chat assistants, reflecting the high demand despite the task proving more complex than early researchers anticipated.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 5,
+      "title": "Different approaches",
+      "summary": "Machine translation serves as a primary NLP application to illustrate three distinct paradigms: symbolic, statistical, and neural. The symbolic approach relies on linguistics, logic, and hand-coded rules; statistical methods utilize Bayes' theorem; and neural approaches employ neural networks. These frameworks represent the evolution of solving the task of automatically translating text from a source language into a target language using increasingly different underlying mechanisms.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 6,
+      "title": "Different approaches",
+      "summary": "Machine translation employs three distinct approaches: symbolic, statistical, and neural. Symbolic translation relies on linguistics and logic, while statistical methods are grounded in Bayes' theorem. Finally, neural machine translation utilizes neural networks to process language data.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 7,
+      "title": "Symbolic machine translation",
+      "summary": "Symbolic machine translation is characterized by the Vauquois triangle, which maps the relationship between source and target languages across three levels of linguistic representation: morphology, syntax, and meaning. This framework illustrates how analysis transforms the source language into an interlingua or direct syntactic form before production generates the target language output. The model highlights that translation strategies vary based on the depth of analysis required, ranging from surface-level morphological mapping to deep semantic interpretation via an intermediate representation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 8,
+      "title": "Symbolic machine translation",
+      "summary": "Direct transfer represents a simple symbolic machine translation approach that relies on minimal knowledge to perform word-by-word translation from source to target language. This method involves conducting basic morphological analysis on source words, translating them directly, and applying slight morphological adaptation or generation to ensure correct expression in the target language.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 9,
+      "title": "Symbolic machine translation",
+      "summary": "Symbolic machine translation relies on direct transfer, a \"word-by-word\" approach that maps source language elements directly to the target language. This method attempts to align grammatical categories, such as translating the English determiner and plural noun phrase \"the questions\" into the French equivalents \"les questions\". The process treats the source and target languages as parallel structures where individual words or morphemes are substituted without complex syntactic reordering.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 10,
+      "title": "Symbolic machine translation",
+      "summary": "Symbolic machine translation converts a source language into a target language through a structured pipeline of linguistic processing. This approach begins with morphological and syntactic analysis of the input, followed by syntactic transfer to map structures between languages, and concludes with syntactic generation and morphological generation to produce the final output.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 11,
+      "title": "Symbolic machine translation",
+      "summary": "Symbolic machine translation relies on syntactic transfer to convert sentences from a source language into a target language by restructuring their grammatical patterns. This approach is illustrated by translating the English phrase \"the red house\" into the French \"la maison rouge,\" where the adjective shifts position relative to the noun to adhere to the target language's syntax.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 12,
+      "title": "Symbolic machine translation",
+      "summary": "Symbolic machine translation converts a source language into a target language through a structured pipeline of linguistic processing stages. This approach begins with morphological and syntactic analysis, followed by semantic analysis to interpret meaning, which is then transferred via semantic transfer before being reconstructed through semantic generation, syntactic generation, and finally morphological generation in the target language.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 13,
+      "title": "Symbolic machine translation",
+      "summary": "Symbolic machine translation employs semantic transfer to convert a source sentence into an intermediate representation before generating the target language. Using \"Tom misses Paris\" as an example, the English predicate `miss(Tom, Paris)` is transformed into the French equivalent `manquer_à(Paris, Tom)`, where the agent and patient arguments are swapped to reflect differing syntactic roles. This adjusted semantic structure then undergoes syntactic generation and morphological adaptation to produce the final translation, \"Paris manque à Tom.\"",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 14,
+      "title": "Symbolic machine translation",
+      "summary": "Symbolic machine translation converts source text into an abstract, language-independent interlingua through sequential morphological, syntactic, and semantic analysis before generating the target language. This approach relies entirely on manually constructed rules and dictionaries to derive semantic representations, such as analyzing \"Tom misses Paris\" into noun and verb phrases. Dominant from the 1950s through the early 2000s, this method represents a full-scale linguistic analysis where all knowledge is explicitly defined by humans rather than learned from data.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 15,
+      "title": "Symbolic machine translation",
+      "summary": "Symbolic machine translation at the top of the Vauquois triangle converts source language sentences into a language-independent interlingua representation through syntactic and semantic analysis. Using \"Mary did not slap the green witch\" as an example, this approach extracts a typed feature structure capturing the slapping event, agent (Mary), past tense, negative polarity, and the theme's attributes (a definite green witch). This abstract meaning is then used for semantic and syntactic generation to produce translations in any target language, such as Spanish.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 16,
+      "title": "Symbolic machine translation",
+      "summary": "Symbolic machine translation performs effectively within restricted domains but struggles to generalize to open domains due to inherent ambiguities and exceptions. This approach relies on rules created manually by humans, resulting in a development process that is both tedious and costly. Consequently, while useful for specific applications, the method faces significant scalability challenges when applied to broader linguistic contexts.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 17,
+      "title": "Different approaches",
+      "summary": "Machine translation employs three distinct approaches: symbolic methods grounded in linguistics and logic, statistical techniques based on Bayes' theorem, and neural systems utilizing neural networks. While large language models often excel for well-resourced languages like English and French due to their extensive knowledge, specific machine translation models are preferable for low-resource or specialized language pairs, such as English and Finnish. Each paradigm offers unique advantages depending on the available data and linguistic context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 18,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation finds the most likely English sentence $\\hat{e}$ given a French source $f$ by maximizing the product of the translation probability $p(f|e)$ and the prior probability $p(e)$, omitting the constant $p(f)$. While the formula applies to individual words, practical systems often operate at the phrase level to handle multi-word alignments. The decoding process generates candidate translations by evaluating probabilities for various word positions in the source sentence, such as translating the first word or skipping ahead to later words like \"witch,\" based on the correspondence model.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 19,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation applies Bayes' theorem to find the most likely target sentence by decomposing the problem into two independently trainable models: a language model $P(e)$ ensuring correct English usage, and a translation model $P(f|e)$ verifying correspondence between French and English. This division of labor avoids directly modeling $P(e|f)$, allowing the system to balance grammatical correctness with semantic alignment, as illustrated by rejecting ungrammatical translations like \"we look at the television\" despite their lexical correspondence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 20,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation uses a crime scene analogy to explain Bayes' theorem, where the source sentence $f$ is the crime scene and the target sentence $e$ is the suspect. While directly asking \"who did it?\" ($p(e|f)$) offers too many possibilities, applying Bayes' theorem separates the problem into two necessary components: $P(e)$ represents the suspect's motive, and $P(f|e)$ verifies if they had the means through a crime scene investigation. Just as a suspect requires both motive and means to be identified, successful translation depends on combining these two distinct models.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 21,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation selects the optimal output by balancing two probabilities: correct English usage (P(E)) and accurate source-target correspondence (P(F|E)). Using \"Nous regardons la télévision\" as an example, literal translations like \"We look the television\" fail due to poor grammar despite word alignment, while fluent phrases like \"That seems fairly reasonable\" lack semantic correspondence. The system identifies \"We are watching television\" as the best translation because it simultaneously satisfies both grammatical correctness and high probability of correspondence with the French source.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 22,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation evaluates candidate translations by combining the probability of correct English usage, P(E), with the probability of good French-to-English correspondence, P(F | E). The slide illustrates this using \"Nous regardons la télévision,\" showing that while literal translations like \"We look the television\" may have high correspondence, they fail on grammatical correctness. In contrast, \"We are watching television\" succeeds because it satisfies both criteria, demonstrating that optimal translation requires balancing fluency and accuracy.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 23,
+      "title": "Statistical machine translation",
+      "summary": "In statistical machine translation, the probability of correct usage $p(e)$ is modeled using N-gram techniques to estimate word probabilities based on limited preceding context. To compute the joint probability of a sentence like \"the dog was running across the green field,\" the calculation decomposes into a product of conditional probabilities, where each term considers at most two prior words. This approach allows existing N-gram models to serve directly as the a priori model for English usage within the translation formula.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 24,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation applies the principle of the Rosetta Stone, where parallel texts in a known language (Ancient Greek) and an unknown one (Egyptian) allowed humans to decipher the latter by establishing links between them. Similarly, this approach uses algorithms instead of human intuition to analyze parallel corpora, such as French and English, to learn translation correspondences automatically.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 25,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation relies on large parallel corpora, such as European Parliament proceedings, movie subtitles, and multilingual websites, which serve as a modern \"Rosetta Stone\". While these resources provide sentence-level alignment between source and target languages, they do not reveal word-to-word correspondences. Algorithms address this gap by utilizing a correspondence model to map words and a language model to ensure grammatical correctness, selecting the translation hypothesis with the highest probability during decoding.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 26,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation relies on the intuition that word alignments can be inferred by analyzing a parallel corpus globally rather than sentence-by-sentence. As demonstrated with the English word \"heaven\" and its Vietnamese counterpart \"Trời,\" consistent co-occurrence across multiple sentences allows an algorithm to establish the correct link without prior knowledge of specific translations. This global perspective enables the system to identify correspondences that might be ambiguous in isolation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 27,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation relies on the intuition that word meanings are derived from context rather than fixed one-to-one mappings, as demonstrated by the Vietnamese translation of \"heaven\". The examples show that \"heaven\" translates to \"tròi\" in phrases like \"created the heavens,\" \"called the expanse heaven,\" and \"stars of heaven,\" illustrating how statistical models learn these associations from parallel corpora. This approach allows the system to determine the correct target word based on surrounding linguistic patterns instead of relying on a static dictionary.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 28,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation begins with simple word-by-word alignment but improves accuracy by incorporating syntactic analysis. By identifying parts of speech, the system models sentence structure to handle language-specific differences, such as reordering English noun phrases (determiner-adjective-noun) into French structures (determiner-noun-adjective). This ensures proper agreement and word order, transforming \"the red house\" correctly into \"la maison rouge\" rather than a literal translation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 29,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation relies on alignment to establish correspondences between source and target language units. The slide illustrates this process by mapping French phrases like \"la maison\" and \"la maison bleue\" to their English equivalents, \"the house\" and \"the blue house,\" while also aligning \"la fleur\" with \"the flower\". This visual example demonstrates how the system identifies which words in one sentence correspond to specific words in the other to facilitate translation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 30,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation relies on alignment to establish correspondences between source and target language units. The slide illustrates this process by mapping French phrases like \"la maison\" and \"la maison bleue\" to their English equivalents, \"the house\" and \"the blue house,\" while also aligning \"la fleur\" with \"the flower\". This visual example demonstrates how the system identifies specific word-level relationships necessary for generating accurate translations.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 31,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation relies on alignment to establish correspondences between source and target language units. The slide illustrates this process by mapping French phrases like \"la maison\" and \"la maison bleue\" to their English equivalents, \"the house\" and \"the blue house,\" while also showing the distinct alignment for \"la fleur\" as \"the flower\". This visual example demonstrates how statistical models identify word-level relationships necessary for translation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 32,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation determines word alignments by iteratively analyzing a corpus to strengthen connections between frequently linked terms, such as French \"maison\" and English \"house\". While initial alignments are assumed equally probable, this process refines them into specific conditional probabilities, like p(maison|house) = 0.876 or p(la|the) = 0.453. These calculated values form the basis of the translation model, quantifying the likelihood of a target word given a source word based on observed patterns across many sentences.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 33,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation involves alignment processes that extend beyond single words to connect units consisting of multiple words. This approach addresses the complexity of translating phrases and multi-word expressions by establishing correspondences between larger linguistic segments rather than relying solely on word-to-word mappings.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 34,
+      "title": "Statistical machine translation",
+      "summary": "Statistical machine translation decoding constructs sentences from left to right while evaluating multiple hypotheses with associated probabilities, such as \"Mary\" (0.534) versus \"witch\" (0.182). To manage computational complexity, the process employs pruning to reduce the search space by eliminating weak hypotheses that have low likelihood scores. This approach balances the generation of candidate translations against the need for efficiency in selecting the optimal output sequence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 35,
+      "title": "Different approaches",
+      "summary": "Machine translation has evolved through three distinct paradigms: symbolic approaches based on linguistics and logic, statistical methods utilizing Bayes' theorem, and neural techniques relying on neural networks. While the symbolic paradigm offers interpretability for limited domains, its reliance on manual rule creation is costly, tedious, and unable to fully capture language innovation. Consequently, researchers shifted toward statistical models in the 1990s to address these limitations by leveraging statistical theory rather than explicit rules.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 36,
+      "title": "Neural machine translation",
+      "summary": "Neural machine translation models the process as a single mathematical function using an encoder-decoder architecture with attention, evolving from recurrent neural networks to modern transformers. Unlike statistical methods relying on component pipelines, these systems are trained end-to-end on parallel corpora to directly map input text to translated output. The encoder builds a contextualized representation of the source sentence, which the decoder then uses to generate the target language word by word.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 37,
+      "title": "Recurrent neural network",
+      "summary": "Recurrent neural networks (RNNs) utilize an encoder-decoder architecture for tasks like translating \"je regarde la télévision\" into \"I am watching television\". The encoder builds a semantic representation of the input sentence, which is then fed into a decoder RNN that generates output word-by-word starting from a special start symbol. Crucially, recurrent connections in both the encoder and decoder integrate the history of previously seen data, a capability often extended by attention mechanisms that allow the model to reference specific intermediate states from the encoder during decoding.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 38,
+      "title": "Recurrent neural network",
+      "summary": "Recurrent neural networks risk losing significant semantic information when compressing an entire sequence into a single vector. To address this limitation, the transformer architecture replaces recurrence with an encoder-decoder structure that utilizes attention mechanisms. This approach generates precise, contextualized representations for every word in the source sequence, allowing the decoder to reference specific generated content throughout the sequential process rather than relying on a compressed summary.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 39,
+      "title": "Recurrent neural network",
+      "summary": "Slide 39 introduces the Recurrent Neural Network (RNN) architecture, specifically highlighting an encoder-decoder configuration. The diagram illustrates key components including input vectors ($x$), output vectors ($y$), and weight matrices ($W$, $V$, $U$) alongside bias terms ($b_2$, $b_3$).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 40,
+      "title": "Recurrent neural network",
+      "summary": "This slide introduces the recurrent neural network (RNN) architecture configured as an encoder-decoder model, featuring weight matrices $W$, $U$, and $V$ alongside bias terms $b_3$ and $b_4$. The diagram illustrates a sequence-to-sequence translation task where the French input \"je regarde la télévision\" is processed to generate the Spanish output \"la météo,\" demonstrating how RNNs handle variable-length sequences in computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 41,
+      "title": "Recurrent neural network",
+      "summary": "Slide 41 illustrates a recurrent neural network configured as an encoder-decoder architecture, featuring weight matrices (W, V, U) and bias terms (b5, b4). The diagram demonstrates the model processing the French input sequence \"je regarde la télévision\" to generate the output tokens \"télévision,\" \"et,\" \"mais,\" and a final \"<stop>\" token. This visual example highlights how the network encodes an input sentence and sequentially decodes it into a target representation within computational linguistics applications.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 42,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture transforms input sequences into output sequences, as illustrated by translating the French phrase \"je regarde la télévision\" into the English sentence \"I am watching television\". This process incorporates a special start token to initiate generation and demonstrates how the model handles word order and grammatical structure differences between languages.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 43,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture transforms an input sequence, such as the French phrase \"je regarde la télévision,\" into a corresponding output sequence like \"I am watching television\". This process involves generating tokens sequentially, often beginning with a special start token to initiate the decoding phase. The example illustrates how the model maps source language structures to target language equivalents within computational linguistics tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 44,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture transforms an input sequence, such as the French phrase \"je regarde la télévision,\" into a corresponding output sequence like \"I am watching television\". This process involves generating tokens sequentially, often beginning with a special start token to initiate the decoding phase. The example illustrates how the model maps source language structures to target language equivalents within computational linguistics tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 45,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture processes input sequences, such as the French phrase \"je regarde la télévision,\" to generate corresponding output sequences like the English translation \"I am watching television\". This example illustrates how the model handles tokenization and sequence generation, including the use of a special `<start>` token to initiate the decoding process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 46,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated by translating the French phrase \"je regarde la télévision\" into the English sentence \"I am watching television\". This example demonstrates how the model processes an input sequence and generates a corresponding output sequence, utilizing a special `<start>` token to initiate the decoding process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 47,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture transforms an input sequence, such as the French phrase \"je regarde la télévision,\" into a corresponding output sequence like \"I am watching television\". This process typically begins with a special start token to initiate generation and demonstrates how the model maps source language structures to target language equivalents in machine translation tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 48,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture transforms an input sequence, such as the French phrase \"je regarde la télévision,\" into a corresponding output sequence like \"I am watching television\". This process typically begins with a special start token to initiate generation and demonstrates how the model maps source language structures to target language equivalents. The example illustrates the fundamental mechanism of translating entire sentences by encoding the input meaning and decoding it word-by-word in the target language.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 49,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture translates input sequences into output sequences, as illustrated by converting the French phrase \"je regarde la télévision\" into the English sentence \"I am watching television\". This process involves an initial start token to trigger generation and demonstrates how the model maps source language structures to target language equivalents within computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 50,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture processes input sequences, such as the French phrase \"je regarde la télévision,\" to generate corresponding output sequences like the English translation \"I am watching television\". This example illustrates how the model handles tokenization and sequence generation, including the use of a special `<start>` token to initiate the decoding process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 51,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture transforms an input sequence, such as the French phrase \"je regarde la télévision,\" into a corresponding output sequence like \"I am watching television\". This process involves encoding the source sentence and decoding it into the target language, often utilizing special tokens like `<start>` to initiate generation. The example illustrates how the model maps semantic meaning across languages while managing sequential dependencies.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 52,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture processes input sequences, such as the French phrase \"je regarde la télévision,\" to generate corresponding output sequences like \"I am watching television\". This example illustrates how the model translates between languages by encoding the source meaning and decoding it into the target language, often utilizing special tokens like `<start>` to initiate generation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 53,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example where the input \"je regarde la télévision\" is processed to generate the output \"I am watching television\". The sequence begins with a special `<start>` token, followed by the generation of words like \"am,\" \"television,\" and \"watching,\" demonstrating how the model sequentially produces target language tokens from an encoded source representation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 54,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture processes input sequences, such as the French phrase \"je regarde la télévision,\" to generate corresponding output sequences like \"I am watching television\". The model utilizes a special `<start>` token to initiate the generation process and produces tokens sequentially until reaching an end condition. This example illustrates how the system translates or transforms structured linguistic input into a target language representation within computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 55,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture processes input sequences, such as the French phrase \"je regarde la télévision,\" to generate corresponding output sequences like \"I am watching television\". The slide illustrates this translation process by showing how the model handles tokenization and sequence generation, including the use of a start token `<start>` to initiate the decoding phase. This example demonstrates the fundamental mechanism where an encoder compresses source information into a representation that the decoder then expands into the target language.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 56,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture processes a French input sequence, \"je regarde la télévision,\" to generate an English translation. The model produces the output token by token, beginning with a `<start>` marker and concluding with a `<stop>` token, as illustrated by the example phrase \"I am watching television\". This slide demonstrates the fundamental mechanism of translating source sequences into target sequences within computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 57,
+      "title": "Neural machine translation",
+      "summary": "Statistical machine translation dominated until 2015, when the field rapidly shifted to neural paradigms following the 2014 introduction of RNN-based sequence-to-sequence models. By 2016, Google Translate adopted this approach as the standard, and the Transformer architecture, originally developed for translation in 2017, quickly became the dominant model. The evolution continues into the 2020s with massively multilingual systems where translation functions as one task among many within large language models.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 58,
+      "title": "Neural machine translation",
+      "summary": "Translation quality is evaluated based on adequacy, which measures meaning preservation, and fluency, which assesses grammatical naturalness in the target language. While statistical machine translation often achieves adequacy but suffers from fluency issues due to phrase concatenation, neural machine translation produces considerably more fluent output by replacing complex pipelines with a single end-to-end model that better handles word order and morphology. However, this high fluency can sometimes mask adequacy errors such as omissions or invented content.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 59,
+      "title": "Multilingual machine translation",
+      "summary": "The classical machine translation setup requires a separate model for every language pair, creating 552 directions for the EU's 24 languages and failing where parallel data is scarce, such as between Finnish and Swahili. As an alternative, a single multilingual neural network shares parameters across many languages to induce a global semantic space. This architecture enables translation for pairs with little or no direct training data by leveraging shared vocabulary and generalized representations learned from other language combinations.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 60,
+      "title": "Multilingual NMT",
+      "summary": "Multilingual Neural Machine Translation employs a single shared encoder-decoder architecture and unified subword vocabulary to handle multiple languages simultaneously. The target language is specified via a special tag, such as `<2nl>` for Dutch or `<2fr>` for French, which directs the model to generate the appropriate translation. This parameter-sharing approach facilitates knowledge transfer between related languages, significantly benefiting those with limited parallel training data.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 61,
+      "title": "Zero-shot translation",
+      "summary": "Zero-shot translation enables models to translate between unseen language pairs, such as Portuguese to Spanish, by training only on intermediate pairs like Portuguese-English and English-Spanish. This capability arises because the encoder-decoder learns a shared, language-independent semantic representation that generalizes across languages, functioning as a data-driven interlingua rather than a manually designed one or a pivot language like English. Unlike constructed languages such as Esperanto, this internal representation avoids specific linguistic features to capture global sentence meaning directly from parallel corpora.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 62,
+      "title": "MT with large language models",
+      "summary": "For large language models, translation is merely one instruction among many, acquired implicitly through multilingual pretraining and instruction tuning rather than dedicated training. Unlike specialized systems, these models leverage prompts to maintain document-level context and consistency while allowing precise control over style, register, and terminology constraints. This flexibility also supports interactive post-editing, enabling users to specify requirements such as an informal tone or domain-specific vocabulary directly within the prompt.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 63,
+      "title": "Course evaluation: project",
+      "summary": "The course project requires designing, implementing, and evaluating two models from different paradigms (symbolic, statistical, or neural) to address an NLP task or computational linguistic research question. Students must compare the models' performance and interpretability, choosing either the provided Toxic Comment Classification dataset or a self-selected topic such as emotion detection, sarcasm, POS tagging, NER, spam filtering, or another language.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 64,
+      "title": "Project: requirements",
+      "summary": "The project requires a fixed train/dev/test split where the test set is used only once at the end. Students must implement two models alongside a simple baseline, making all feature and hyperparameter choices based on development data while using identical metrics. The final discussion demands error analysis with concrete test set examples and notebook-backed claims for every assertion. Although generative AI tools are permitted, their use must be declared, and students retain full responsibility for all code and conclusions.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 65,
+      "title": "4 ECTS vs. 6 ECTS version",
+      "summary": "The 4 ECTS version follows the standard requirements, while the 6 ECTS option extends this by requiring a choice between a deeper discussion of linguistic interpretability or a thorough analysis of applications in digital humanities research. Deliverables for both versions consist of a functional notebook with saved outputs and an optional separate report. The final submission deadline is Tuesday, 12 January 2027.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    }
+  ]
+}

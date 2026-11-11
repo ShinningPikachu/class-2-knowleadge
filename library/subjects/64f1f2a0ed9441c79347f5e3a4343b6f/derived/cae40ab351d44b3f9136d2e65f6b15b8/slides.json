@@ -1,0 +1,1027 @@
+{
+  "metadata": {
+    "source_file": "Lecture_04_Untitled_Slides.pdf",
+    "created_at": "2026-10-30T14:21:00.135398+00:00",
+    "slide_count": 113,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Lecture 4: Ensembles",
+      "content": "Lecture 4: Ensembles Machine learning and inductive inference Sieben Bocklandt Slides based on slidedecks from Jesse Davis’ lectures in Principles of Machine Learning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "– Deep understanding of how ensemble algorithms work",
+      "content": "– Deep understanding of how ensemble algorithms work – Voting – Stacking – Bagging – Random forest – Boosting – Error-coding output codes – Understand strengths and weaknesses of the ensemble methods – Understand and be able to explain why ensembles work Faculteit, departement, dienst … 2 Goals of this lecture",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "– Voting, stacking, bagging and random forests",
+      "content": "– Voting, stacking, bagging and random forests – AdaBoost, XGBoost – Manipulating inputs and outputs – Why ensembles work – Applications Faculteit, departement, dienst … 3 Outline",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "- Music playlist consisting of songs used as background music",
+      "content": "- Music playlist consisting of songs used as background music Machine learning and inductive inference: Lecture 2 4 Running example",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "- Music playlist consisting of songs used as background music",
+      "content": "- Music playlist consisting of songs used as background music - We want to automatically add new songs Machine learning and inductive inference: Lecture 2 5 Running example",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "- Music playlist consisting of songs used as background music",
+      "content": "- Music playlist consisting of songs used as background music - We want to automatically add new songs Machine learning and inductive inference: Lecture 2 6 Running example",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "- Music playlist consisting of songs used as background music",
+      "content": "- Music playlist consisting of songs used as background music - We want to automatically add new songs Machine learning and inductive inference: Lecture 2 7 Running example ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 8 Running example: One model vs multiple models ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 9 Running example: One model vs multiple models ? M1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 10 Running example: One model vs multiple models ? M1 M2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 11 Running example: One model vs multiple models ? M1 M2 M3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "– An ensemble model is a predictive model that is a combination of several different predictive",
+      "content": "– An ensemble model is a predictive model that is a combination of several different predictive models. – Same type of models → homogeneous ensemble – Different type of models → heterogeneous ensemble – An ensemble is often more accurate than any of its constituent models – Why? Because “two know more than one” Faculteit, departement, dienst … 12 Ensemble method",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "– An ensemble model is a predictive model that is a combination of several different",
+      "content": "– An ensemble model is a predictive model that is a combination of several different predictive models. – Same type of models → homogeneous ensemble – Different type of models → heterogeneous ensemble – An ensemble is often more accurate than any of its constituent models – Why? Because “two know more than one” But.... – How do we get multiple predictive models that make other mistakes? – What models can we consider for this? – How do we combine their predictions? Faculteit, departement, dienst … 13 Ensemble method",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Use multiple models",
+      "content": "Use multiple models Faculteit, departement, dienst … 14",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "– Assume we have k classifiers M1, M2, …, Mk",
+      "content": "– Assume we have k classifiers M1, M2, …, Mk – Consider classifier M: – given a new instance x, M computes M1(x), M2(x), …, Mk(x), counts how often each class is predicted, and returns the class that is predicted most often – In other words: M lets all classifiers vote and returns the majority vote as its answer – How well will M work? Faculteit, departement, dienst … 15 Voting",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 16 Voting example on music ? M1 M2 M3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "– The question is difficult to answer in general, but we can analyze what",
+      "content": "– The question is difficult to answer in general, but we can analyze what happens under some simplifying assumptions – Let us assume: 1. all classifiers M1, …, Mk have the same accuracy p 2. mistakes made by different classifiers are statistically independent - That is: for i≠j, P(Mi wrong | Mj wrong) = P(Mi wrong | Mj right) = P(mi is wrong) - Or: “if something is difficult for Mj, that doesn’t mean it’s also difficult for Mi ” Faculteit, departement, dienst … 17 Voting",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 18 Voting",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 19 Voting x x x xx 1 classifier: 0.800 3 classifiers: 0.896 5 classifiers: 0.942 11 classifiers: 0.988 21 classifiers: 0.999",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "– We can prove that voting helps if we have equally good models that make",
+      "content": "– We can prove that voting helps if we have equally good models that make mistakes independently – But what if: – mistakes are not independent? – some models are better than others? ➔Need experimental validation Faculteit, departement, dienst … 20 Voting",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "– Use the votes as the input of a new learner",
+      "content": "– Use the votes as the input of a new learner – This can also be seen as a data transformation Faculteit, departement, dienst … 21 Stacking Data Learner A Learner B Learner C Learner D Prediction Transformed Data",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 22 Stacking example on music ? +",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 23 Stacking example on music ? ? + +",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 24 Stacking example on music ? ? ? + + -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 25 Stacking example on music ? ? ? + + - DT predicts Linear predicts kNN predicts + + + Yes No Yes No Yes No + + - -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Use the same algorithm,",
+      "content": "Use the same algorithm, vary the training data Faculteit, departement, dienst … 26",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "– Goal: multiple models that make different mistakes",
+      "content": "– Goal: multiple models that make different mistakes – Problem: only one training set S – Bootstrap replicates: – Construct bootstrap replicates to generate S’ by sampling |S| examples with replacement from S Faculteit, departement, dienst … 27 Bootstrap 63.2% chance that an example appears in a replicate Replicate 1 Replicate 3 Replicate 2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "– Claim: 63.2% chance example 𝑥is in a bootstrap replicate 𝑆’ with size |S|=n",
+      "content": "– Claim: 63.2% chance example 𝑥is in a bootstrap replicate 𝑆’ with size |S|=n – Proof: 𝑃𝑥= 𝑆𝑖 ′ = 1 𝑛 x is sampled for i th position in S’ 𝑃𝑥≠𝑆𝑖 ′ = 1 −1 𝑛 𝑃𝑥∉𝑆′ = 1 −1 𝑛 𝑛 𝑃𝑥∈𝑆′ = 1 −1 −1 𝑛 𝑛 ≈1 −1 𝑒≈0.632 Faculteit, departement, dienst … 28 Bootstrap Replicate",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "– Given: Data set S, integer T",
+      "content": "– Given: Data set S, integer T For t = 1..T St=Bootstrap replicate of S ht= Apply learning algorithm to St Combine all ht using an unweighted vote Faculteit, departement, dienst … 29 Bagging: Bootstrap Aggregating Learner Learner Learner V X X X",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 30 Bagging example on music",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 31 Bagging example on music",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 32 Bagging example on music M1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 33 Bagging example on music M1 M2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 34 Bagging example on music M1 M2 M3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 35 Bagging example on music ? M1 M2 M3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "– Bagging works with any learner in principle",
+      "content": "– Bagging works with any learner in principle – Bagging works best for unstable learners – Learner is UNSTABLE if: minor variations in training data results in major changes in classifier output – Unstable: Decision trees, neural networks, rule learning algorithms, 1NN – Stable: Linear regression, kNN (k>1), linear threshold algorithms Faculteit, departement, dienst … 36 Sampling based ensembles",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "– Suppose your data looks like this:",
+      "content": "– Suppose your data looks like this: – Learners spend a lot of effort to fit noisy examples – Noisy examples not in sample = better model ➔ Bootstrap replicates can generate “easier/better” data for the learner Faculteit, departement, dienst … 37 Intuition: why does bagging work?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "– A variant of Bagging",
+      "content": "– A variant of Bagging – Given Dataset S, integer T For i=1..T St= bootstrap replicate of S Build decision tree on St, but in each recursive call Choose n features (without replacement) Choose best of these n as the root of this (sub)tree Do not prune the tree Faculteit, departement, dienst … 38 Further decorrelate models: Random Forests",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 39 Random Forest example on music Genre = Jazz",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 40 Random Forest example on music Genre = Jazz 1) Energy / BPM BPM<125",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 41 Random Forest example on music Genre = Jazz 1) Energy / BPM 2) BPM / Genre BPM<125 BPM<95",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 42 Random Forest example on music Genre = Jazz BPM<125 BPM<95 1) Energy / BPM 2) BPM / Genre 3) Energy / Genre Genre = Jazz",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 43 Random Forest example on music Genre = Jazz 1) Energy / BPM 2) BPM / Genre 3) Energy / Genre BPM<125 BPM<95 Genre = Jazz",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 44 Random Forest example on music Genre = Jazz 1) Energy / BPM 2) BPM / Genre 3) Energy / Genre BPM<125 BPM<95 Genre = Jazz ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "– Increasing n increases",
+      "content": "– Increasing n increases – Correlation among individual trees through shared features (BAD) – Accuracy of individual trees (GOOD) – Using a tuning set to pick a good value for n – Overall, random forests are – Very fast – Able to deal with large numbers of features – Reducing overfitting substantially – Working very well in practice Faculteit, departement, dienst … 45 More on Random Forests",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "– Given Dataset S, integer T",
+      "content": "– Given Dataset S, integer T For i=1..T St= bootstrap replicate of S Build decision tree on St, but in each recursive call Choose n features (without replacement) Choose random split points for these features Choose best of these n as the root of this (sub)tree Do not prune the tree Faculteit, departement, dienst … 46 Other Idea: extremely random trees",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 47 Random Forest example on music Genre = Jazz 1) Energy>3 / BPM<130 BPM<130 Energy>3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 48 Random Forest example on music Genre = Jazz 1) Energy>3 / BPM<130 BPM<130",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 49 Random Forest example on music Genre = Jazz 1) Energy / BPM 2) BPM<90 / Genre=Jazz BPM<130 BPM<90",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 50 Random Forest example on music Genre = Jazz 1) Energy / BPM 2) BPM / Genre 3) Energy < 2 / Genre=Jazz Genre = Jazz BPM<130 BPM<90 Energy<2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 51 Random Forest example on music Genre = Jazz 1) Energy / BPM 2) BPM / Genre 3) Energy / Genre Genre = Jazz BPM<130 BPM<90",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "– How well does each learned model generalize?",
+      "content": "– How well does each learned model generalize? – For each example i in the database – Find all the models that did not train on this example – Take the majority vote of these models’ predictions on i and compare with label – Take the average of these errors Faculteit, departement, dienst … 52 Alternative evaluation: Out of bag error",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "– How well does each learned model generalize?",
+      "content": "– How well does each learned model generalize? – For each example i the database – Find all the models that did not train on this example – Take the majority vote of these models’ predictions on i and compare with label – Take the average of these errors Faculteit, departement, dienst … 53 Alternative evaluation: Out of bag error h1 h2 h3 h4",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "– How well does each learned model generalize?",
+      "content": "– How well does each learned model generalize? – For each example i the database – Find all the models that did not train on this example – Take the majority vote of these models’ predictions on i and compare with label – Take the average of these errors Faculteit, departement, dienst … 54 Alternative evaluation: Out of bag error h1 h2 h3 [ ] + h4",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "– How well does each learned model generalize?",
+      "content": "– How well does each learned model generalize? – For each example i the database – Find all the models that did not train on this example – Take the majority vote of these models’ predictions on i and compare with label – Take the average of these errors Faculteit, departement, dienst … 55 Alternative evaluation: Out of bag error h1 h2 h3 [ ] [h1→ +,h2 → -, h4→- ] + + h4",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "– How well does each learned model generalize?",
+      "content": "– How well does each learned model generalize? – For each example i the database – Find all the models that did not train on this example – Take the majority vote of these models’ predictions on i and compare with label – Take the average of these errors Faculteit, departement, dienst … 56 Alternative evaluation: Out of bag error h1 h2 h3 [ ] [h1→ +,h2 → -, h4→- ] [h3→ - ] + + - h4",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "– How well does each learned model generalize?",
+      "content": "– How well does each learned model generalize? – For each example i the database – Find all the models that did not train on this example – Take the majority vote of these models’ predictions on i and compare with label – Take the average of these errors Faculteit, departement, dienst … 57 Alternative evaluation: Out of bag error h1 h2 h3 [ ] [h1→ +,h2 → -, h4→- ] [h3→ - ] [h3 → + ] + + - - h4",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "– How well does each learned model generalize?",
+      "content": "– How well does each learned model generalize? – For each example i the database – Find all the models that did not train on this example – Take the majority vote of these models’ predictions on i and compare with label – Take the average of these errors Faculteit, departement, dienst … 58 Alternative evaluation: Out of bag error h1 h2 h3 [ ] [h1→ +,h2 → -, h4→- ] [h3→ - ] [h3 → + ] + + - - h4 OOB = 1 3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Learn from previous",
+      "content": "Learn from previous mistakes Faculteit, departement, dienst … 59",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "– Typically, we want “strong learners”, i.e., high chance to get small error rate",
+      "content": "– Typically, we want “strong learners”, i.e., high chance to get small error rate – Boosting works with “weak learner”: Models are (slightly) better than random guessing – General approach – Learn an additive model – Greedily add a model at a time – Current model focuses on correcting mispredictions from the previous models Faculteit, departement, dienst … 60 Boosting",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "– Works for binary classification problems",
+      "content": "– Works for binary classification problems – Learns additive model iteratively 𝐹𝑋= α1ℎ1(X)+α2ℎ2 𝑋+ ⋯+ α𝑡ℎ𝑡(𝑋) – Two big ideas when adding new model ℎ𝑡+1: – Idea 1: Weight examples that are classified incorrectly by ℎ𝑡 – Idea 2: Prediction is a weighted vote where more accurate models have a higher weight 𝛼 Faculteit, departement, dienst … 61 Adaboost",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "Given: Training examples E, Integer T",
+      "content": "Given: Training examples E, Integer T Give every example 𝑒∈𝐸equal weight we = 1 |𝐸| For t = 1 … T: Train a simple classifier ℎₜ using the current example weights 𝜀𝑡←σ 𝑒∈𝐸 ℎ𝑡𝑒≠𝑦𝑒 𝑤𝑒 Sum the weights of all incorrectly classified examples given labels 𝑦𝑒 𝛼𝑡= 1 2 ln( 1− 𝜀𝑡 𝜀𝑡) For every training example 𝑒∈𝐸: If ℎₜ classifies it incorrectly →Increase its weight 𝑤𝑒 Otherwise →Decrease its weight 𝑤𝑒 Normalize the example weights to 1: 𝑤𝑒= 𝑤𝑒 Σ𝑒∈𝐸𝑤𝑒 Add ℎₜ with voting strength 𝛼ₜ to the ensemble Faculteit, departement, dienst … 62 AdaBoost",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 63 AdaBoost example music",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 64 AdaBoost example music h1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 65 AdaBoost example music 𝜀1 = 5 26 ⟹𝛼1 = 1 2 ln 1 −5 26 5 26 ≈0.72 F(x) = 0.72 h1(x) h1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 66 AdaBoost example music F(x) = 0.72 h1(x) BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - - h1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 67 AdaBoost example music h1 F(x) = 0.72 h1(x) BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - - h2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 68 AdaBoost example music h1 F(x) = 0.72 h1(x)+1.87 h2(x) BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - - h2 𝜀2 = 1 42 ⟹𝛼2 = 1 2 ln 1 −1 42 1 42 ≈1.87",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "– Expect: Training error drops to 0, but test error increases",
+      "content": "– Expect: Training error drops to 0, but test error increases – Observed: Even after 1000 rounds, test error is stable and continues to drop even after training error is 0 Faculteit, departement, dienst … 69 How will the number of rounds affect generalization?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 70,
+      "title": "– Key idea: Error only measures if classification is correct, but confidence of",
+      "content": "– Key idea: Error only measures if classification is correct, but confidence of prediction is important – Measure confidence by margin: (weighted vote +) – (weighted vote - ) – Large margins mean more weak learners agree, hence more rounds does not necessarily imply that the final classifier is getting more complex – Theorem: Large margins yield better bound on generalization error Faculteit, departement, dienst … 70 Margins",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 71,
+      "title": "– Continuous search method",
+      "content": "– Continuous search method Faculteit, departement, dienst … 71 Gradient Descent",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 72,
+      "title": "– Continuous search method",
+      "content": "– Continuous search method Faculteit, departement, dienst … 72 Gradient Descent y=2x X",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 73,
+      "title": "– Continuous search method",
+      "content": "– Continuous search method Faculteit, departement, dienst … 73 Gradient Descent y=2x y=4 X X",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 74,
+      "title": "– Continuous search method",
+      "content": "– Continuous search method Faculteit, departement, dienst … 74 Gradient Descent y=2x y=4 y=-x+10 X X X",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 75,
+      "title": "– Continuous search method",
+      "content": "– Continuous search method Faculteit, departement, dienst … 75 Gradient Descent y=2x y=4 y=-x+10 y=1.5x+2 X X X X",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 76,
+      "title": "– Continuous search method",
+      "content": "– Continuous search method Faculteit, departement, dienst … 76 Gradient Descent y=2x y=4 y=-x+10 y=1.5x+2 X",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 77,
+      "title": "– Continuous search method",
+      "content": "– Continuous search method Faculteit, departement, dienst … 77 Gradient Descent y=2x y=4 y=-x+10 y=1.5x+2 X X",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 78,
+      "title": "– Continuous search method",
+      "content": "– Continuous search method Faculteit, departement, dienst … 78 Gradient Descent y=2x y=4 y=-x+10 y=1.5x+2 X X X",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 79,
+      "title": "– Continuous search method",
+      "content": "– Continuous search method Faculteit, departement, dienst … 79 Gradient Descent y=2x y=4 y=-x+10 y=1.5x+2 X X X X",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 80,
+      "title": "– Extreme gradient boosting",
+      "content": "– Extreme gradient boosting – Gradient boosting: when extending an additive ensemble model 𝐹𝑛𝑥= 𝑓1 𝑥+ 𝑓2 𝑥+ ⋯+ 𝑓𝑛𝑥by adding one more component 𝑓𝑛+1 𝑥, train 𝑓𝑛+1 𝑥 so that adding it represents a step in the direction of the negative gradient – XGBoost uses decision trees for the 𝑓𝑖 functions. – Currently the gold standard for tabular learning Faculteit, departement, dienst … 80 XGBoost",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 81,
+      "title": "Change the output labels",
+      "content": "Change the output labels Faculteit, departement, dienst … 81",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 82,
+      "title": "– Given k>2 classes: A B C …",
+      "content": "– Given k>2 classes: A B C … – Some learners can predict multiple classes – Other option: one-vs-rest. Learn k binary classifiers where – One class is positive, the other classes are negative. – Take the prediction with the highest confidence Faculteit, departement, dienst … 82 Multiclass problems A B C D A Not A A Not A B Not B B Not B C Not C C Not C",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 83,
+      "title": "– Encode by partition output labels in 2 subsets, create log(k) models",
+      "content": "– Encode by partition output labels in 2 subsets, create log(k) models – A B C D vs E F G H – A C E G vs B D F H – A B E G vs C D F H – Could create more than log(k) models to build redundancy: “Error-correcting codes” Faculteit, departement, dienst … 83 Multiclass problems",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 84,
+      "title": "– Ensemble method for multiclass problems",
+      "content": "– Ensemble method for multiclass problems – Build T bit code word for each class – For class 𝑦𝑘, the ith bit is 1 if 𝑦𝑘 is new ‘pos’ class for ℎ𝑖 0 if 𝑦𝑘 is new ‘neg’ class for ℎ𝑖 – For t=1..T Partition labels into two disjoint label sets Train model on new label set Faculteit, departement, dienst … 84 Error-Correcting Output Codes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 85,
+      "title": "– Given example 𝑥, create bit vector ℎ(𝑥) of length T where the ith bit:",
+      "content": "– Given example 𝑥, create bit vector ℎ(𝑥) of length T where the ith bit: Is 1 if ℎ𝑖(𝑥) predicts positive Is 0 if ℎ𝑖(𝑥) predicts negative -Then predict the class with the smallest Hamming distance to ℎ(𝑥) Faculteit, departement, dienst … 85 Error-correcting Output codes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 86,
+      "title": "– Given example 𝑥, create bit vector ℎ(𝑥) of length T where the ith bit:",
+      "content": "– Given example 𝑥, create bit vector ℎ(𝑥) of length T where the ith bit: Is 1 if ℎ𝑖(𝑥) predicts positive Is 0 if ℎ𝑖(𝑥) predicts negative -Then predict the class with the smallest Hamming distance to ℎ(𝑥) Faculteit, departement, dienst … 86 Error-correcting Output codes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 87,
+      "title": "Explaining why ensembles work",
+      "content": "Explaining why ensembles work Faculteit, departement, dienst … 87",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 88,
+      "title": "– Given a new data point x, what is the expected prediction error?",
+      "content": "– Given a new data point x, what is the expected prediction error? – Assume data points are drawn i.i.d (independent and identically distributed) from a unique underlying probability distribution p – Goal: Compute for an arbitrary new point x 𝐸𝑝 𝑦−ℎ𝑥2 – 𝐸𝑝 is the expectation across all training sets – 𝑦 is the true label – ℎ(𝑥) is the predicted label – Note: looking at the squared error Faculteit, departement, dienst … 88 Expected Error",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 89,
+      "title": "– Assume that the true function generating the true labels is 𝑓𝑥 and the",
+      "content": "– Assume that the true function generating the true labels is 𝑓𝑥 and the average prediction of ℎ(𝑥) is ℎ(𝑥), then one can decompose 𝐸𝑝 𝑦−ℎ𝑥2 = ℎ𝑥−𝑓𝑥 2 + Ep h x −ℎ(𝑥) 2 + Ep[ y −f x 2] Faculteit, departement, dienst … 89 Expected error Bias² Noise Variance",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 90,
+      "title": "– Assume that the true function generating the true labels is 𝑓𝑥 and the",
+      "content": "– Assume that the true function generating the true labels is 𝑓𝑥 and the average prediction of ℎ(𝑥) is ℎ(𝑥), then one can decompose 𝐸𝑝 𝑦−ℎ𝑥2 = ℎ𝑥−𝑓𝑥 2 + Ep h x −ℎ(𝑥) 2 + Ep[ y −f x 2] – Bias: Inability to represent the true target Faculteit, departement, dienst … 90 Expected error Bias² Noise Variance",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 91,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 91 Bias True function 𝑓(𝑥) Learned function ℎ(𝑥)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 92,
+      "title": "– Inability to represent certain decision boundaries",
+      "content": "– Inability to represent certain decision boundaries – E.g., linear threshold units, decision trees – Incorrect assumptions – E.g., naïve Bayes’ independence assumption fails – Classifiers that are “too global” – E.g., single linear separator, small decision tree – If bias is high, the model is underfitting the data Faculteit, departement, dienst … 92 Sources of bias",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 93,
+      "title": "– Assume that the true function generating the true labels is 𝑓𝑥 and the",
+      "content": "– Assume that the true function generating the true labels is 𝑓𝑥 and the average prediction of ℎ(𝑥) is ℎ(𝑥), then one can decompose 𝐸𝑝 𝑦−ℎ𝑥2 = ℎ𝑥−𝑓𝑥 2 + Ep h x −ℎ(𝑥) 2 + Ep[ y −f x 2] – Bias: Inability to represent the true target – Variance: Fluctuations due to variations in the data sample Faculteit, departement, dienst … 93 Expected error Bias² Noise Variance",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 94,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 94 Variance True function 𝑓(𝑥) Learned function ℎ(𝑥)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 95,
+      "title": "– Statistical sources",
+      "content": "– Statistical sources – Classifiers are “too local” and can easily fit the data (e.g., nearest neighbor, large decision trees) – Computational sources – Decision made on small subsets of the data (e.g., decision tree splits near the leaves) – Randomization in the learning algorithm (e.g., neural nets with random initial weights) – Unstable learning algorithms (e.g., decision boundary can change if one training example changes) – High variance ⇒model is overfitting the data Faculteit, departement, dienst … 95 Sources of Variance",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 96,
+      "title": "– Assume that the true function generating the true labels is 𝑓𝑥 and the",
+      "content": "– Assume that the true function generating the true labels is 𝑓𝑥 and the average prediction of ℎ(𝑥) is ℎ(𝑥), then one can decompose 𝐸𝑝 𝑦−ℎ𝑥2 = ℎ𝑥−𝑓𝑥 2 + Ep h x −ℎ(𝑥) 2 + Ep[ y −f x 2] – Bias: Inability to represent the true target – Variance: Fluctuations due to variations in the data sample – Noise: Inability to distinguish between two objects with different labels Faculteit, departement, dienst … 96 Expected error Bias² Noise Variance",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 97,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 97 Noise True function 𝑓(𝑥)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 98,
+      "title": "– Inherent randomness",
+      "content": "– Inherent randomness – Some processes are genuinely stochastic, such as equipment failure or customer behavior. – Unobserved variables – Important information is missing from the input features – Measurement error – Sensors, laboratory measurements or data-entry processes record imperfect values. – Ambiguous or inconsistent labels – Different experts may assign different labels to the same example. Faculteit, departement, dienst … 98 Sources of Noise",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 99,
+      "title": "– Typically:",
+      "content": "– Typically: – Bias: Do not have good hypotheses in the considered class – Variance: hypothesis class too big – Hence, we are faced with a trade-off: – More expressive hypothesis class, which generates higher variance – Less expressive class, which generates higher bias Faculteit, departement, dienst … 99 Bias variance tradeoff",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 100,
+      "title": "– Ensembles can address both bias and variance!",
+      "content": "– Ensembles can address both bias and variance! – Bagging – If bootstrap approximation is correct, then would reduce variance without changing bias – In practice, bagging can reduce both – For high-bias classifiers, can reduce bias – For high-variance classifiers, can reduce variance  – Boosting – Early iterations: primarily reduces bias – Later iterations: primarily reduces variance (apparently) Faculteit, departement, dienst … 100 Explanation 1: Bias-Variance",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 101,
+      "title": "– 3 possible coins",
+      "content": "– 3 possible coins – We pick a coin (based on P(Ci) ) , flip it twice and observe Heads - Tails – We want to predict the third flip → P(H|HT)? Faculteit, departement, dienst … 101 Bayesian Estimate Coin P(H|Ci) P(Ci) C1 0.1 0.05 C2 0.5 0.25 C3 0.9 0.7",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 102,
+      "title": "– 3 possible coins",
+      "content": "– 3 possible coins – We pick a coin (based on P(Ci) ) , flip it twice and observe Heads - Tails – We want to predict the third flip → P(H|HT)? – P(HT|C1)=0.1 x 0.9 = 0.09 ; P(HT|C2)=0.5 x 0.5 = 0.25 ; P(HT|C3)=0.9 x 0.1 = 0.09 Faculteit, departement, dienst … 102 Bayesian Estimate Coin P(H|Ci) P(Ci) C1 0.1 0.05 C2 0.5 0.25 C3 0.9 0.7",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 103,
+      "title": "– 3 possible coins",
+      "content": "– 3 possible coins – We pick a coin (based on P(Ci) ) , flip it twice and observe Heads - Tails – We want to predict the third flip → P(H|HT)? – P(HT|C1)=0.1 x 0.9 = 0.09 ; P(HT|C2)=0.5 x 0.5 = 0.25 ; P(HT|C3)=0.9 x 0.1 = 0.09 – Using Bayes’ rule, we combine the prior probabilities (P(Ci)) with the likelihood of observing HT: 𝑃𝐶𝑖𝐻𝑇∝𝑃𝐻𝑇𝐶𝑖𝑃(𝐶𝑖) – After normalization: P(C1|HT)=0.035 ; P(C2|HT)=0.481 ; P(C3|HT)=0.485 Faculteit, departement, dienst … 103 Bayesian Estimate Coin P(H|Ci) P(Ci) C1 0.1 0.05 C2 0.5 0.25 C3 0.9 0.7",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 104,
+      "title": "– 3 possible coins",
+      "content": "– 3 possible coins – We pick a coin (based on P(Ci) ) , flip it twice and observe Heads - Tails – We want to predict the third flip → P(H|HT)? – P(HT|C1)=0.1 x 0.9 = 0.09 ; P(HT|C2)=0.5 x 0.5 = 0.25 ; P(HT|C3)=0.9 x 0.1 = 0.09 – Using Bayes’ rule, we combine the prior probabilities (P(Ci)) with the likelihood of observing HT: 𝑃𝐶𝑖𝐻𝑇∝𝑃𝐻𝑇𝐶𝑖𝑃(𝐶𝑖) – After normalization: P(C1|HT)=0.035 ; P(C2|HT)=0.481 ; P(C3|HT)=0.485 ➔We don’t know which coin we observed, can we combine them though? Faculteit, departement, dienst … 104 Bayesian Estimate Coin P(H|Ci) P(Ci) C1 0.1 0.05 C2 0.5 0.25 C3 0.9 0.7",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 105,
+      "title": "– 3 possible coins",
+      "content": "– 3 possible coins – We pick a coin (based on P(Ci) ) , flip it twice and observe Heads - Tails – We want to predict the third flip → P(H|HT)? – P(HT|C1)=0.1 x 0.9 = 0.09 ; P(HT|C2)=0.5 x 0.5 = 0.25 ; P(HT|C3)=0.9 x 0.1 = 0.09 – Using Bayes’ rule, we combine the prior probabilities (P(Ci)) with the likelihood of observing HT: 𝑃𝐶𝑖𝐻𝑇∝𝑃𝐻𝑇𝐶𝑖𝑃(𝐶𝑖) – After normalization: P(C1|HT)=0.035 ; P(C2|HT)=0.481 ; P(C3|HT)=0.485 ➔We don’t know which coin we observed, can we combine them though? 𝑃𝐻𝐻𝑇= ෍ 𝑖 𝑃𝐻𝐶𝑖𝑃𝐶𝑖𝐻𝑇= 0.1 × 0.035 + 0.5 × 0.481 + 0.9 × 0.485 ≈0.68 Faculteit, departement, dienst … 105 Bayesian Estimate Coin P(H|Ci) P(Ci) C1 0.1 0.05 C2 0.5 0.25 C3 0.9 0.7",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 106,
+      "title": "– How can the learning algorithm select among set of (almost) equally good",
+      "content": "– How can the learning algorithm select among set of (almost) equally good hypotheses? – Bayes optimal classifier: Weighted majority vote of all hypotheses – Weighted by their posterior probability – Provably the best possible classifier, that is, minimizes the error rate – Ensemble learning approximates Bayes optimal Faculteit, departement, dienst … 106 Explanation 2: Statistical explanation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 107,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 107 Explanation 3: Representation explanation + + + + – Each learner works with a given hypothesis class – Possible that the target function lies outside of the considered hypothesis class – Ensemble averaging may approximate the true target function with arbitrarily good accuracy + + + + - - - - - - - - - + + + + + + + + - - - - - - - - -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 108,
+      "title": "– Most learning algorithms search through hypothesis space to find one “good”",
+      "content": "– Most learning algorithms search through hypothesis space to find one “good” model – Most interesting hypothesis spaces are: – Huge/infinite – Heuristic search is essential – Learner might get stuck in a local minimum – One strategy for avoiding local minima: Repeat the search many times with random restarts: This is similar to bagging! Faculteit, departement, dienst … 108 Explanation 4: Computation explanation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 109,
+      "title": "Applications",
+      "content": "Applications Faculteit, departement, dienst … 109",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 110,
+      "title": "– The Netflix Prize Competition",
+      "content": "– The Netflix Prize Competition – Dataset: 100 million film ratings, 480.000 users, 17.700 films – Reduce the error of Netflix’ Cinematch system by 10% – Won by a huge ensemble model – Neighborhood models (kNN) – Bagged Gradient Boosted Decision tree – Temporal models – Matrix factorization – All combined through stacking Faculteit, departement, dienst … 110 Netflix",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 111,
+      "title": "– Contextual ranking through XGBoost based on:",
+      "content": "– Contextual ranking through XGBoost based on: – Collaborative signals: what people with similar listening patterns enjoy. – Content signals: properties of the track, such as audio or semantic information. – User-history signals: long-term preferences and recent listening. – Contextual signals: time, device, session and current activity. – Exploration systems: unfamiliar artists or newly released content Faculteit, departement, dienst … 111 Spotify",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 112,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 112 Motion capture",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 113,
+      "title": "Questions?",
+      "content": "Questions? Faculteit, departement, dienst … 113",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

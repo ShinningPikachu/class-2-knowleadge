@@ -1,0 +1,351 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 01",
+    "section_label": "Slide",
+    "completed": 68,
+    "total": 68,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Machine Learning and",
+      "summary": "This lecture introduces the topic of \"Machine Learning and Inductive Inference\" for the Master of Artificial Intelligence program and several other master's degrees. The session is presented by instructors Hendrik Blockeel and Sieben Bocklandt."
+    },
+    {
+      "slide": 2,
+      "title": "This academic year…",
+      "summary": "This academic year includes ten lectures with available recordings, though locations vary so students must check the schedule. Exercises and their separate solutions are posted on Toledo; students should attempt problems independently before verifying answers or attending exercise sessions. There are multiple parallel session series (A–F), requiring registration via the \"course information\" section on Toledo."
+    },
+    {
+      "slide": 3,
+      "title": "Lecture 1 : Introduction",
+      "summary": "Consequently, this slide functions solely to introduce the lecture's subject."
+    },
+    {
+      "slide": 4,
+      "title": "Questions:",
+      "summary": "This slide initiates a discussion by posing three key questions for students: defining \"machine learning,\" identifying its applications, and explaining the concept of \"inductive inference\". The professor frames these inquiries as an introductory exercise to gauge prior knowledge before delving into technical problems within the field."
+    },
+    {
+      "slide": 5,
+      "title": "The RoboSail project",
+      "summary": "Around 2003, Pieter Adriaans developed the first sailing boat autopilot because chaotic wind and water conditions lacked a suitable mathematical theory for traditional control. The RoboSail project utilized a boat equipped with AI agents, sensors, and machine learning components to learn sailing behavior directly from environmental inputs. This system successfully steered the vessel by adapting to complex variables that were impossible to describe mathematically in detail."
+    },
+    {
+      "slide": 6,
+      "title": "Language learning",
+      "summary": "Children learn language by observing sentences used within specific contexts, such as inferring the word \"salt\" when someone passes it upon request. Similarly, computers can be trained using datasets like Zitnick et al. (2013) to learn word meanings from paired examples of images and descriptive sentences. Once a mental model is established, the system can automatically generate accurate sentences for new, unseen pictures."
+    },
+    {
+      "slide": 7,
+      "title": "Autonomous cars",
+      "summary": "The 2004 DARPA Grand Challenge marked the first race for fully autonomous cars on desert roads, where no vehicle finished and the best traveled only 12 km. Progress was rapid by 2005, when five cars completed the full 212 km course. Despite this early success, developing autonomous vehicles remains difficult because city environments involve complex human behaviors and require background knowledge that is far more challenging to interpret than relatively simple desert terrain."
+    },
+    {
+      "slide": 8,
+      "title": "The Robot Scientist",
+      "summary": "The Robot Scientist (King et al., 2004) automates iterative scientific research by removing humans from the loop, using AI to interpret results and determine the next most informative experiment. This approach employs active learning to estimate which new experiments will best address current knowledge gaps. A notable advancement is the 2015 version, \"Eve,\" which successfully discovered a lead compound against malaria on its first run."
+    },
+    {
+      "slide": 9,
+      "title": "Automating manual tasks",
+      "summary": "Automating manual tasks, such as employee rostering, involves solving complex scheduling puzzles governed by numerous constraints like task eligibility and mandatory rest periods between shifts. These tasks are difficult to automate unless the system can learn these often non-obvious constraints from previous schedule examples. By extracting rules from historical data, AI can generate valid rosters that accommodate specific requirements without manual intervention."
+    },
+    {
+      "slide": 10,
+      "title": "Other applications…",
+      "summary": "Machine learning powers diverse applications including recommender systems for personalized ads, natural language processing for sentiment analysis, and automatic spam filters. Unlike traditional programming with fixed rules, these systems learn decision processes by observing user behavior, such as which emails are flagged or responded to, to predict preferences and classify content accurately."
+    },
+    {
+      "slide": 11,
+      "title": "Definitions of machine learning?",
+      "summary": "Tom Mitchell's 1996 definition describes machine learning as the study of enabling programs to improve performance on specific tasks through experience. Performance encompasses metrics like speed and accuracy, while experience refers to earlier observations or attempts, including partial failures. This approach allows computers to autonomously solve complex problems, such as vision or game playing, where traditional programming is insufficient."
+    },
+    {
+      "slide": 12,
+      "title": "Machine learning vs. other AI",
+      "summary": "Machine learning is a subset of AI distinguished by its reliance on data, where systems extract general models from specific observations through inductive inference. This reasoning process mirrors statistical sampling and scientific theory formation, linking machine learning closely to data mining and statistics. While foundational to modern developments like language models, it remains distinct from other AI approaches that may solve problems more efficiently without requiring extensive data-driven generalization."
+    },
+    {
+      "slide": 13,
+      "title": "Machine learning and AI",
+      "summary": "Recent attention on Deep Learning has created misconceptions equating AI solely with Machine Learning or Deep Learning, ignoring the broader history of the field. While Deep Learning revolutionized areas like computer vision and natural language processing, the view that earlier logic-based expert systems \"did not work\" is an oversimplification; logic remains effective for specific tasks like constraint solving. Consequently, many new researchers lack a comprehensive understanding of AI's evolution beyond current trends."
+    },
+    {
+      "slide": 14,
+      "title": "Machine learning and AI",
+      "summary": "While deep learning currently drives progress in language and visual processing, it remains a specific subset of the broader fields of machine learning and artificial intelligence. The course emphasizes that scientific advancement continues across all fronts, including logic-based constraint solving and probabilistic methods that handle uncertainty better than rigid logical systems. Consequently, deep learning is not the sole approach, but rather one evolution within a complex landscape of AI techniques."
+    },
+    {
+      "slide": 15,
+      "title": "The machine learning landscape",
+      "summary": "Slide 15 presents the machine learning landscape by categorizing key concepts into four distinct groups: tasks, techniques, models, and applications. The slide lists specific examples for each category, including reinforcement learning and classification as tasks; neural networks and support vector machines as models; and vision and speech as applications. This overview illustrates the breadth of the field."
+    },
+    {
+      "slide": 16,
+      "title": "Related courses",
+      "summary": "Slide 16 lists related courses that complement the current material, including Machine Learning and Inductive Inference, Neural Computing, Support Vector Machines, Genetic Algorithms and Evolutionary Computing, Uncertainty in AI, and Data Mining. These topics represent key adjacent fields within artificial intelligence and computational learning."
+    },
+    {
+      "slide": 17,
+      "title": "About this course…",
+      "summary": "This course provides a broad overview of machine learning methods and insights into their workings, with the secondary goal of enabling practical application. To avoid redundancy with other Master of AI courses, specific topics like neural networks and genetic algorithms are covered briefly or omitted, though extra materials are available on Toledo. The structure consists of ten plenary lectures and five exercise sessions for questions, supplemented by an optional textbook available at the Acco bookshop."
+    },
+    {
+      "slide": 18,
+      "title": "About the exam…",
+      "summary": "The exam is a classic written, closed-book assessment where students cannot use course notes or slides, but a formula sheet is provided so formulas need not be memorized verbatim. It emphasizes insight, understanding, and the ability to reason about methods and simulate their application rather than rote reproduction of lecture content. The test will include both theoretical questions and practical exercises."
+    },
+    {
+      "slide": 19,
+      "title": "Some basic concepts",
+      "summary": "Some basic concepts and terminology"
+    },
+    {
+      "slide": 20,
+      "title": "Machine learning",
+      "summary": "Machine learning typically transforms a dataset input into a model output, though generally it converts specific knowledge into more general knowledge through inductive inference. This process involves inferring broad principles from specific observations, such as data points. Learning methods are categorized by their input and output formats as well as the learning goal, encompassing diverse techniques ranging from mathematical optimization to search algorithms that produce varied model structures like neural networks or decision trees."
+    },
+    {
+      "slide": 21,
+      "title": "Example: Iris dataset",
+      "summary": "The Iris dataset example defines a learning task to predict the species of an iris flower based on its physical characteristics. The goal is to learn a mathematical function, $f$, that maps four input features—sepal length (SL), sepal width (SW), petal length (PL), and petal width (PW)—to the output species ($S$). This formulation represents the core objective of deriving a model where $f(SL, SW, PL, PW) = S$."
+    },
+    {
+      "slide": 22,
+      "title": "Example: classifying pictures",
+      "summary": "This slide contrasts two methods for classifying iris species from pictures: \"Classic\" methods estimate specific features (SL, SW, PL, PW) before classification, while \"Deep learning\" uses an \"end-to-end\" approach. The deep learning method takes the raw pixel matrix as direct input without manual feature extraction, allowing the model to learn patterns directly from the image data to predict the species."
+    },
+    {
+      "slide": 23,
+      "title": "Example: generating pictures",
+      "summary": "This slide defines the learning task for generating pictures as creating a model that outputs an image matching a given textual description. Formally, this is expressed as $f(S) = P$, where $S$ represents the textual description and $P$ is the data structure representing the picture. This process exemplifies \"Generative AI,\" illustrated by the specific example of generating an image for \"Iris Versicolor.\""
+    },
+    {
+      "slide": 24,
+      "title": "Predictive versus descriptive",
+      "summary": "Predictive learning constructs models to predict specific target properties from inputs, encompassing tasks like classification, regression, and ranking. In contrast, descriptive learning focuses on understanding underlying data patterns rather than making predictions. While predictive tasks include binary classification (concept learning) and multi-label assignment, descriptive analysis aims solely at interpreting the structure within a dataset."
+    },
+    {
+      "slide": 25,
+      "title": "Predictive versus descriptive",
+      "summary": "Descriptive learning involves identifying patterns within a dataset or its underlying population without necessarily generating predictive rules. While these insights, such as the correlation between cheese and wine purchases, are valuable for understanding data distributions, they do not always enable specific future predictions like determining if an individual will buy apples. This approach focuses on describing existing relationships rather than forecasting outcomes."
+    },
+    {
+      "slide": 26,
+      "title": "Function learning",
+      "summary": "Function learning involves estimating parameters within a given family of functions to map input variables X to output Y, enabling prediction or description. The optimal fit is determined by minimizing a loss function, such as quadratic loss, which sums the squared differences between predicted and observed values. Linear regression exemplifies this parametric approach by finding coefficients $a$ and $b$ for $y = ax + b$ that minimize these squared errors."
+    },
+    {
+      "slide": 27,
+      "title": "Distribution learning",
+      "summary": "Distribution learning estimates an underlying probability distribution from data, distinguishing between parametric approaches (estimating parameters within a fixed family like Gaussian) and non-parametric ones (assuming no specific family). It further separates generative learning, which models the joint probability distribution of all variables to enable instance generation, from discriminative learning, which predicts a conditional distribution of target variables given inputs. Unlike standard function approximation, these methods output probability distributions rather than single values."
+    },
+    {
+      "slide": 28,
+      "title": "These categorizations are somewhat",
+      "summary": "Categorizations between descriptive patterns and predictive functions are somewhat fuzzy, as descriptions can sometimes enable predictions. For instance, knowing \"Bank X refuses loans to those earning under 1200 euros\" allows predicting that Bob, earning 1100 euros, will be denied. However, such rules may lack general utility if they do not address other cases, whereas probability distributions offer a robust alternative by predicting the value of Y with the highest conditional probability given X."
+    },
+    {
+      "slide": 29,
+      "title": "Parametric vs. non-parametric",
+      "summary": "Parametric methods assume a fixed family of functions or distributions uniquely defined by a set of parameters, such as linear regression or fitting a Gaussian distribution to population weights. In contrast, non-parametric approaches make no specific functional assumptions, instead searching a space with varying model structures rather than just parameter values. This structural search often involves discrete spaces and includes examples like decision trees and rules."
+    },
+    {
+      "slide": 30,
+      "title": "Link with “explainable AI”",
+      "summary": "Explainable AI (XAI) studies systems where decisions are understandable, distinguishing between comprehending the entire learned model and explaining individual decisions, such as a loan denial due to low income. Machine learning presents challenges for XAI because it often produces \"black-box\" models that lack immediate interpretability. While understanding the full model is not always legally required, providing clear reasons for specific automated decisions is essential for responsible AI."
+    },
+    {
+      "slide": 31,
+      "title": "Responsible AI : challenges",
+      "summary": "Responsible AI faces significant challenges in privacy-preserving data analysis, as training requires large datasets that may include personal information collected for specific purposes. A key difficulty is ensuring this data is not abused beyond its original consent once embedded in a model. Additionally, developing \"safe\" models that strictly adhere to constraints regarding bias, discrimination, and privacy remains difficult because the actual properties of learned models are often hard to guarantee in detail."
+    },
+    {
+      "slide": 32,
+      "title": "Predictive learning",
+      "summary": "Predictive learning constitutes a major focus within the field of machine learning. This section serves as an introduction to additional concepts and specific terminology relevant to this predictive setting."
+    },
+    {
+      "slide": 33,
+      "title": "Prediction: task definition",
+      "summary": "The prediction task involves taking a description of an instance to predict a specific property of interest, known as the target. This process operates by drawing analogies to previously observed cases. Common examples include classifying emails as spam or non-spam, identifying fish species like salmon or bass, and forecasting tomorrow's weather based on current measurements using increasingly complex models."
+    },
+    {
+      "slide": 34,
+      "title": "Terminology",
+      "summary": "The training set consists of labeled instances containing the target property, while the prediction set comprises unlabeled instances lacking this property. The prediction task involves determining the correct labels for these unlabeled instances based on the patterns learned from the training data. This distinction is illustrated by examples where known categories like \"Dog\" and \"Cat\" are used to infer unknown entries marked as \"???\""
+    },
+    {
+      "slide": 35,
+      "title": "Inductive vs. transductive learning",
+      "summary": "The learning process yields two distinct outcomes: transductive learning produces the specific predictions themselves for given instances, whereas inductive learning generates a generalizable function capable of predicting labels for any unlabeled instance. Transduction focuses on direct prediction outputs, while induction aims to derive a reusable model for future data points."
+    },
+    {
+      "slide": 36,
+      "title": "Inductive vs. transductive learning",
+      "summary": "The learning process yields either specific predictions for given instances (transductive learning) or a general function capable of predicting labels for any unlabeled instance (inductive learning). Transduction focuses on the outcome being the predictions themselves, whereas induction produces a mapping function $f: X \\to Y$ that can be applied broadly beyond the training data."
+    },
+    {
+      "slide": 37,
+      "title": "Inductive vs. transductive learning",
+      "summary": "Transductive learning produces specific predictions for known unlabeled instances as its outcome, whereas inductive learning generates a general function capable of predicting labels for any unseen instance. Transduction requires knowing the target cases beforehand, offering an advantage by utilizing information about specific questions to be asked. In contrast, induction is necessary when future prediction targets are unknown, providing a reusable model applicable to any new data point."
+    },
+    {
+      "slide": 38,
+      "title": "• “Occam’s razor”: among equally accurate models, choose",
+      "summary": "Occam's razor states that among equally accurate models, one should choose the simpler one to balance data explanation with simplicity. Both overfitting, which captures noise by fitting training data too tightly, and underfitting, where a model is too simple to capture real behavior, are harmful to predictive performance. Effective machine learning requires finding a middle ground: selecting the simplest model that adequately fits the training data without being overly complex or insufficiently detailed."
+    },
+    {
+      "slide": 39,
+      "title": "Levels of supervision",
+      "summary": "Supervised learning builds predictive models from labeled instances, such as distinguishing cats from dogs. Unsupervised learning uses unlabeled data to create models that are typically not directly predictive but remain useful for indirect or non-predictive tasks. Semi-supervised learning combines these approaches by training a predictive model using a small set of labeled examples alongside many unlabeled ones."
+    },
+    {
+      "slide": 40,
+      "title": "Semi-supervised learning",
+      "summary": "Semi-supervised learning explores how unlabeled examples can assist in building a better model. The accompanying illustration depicts two distinct classes, labeled \"+\" and \"-\", represented as instances within a two-dimensional space. This visual setup highlights the challenge of utilizing both labeled and unlabeled data points to improve classification boundaries."
+    },
+    {
+      "slide": 41,
+      "title": "Semi-supervised learning",
+      "summary": "Semi-supervised learning addresses the question of how unlabeled examples can assist in training a better model. This approach leverages data points without class labels alongside labeled examples to improve overall model performance, as illustrated by the slide's visual representation of mixed positive, negative, and unknown instances."
+    },
+    {
+      "slide": 42,
+      "title": "Semi-supervised learning",
+      "summary": "Semi-supervised learning addresses how unlabeled examples can assist in training a better model. This approach combines a small set of labeled data, represented by positive and negative classes, with a larger pool of unlabeled instances to improve overall performance. The core objective is leveraging the structure within the abundant unlabeled data to enhance the learning process beyond what labeled examples alone can achieve."
+    },
+    {
+      "slide": 43,
+      "title": "Unsupervised learning",
+      "summary": "Unsupervised learning involves identifying structure in data without any class labels. This process, known as clustering, detects groups or clusters within the distribution to predict which group a new instance belongs to, even when specific class names are unknown. While visually straightforward in two-dimensional spaces, this task becomes significantly more difficult when applied to high-dimensional data."
+    },
+    {
+      "slide": 44,
+      "title": "PU-learning",
+      "summary": "PU-learning is a special case of semi-supervised learning where labeled examples exist only for the \"positive\" class, while all other instances remain unlabeled and could be either positive or negative. This scenario arises when the absence of a mention does not confirm the absence of an event, such as a sentence describing \"Mike kicking the ball\" confirming the action but silence failing to prove it did not happen. Consequently, learners possess positive labels but lack any explicit negative labels."
+    },
+    {
+      "slide": 45,
+      "title": "Weakly supervised learning",
+      "summary": "Weakly supervised learning generalizes semi-supervised learning by providing partial label information rather than a binary known or unknown state. Key forms include superset learning, where the true label is one of several candidates; multi-instance learning, where a label applies to at least one instance in a set without specifying which; and constraint-based clustering, which identifies instances sharing an unknown label. These approaches address scenarios with incomplete supervision, such as identifying a specific car type within a group or confirming two items belong to the same cluster."
+    },
+    {
+      "slide": 46,
+      "title": "Relationship between different",
+      "summary": "Slide 46 outlines the relationship between various machine learning supervision settings. It categorizes these approaches into Supervised Learning, Unsupervised Learning, and Weakly supervised Learning. The slide further lists specific weakly supervised paradigms including Predictive learning, Semi-supervised learning, Multi-instance learning, PU-learning, Superset learning, and Constraint-based clustering."
+    },
+    {
+      "slide": 47,
+      "title": "Reinforcement learning",
+      "summary": "Reinforcement learning involves an agent taking actions in various states to maximize long-term rewards rather than immediate gains, such as sacrificing a chess piece for future advantage. The learning task is to predict the best action for any state using indirect supervision from sequences of states, actions, and resulting rewards, without explicit labels indicating optimal moves. This complex setting requires the learner to infer effective strategies by analyzing how current actions influence future reward opportunities."
+    },
+    {
+      "slide": 48,
+      "title": "Format of input data",
+      "summary": "The standard setting for input data assumes instances described by identical features, forming independent and identically distributed (i.i.d.) tabular data where the training set represents a random sample from a single distribution. While this table format is common, alternative structures exist where instances are represented as graph nodes, entire graphs, or sequence elements."
+    },
+    {
+      "slide": 49,
+      "title": "Format of input data: tabular",
+      "summary": "Slide 49 illustrates the tabular format of input data using a dataset with columns for sepal length, sepal width, petal length, petal width, and class. The example distinguishes between a training set containing known labels like Setosa, Versicolor, and Virginica, and a prediction set where the class values are marked as unknown. This structure demonstrates how features are organized alongside target variables for model learning and subsequent inference."
+    },
+    {
+      "slide": 50,
+      "title": "Format of input data: sequences",
+      "summary": "Learning from sequences involves making either one prediction per entire sequence or multiple predictions for individual elements. Sequence elements can range from simple numbers and symbols to complex tuples or structures, as illustrated by string classification examples like \"abababab\" versus \"aabbaabb\". Unlike standard variable-based approaches that may fail to capture underlying rules in strings, specialized learners can process these sequential data types directly."
+    },
+    {
+      "slide": 51,
+      "title": "Format of input data: trees",
+      "summary": "Tree-structured input data supports one prediction per entire tree or per individual node, where nodes may be unlabeled or labeled with symbols like HTML/XML tags. For instance, a tree representing a list context can identify a \"positive\" text field preceded by \"Address:\" to extract addresses from web pages. This approach differs from standard attribute-value performance by leveraging hierarchical structure for classification tasks."
+    },
+    {
+      "slide": 52,
+      "title": "Format of input data: graph",
+      "summary": "Graphs serve as a specific format for input data, exemplified by social networks where target values are known for some nodes but not others. This structure enables predictions of node labels, edges, or edge labels by leveraging the inherent network topology. The core principle is utilizing the connections within the graph to infer missing information across the system."
+    },
+    {
+      "slide": 53,
+      "title": "Format of input data: raw data",
+      "summary": "Raw data appears simple, such as a vector of numbers, but its individual components are not meaningful features; for example, a photo is merely a vector of pixels. This data requires non-trivial processing to extract meaningful features that enable function learning. Deep learning excels specifically at performing this complex feature extraction from raw inputs."
+    },
+    {
+      "slide": 54,
+      "title": "Format of input data: knowledge",
+      "summary": "Knowledge input data comprises facts, rules, and definitions represented in logic-based languages. The slide illustrates this with Prolog-style code where rules like `hacc` and `zincsite` define chemical properties based on atom attributes, while facts such as `atm` and `bond` specify concrete molecular structures and connections."
+    },
+    {
+      "slide": 55,
+      "title": "Data preprocessing",
+      "summary": "Data preprocessing addresses cases where raw data formats or features are unsuitable for a learner. Data wrangling converts input into a compatible format, such as tabular structures, while feature selection identifies the most informative inputs among irrelevant ones like individual pixels. Additionally, feature construction creates new, derived features to enhance the meaningfulness of the dataset for analysis."
+    },
+    {
+      "slide": 56,
+      "title": "What learning method to use?",
+      "summary": "Selecting a suitable learning method depends strongly on input data structure. Most learners utilize the standard attribute-value (tabular) format, where instances are described by a fixed set of features for classification. Conversely, inductive logic programming handles complex structures like sequences and graphs using clausal logic, while specialized knowledge-based systems can incorporate domain expertise, such as chemical properties, to explain molecular drug activity."
+    },
+    {
+      "slide": 57,
+      "title": "What learning method to use?",
+      "summary": "The data format and learning task impose strong constraints on which learning methods are applicable. Beyond these constraints, a method's performance depends on its inductive bias and ability to handle missing values, noise, high-dimensional or large datasets, and generalization from small datasets to avoid overfitting. The course will cover these specific strengths and weaknesses at various points."
+    },
+    {
+      "slide": 58,
+      "title": "Output formats,",
+      "summary": "Output formats, methods (overview)"
+    },
+    {
+      "slide": 59,
+      "title": "Output formats",
+      "summary": "The output of a learning system is a model, and many different types of models exist. Crucially, the specific learning algorithm or method employed is strongly linked to the resulting type of model produced. This relationship dictates how the system structures its final output based on the chosen approach."
+    },
+    {
+      "slide": 60,
+      "title": "Different views of the landscape",
+      "summary": "Slide 60 outlines three distinct perspectives on the machine learning landscape. Domingos categorizes approaches into \"five tribes\" (Symbolists, Connectionists, Evolutionaries, Bayesians, and Analogizers), while Flach identifies \"three types of models\" (Probabilistic, Geometric, and Logical). In contrast, Bishop argues that all these views are fundamentally Bayesian."
+    },
+    {
+      "slide": 61,
+      "title": "Parametrized functions",
+      "summary": "Parametrized functions involve a predefined format, such as linear functions of inputs, where the goal is to find parameter values that best fit the data. Linear regression serves as a standard example, illustrated by modeling petal width against length using the equation $y = ax + b$. The specific fitted parameters for this dataset are $width = 0.416 \\times length - 0.363$."
+    },
+    {
+      "slide": 62,
+      "title": "Conjunctive concepts",
+      "summary": "A conjunctive concept is defined as a set of conditions where every single condition must be true for the concept to hold. Formally, an instance x belongs to class C if and only if condition 1 AND condition 2 AND ... AND condition k are all satisfied. For example, a mortgage application is accepted if and only if the applicant's salary is at least three times the monthly payback and they have no other running mortgages."
+    },
+    {
+      "slide": 63,
+      "title": "• A rule set is a set of rules of the form “if … then …” or “if … then",
+      "summary": "A rule set consists of \"if … then …\" or \"if … then … else …\" statements where machine learning systems learn alternative conditions to classify inputs. The lecture illustrates this with leap year definitions: a year is a leap year if divisible by 400, not if divisible by 100 (unless also by 400), and yes if divisible by 4. This approach offers high interpretability, allowing users to understand the model's logic directly without it being a black box."
+    },
+    {
+      "slide": 64,
+      "title": "Decision trees",
+      "summary": "A decision tree represents a stepwise procedure to arrive at a decision by starting at the top node and following tests based on answers until reaching the bottom. For example, deciding whether to play tennis involves checking weather conditions like humidity sequentially. While single trees are interpretable, ensembles of multiple trees, such as XGBoost, are widely used in machine learning for their speed and high predictive accuracy compared to neural networks."
+    },
+    {
+      "slide": 65,
+      "title": "Neural networks",
+      "summary": "A neural network is a complex structure where neurons aggregate multiple input signals into a single output through layered calculations. Each node multiplies inputs by specific connection values (weights) and applies an activation function to produce a result, which serves as input for subsequent layers. Collectively, these numerous weights define the network's overall function, aiming to perform the intended task."
+    },
+    {
+      "slide": 66,
+      "title": "Probabilistic graphical models",
+      "summary": "Probabilistic graphical models (PGMs) represent high-dimensional joint distributions over multiple variables as products of low-dimensional factors. Common types include Bayesian networks, Markov networks, and factor graphs. As illustrated by the example P(A,B,C,D,E), a complex joint distribution is decomposed into simpler conditional probabilities or factors, such as P(C|A,B), to manage complexity within a probabilistic context."
+    },
+    {
+      "slide": 67,
+      "title": "Instance-based learning",
+      "summary": "Instance-based learning, also known as nearest neighbor methods, represents the simplest model where the dataset itself serves as the model rather than a derived structure. Learning involves only storing observed data points, while predictions for new cases are made by identifying and comparing them to the most similar previously observed instances. The underlying assumption is that if cases are similar in observed features, they will likely share similar values for unobserved or target features."
+    },
+    {
+      "slide": 68,
+      "title": "Coming lectures…",
+      "summary": "The remaining ten lectures of the course will examine various learning methods, beginning next week with predictive functions and nearest neighbor techniques. Subsequent sessions will also cover neural networks to address how these approaches facilitate making predictions. These topics represent the core content planned for the remainder of the term."
+    }
+  ]
+}

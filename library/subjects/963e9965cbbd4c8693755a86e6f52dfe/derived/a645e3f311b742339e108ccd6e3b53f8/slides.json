@@ -1,0 +1,415 @@
+{
+  "metadata": {
+    "source_file": "Lecture_04_Untitled_Slides.pdf",
+    "created_at": "2026-10-12T17:04:21.490673+00:00",
+    "slide_count": 45,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Fundamentals of Artificial Intelligence",
+      "content": "Fundamentals of Artificial Intelligence Prof. Tias Guns Lecture 04, 2024-25 Informed Search Based on the slides of CS188 @ Berkeley and Prof. De Raedt's AI course",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Example: route-finding in Romania",
+      "content": "Example: route-finding in Romania",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Uniform Cost Search",
+      "content": "Uniform Cost Search Strategy: expand lowest path cost The good: UCS is complete and optimal! The bad: Explores options in every “direction” No information about goal location Start Goal … c ≤ 3 c ≤ 2 c ≤ 1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "What we would like to have happen",
+      "content": "What we would like to have happen Guide search towards the goal instead of all over the place Start Goal Start Goal Uninformed Informed",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Search Heuristics",
+      "content": "Search Heuristics ▪A heuristic is: ▪A function that estimates how close a state is to a goal ▪Designed for a particular search problem ▪Path planning? 10 5 11.2 Manhattan distance Euclidean distance",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Greedy Best-First Search",
+      "content": "Greedy Best-First Search",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Greedy Best-First Search",
+      "content": "Greedy Best-First Search • Expand the node that seems closest… (Euclidean distance to goal) • Is it optimal? No. Resulting path to Bucharest is not the shortest!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Greedy Best-First Search (GBFS)",
+      "content": "Greedy Best-First Search (GBFS) • Strategy: expand a node that you think is closest to a goal state • Heuristic: estimate of distance to nearest goal for each state • A common case: • Greedy best-first takes you straight to a goal • Worst-case: like a badly-guided DFS … b … b",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Video of Demo Contours GBFS (Empty)",
+      "content": "Video of Demo Contours GBFS (Empty)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Video of Demo Contours GBFS (Pacman Small Maze)",
+      "content": "Video of Demo Contours GBFS (Pacman Small Maze)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Beam Search",
+      "content": "Beam Search Variant of breadth-first search and greedy best-first • just like Breadth-first search: expand all nodes that are at the same depth, but after every level: only keep the k best paths on the frontier, remove all others • just like Greedy: choose which k paths to keep based on their heuristic value",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Beam Search Properties, beam size k",
+      "content": "Beam Search Properties, beam size k How much space does the frontier take? Queue has always size k, but expansion requires size O(kb) What nodes does BFS expand? If a solution is found: O(skb) otherwise: O(mkb) Is it complete? NO! you may throw away a needed path Is it optimal? NO!  ‘(greedy) hill-climbing search’: K = 1 (stick to 1 path, no ‘backtracking’) … b 1 node b nodes b2 nodes bm nodes s tiers bs nodes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Informed search...",
+      "content": "Informed search... Greedy best-first search is not optimal… Can we do informed search, like GBFS, but with optimality guarantees like UCS?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "A* Search",
+      "content": "A* Search",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Combining UCS and Greedy",
+      "content": "Combining UCS and Greedy Uniform-cost orders by path cost, or backward cost g(n) Greedy orders by goal proximity, or forward cost h(n) A* Search orders by the sum: f(n) = g(n) + h(n) S a d b G h=5 h=6 h=2 1 8 1 1 2 h=6 h=0 c h=7 3 e h=1 1 Example: Teg Grenager S a b c e d d G G g = 0 h=6 g = 1 h=5 g = 2 h=6 g = 3 h=7 g = 4 h=2 g = 6 h=0 g = 9 h=1 g = 10 h=2 g = 12 h=0",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "A*: the core idea",
+      "content": "A*: the core idea Expand a node n most likely to be on an optimal path Expand a node n with lowest value of g(n) + h*(n)  g(n) is the cost from root to n  h*(n) is the optimal cost from n to the closest goal We seldom know h*(n) but might have a heuristic approximation h(n) A* = tree search with priority queue ordered by f(n) = g(n) + h(n)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Example: route-finding in Romania",
+      "content": "Example: route-finding in Romania h(n) = Euclidean distance to Bucharest",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Example: pathing in Pacman",
+      "content": "Example: pathing in Pacman h(n) = Manhattan distance = |x| + |y| Is Manhattan better than straight-line distance? 10 5 11.2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Is A* Optimal?",
+      "content": "Is A* Optimal? What went wrong? Actual SAG1 is better then the estimated SA Actual bad solution cost SG2=5 < estimated good solution cost SA=7 A G2 S 1 3 h = 6 h = 0 5 h = 7 [S:0+7=7] [SA:1+6=7, SG2:5+0=5] Expand and stop with SG2=5 but SAG1=4? G1 h = 0",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Admissible Heuristics",
+      "content": "Admissible Heuristics",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Admissible Heuristics",
+      "content": "Admissible Heuristics A heuristic h is admissible if: 0 ≤ h(n) ≤ h*(n) where h*(n) is the true cost to a nearest goal Only optimistic estimates! Example: 1 5",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Optimality of A* Tree Search",
+      "content": "Optimality of A* Tree Search",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Optimality of A* Tree Search (no loop br.)",
+      "content": "Optimality of A* Tree Search (no loop br.) Given: A is an optimal goal node B is a suboptimal goal node h is admissible Claim to prove: A will be chosen for expansion before B in A* tree search … A B",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Optimality of A* Tree Search: Blocking",
+      "content": "Optimality of A* Tree Search: Blocking Proof: Imagine suboptimal B is on the frontier Some ancestor n of A is on the frontier, too (maybe A itself!) Claim: n will be expanded before B 1. f(n) ≤ f(A) f(n) = g(n) + h(n) Definition of f-cost g(n) + h(n) ≤ g(n) + h*(n) Admissibility of h … g(A) = f(A) h = 0 at a goal A B n f(n) ≤ g(A) (rewrite)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Optimality of A* Tree Search: Blocking",
+      "content": "Optimality of A* Tree Search: Blocking Proof: Imagine B is on the frontier Some ancestor n of A is on the frontier, too (maybe A itself!) Claim: n will be expanded before B 1. f(n) ≤ f(A) 2. f(A) < f(B) … A B n g(A) < g(B) Suboptimality of B f(A) < f(B) h = 0 at a goal",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Optimality of A* Tree Search: Blocking",
+      "content": "Optimality of A* Tree Search: Blocking Proof: Imagine B is on the frontier Some ancestor n of A is on the frontier, too (maybe A itself!) Claim: n will be expanded before B 1. f(n) ≤ f(A) 2. f(A) < f(B) 3. n is expanded before B All ancestors of A are expanded before B A is expanded before B A* tree search is optimal … A B n f(n) ≤ f(A) < f(B)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "UCS vs A* Contours",
+      "content": "UCS vs A* Contours Uniform-cost expands equally in all “directions” A* expands mainly toward the goal, but does hedge its bets to ensure optimality Start Goal Start Goal",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Comparison",
+      "content": "Comparison Greedy (h) Uniform Cost (g) A* (g+h)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "A* Applications",
+      "content": "A* Applications Video games Pathing / routing problems Resource planning problems Robot motion planning Language analysis Machine translation Speech recognition Protein design Chemical synthesis …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Creating Heuristics",
+      "content": "Creating Heuristics",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Creating Admissible Heuristics",
+      "content": "Creating Admissible Heuristics Often, admissible heuristics are solutions to relaxed problems, where new actions are available Problem P2 is a relaxed version of P1 if A2(s) ⊇ A1(s) for every s Theorem: h2 *(s) ≤ h1 *(s) for every s, so h2 *(s) is admissible for P1 1 5 366",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Example: 8 Puzzle",
+      "content": "Example: 8 Puzzle What are the states? How many states? What are the actions? What are the step costs? Start State Goal State Actions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "8 Puzzle I",
+      "content": "8 Puzzle I Heuristic: Number of tiles misplaced Why is it admissible? h(start) = Average nodes expanded when the optimal path has… …4 steps …8 steps …12 steps UCS 112 6,300 3.6 x 106 A*TILES 13 39 227 Start State Goal State Statistics from Andrew Moore 8",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "8 Puzzle II",
+      "content": "8 Puzzle II What if we had an easier 8-puzzle where any tile could slide any direction at any time, ignoring other tiles? Total Manhattan distance Why is it admissible? h(start) = 3 + 1 + 2 + … = 18 Average nodes expanded when the optimal path has… …4 steps …8 steps …12 steps A*TILES 13 39 227 A*MANHATTAN 12 25 73 Start State Goal State",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "8 Puzzle III",
+      "content": "8 Puzzle III How about using the actual cost as a heuristic? Would it be admissible? Would we save on nodes expanded? What’s wrong with it? With A*: a trade-off between quality of estimate and work per node As heuristics get closer to the true cost, you will expand fewer nodes but usually do more work per node to compute the heuristic itself",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Trivial Heuristics, Dominance",
+      "content": "Trivial Heuristics, Dominance Dominance: ha ≥ hc if Heuristics form a semi-lattice: Max of admissible heuristics is admissible Trivial heuristics Bottom of lattice is the zero heuristic (what does this give us?) Top of lattice is the exact heuristic",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Optimality of A* Graph Search (w. closed set loop breaking)",
+      "content": "Optimality of A* Graph Search (w. closed set loop breaking)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "A* Graph Search Gone Wrong?",
+      "content": "A* Graph Search Gone Wrong? S A B C G 1 1 1 2 3 h=2 h=1 h=4 h=1 h=0 S (0+2) A (1+4) B (1+1) C (2+1) G (5+0) C (3+1) G (6+0) State space graph Search tree Not expanded due to loop breaking: C already in ‘closed’ set",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Alternative: Consistency of Heuristics",
+      "content": "Alternative: Consistency of Heuristics Main idea: estimated heuristic costs ≤ actual costs Admissibility: heuristic cost ≤ actual cost to goal h(A) ≤ h*(A) Consistency: heuristic “arc” cost ≤ actual cost for each arc h(A) – h(C) ≤ c(A,C) or h(A) ≤ c(A,C) + h(C) (=triangle inequality) Note: h* necessarily satisfies triangle inequality Consequences of consistency: The f(n) (=g(n)+h(n)) value along a path never decreases: h(A) ≤ c(A,C) + h(C) => g(A) + h(A) ≤ g(A) + c(A,C) + h(C) => g(A) + h(A) ≤ g(AC) + h(C) => f(A) ≤ f(AC) h= 1 A G h= 2 C 1 3 h= 4",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "A* Graph Search Gone Wrong?",
+      "content": "A* Graph Search Gone Wrong? S A B C G 1 1 1 2 3 h=2 h=1 h=4 h=1 h=0 State space graph: h not consistent S A B C G 1 1 1 2 3 h=2 h=1 h=2 h=1 h=0 This h would be consistent Exercise: write out the search tree of A*!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Optimality of A* Graph Search",
+      "content": "Optimality of A* Graph Search Sketch: consider what A* does with a consistent heuristic: Fact 1: In tree search, A* expands nodes in increasing total f value (f-contours) Fact 2: For every state s, nodes that reach s optimally are expanded before nodes that reach s suboptimally (f value along path never decreases) Result: A* graph search is optimal … f ≤ 3 f ≤ 2 f ≤ 1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Optimality",
+      "content": "Optimality Tree search: A* is optimal if heuristic is admissible Graph search: A* with closed set is optimal if heuristic is consistent Consistency implies admissibility Most natural admissible heuristics tend to be consistent, especially if from relaxed problems",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Upgrade: optimal A* with admissible heuristic",
+      "content": "Upgrade: optimal A* with admissible heuristic S (0+2) A (1+4) B (1+1) C (2+1) G (5+0) C (3+1) G (6+0) Search tree Not expanded due to loop breaking: C already in ‘closed’ set Closed set stores which states expanded Closed dictionary ‘closed_cost’ stores which state AND at what cost expanded New check: expand if state s not in closed dictionary OR if current-cost g(n) < closed_cost[s] Then update closed_cost dictionary Upside: less restricted when designing heuristics Downside: A crappy heuristic might make us expand the same state many times… g(n) ?< closed_cost[C] Yes: 2 < 3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "But…",
+      "content": "But… A* keeps the entire explored region in memory => will run out of space before you get bored waiting for the answer There are variants that use less memory (AIMA Section 3.5.5): IDA* works like iterative deepening, except it uses an f-limit instead of a depth limit On each iteration, remember the smallest f-value that exceeds the current limit, use as new limit Very inefficient when f is real-valued and each node has a unique value RBFS is a recursive depth-first search that uses an f-limit = the f-value of the best alternative path available from any ancestor of the current node When the limit is exceeded, the recursion unwinds but remembers the best reachable f-value on that branch SMA* uses all available memory for the queue, minimizing thrashing When full, drop worst node on the queue but remember its value in the parent",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "A*: Summary",
+      "content": "A*: Summary A* orders nodes in the queue by f(n) = g(n) + h(n) A* is optimal for trees/graphs with admissible/consistent heuristics Heuristic design is key: often use relaxed problems g g h h",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

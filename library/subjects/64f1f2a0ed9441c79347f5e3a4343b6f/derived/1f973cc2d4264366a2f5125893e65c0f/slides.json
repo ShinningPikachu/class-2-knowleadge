@@ -1,0 +1,352 @@
+{
+  "metadata": {
+    "source_file": "Lecture_05_Untitled_Slides.pdf",
+    "created_at": "2026-10-30T09:54:31.888402+00:00",
+    "slide_count": 38,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Lecture 5: Inductive bias, Learning",
+      "content": "Lecture 5: Inductive bias, Learning theory",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "• The theoretical study of",
+      "content": "• The theoretical study of • what is learnable? • how much data is needed? • how much work does it take? • Studied in fields known as • Computational Learning Theory • Statistical Learning Theory • This lecture presents a small sample from the field of learning theory, starting with the important concept of inductive bias 2 Learning theory",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Inductive bias",
+      "content": "3 Inductive bias",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "• Every learning method makes certain assumptions about the data",
+      "content": "• Every learning method makes certain assumptions about the data • This set of assumptions is called its inductive bias (not to be confused with statistical bias, as in bias-variance) • We illustrate this here for linear regression and decision trees • Important theoretical result: learning without inductive bias is impossible 4 Inductive bias",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "• “Linear model” :",
+      "content": "• “Linear model” : • Usually: best fit means minimal sum of squared vertical deviations from line (“least squares” method). (this is a choice — other loss functions could be chosen) Y = a + b1X1 + b2X2 + ⋯+ bmXm 5 Linear regression to predict petal width from petal length for iris flowers: best possible linear predictor (in the sense of “least squares”) is width = 0.416*length - 0.363 ● ● ● ● ● ● ● ● ● ●● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●● ●● ● ● ● ● ● ● ● ● ● ●● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● 1 2 3 4 5 6 7 0.5 1.0 1.5 2.0 2.5 Petal.Length Petal.Width",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "What is the meaning of the",
+      "content": "What is the meaning of the coefficients in ? • tells us how much increases if Xi increases by 1 and all Xj, j≠i, remain the same • We call this the effect of on • Watch out: the effect is not necessarily causal! • If we observe an increase by 1 for , we expect to increase by • If we make increase by 1, we do not know what will happen to • (E.g.: predicting outside temperature from people’s clothing. If people dress lightly, it’s probably warm, but you can’t make it warmer by dressing lightly) bi Y = a + b1X1 + b2X2 + ⋯+ bmXm bi Y Xi Y Xi Y bi Xi Y 6 Interpretation of the model",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "• The linear regression model implicitly assumes:",
+      "content": "• The linear regression model implicitly assumes: • The effect of each variable on the target is constant (does not depend on other variables) — indeed, if it’s not constant, the interpretation of the mentioned before would be meaningless • The effects of different variables are cumulative (add up) • (there are some more technical assumptions, which do not matter here) • In statistics terminology: “No interaction” bi 7 Important assumptions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "• After splitting on",
+      "content": "• After splitting on , each branch is developed entirely independently • may have a positive effect on in one branch, but a negative in another branch • No assumption whatsoever that “ has the same effect everywhere” • From this point of view, decision trees are quite the opposite of linear regression ! Xi Xj Y Xj 8 Decision tree induction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Trees vs. linear regression",
+      "content": "9 Trees vs. linear regression Y = a + b1A + b2S + b2C + b3J On average, professor salaries are 500$ higher than postdoc salaries. I’ll assume the same holds for each country separately. That’s silly! You don’t know that. It may be different in different countries. Nah… I don’t think so. Even if very strong evidence to the contrary is presented, I’ll stick to this assumption. Wow… you’re quite biased! A,S,C,J: Age, Sex, Country, Job",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "10",
+      "content": "10 Trees vs. linear regression Y = a + b1A + b2S + b2C + b3J Professors earn 500$ more than postdocs if we look at males aged 30-40; males aged 40-50; males aged 50-60; females aged 30-40; females aged 50-60. But what about females aged 40-50? I have no data! Well, surely that’ll be the same, no? I’ll believe that when I see it with my own eyes, not before. You’re quite paranoid!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "• Which method performs best? Largely depends on your problem!",
+      "content": "• Which method performs best? Largely depends on your problem! • Each learning approach has an “inductive bias”: implicit assumptions it makes • Learners whose bias fits your problem will perform better • Unfortunately, the problem is often not sufficiently understood to decide in a principled way (neither are learners, in fact!) • “Cumulative effects” vs. “interaction” is just one simple example of how methods can be biased 11 Trees vs. linear regression",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "• Many different machine learning methods exist",
+      "content": "• Many different machine learning methods exist • They can be used for all kinds of modeling, including predictive modeling • Examples: Naive Bayes, probabilistic graphical models, discriminant analysis, … • All of them have their own bias = implicit assumptions about what properties the true model has • This results in different ways of generalizing towards unseen data • The next slide illustrates this for classification 12 Many methods, many biases",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "13",
+      "content": "13 Classifiers illustrated in 2-D (source code: Scikit-Learn documentation)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "• Theoretical proofs exist that bias-free learning is impossible",
+      "content": "• Theoretical proofs exist that bias-free learning is impossible • Wolpert’s “no free lunch theorems”: For each problem where method A works better than B, there’s a problem where B works better than A (using a probabilistic characterization). There is no single best method for learning. • A less technical argument (presented by Mitchell, 1996): • Let hypothesis space = set of all hypotheses that the learner will consider, and version space = subset of consistent with the training set • What happens if contains every possible concept (i.e., every imaginable function from to {True,False}? • Then for any hypothesis that predicts True for a new instance , there exists a that predicts False for (just choose for all and ). • Hence, if we let all vote, the votes will be exactly 50-50 for every unseen instance • General conclusion: no generalization towards unseen cases is possible without making some assumptions ℋ VS ℋ ℋ X h ∈VS q h′￼∈VS q h′￼(x) = h(x) x ≠q h′￼(q) = ¬h(q) h ∈VS 14 Get rid of bias?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "• Bias can be in the form of preference or selection bias",
+      "content": "• Bias can be in the form of preference or selection bias • Selection bias: not every imaginable hypothesis is in the hypothesis space • Preference bias: some hypotheses in the hypothesis space are preferred over others • e.g., decision trees: preference for small trees over large ones • In the remainder, we will focus on selection bias • The closer a hypothesis space is to being able to represent every imaginable hypothesis, the smaller the inductive bias is • How can we measure the strength of the bias, and how does it impact learnability? 15 Bias",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "16",
+      "content": "16 Measuring the expressiveness, or “capacity”, of a hypothesis space",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "• Hypothesis space",
+      "content": "• Hypothesis space : set of all models (“hypotheses”) that could be returned by the learner • We will here focus on predictive models (functions ) • Question: How expressive / flexible is a given hypothesis space? Can it model a wide variety of functions / concepts, or a rather limited set? • One way to answer this question is the following: given a dataset , can we always find a model that perfectly fits it (i.e., for all )? How large should be before this is no longer the case? • This expresses ’s “capacity to perfectly fit” data • Note: this also implies a capacity to overfit data • We simply call it the capacity of the hypothesis space ℋ f : 𝒳→𝒴 D f f(x) = y (x, y) ∈D D ℋ 17 Capacity of a hypothesis space",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "• Consider univariate regression: we look for functions of the form",
+      "content": "• Consider univariate regression: we look for functions of the form • Assume two inputs and are given. You get to choose the labels and , I have to find values for and such that and • No matter how you choose and , I can always find the right values for and . I can always find a line that goes through both points. • For three points, however, this is no longer true: it is quite easy to find -values for the such that no straight line connects all three points y = ax + b x1 x2 y1 y2 a b y1 = ax1 + b y2 = ax2 + b y1 y2 a b y xi 18 Example: polynomial regression x1 x2 x1 x2 x1 x3 x2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "• However, if we consider quadratic functions (of the form",
+      "content": "• However, if we consider quadratic functions (of the form ), then it is possible to perfectly fit three points • Generally, polynomials of degree can fit points, in the sense that no matter how you choose the -values, a polynomial exists that perfectly fits the data • This means the hypothesis space “polynomials of degree ” is more expressive (has a higher capacity) than the hypothesis space “polynomials of degree ” y = ax2 + bx + c n n + 1 y n n −1 19 Example: polynomial regression x1 x3 x2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "• We will now apply the same principle to classification",
+      "content": "• We will now apply the same principle to classification • Consider binary classification: • Definition: A set of points is shattered by a hypothesis space if, for each possible label assignment to these points, a hypothesis exists such that • That is: given , no matter how you choose the corresponding labels , it is always possible to find a hypothesis that perfectly fits the data (similar to the regression case) y ∈{0,1} S n l : S →{0,1} f ∈ℋ ∀x ∈S : f(x) = l(x) S = {x1, x2, …, xn} yi 20 The principle of capacity, applied to binary classification",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "21",
+      "content": "21 Example: linear separators in 2D is shattered by ℋ is not shattered by ℋ labels Hypothesis",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "• Definition: The VC-dimension (or Vapnik-Chervonenkis dimension) of a",
+      "content": "• Definition: The VC-dimension (or Vapnik-Chervonenkis dimension) of a hypothesis space containing functions is the size of the largest finite subset of that is shattered by , or infinite if shattered subsets exists for any size. • Note: not all subsets of size have to be shattered. It suffices that one shattered subset of size exists for the VC-dimension to be at least . ℋ 𝒳→{0,1} 𝒳 ℋ k k k 22 VC-dimension",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "• The VC-dimension of linear separators in 2D is 3 : there does not exist a set of",
+      "content": "• The VC-dimension of linear separators in 2D is 3 : there does not exist a set of 4 points that is shattered by this hypothesis space (we omit the proof) • With hypotheses of the form “everything inside the ellipse is positive” (where the ellipse can be chosen), there exists a set of 4 points that is shattered — so the VC-dimension of this hypothesis space is at least 4 23 Example: 4 points in 2D No linear separator separates from (10 more labelings exist, but all equivalent to one of the above)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "• Note: a set of points can be labeled in",
+      "content": "• Note: a set of points can be labeled in ways • For this set to be shattered by , at least one hypothesis in must exist for each labeling, so must contain at least hypotheses • In other words, implies • Written differently, , and therefore, n 2n ℋ ℋ ℋ 2n VC(ℋ) = n |ℋ| ≥2n |ℋ| ≥2VC(ℋ) VC(ℋ) ≤log2(|ℋ|) 24 An upper bound on the VC dimension",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "25",
+      "content": "25 PAC-learning How much data is needed for successful learning? Sample complexity & its relation to capacity",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Statistical learning theory provides theoretical results that relate:",
+      "content": "Statistical learning theory provides theoretical results that relate: • probability of “successful” learning • number of training examples (sample complexity) • how training examples are chosen • complexity of hypothesis space • accuracy to which target is approximated • time spent on learning (time complexity) 26 Statistical learning theory",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "We will focus on the following task (binary classification / concept learning) :",
+      "content": "We will focus on the following task (binary classification / concept learning) : • given: • instance space • existence of an unknown target function • hypothesis space • training examples • find: • a function such that • for all ? • for all ? (this is most interesting) 𝒳 c : 𝒳→{0,1} ℋ D ⊆𝒳× {0,1} f ∈ℋ f(x) = c(x) x ∈D x ∈𝒳 27 Complexity of concept learning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "• PAC stands for “probably approximately correct”",
+      "content": "• PAC stands for “probably approximately correct” • Assume examples are drawn randomly from one distribution ( i.i.d. : independently and identically distributed) • We can never guarantee that a correct hypothesis is learned: there’s always a small chance that randomly drawn examples are highly unrepresentative • Therefore, relax the learning task: learner should very probably find an approximately correct hypothesis • Formally: with probability , return a hypothesis with accuracy • The smaller and are chosen, the stronger this “soft guarantee” is ≥1 −δ ≥1 −ε δ ε 28 PAC learning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "• Formal definition of PAC-learnability according to Mitchell (1997):",
+      "content": "• Formal definition of PAC-learnability according to Mitchell (1997): • Assume a class C of possible target concepts defined over instance space X; instances have “size” n; learner uses hypothesis space • C is PAC-learnable by using if for all c in C, for all probability distributions over X, and for all 0<δ<1/2 and 0<ε<1/2, the following holds: finds with probability 1-δ some with acc( f ) ≥ 1-ε in time polynomial in 1/δ, 1/ε, n and size(c) L ℋ L ℋ L f ∈ℋ 29 PAC-learnability",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "• Consider binary prediction, learning from an i.i.d. dataset",
+      "content": "• Consider binary prediction, learning from an i.i.d. dataset • Can we (probabilistically) bound the error on the population, based on the error in the training set and the size of the training set? • Many results on this exist, often complicated to derive • To illustrate the type of reasoning, we look at a simple case here: • If I have a hypothesis that perfectly fits a training set of size … (error 0) • … how likely is it that its real error is still larger than some ? n ε 30 Linking training error and real error",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "• When the version space (the set of all hypotheses that perfectly fit the training",
+      "content": "• When the version space (the set of all hypotheses that perfectly fit the training set) does not contain any hypotheses with error , we say that the version space is -exhausted • We will try to answer the following question: given values for , how many instances does the dataset have to contain so that, with probability at least , the version space is -exhausted ? ≥ε ε δ, ε 1 −δ ε 31 -exhausting the version space ε",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "• Assume hypothesis has real error . How likely is it that it perfectly fits a data set of randomly",
+      "content": "• Assume hypothesis has real error . How likely is it that it perfectly fits a data set of randomly drawn instances? That probability is • It has error , this probability is • If there are such hypotheses, the probability that at least one perfectly fits the dataset is • Clearly, (you can’t have more such hypotheses than there are in the entire hypothesis space) • Hence, the probability that at least one hypothesis with error perfectly fits the data is upper- bounded by • is itself upper-bounded by • Hence: if , then (Haussler’s theorem) h ε n (1 −ε)n h ≥ε ≤(1 −ε)n k ≤k(1 −ε)n k ≤|ℋ| ≥ε |ℋ|(1 −ε)n |ℋ|(1 −ε)n |ℋ|e−nε h ∈VS P(error(h) > ε) ≤|ℋ|e−nε 32 Haussler’s theorem (1988)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "• From the previous slide, it follows that",
+      "content": "• From the previous slide, it follows that guarantees that the probability that the version space contains at least one hypothesis with error is at most • Solve for : ; or, equivalently, • Conclusion: learning from at least instances guarantees with probability at least that • the version space contains only -correct hypotheses • Hence, any learner that returns a perfectly-fitting classifier, returns an -correct hypothesis |ℋ|e−nε ≤δ ≥ε δ n n ≥ln(|ℋ|/δ)/ε n ≥1 ε (ln|ℋ| + ln 1 δ ) ln(|ℋ|/δ)/ε 1 −δ ε L ε 33 How many examples needed?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "• Consider learning a conjunctive formula over 100 boolean variables. A variable",
+      "content": "• Consider learning a conjunctive formula over 100 boolean variables. A variable may occur in the conjunction positively, negatively, or not at all. If you want to be 99% certain that the learned formula gives a different result than the real one on at most 1% of the population, how many examples should you use? • Answer: (for each of the 100 variables, there is the option to include it positively or negatively, or leave it out from the formula). We thus obtain . (The total instance space has size ) |ℋ| = 3100 n ≥ln(3100/0.01)/0.01 ≈11447 2100 = 1.268 ⋅1030 34 A concrete example",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "• In the previous examples,",
+      "content": "• In the previous examples, served as a measure for how expressive is (the more hypotheses in , the more different concepts it can represent) • What if is infinite? (e.g.: linear regression, neural nets) The result is useless in that case! • Also: perhaps many are actually quite similar; to what extent does contain truly different hypotheses? • E.g., vs. : one is more expressive than the other • This is where capacity measures such as the VC-dimension come in |ℋ| ℋ ℋ |ℋ| f ∈ℋ ℋ ℋ1 = {y = ax + b|a, b ∈ℝ} ℋ2 = {y = ax2 + bx + c|a, b, c ∈ℝ} 35 Sample complexity and VC-dimension",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "• Many results exist that link learnability to VC-dimension",
+      "content": "• Many results exist that link learnability to VC-dimension • E.g.: how many examples needed to ε-exhaust VS with probability at least 1-δ ? • Under mild conditions, • Many known results are based on theory about Rademacher complexity — which we will not go into here. 36 Sample complexity and VC-dimension n ≥1 ε (4 log2 2 δ + 8VC(H)log2 13 ε ) is PAC-learnable ⇔ is finite ℋ VC(ℋ)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "• Sample complexity relates the chances of successful learning to the size of the",
+      "content": "• Sample complexity relates the chances of successful learning to the size of the training set • The sample complexity of a learning problem is related to the expressiveness of the hypothesis space • The latter can be formally expressed by measures such as the size of the hypothesis space (for finite sizes), its VC-dimension, and its Rademacher complexity 37 Summary",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "• PAC-learning assumes random sampling. It does not say anything about",
+      "content": "• PAC-learning assumes random sampling. It does not say anything about learning settings where the instances are carefully chosen by a benevolent teacher, or by the learner, to be maximally informative (e.g., the active learning setting) • Sample complexity is only one measure. Computational complexity is another possibly useful measure: how much computation is needed, rather than how much data 38 Some final remarks…",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

@@ -1,0 +1,515 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 04",
+    "section_label": "Slide",
+    "completed": 56,
+    "total": 56,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "faculty of arts",
+      "summary": "This lecture introduces Neural Language Modeling as the fourth session in the Natural Language Processing course within the Faculty of Arts. The session is led by Tim Van de Cruys and took place on Thursday, 15 October 2026.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "Reminder",
+      "summary": "A single neuron performs the same computation as logistic regression: inputs are weighted by parameters, summed with a bias, and passed through an activation function to produce an output. In a feedforward neural network, this process is generalized across layers where an input vector is multiplied by weight matrices and added to bias vectors to generate hidden representations. These values propagate through successive layers of neurons until reaching the final output layer, with all weight matrices serving as the parameters optimized during training to match the correct outputs for the…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 3,
+      "title": "Feed-forward",
+      "summary": "The feed-forward architecture utilizes a multi-layer perceptron with two hidden layers to process input $x$ into output $y$. This involves computing the first hidden layer $h_1$ and second hidden layer $h_2$ using an activation function $g$, followed by a final linear transformation, where all weights ($W$) and biases ($b$) constitute the network parameters $\\theta$. The employment of these multiple hidden layers defines the approach as deep learning.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 4,
+      "title": "Word embeddings",
+      "summary": "Word embeddings represent each word as a dense vector in a real-valued space, typically with several thousand dimensions in current large language models. These vectors form a matrix where rows correspond to vocabulary size and columns to embedding size, ensuring that semantically similar words possess similar vector representations. This geometric arrangement allows the model to distinguish between different senses of ambiguous words or distinct languages by placing them in separate locations within the reduced embedding space.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 5,
+      "title": "Feed-forward network",
+      "summary": "A feed-forward network performs language modeling by predicting the next word in a sequence based on preceding words extracted from an embedding matrix. The architecture consists of one non-linear hidden layer followed by a softmax classification layer, with all parameters optimized during training to maximize the probability of the correct next word. By learning semantic similarities through this objective on large corpora, the model can effectively solve diverse tasks like summarization and question answering within a single system.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 6,
+      "title": "Recurrent neural network",
+      "summary": "Recurrent neural networks address the fixed-input limitation of feedforward architectures by processing varying amounts of language input to predict the next word. This model builds a historical representation by combining the current word input with the hidden layer from the previous timestep using specific weight matrices and an activation function. The resulting hidden state is then passed through a softmax function to generate a probability distribution for the predicted output.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 7,
+      "title": "Concrete RNN architectures",
+      "summary": "This section introduces concrete Recurrent Neural Network (RNN) architectures, specifically focusing on the Simple RNN as a foundational model for neural language modeling. The slide identifies this architecture as the primary example to be discussed, with visual references sourced from colah.github.io to illustrate its structure.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 8,
+      "title": "Concrete RNN architectures",
+      "summary": "While simple RNNs struggle to retain narrow contexts due to vanishing gradients, Long Short-Term Memory (LSTM) networks introduce a complex architecture capable of capturing long-term dependencies. LSTMs utilize specific gates to actively control which information is remembered or forgotten at each timestep, preventing the rapid loss of distant events common in standard recurrent models. This mechanism enables an ideal long-term memory essential for accurate sequential language modeling and next-word prediction.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 9,
+      "title": "Concrete RNN architectures",
+      "summary": "This section introduces concrete Recurrent Neural Network (RNN) architectures, specifically highlighting the Long Short-Term Memory (LSTM) model as a key implementation within neural language modeling.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 10,
+      "title": "Transformer",
+      "summary": "The Transformer is the fundamental building block of LLMs, functioning as an attention-based network that converts static word inputs into contextualized embeddings by integrating surrounding information. In left-to-right language modeling, a residual stream progressively refines these representations through successive blocks to capture preceding context, culminating in a final hidden state used by an unembedding matrix to predict the next word. While this decoder-focused approach handles causal prediction, the architecture also supports encoder and encoder-decoder variants that access full sentence contexts for tasks like machine translation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 11,
+      "title": "Transformer",
+      "summary": "The Transformer serves as the fundamental building block of Large Language Models, functioning as an advanced feedforward network centered on the attention mechanism. Its primary role is generating contextualized embeddings where a word's meaning adapts based on surrounding history, such as \"star\" referring to a celestial body for an astronomer versus a celebrity for an audience. While originally designed as an encoder-decoder, modern implementations focus on left-to-right causal language modeling to predict the next word in an autoregressive sequence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 12,
+      "title": "Transformer",
+      "summary": "The Transformer serves as the fundamental building block of Large Language Models, functioning like a sophisticated feedforward network driven by an attention mechanism to generate contextualized word embeddings. By integrating surrounding words into current representations, it resolves ambiguity; for instance, \"star\" following \"astronomer\" predicts \"telescope,\" whereas \"audience\" suggests a \"pop star\". The architecture stacks successive Transformer blocks that process inputs combining token and position embeddings within large context windows to predict the next word in a sequence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 13,
+      "title": "Transformer",
+      "summary": "Slide 13 introduces the Transformer architecture as a key topic within neural language modeling, citing Jurafsky and Martin (2026) as the primary reference. The slide serves as a section header for this specific model, identified by the course instructor Tim Van De Cruys at KU Leuven.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 14,
+      "title": "Attention",
+      "summary": "In causal language modeling, attention operates left-to-right, restricting each token's view to only preceding and current inputs. When processing a specific token $x_i$, the model attends to all inputs up to and including $x_i$ itself; for instance, $x_1$ relies solely on itself, while $x_3$ incorporates information from $x_1$, $x_2$, and $x_3$. This mechanism ensures predictions are based exclusively on available historical context rather than future tokens.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 15,
+      "title": "Attention: an intuitive simplification",
+      "summary": "Attention is presented as an intuitive simplification where the relevance between tokens is calculated via a dot-product score, $score(x_i, x_j) = x_i \\cdot x_j$. These scores are normalized into attention weights $\\alpha_{ij}$ using softmax over all preceding positions ($j \\le i$), and the final context vector $a_i$ is computed as the weighted sum of those previous token representations.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 16,
+      "title": "An attention head",
+      "summary": "An attention head replaces original input vectors with three derivative vectors—query, key, and value—projected via weight matrices $W_Q$, $W_K$, and $W_V$. The query vector for the current element computes a similarity score against preceding key vectors using a dot product, which is normalized to generate weights. These weights determine a weighted average of the corresponding value vectors, creating a contextualized representation that blends relevant information from previous inputs rather than relying on raw vectors alone.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 17,
+      "title": "An attention head",
+      "summary": "Slide 17 introduces the concept of an attention head using the repeated phrase \"the star astronomer watched\" to illustrate how query (q), key (k), and value (v) vectors are processed. The slide visually represents multiple instances of these q, k, and v components associated with the input sequence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 18,
+      "title": "Attention computation",
+      "summary": "Attention computation transforms input vectors $x$ into query ($q_i$), key ($k_j$), and value ($v_j$) representations using weight matrices $W_Q$, $W_K$, and $W_W$. The attention score between positions is calculated as the dot product of the query and key, scaled by $\\sqrt{d_k}$, then normalized via softmax to produce weights $\\alpha_{ij}$. Finally, the output vector $a_i$ is generated as a weighted sum of values $v_j$ for all positions $j$ up to the current position $i$, enforcing causal masking.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 19,
+      "title": "Visual representation",
+      "summary": "Slide 19 introduces the topic of visual representation within the context of Neural Language Modeling, referencing Jurafsky and Martin (2026) as the primary source. This section serves as a structural marker for the lecture series, identified as slide 17 of 53, and is presented by tim.vandecruys@kuleuven.be.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 20,
+      "title": "Multi-head attention",
+      "summary": "Multi-head attention extends the standard mechanism by performing the computation multiple times (e.g., 8, 24, or 36 heads) rather than once, allowing each head to focus on distinct phenomena such as syntactic structures, linguistic relationships, or semantic patterns. The process involves computing queries, keys, and values for each head, calculating attention scores via softmax, and aggregating the resulting heads through concatenation and a final linear projection. This parallel specialization enables the model to capture diverse contextual features essential for accurate next-word prediction.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 21,
+      "title": "Multi-head attention: visual representation",
+      "summary": "Multi-head attention operates on intermediate representations derived from all preceding words, utilizing a current input that has first undergone normalization to ensure stable computations. This normalized representation feeds into the attention mechanism, which generates a novel output subsequently combined with the original residual stream via addition. The process effectively integrates the newly computed context back into the propagated neural network representation while maintaining the flow of information through the residual connection.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 22,
+      "title": "The residual stream",
+      "summary": "The residual stream",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 23,
+      "title": "Layer Norm",
+      "summary": "Layer Norm applies a z-score-like normalization to a single vector, ensuring it has a mean of 0 and standard deviation of 1 by subtracting the computed mean and dividing by the standard deviation. This step prevents vectors from becoming too large, allowing them to be properly added to the residual stream for smooth computation. Finally, learnable parameters gamma and beta are applied to control the scale and shift of the normalized representation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 24,
+      "title": "Feedforward network",
+      "summary": "The Transformer block incorporates a standard feedforward network with one hidden layer to model non-linearities within representations. This component computes a hidden representation by multiplying the input by a weight matrix, applies a non-linear activation function (originally ReLU), and then multiplies by a second weight matrix to produce the final output. The resulting representation is added back into the residual stream, often following a layer normalization step that ensures computations remain stable and values are appropriately scaled for integration.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 25,
+      "title": "Putting it all together",
+      "summary": "This slide synthesizes the complete encoder layer computation by first applying LayerNorm to the input $x_i$, followed by Multi-Head Attention over the sequence. The attention output is added to the original input via a residual connection, then normalized again before passing through a Feed-Forward Network (FFN). Finally, the FFN output is added to the pre-FFN residual to produce the layer's final output $h_i$.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 26,
+      "title": "Putting it all together",
+      "summary": "Transformer blocks are stacked sequentially to progressively refine contextualized representations for next-word prediction, with modern architectures ranging from dozens to thousands of layers. To enable this stacking and residual connections, all vectors must maintain a consistent dimensionality $d$, achieved by concatenating multi-head outputs and projecting them back via a weight matrix. This uniform structure allows the entire computation to be parallelized efficiently while ensuring data flows correctly through the residual stream across successive blocks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 27,
+      "title": "Putting it all together",
+      "summary": "While current large language models like Llama and Mistral retain the original architecture's core building blocks and training objective, they incorporate specific optimizations for performance. Key adaptations include replacing LayerNorm with RMSNorm (rescaling without re-centering), using gated feed-forward layers instead of ReLU, and employing Rotary position embeddings to encode relative positions directly in attention. Additionally, grouped-query attention accelerates inference by having multiple query heads share a single key-value head, as maintaining separate keys and values for every head offers no practical benefit.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 28,
+      "title": "Input: token embeddings plus position embeddings",
+      "summary": "The model input combines token embeddings from a vocabulary matrix with position embeddings, which are randomly initialized vectors learned during training to encode word order. This addition is essential because the attention mechanism inherently loses positional information, making it impossible to track where words appear in a sentence without this explicit signal. The final input representation is generated by summing the specific token embedding and its corresponding position embedding.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 29,
+      "title": "Visual representation",
+      "summary": "Slide 29 presents a visual representation within the context of Neural Language Modeling, referencing Jurafsky and Martin (2026) as the source material. This specific slide serves as the 27th in a series of 53 and is part of a lecture delivered by Tim Van De Cruys at KU Leuven.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 30,
+      "title": "Language modeling head",
+      "summary": "Slide 30 introduces the language modeling head within the context of neural language modeling, referencing Jurafsky and Martin (2026) as the primary source.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 31,
+      "title": "From logits to probabilities",
+      "summary": "Logits represent unnormalized scores for each vocabulary token, theoretically ranging from negative to positive infinity, which are generated via an unembedding layer often transposed from the initial embedding matrix. To convert these raw scores into a valid probability distribution suitable for sampling, the softmax function is applied to normalize them. This process transforms the model's spread-out output distribution into probabilities that can be compared against the true, peaky target distribution where the correct word has a probability of one.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 32,
+      "title": "Decoding",
+      "summary": "Decoding converts the model's output probability distribution into a specific next token using strategies like greedy decoding or sampling. Greedy decoding selects the single most probable word, but this often yields repetitive and uninteresting text. Conversely, random sampling introduces variety by selecting tokens according to their probabilities, yet it risks choosing unlikely words from the distribution's tail. To balance coherence with diversity, researchers employ techniques like top-k and top-p sampling, which restrict selection to likely candidates while maintaining randomness.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 33,
+      "title": "Improved decoding: restrict the vocabulary",
+      "summary": "Improved decoding restricts the vocabulary to avoid sampling from unlikely words in the probability tail. Top-k sampling selects a fixed number of most likely words (e.g., 50) and renormalizes them, though this fixed limit may not suit contexts where grammatical necessity demands high certainty versus open-ended possibilities like adjectives. Top-p (nucleus) sampling addresses this by dynamically selecting the smallest word set covering a specific probability mass percentage (e.g., top 80%), ensuring the vocabulary size adapts to the model's confidence at each position.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 34,
+      "title": "Improved decoding: reshape the probability distribution",
+      "summary": "Temperature sampling reshapes the probability distribution by dividing logits by a parameter τ before applying softmax, borrowing terminology from thermodynamics where high temperatures allow flexible exploration and low temperatures restrict options. Setting τ below 1 amplifies scores passed to the softmax, pushing high-probability words higher and low-probability words lower to create a more greedy distribution, while τ equals 1 leaves the original probabilities unchanged.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 35,
+      "title": "The power of scale",
+      "summary": "The power of scale in Large Language Models (LLMs) arises from applying the transformer architecture with vast numbers of parameters and extensive data. By focusing solely on the task of predicting words, these models inherently acquire the ability to solve diverse downstream tasks such as sentiment analysis, question answering, and summarization without explicit training for each specific function.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 36,
+      "title": "Conditional generation",
+      "summary": "This section introduces the concept of conditional generation within neural language modeling, referencing the framework established by Jurafsky and Martin (2026).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 37,
+      "title": "Examples",
+      "summary": "Neural language models solve diverse tasks like sentiment analysis and question answering by predicting the next most probable word token-by-token. For instance, given the prompt \"The sentiment of the sentence 'The new Bond movie is fantastic' is:\", the model generates the sentiment label as the next word. Similarly, for \"The capital of France is...\", it predicts the correct city name. This capability emerges from applying the next-word prediction training objective at an enormous scale, allowing the model to provide direct answers to these queries.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 38,
+      "title": "Summarization",
+      "summary": "This slide illustrates summarization by contrasting a detailed news story about entrepreneur Kyle Waring selling Boston snow with a condensed version that retains only essential facts. The original text describes the $89 price, 6-pound quantity, shipping restrictions to New England, and the origin of the idea during record-breaking snowfall. In contrast, the provided summary extracts just the core transaction details and geographic limitations, demonstrating how summarization reduces length while preserving the primary message.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 39,
+      "title": "Summarization",
+      "summary": "Slide 39 introduces the topic of summarization within the context of neural language modeling, referencing Jurafsky and Martin (2026) as the primary source material. This section serves as a structural marker in the lecture series, identified by the course email tim.vandecruys@kuleuven.be and positioned as slide 37 of 53 in the referenced text.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 40,
+      "title": "Pretraining with self-supervision",
+      "summary": "Pretraining is the initial step for Large Language Models, utilizing vast web-extracted datasets like CommonCrawl or curated versions such as FineWeb and Dolma, often totaling 10–15 trillion tokens. This process is termed \"self-supervised\" because it relies on plain text without requiring manual annotations; instead, the model learns by predicting the next word in a sequence, using the subsequent token itself as the training label.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 41,
+      "title": "Objective function: cross-entropy loss",
+      "summary": "The cross-entropy loss function aims to assign high probability to the true next word by utilizing its negative log probability as the loss metric. Consequently, the model incurs a large loss when assigning low probability to the correct word and a small loss when the prediction is accurate. During training, this loss is computed across multiple positions simultaneously, driving gradient-based updates to attention and feed-forward weight matrices that minimize the overall error.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 42,
+      "title": "Teacher forcing",
+      "summary": "Teacher forcing is a training strategy where, at each token position $t$, the model receives the correct ground-truth tokens $w_{1:t}$ as input to compute the loss for predicting the next token $w_{t+1}$. Crucially, even if the model predicts an incorrect word, its prediction is ignored for the subsequent step; instead, the actual true word from the corpus is fed into the context for position $t+1$. This ensures that the network always bases its next prediction on the correct historical sequence rather than its own potentially erroneous outputs.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 43,
+      "title": "Visual representation",
+      "summary": "Slide 43 presents a visual representation within the context of Neural Language Modeling, referencing Jurafsky and Martin (2026) as the source material. This specific slide serves as a citation marker for section 41/53 of the course content, attributed to tim.vandecruys@kuleuven.be.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 44,
+      "title": "Finetuning",
+      "summary": "Slide 44 introduces the topic of finetuning within the context of neural language modeling, referencing Jurafsky and Martin (2026) as the primary source material.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 45,
+      "title": "Post-training",
+      "summary": "Post-training transforms pretrained text-predictors into conversational assistants through instruction tuning, where loss is computed solely on response tokens, and preference learning, which uses human comparisons to train a reward model. Alignment then optimizes the model toward preferred responses via reinforcement learning (RLHF, PPO) or direct methods (DPO), ensuring safe and precise answers. Because full fine-tuning is costly, parameter-efficient techniques like LoRA update only a small subset of extra parameters to adapt large models effectively.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 46,
+      "title": "The downside of LLMs",
+      "summary": "Large Language Models face significant downsides including hallucination, copyright infringement, privacy risks, bias, toxicity, misinformation, and ecological impact. Hallucinations persist because models optimize solely for next-word prediction without an inherent concept of truth or proof; consequently, humans must define what constitutes a hallucination. Additionally, these models absorb copyrighted texts without compensating authors, potentially reuse user data on servers, and propagate societal biases present in their training data.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 47,
+      "title": "Three architectures for LLMs",
+      "summary": "Large language models utilize three primary architectures: Decoder-only models like GPT and Llama dominate current applications by predicting words for tasks framed as generation; Encoder-only models such as BERT use masked language modeling to predict tokens from bidirectional context, often fine-tuned for single-sentence classification or sequence labeling like named entity recognition; and Encoder-Decoder architectures like T5 map input sequences to output sequences for tasks including machine translation and speech recognition.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 48,
+      "title": "Three architectures for LLMs",
+      "summary": "Large language models utilize three primary architectures: Decoder-only models like GPT and Llama dominate current applications by predicting words for tasks framed as word prediction. Encoder-only models, exemplified by BERT, employ masked language modeling to predict words using both left and right context, typically requiring fine-tuning with supervised data. Finally, Encoder-Decoder architectures such as T5 map one sequence to another, making them suitable for machine translation and speech recognition.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 49,
+      "title": "Bi-directional attention",
+      "summary": "Slide 49 introduces the concept of bi-directional attention, distinguishing it from causal self-attention layers. The material presents these two architectures as distinct components within neural language modeling, referencing Jurafsky and Martin (2026) for further context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 50,
+      "title": "Masked language modeling",
+      "summary": "Masked language modeling is necessary when an attention mechanism has access to future tokens, as predicting the next token becomes redundant in such contexts. To address this, a specific percentage of tokens within a sentence—such as masking the second and fourth words in \"so long and thanks for all the fish\"—are hidden or randomly altered. This forces the model to learn by reconstructing the missing information rather than simply relying on future context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 51,
+      "title": "Next sentence prediction",
+      "summary": "Slide 51 introduces the topic of next sentence prediction within the context of neural language modeling, referencing Jurafsky and Martin (2026).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 52,
+      "title": "Contextualized embeddings",
+      "summary": "BERT-like encoder models excel at creating contextualized embeddings by processing entire sentences as input, granting access to both left-hand history and right-hand future context. Unlike causal language modeling in decoders which only sees the past, encoders utilize attention mechanisms across all tokens to capture bidirectional meaning. This comprehensive context allows these models to generate rich representations suitable for fine-tuning on specific classification tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 53,
+      "title": "Fine-tuning for classification",
+      "summary": "Fine-tuning for classification adapts a pre-trained encoder, originally trained on large text corpora via masked language modeling, to specific tasks by adding an appropriate classification head and training on curated, hand-labeled data. While pre-trained parameters can be frozen or minimally adjusted, the model is pushed toward the target task using examples like sentiment analysis or grammatical error correction. This process leverages self-supervised pre-training to efficiently solve downstream problems with binary or multi-class outputs calculated via softmax.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 54,
+      "title": "Sequence classification",
+      "summary": "This section introduces sequence classification within the context of neural language modeling, referencing the foundational work of Jurafsky and Martin (2026).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 55,
+      "title": "Sequence labeling",
+      "summary": "Slide 55 introduces the topic of sequence labeling within the context of neural language modeling, referencing Jurafsky and Martin (2026) pages 52–53.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 56,
+      "title": "Different classification configurations",
+      "summary": "Slide 56 introduces the topic of different classification configurations, referencing the work of Devlin et al. (2019). As this is the final slide in the Neural Language Modeling series by Tim Van De Cruys, it serves as a concluding reference point for these architectural variations.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    }
+  ]
+}

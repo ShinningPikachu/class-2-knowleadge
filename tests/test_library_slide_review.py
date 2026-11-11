@@ -11,6 +11,7 @@ from pathlib import Path
 from src.config import PipelineConfig
 from src.jobs import JobManager
 from src.library import LibraryStore
+from src.lecture_artifacts import save_portable_artifacts
 from src.ui.library_page import (
     _exact_slide_summary,
     _is_internal_lecture_artifact_name,
@@ -27,6 +28,34 @@ from src.ui.library_page import (
 
 
 class LibrarySlideReviewTest(unittest.TestCase):
+    def test_portable_artifacts_load_without_job_history(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            library = LibraryStore(root / "library")
+            subject = library.create_subject("Course")
+            folder = library.create_folder(subject.id, "Lecture 1")
+            deck = root / "Slides.pdf"
+            deck.write_bytes(b"pdf placeholder")
+            audio = root / "Recording.m4a"
+            audio.write_bytes(b"audio placeholder")
+            slide_document = library.add_document(subject.id, deck, folder_id=folder.id)
+            audio_document = library.add_document(subject.id, audio, folder_id=folder.id)
+            run = root / "run"
+            run.mkdir()
+            (run / "slides.json").write_text(json.dumps({"slides": [{"slide": 1, "title": "Title"}]}))
+            (run / "slide_summaries.json").write_text(json.dumps({"slides": [{"slide": 1, "summary": "Slide 1: Title"}]}))
+            (run / "alignment.json").write_text(json.dumps({"slides": [{"slide": 1, "paragraphs": [{"text": "Hello"}]}]}))
+            (run / "transcript.json").write_text(json.dumps({"metadata": {"transcript_kind": "cleaned"}, "paragraphs": [{"text": "Hello"}]}))
+            save_portable_artifacts(library, subject.id, folder.id, run)
+            manager = SimpleNamespace(list_jobs=lambda **_kwargs: [])
+            slide_bundle = _lecture_slide_bundle(library, manager, slide_document)
+            audio_bundle = _lecture_audio_bundle(library, manager, audio_document)
+            self.assertIsNotNone(slide_bundle)
+            assert slide_bundle is not None
+            self.assertEqual(slide_bundle.summaries[1], "Slide 1: Title")
+            self.assertEqual(slide_bundle.alignment[1][0]["text"], "Hello")
+            self.assertEqual(audio_bundle.paragraphs[0]["text"], "Hello")
+
     def test_translation_artifacts_are_hidden_while_primary_notes_remain_visible(self) -> None:
         for name in (
             "Notes.chinese_simplified.md",

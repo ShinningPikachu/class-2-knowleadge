@@ -1,0 +1,577 @@
+{
+  "metadata": {
+    "source_file": "Lecture_01_Untitled_Slides.pdf",
+    "created_at": "2026-09-27T22:14:48.976594+00:00",
+    "slide_count": 63,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Natural Language Processing:",
+      "content": "Natural Language Processing: Introduction H02B1A Miryam de Lhoneux Department of Computer Science KU Leuven",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Introduction",
+      "content": "Introduction Outline Introduction State of NLP General challenges Representing words and sentences Course overview Practical information 1 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Introduction",
+      "content": "Introduction Natural language processing 2 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Introduction",
+      "content": "Introduction Natural language processing: deﬁnition Natural language processing is a ﬁeld of science and engineering focused on the development and study of automatic systems that understand and generate natural (that is, human,) languages. StanfordNLP (2024) 3 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Introduction",
+      "content": "Introduction Natural language processing: all-in-one Retrieved 19/08/2024 4 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Introduction",
+      "content": "Introduction Natural language processing: all-in-one Retrieved 19/08/2024 5 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Introduction",
+      "content": "Introduction This course Foundations • Building blocks of state-of-the-art NLP systems • What challenges have been overcome? • What challenges are still open? Tasks and applications • Tasks that cover all levels of linguistic processing (morphology, syntax, semantics) • Example applications (e.g. machine translation and conversational agents) 6 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Introduction",
+      "content": "Introduction This course Learning goals At the end of the course, you should be able to • describe fundamental concepts and algorithms seen in class • implement and apply these algorithms • describe and use state-of-the-art NLP models 7 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Introduction",
+      "content": "Introduction This lecture • Current state of NLP • General challenges • Representing words and sentences • Practical aspects of the course 8 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "State of NLP",
+      "content": "State of NLP Outline Introduction State of NLP General challenges Representing words and sentences Course overview Practical information 9 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "State of NLP",
+      "content": "State of NLP State of NLP NLP progress in 2012 by Dan Jurafsky 10 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "State of NLP",
+      "content": "State of NLP State of NLP NLP progress in 2025, adapted from Dan Jurafsky 10 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "State of NLP",
+      "content": "State of NLP State of NLP Benchmark progress in NLP and CV. −1=initial performance, 0=human performance. Kiela et al. (2021). 10 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "State of NLP",
+      "content": "State of NLP State of NLP Challenges of open-domain QA (Liu et al., 2022). 10 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "State of NLP",
+      "content": "State of NLP State of NLP Performance disparity of NER systems considering languages and their number of speakers (Song et al., 2023). 10 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "State of NLP",
+      "content": "State of NLP State of NLP Performance disparity of systems considering languages and their number of speakers for 6 tasks. (Song et al., 2023). 10 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "General challenges",
+      "content": "General challenges Outline Introduction State of NLP General challenges Representing words and sentences Course overview Practical information 11 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "General challenges",
+      "content": "General challenges What makes NLP challenging? • Ambiguity • Non-standard language • Neologisms • Need for external knowledge • Long tail of rare words/pheonomena 12 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "General challenges",
+      "content": "General challenges Ambiguity • I love ambiguity more than most people love ambiguity. • I love ambiguity more than I love most people. 13 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "General challenges",
+      "content": "General challenges Ambiguity I made her duck • I cooked duck for her • I cooked a duck which belonged to her • I created the duck which belongs to her • I caused her to lower her head • I turned her into a duck Need context to disambiguate. 14 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "General challenges",
+      "content": "General challenges Ambiguity Types of ambiguity • Lexical: I saw a bat saw = past tense of see or present tense of saw bat = ﬂying mammal or wooden club • Structural: I saw a man with a telescope I have a telescope or the man does • Semantic: John and Mary are married to each other or to other people • Anaphoric: Margaret invited Susan, and she gave her a sandwich. she = Margaret or Susan 15 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "General challenges",
+      "content": "General challenges Non-standard language Example tweet including emoji, hashtags, slang (wanna), abbreviations (MT, HMU) 16 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "General challenges",
+      "content": "General challenges Neologisms Recent neologisms • Deepfake • Prompt engineer • Situationship • Enshittiﬁcation 17 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "General challenges",
+      "content": "General challenges Neologisms NYT ﬁrst said bluesky bot 18 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "General challenges",
+      "content": "General challenges Need for external knowledge Jack needed some money, so he went and shook his piggy bank. He was disappointed when it made no sound. Why was he disappointed? Minsky (2000) Types of external knowledge • Commonsense knowledge of the physical and social world • Domain knowledge • Knowledge of the broader context 19 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "General challenges",
+      "content": "General challenges Law of Zipf Frequency of words per rank in Romeo and Juliet 20 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Representing words and sentences",
+      "content": "Representing words and sentences Outline Introduction State of NLP General challenges Representing words and sentences Course overview Practical information 21 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Representing words and sentences",
+      "content": "Representing words and sentences Representing words Vocabulary: {sky, wings, engine, helicopter, drone, rocket, goose, eagle, bee} The goose is in the sky. The eagle in the sky has wings. The bee in the sky has wings. The goose with wings in the sky. The eagle with wings in the sky. The bee with wings in the sky. The goose and the eagle with wings are in the sky. The goose flies in the sky. The wings of the bee are good wings. The helicopter, the drone and the rocket are in the sky. The helicopter in the sky is a useful engine. The drone in the sky is an engine that takes pictures. A rocket is an engine. The helicopter is an engine. A drone is an engine that takes pictures. A rocket is a useful engine among sky engines. A helicopter is flying in the sky. The sky is full of helicopters and drones. The engine here is a drone, the one there is a rocket. Toy corpus 22 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Representing words and sentences",
+      "content": "Representing words and sentences Representing words bee (4,0,2) goose (2,0,4) eagle (3,0,3) drone (0,3,3) rocket (0,4,2) helicopter (0,2,4) 1 2 3 4 1 2 3 4 1 2 3 4 sky engine wings Vector space of word co-occurrences with 3 dimensions 22 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Representing words and sentences",
+      "content": "Representing words and sentences Representing phrases/sentences Bag of words + + + a pizza Mary ate Mary ate a pizza 23 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Representing words and sentences",
+      "content": "Representing words and sentences Representing phrases/sentences Recurrent Neural Network f( ) , Mary ate a pizza f( ) , Mary ate a , f( ) Mary ate Mary Mary ate a pizza 23 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Representing words and sentences",
+      "content": "Representing words and sentences Representing phrases/sentences Transformer f( ) + + + + 1 2 3 4 , , , , a pizza ate CLS CLS Mary pizza a ate Mary Mary ate a pizza 23 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Representing words and sentences",
+      "content": "Representing words and sentences Representing phrases/sentences The reality is not so simple • Word vectors are learned/updated by the neural network • f () is complex for RNNs (see lecture 4) • f () is even more complex for transformers (see lecture 4) • Neural networks are deep and consist of multiple layers. • The input units of transformers are not words but subwords (see lecture 2) 24 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Course overview",
+      "content": "Course overview Outline Introduction State of NLP General challenges Representing words and sentences Course overview Practical information 25 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Course overview",
+      "content": "Course overview Fundamentals 1. Introduction 2. Segmentation and tokenization 3. Language modelling 4. Neural language modelling Foundational application 5. Neural Machine Translation 26 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Course overview",
+      "content": "Course overview Levels of linguistic processing 6. POS tagging 7. Morphological analysis 8. Syntactic parsing 9. Semantics 10. Discourse Applications 11. Question Answering 12. (Not a lecture: Q&A session) 13. Conversational agents 27 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Course overview",
+      "content": "Course overview 2. Tokenization • What units to even use? • How to split text into these units? 28 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Course overview",
+      "content": "Course overview 3. Language modelling Probabilistic foundations of language modelling 29 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Course overview",
+      "content": "Course overview 4. Neural Language modelling • Language modelling with RNNs • Language modelling with transformers Lecture by Tim Van de Cruys 30 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Course overview",
+      "content": "Course overview 5. Neural Machine Translation The encoder-decoder transformer architecture for machine translation (Jurafsky and Martin, 2024). 31 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Course overview",
+      "content": "Course overview 6. POS tagging POS tagging: mapping from input words x1, x2, ..., xn to output POS tags y1, y2, ..., yn (Jurafsky and Martin, 2024). 32 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Course overview",
+      "content": "Course overview 7. Morphological analysis Morphological analysis of the word independently Analysing the internal structure of words 33 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Course overview",
+      "content": "Course overview 8. Syntactic parsing Who developed the algorithm for the black hole image nsubj root det obj case det compound compound obl Analysing the structure of sentences 34 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "Course overview",
+      "content": "Course overview 9. Semantics Word sense disambiguation 35 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "Course overview",
+      "content": "Course overview 9. Semantics Semantic role labelling: who did what to whom, when (Jindal et al., 2020) 35 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Course overview",
+      "content": "Course overview 10. Discourse Coreference resolution 36 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "Course overview",
+      "content": "Course overview 11. Question Answering 37 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Course overview",
+      "content": "Course overview 12. Q&A session • Opportunity to ask any question about any of the lectures or the reading material. • To be conﬁrmed but possibly going through a mock exam. 38 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Course overview",
+      "content": "Course overview 13. Conversational agents Generative AI Generative AI Thomas Winters Thomas Winters Post-doc @ DTAI, KU Leuven Post-doc @ DTAI, KU Leuven @thomas_wint @thomas_wint thomaswinters.be thomaswinters.be Lecture 1: Text generation Lecture 1: Text generation Not part of the course material but fun and informative lecture about LLM-based conversational agents. 39 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Course overview",
+      "content": "Course overview Course overview Linguistic structures: Why bother? • POS tagging, dependency parsing, etc. are currently not used in production. But: • LLMs are black boxes • Understanding the challenges in processing language is crucial to interpretability • It can help identifying weaknesses and analysing errors • LLMs do not work well for low-resource languages • These tasks may still have relevance for these languages • LLMs have massive amounts of parameters • More sustainable models may involve these tasks 40 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Practical information",
+      "content": "Practical information Outline Introduction State of NLP General challenges Representing words and sentences Course overview Practical information 41 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Practical information",
+      "content": "Practical information Views on teaching Views • Traditional lectures are bad - you learn best by activating your brain . • Interaction with teacher and peers boosts learning - you should feel encouraged to come to class. • You should not feel obliged to come (stay home if you are sick!) • The belgian system where you do everything during the \"blok\" is bad, learning takes time 42 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "Practical information",
+      "content": "Practical information Course format Course content • All content material is online on the Toledo platform: • Pre-recorded videos of the lectures • Slides • Required readings • In-class exercises and solutions • Labs and solutions • Slides (lectures/videos): high-level intuitive explanations • Required readings: necessary to understand the models and algorithms in detail 43 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Practical information",
+      "content": "Practical information Course format In-person lectures • 13 lectures: Thursdays 11h to 13h. • L6 Friday 30/10 9h30-11h30 in QDV-01.100 • Not recorded • Same content as the videos • Interactive, with short exercises • Opportunity to ask for clariﬁcations • Get and give geedback • Informal exam tips and preparation 44 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Practical information",
+      "content": "Practical information Course format Labs • 7 exercises sessions of 2 hours, 2 groups. • Mix of implementation and paper exercises (algorithms application). • No additional material but direct preparation for the exam. • Organized by the course’s TAs 45 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "Practical information",
+      "content": "Practical information Relation to other courses this academic year It is complementary to the Computational Linguistics course taught by Tim Van de Cruys (not a requirement). Computational Linguistics Stronger focus on the linguistic formalisms and high-level intuitions of models. NLP We go deeper in mathematical modelling and see the diﬀerent algorithms in more detail. We are collaborating to make the courses as compatible as possible. Redundancy may still happen. We welcome feedback! 46 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "Practical information",
+      "content": "Practical information Relation to other courses this academic year Advanced NLP taught by Pieter Delobelle. • For MirAI students • Large content overlap in the lectures + project • In Dutch 47 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "Practical information",
+      "content": "Practical information Evaluation Open-book written exam Focus on understanding rather than memorizing. Exam • Theoretical part (50%): Broad overview questions, comparison of technologies, explaining algorithms. • Exercise part (50%): Apply algorithms or evaluation metrics and analyse the results. Analyse the output of programs used in the labs. Information sheet with example questions will be made available on toledo mid-October 48 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Practical information",
+      "content": "Practical information Teaching team Course coordinator and lecturer Miryam de Lhoneux Dpt of Computer Science Celestijnlaan 200A, room 4.50 email: miryam.delhoneux@kuleuven.be TAs Coleman Haley coleman.haley@kuleuven.be Wessel Poelman wessel.poelman@kuleuven.be Benjamin Suter benjaminstefan.suter@ehu.eus 49 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Practical information",
+      "content": "Practical information Please mind our time! • There are ∼200 registered students • Come or don’t come to class, don’t tell me about it • Yes the required readings are required • No you cannot bring your laptop/tablet to the exam 50 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "Practical information",
+      "content": "Practical information Questions • You have a content-based question? • First try the forum on toledo • Or in the lectures or labs • You have a practical question? • First check if the answer is on toledo • Then try the forum ﬁrst • Iﬀyour question is urgent or goes unanswered for too long, then email • Please include [H02B1A] in the subject line • Questions will be answered throughout the semester. No guarantee after that. 51 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "Practical information",
+      "content": "Practical information To sum up • Let’s try to decrease redundant communication • And increase meaningful interaction 52 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "Practical information",
+      "content": "Practical information References Ishan Jindal, Ranit Aharonov, Siddhartha Brahma, Huaiyu Zhu, and Yunyao Li. 2020. Improved semantic role labeling using parameterized neighborhood memory adaptation. ArXiv, abs/2011.14459. Daniel Jurafsky and James H. Martin. 2024. Speech and Language Processing: An Introduction to Natural Language Processing, Computational Linguistics, and Speech Recognition with Language Models, 3rd edition. Online manuscript released August 20, 2024. Douwe Kiela, Max Bartolo, Yixin Nie, Divyansh Kaushik, Atticus Geiger, Zhengxuan Wu, Bertie Vidgen, Grusha Prasad, Amanpreet Singh, Pratik Ringshia, Zhiyi Ma, Tristan Thrush, Sebastian Riedel, Zeerak Waseem, Pontus Stenetorp, Robin Jia, Mohit Bansal, Christopher Potts, and Adina Williams. 2021. Dynabench: Rethinking benchmarking in NLP. In Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies. Linqing Liu, Patrick Lewis, Sebastian Riedel, and Pontus Stenetorp. 2022. Challenges in generalization in open domain question answering. In Findings of the Association for Computational Linguistics: NAACL 2022. Marvin Minsky. 2000. Commonsense-based interfaces. Commun. ACM, 43(8):66 – 73. Yueqi Song, Simran Khanuja, Pengfei Liu, Fahim Faisal, Alissa Ostapenko, Genta Winata, Alham Fikri Aji, Samuel Cahyawijaya, Yulia Tsvetkov, Antonios Anastasopoulos, and Graham Neubig. 2023. GlobalBench: A benchmark for global progress in natural language processing. In Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing. StanfordNLP. 2024. Cs224n: Natural language processing with deep learning. 53 NLP: Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

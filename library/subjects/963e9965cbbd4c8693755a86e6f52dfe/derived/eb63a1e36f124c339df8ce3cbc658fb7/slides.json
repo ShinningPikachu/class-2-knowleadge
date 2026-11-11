@@ -1,0 +1,478 @@
+{
+  "metadata": {
+    "source_file": "Lecture_05_Constraint_Satisfaction_Problems_19_Oct_Slides.pdf",
+    "created_at": "2026-11-04T22:16:41.881874+00:00",
+    "slide_count": 52,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Fundamentals of Artificial Intelligence",
+      "content": "Fundamentals of Artificial Intelligence Prof. Tias Guns Lecture 05, 2026-27 Constraint Satisfaction Problems Based on the slides of CS188 @ Berkeley",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "FAI: Reasoning & decisions",
+      "content": "FAI: Reasoning & decisions L01: Mon 21/09, 10:35 -- 12:30, Intro AI L02: Mon 28/09, 10:35 -- 12:30, Agents + Search (1/2) L03: Mon 05/10, 10:35 -- 12:30, Search (2/2) HS1: Mon 05/10, 17:00 -- 18:30, #Project hackerspace 1: get rollin’ L04: Mon 12/10, 10:35 -- 12:30, Informed Search L05: Mon 19/10, 10:35 -- 12:30, Constraint Satisfaction Problems L06: Mon 26/10, 10:35 -- 12:30, Game trees HS2: Fri 06/11, 12:35 -- 14:00, #Project hackerspace 2: last resort L07: Mon 09/11, 10:35 -- 12:30, Uncertainty in Game Trees L08: Mon 16/11, 10:35 -- 12:30, Markov Decision Processes L09: Mon 23/11, 10:35 -- 12:30, SAT Solving + Logic L10: Mon 30/11, 10:35 -- 12:30, 1st order Logic + Planning LXX: Mon 07/12, 10:35 -- 12:30, Exam info + Q&A LGG: Thu 17/12, 13:00 – 16:00, Guest Lecture: Ethics of AI Algorithmic fundamentals of search Applications of search in deterministic environments Applications of search in stochastic env. Implications of AI",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "RECAP: Designing Rational Agents",
+      "content": "RECAP: Designing Rational Agents o An agent is an entity that perceives and acts. o A rational agent selects actions that maximize its (expected) utility. o Characteristics of the percepts, environment, and action space dictate techniques for selecting rational actions o This course is about: o General AI search techniques for a variety of problem types o Learning to recognize when and how a new problem can be solved with an existing technique Agent ? Sensors Actuators Environment Percepts Actions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "What is Search For?",
+      "content": "What is Search For? o Assumptions about the world: a single agent, deterministic actions, fully observed state, discrete state space o Planning: sequences of actions o The path to the goal is the important thing o Paths have various costs, depths o Heuristics give problem-specific guidance o Identification: assignments to variables o The goal itself is important, not the path o All paths at the same depth (for some formulations)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "CSP Examples",
+      "content": "CSP Examples https://mybinder.org/v2/gh/CPMpy/cpmpy/HEAD?labpath=examples%2Fmap_coloring_oz.ipynb",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Example: Map Coloring",
+      "content": "Example: Map Coloring o Variables: o Domains: o Constraints: adjacent regions must have different colors o Solutions are assignments satisfying all constraints, e.g.: Implicit representation: Explicit representation:",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Constraint Satisfaction Problems",
+      "content": "Constraint Satisfaction Problems o Generic search problems: o State is a “black box”: arbitrary data structure o Goal test can be any function over states o Successor function can also be anything o Constraint satisfaction problems (CSPs): o A special subset of search problems o State is defined by variables Xi with values from a domain D (sometimes D depends on i) o Goal test is a set of constraints specifying allowable combinations of values for subsets of variables o Allows useful general-purpose algorithms with more power than standard search algorithms",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Example: N-Queens",
+      "content": "Example: N-Queens o Formulation 1: o Variables: o Domains: o Constraints:",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Example: N-Queens",
+      "content": "Example: N-Queens o Formulation 2: o Variables: o Domains: o Constraints: Implicit: Explicit:",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Constraint Graphs",
+      "content": "Constraint Graphs",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Constraint Graphs",
+      "content": "Constraint Graphs o Binary CSP: each constraint relates (at most) two variables o Binary constraint graph: nodes are variables, arcs show constraints o Bonus: general-purpose CSP algorithms can use the graph structure to speed up search. E.g., Tasmania is an independent subproblem...",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Example: Cryptarithmetic",
+      "content": "Example: Cryptarithmetic o Variables: o Domains: o Constraints: X1 X2 X3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Example: Sudoku",
+      "content": "Example: Sudoku  Variables:  Each (open) square  Domains:  {1,2,…,9}  Constraints: 9-way alldiff for each row 9-way alldiff for each column 9-way alldiff for each block (or can have a bunch of pairwise inequality constraints)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Varieties of CSPs and Constraints",
+      "content": "Varieties of CSPs and Constraints",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Varieties of CSPs",
+      "content": "Varieties of CSPs o Discrete Variables o Finite domains o Size d domains with n variables means O(dn) complete assignments o E.g., Boolean CSPs, including Boolean satisfiability (NP- complete) o Infinite domains (integers, strings, etc.) o E.g., job scheduling, variables are start/end times for each job o Linear constraints solvable, nonlinear undecidable o Continuous variables o E.g., start/end times for Hubble Telescope observations",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Varieties of Constraints",
+      "content": "Varieties of Constraints o Varieties of Constraints o Unary constraints involve a single variable (equivalent to reducing domains), e.g.: o Binary constraints involve pairs of variables, e.g.: o Higher-order constraints involve 3 or more variables: e.g., alldiff constraint, scheduling constraints o Preferences (soft constraints): o E.g., red is better than green o Often representable by a cost for each variable assignment o Gives constrained optimization problems",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Real-World CSPs",
+      "content": "Real-World CSPs o Assignment problems: e.g., who teaches what class o Timetabling problems: e.g., which class is offered when and where? o Hardware configuration o Transportation scheduling o Factory scheduling o Circuit layout o Fault diagnosis o … lots more! o (demos at end of class)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Solving CSPs",
+      "content": "Solving CSPs",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Standard Search Formulation",
+      "content": "Standard Search Formulation o Standard search formulation of CSPs o States defined by the values assigned so far (partial assignments) o Initial state: the empty assignment, {} o Successor function: assign a value to an unassigned variable o Goal test: the current assignment is complete and satisfies all constraints o We’ll start with the straightforward, naïve approach, then improve it",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Search Methods",
+      "content": "Search Methods o What would BFS do? {} {WA=g} {WA=r} {NT=g} … …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Search Methods",
+      "content": "Search Methods o What would BFS do? o What would DFS do? o let’s see!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Demo",
+      "content": "Demo https://www.cs.cmu.edu/~15281/demos/csp_backtracking/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Backtracking Search",
+      "content": "Backtracking Search",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Backtracking Search",
+      "content": "Backtracking Search o Idea 1: Consider only one variable in every search node o Variable assignments are commutative, so fix ordering -> better branching factor! o I.e., [WA = red then NT = green] same as [NT = green then WA = red] o Only need to consider assignments to a single variable at each level of the search tree o Idea 2: Check constraints as you go o I.e. ignore values that are not consistent with already assigned variables o “Incremental goal test” o Checking each constraint might require some computation o Depth-first search with these two improvements is called backtracking search",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Backtracking Example",
+      "content": "Backtracking Example",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Demo",
+      "content": "Demo https://www.cs.cmu.edu/~./15281/demos/csp_backtracking/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Backtracking Search",
+      "content": "Backtracking Search Backtracking = DFS + value-consistency + fail-on-violation What are the remaining agorithm design choices?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Improving Backtracking",
+      "content": "Improving Backtracking o General-purpose ideas give huge gains in speed o Ordering: o Which variable should be assigned next? o In what order should its values be tried? o Filtering: Can we detect inevitable failure early?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Filtering",
+      "content": "Filtering Keep track of domains for unassigned variables and cross off bad options",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Filtering: Forward Checking",
+      "content": "Filtering: Forward Checking o Filtering: Will need to keep track of domains for unassigned variables, to filter out bad options o Forward checking: Cross off values that violate a constraint when added to the existing assignment WA SA NT Q NSW V",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Demo",
+      "content": "Demo https://www.cs.cmu.edu/~./15281/demos/csp_backtracking/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Filtering: Constraint Propagation",
+      "content": "Filtering: Constraint Propagation o Forward checking propagates information from assigned to unassigned variables, but doesn't provide early detection for all failures: o NT and SA cannot both be blue! o Why didn’t we detect this yet? o Need constraint propagation: reason about consistency of each constraint WA SA NT Q NSW V",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Consistency of A Single Arc",
+      "content": "Consistency of A Single Arc o An arc X → Y is consistent iff for every x in the tail there is some y in the head which could be assigned without violating a constraint Forward checking: Enforcing consistency of arcs pointing to each new assignment Delete from the tail! WA SA NT Q NSW V",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Arc Consistency of an Entire CSP",
+      "content": "Arc Consistency of an Entire CSP o Constraint propagation: arc consistency to make sure all arcs are consistent: o Important: If X loses a value, neighbors of X need to be rechecked! o Arc consistency detects failure earlier than forward checking o Can be run as a preprocessor or after each assignment Remember: Delete from the tail! WA SA NT Q NSW V",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Enforcing Arc Consistency in a CSP",
+      "content": "Enforcing Arc Consistency in a CSP o Runtime: O(n2d3), can be reduced to O(n2d2)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Demo",
+      "content": "Demo https://www.cs.cmu.edu/~./15281/demos/csp_backtracking/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Limitations of Arc Consistency",
+      "content": "Limitations of Arc Consistency After enforcing arc consistency: Can have one solution left Can have multiple solutions left Can have no solutions left (and not know it) Arc consistency has to run inside a backtracking search! What went wrong here?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "K-Consistency",
+      "content": "K-Consistency o Increasing degrees of consistency o 1-Consistency (Node Consistency): Each single node’s domain has a value which meets that node’s unary constraints o 2-Consistency (Arc Consistency): For each pair of nodes, any consistent assignment to one can be extended to the other o K-Consistency: For each k nodes, any consistent assignment to k-1 can be extended to the kth node. o Higher k is more expensive to compute",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Strong K-Consistency",
+      "content": "Strong K-Consistency o Strong k-consistency: also k-1, k-2, … 1 consistent o Claim: strong n-consistency means we can solve without backtracking! o Why? o Choose any assignment to any variable o Choose a new variable o By 2-consistency, there is a choice consistent with the first o Choose a new variable o By 3-consistency, there is a choice consistent with the first 2 o … o Lots of middle ground between arc consistency and n-consistency! (e.g. k=3, called path consistency) o Modern solvers use arc consistency + smart search",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Ordering",
+      "content": "Ordering",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Ordering: Minimum Remaining Values",
+      "content": "Ordering: Minimum Remaining Values o Variable Ordering: Minimum remaining values (MRV): o Choose the variable with the fewest legal values left in its domain o Why min rather than max? o “Fail-fast” ordering o Also called “most constrained variable”",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Ordering: Least Constraining Value",
+      "content": "Ordering: Least Constraining Value o Value Ordering: Least Constraining Value o Given a choice of variable, choose the least constraining value o I.e., the one that rules out the fewest values in the remaining variables o Note that it may take some computation to determine this! (E.g., rerunning filtering) o Why least rather than most? o Can combine different variable and value orderings",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Demo",
+      "content": "Demo https://www.cs.cmu.edu/~./15281/demos/csp_backtracking/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "Value Symmetry",
+      "content": "Value Symmetry o In many CSP problems there are symmetries o For instance, in map-coloring with 3 colors, there are 3! = 6 symmetric solutions. These can be obtained by simply permuting the colors. o For instance WA = red, NT = green, SA = blue, Q = red, ... WA = red, NT = blue, SA = green, Q = red, ... WA = blue, NT = green, SA = red, Q = blue, ... … o We can reduce the search space by using symmetry breaking constraints o WA < NT, WA < SA, NT < SA, ... (thus WA < NT < SA < ...)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "Constraint Optimisation?",
+      "content": "Constraint Optimisation? o Most real-world problems involve an optimisation problem: o Variables (with a finite domain) o Constraints o Objective function COP = Constrained Optimisation Problem",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Modeling",
+      "content": "Modeling Knapsack: - gr, bl, og, ye, gy :: {0,1} - 12*gr + 2*bl + 1*og + 4*ye + 1*gy <= 15 - maximize(4*gr + 2*bl + 1*og + 10*ye + 2*gy) Model = - Variables, with a domain - Constraints over variables - Optionally: an objective Model.solve()",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "Optimisation: branch-and-bound",
+      "content": "Optimisation: branch-and-bound Key idea: maintain the 'best' objective value so far constrain solutions to be better than the 'best' 0. set bound = -infinity (maximization problem) Add a constraint: objective_function() > bound 1. Do backtracking search, ensuring all constraints are satisfied (incl objective function constraint) 2. If a solution is found: compute its objective function value v update bound to 'v' in the objective constraint 3. continue (with updated objective function constraint)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "https://cpmpy.readthedocs.io/",
+      "content": "https://cpmpy.readthedocs.io/ (seen extensively in the course “Constraint Solving”)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Modeling",
+      "content": "Modeling Knapsack: - gr, bl, og, ye, gy :: {0,1} - 12*gr + 2*bl + 1*og + 4*ye + 1*gy <= 15 - maximize(4*gr + 2*bl + 1*og + 10*ye + 2*gy) Model = - Variables, with a domain - Constraints over variables - Optionally: an objective Model.solve()",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Integrated constraint solving",
+      "content": "Integrated constraint solving o Many integrations of constraint solving with machine learning, an example: https://visualsudoku.cs.kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "CPMpy demo",
+      "content": "CPMpy demo o A modern C(S)P library https://cpmpy.readthedocs.io/ o Graph coloring Australia example: o https://github.com/CPMpy/cpmpy/blob/master/examples/map_coloring_oz.ipynb o N-queens up to N=1000 example: o https://github.com/CPMpy/cpmpy/blob/master/examples/nqueens_1000.ipynb o Industrial examples with nice visualisations (on toy data): o https://github.com/CPMpy/cpmpy/tree/master/examples/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Summary",
+      "content": "Summary CSPs are a special kind of search problem: States are partial assignments Goal test defined by constraints Basic solution: backtracking search Speed-ups: Filtering Ordering (Structure) (Symmetry breaking) Numerous applications",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

@@ -1,0 +1,290 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 3: Speech Science (23 Oct)",
+    "section_label": "Slide",
+    "completed": 31,
+    "total": 31,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Speech Science 3 2026-2027",
+      "summary": "This lecture introduces the course \"Speech Science 3\" for the 2026–2027 academic year. The session is led by Professor Astrid van Wieringen from the Department of Neurosciences at KU Leuven, where she holds a position in Experimental Otorhinolaryngology (ORL).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "Spectral and temporal properties of plosives",
+      "summary": "Plosives (/p, t, k, b, d, g/) are acoustically defined by a stop gap (50–100 ms silence), a brief release burst (5–40 ms transient), and formant transitions (10–40 ms) reflecting vocal tract changes. While the burst spectrum signals place of articulation, transitions are often more critical, particularly for voiced stops where low-frequency energy (voice bar) precedes the gap. In English, voiceless stop bursts are longer due to aspiration delaying vocal fold closure, and although these rapid events are difficult to measure, they remain perceptually vital for distinguishing consonants from surrounding…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 3,
+      "title": "Time signals of Dutch",
+      "summary": "Slide 3 presents time signal data for Dutch plosives, listing specific numerical values associated with the syllables /aba/, /apa/, /ada/, /ata/, and /aka/. The data includes a time axis ranging from 0 to approximately 0.7 seconds alongside corresponding amplitude or measurement points for each phonetic example.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 4,
+      "title": "Time signals of Dutch plosives: onset of the plosive (in medial position)",
+      "summary": "Slide 4 presents time signal data for the onset of Dutch plosives (/b/, /d/, /t/, /p/, /k/) occurring in medial position within specific syllable contexts like /aba/ and /ada/. The source lists precise temporal measurements in seconds, including positive and negative values relative to a zero point, for each consonant's onset.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 5,
+      "title": "Spectrograms + time signals of 4 Dutch plosives",
+      "summary": "Slide 5 presents spectrograms and time signals for four Dutch plosives, though the professor notes that the visual display is complex and \"very busy\". While four distinct examples are shown, the instructor directs attention specifically to a single instance for detailed analysis. This focus allows students to examine the acoustic characteristics of one plosive without being overwhelmed by the density of the full dataset.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 6,
+      "title": "VOT refers to the time (in ms) between the release of the burst to the beginning of vocal fold vibration for the following vibration. It is an indication",
+      "summary": "Voice Onset Time (VOT) measures the milliseconds between burst release and vocal fold vibration, indicating laryngeal-articulatory coordination. It varies by language: negative VOT implies pre-voicing (10–20 ms), zero indicates simultaneous onset, and short lags characterize English voiced stops, contrasting with Dutch patterns. As a fundamental parameter defining signal production and nativeness, mastering this precise timing requires years of development in children.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 7,
+      "title": "VOT varies with place of articulation. In general it increases as place of articulation moves backward in the oral cavity:",
+      "summary": "Voice Onset Time (VOT) generally increases as the place of articulation moves backward in the oral cavity, ranging from shortest VOTs for bilabials to longest for velars. While VOT signals voicing distinctions primarily in initial positions, final position contrasts rely more on the duration of the preceding vowel. Additionally, VOT values vary cross-linguistically and developmentally; for instance, Spanish /p/ resembles English /b/, and young children often fail to produce clearly separated VOT values for voiced versus voiceless stops.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 8,
+      "title": "Experimenta",
+      "summary": "Experiment 8 demonstrates that Voice Onset Time (VOT) patterns vary across languages, specifically showing that the pattern for voiced plosives in English matches that of voiceless plosives in Dutch. While vowel spaces generally form a quadrilateral or triangle depending on the language's inventory, acoustic analysis of male speakers producing Dutch words like *voet* and *vaat* reveals consistent F1 and F2 measurements across individuals.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 9,
+      "title": "Time (s)",
+      "summary": "Formant transitions during the onset of plosives like /b/ and /d/ provide critical cues for manner and place of articulation. F1 indicates manner by rising from near zero (tight vocal tract constriction) to the vowel frequency, while F2 reveals place through its specific starting \"locus\" frequency before transitioning toward the vowel. For bilabial sounds, the burst energy concentrates between 500–1500 Hz, with F2 rising from approximately 800 Hz and F3 from 2200 Hz; the direction of these transitions depends on the adjoining vowel, allowing listeners to distinguish sounds based on…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 10,
+      "title": "10",
+      "summary": "Formant transitions, lasting 20–50 ms between stops and vowels, are critical cues for identifying stop consonants because release bursts are often absent in daily speech. F1 indicates manner of articulation through its rise from zero to the vowel's frequency, while F2 and F3 reveal place of articulation via specific starting points (loci), such as 600–800 Hz for /b/, 1800 Hz for /d/, and dual loci for /g/. These transitions are characterized by their rate of frequency change and slope, which may be linear or exponential.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 11,
+      "title": "11",
+      "summary": "Slide 11 details acoustic cues for alveolar and velar stops, noting that alveolar bursts act as high-pass filters emphasizing 2500–4000 Hz with an F2 locus near 1800 Hz, while velar bursts enhance midrange frequencies (1500–4000 Hz) and exhibit two F2 loci (approx. 1300 Hz and 2300 Hz) that diverge based on the following vowel's cavity size. Voicing is distinguished by fundamental frequency shifts, voice onset time, and F1 cutback. Although speaker gender affects absolute formant values by roughly a factor of 1.2 due to vocal tract length, the relative ordering…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 12,
+      "title": "12",
+      "summary": "Stops can be identified by their release burst spectrum, which varies by place of articulation: bilabial bursts show a flat or falling spectrum, alveolar bursts exhibit a rising spectrum, and velar bursts display a compact mid-frequency spectrum. Classification relies on dynamic cues such as spectral shape changes at onset and voice onset time, with studies showing templates can correctly identify 85% of stops. Additionally, the sequence of acoustic cues differs by position: syllable-initial stops follow silence-burst-aspiration-transition, while medial and final stops involve transitions leading into or following the burst and…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 13,
+      "title": "13",
+      "summary": "13",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 14,
+      "title": "14",
+      "summary": "Fricatives are produced by turbulent airflow through narrow constrictions, categorized as voiced (/v, ð, z, ʒ/) or voiceless (/f, θ, s, ʃ, h, χ/). Acoustically, non-sibilants like /f/ and /θ/ exhibit weak, broad-spectrum noise (4500–7000 Hz) due to minimal front cavities, whereas sibilants act as quarter-wave resonators with intense energy concentrated at lower frequencies: approximately 3400 Hz for alveolars (/s/) and 2000 Hz for palatals (/ʃ/). While precise phoneme identification is challenging, recognizing the general category of fricatives based on these noise patterns and transitions is a primary learning objective.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 15,
+      "title": "15",
+      "summary": "Slide 15 displays the spectra for fricatives /s/, /ʃ/, and /f/, plotting frequency in hertz against amplitude. The professor emphasizes that while the x-axis extends to 22,000 Hz, the entire range is unnecessary because speech lacks content in these higher frequencies; identifying the relevant frequency range is a critical exam concept. Analysis should focus on spectral peaks representing formants and harmonics rather than precise fundamental frequency values, as exact measurements are often irrelevant for interpretation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 16,
+      "title": "16",
+      "summary": "Slide 16 presents time signals for Dutch recordings of /asa/, /aza/, and /aha/, highlighting that the /h/ sound is particularly difficult to segment. The professor emphasizes that accurate analysis requires identifying sufficient periods within the signal, a skill developed through repeated practice. By zooming in on relevant sections, one can verify the fundamental frequency (approximately 130–132 Hz) observed in the spectrum by measuring individual periods directly in the time domain.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 17,
+      "title": "17",
+      "summary": "Slide 17 introduces the topic of experimental fricatives in Old, Middle, and Early Modern English (ORL), specifically distinguishing between their voiced and voiceless variants.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 18,
+      "title": "18",
+      "summary": "Slide 18 presents spectrograms illustrating typical Dutch frication across three specific phonetic contexts: /acha/, /aga/, and /aha/. The visual data displays time intervals ranging from approximately 0.66 to 0.76 seconds for each example, allowing for the comparison of acoustic patterns associated with these different fricative environments in Dutch.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 19,
+      "title": "19",
+      "summary": "Phonemes /ʧ/ and /ʤ/ are linguapalatal affricates produced via a two-phase pattern combining stop and fricative manners. Acoustically, they feature a stop gap (silence or low energy) caused by complete articulatory constriction, followed by frication characterized by a rapid noise rise time and shorter duration than pure fricatives. While the professor notes that affricates are often treated as a single unit rather than a distinct category, the presence of this complete closure distinguishes them, with voicing status (voiced or unvoiced) determined by vocal fold vibration during the release phase.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 20,
+      "title": "20",
+      "summary": "In conclusion, frication provides sufficient acoustic cues to identify both place of articulation via noise spectrum and manner of articulation via noise duration. Affricates specifically demonstrate this by combining a stop gap before the plosive release with subsequent frication, as illustrated by Dutch examples like /adza/ and /atza/.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 21,
+      "title": "21",
+      "summary": "Nasal consonants /m, n, ŋ/ are voiced sounds produced with a lowered velum that couples the nasal cavity to the vocal tract, creating anti-resonances (antiformants) and an extra low-frequency formant known as nasal murmur. While antiformants dampen specific frequencies due to the sound-absorbent nature of the nasal lining, the resulting spectrum is dominated by intense energy below 500 Hz. Although the nasal murmur itself offers limited distinctive cues for place of articulation, the nasalization transitions in adjacent vowels serve as critical acoustic indicators for distinguishing bilabial, alveolar, and velar nasals.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 22,
+      "title": "22",
+      "summary": "Nasalization occurs when the velum remains open, allowing energy loss through the nose which broadens and lowers F1 amplitude while introducing zeroes and poles that dampen higher formants. Unlike English, many languages like French utilize nasal-non-nasal phonemic distinctions where nasalized vowels exhibit broader F1, a humped F2, and significant amplitude reductions (5–8 dB for F1/F2, ~11 dB for F3, and ~20 dB for F4-F5) compared to their oral counterparts. These spectral changes depend on the specific oral tract shape and the frequencies of the nasal coupling zeroes and poles.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 23,
+      "title": "23",
+      "summary": "Slide 23 presents spectrographic examples of Dutch nasal sounds using the syllables /ama/, /ana/, and /anga/. Each example displays a time duration ranging from approximately 0.749 to 0.764 seconds with a frequency range extending up to 6000 Hz, illustrating the acoustic properties of these nasals in isolation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 24,
+      "title": "24",
+      "summary": "Glides, also known as approximants or semivowels (/j/ and /w/), involve a gradual articulatory movement where the vocal tract narrows without closing. Acoustically, they exhibit slow transitions (75–150 ms) lacking a steady-state portion, with formant frequencies reflecting vocal tract lengthening; specifically, /w/ shows low F2 (~800 Hz) and F3 (~2200 Hz), while /j/ displays high F2 (~2200 Hz) and F3 (~3000 Hz). These sounds function as vowel-vowel sequences, such as [bi] versus [wi], distinguishing them from discrete consonants through their continuous spectral properties.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 25,
+      "title": "25",
+      "summary": "Slide 25 presents spectrograms illustrating the acoustic properties of two glides: /w/ extracted from the word /awa/ and /j/ extracted from /aja/. Both visualizations display frequency ranges up to 5000 Hz over durations of approximately 0.75 seconds, allowing for a direct comparison of their spectral patterns.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 26,
+      "title": "26",
+      "summary": "Phonemes /l/ and /r/ are liquids distinguished by lateral versus rhotic manner and alveolar versus palatal place of articulation. Acoustically, both exhibit fast formant transitions similar to glides, but /l/ concentrates energy in low frequencies with a divided vocal tract (F3 ≈ 2700 Hz), whereas /r/ features a significantly lower F3 (≈1650 Hz) and longer transition durations. While specific formant values like F1 for /r/ vary widely rather than being absolute, temporal cues differentiate them: /l/ shows a long F1 steady-state with short transitions, contrasting with /r/'s short steady-state and…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 27,
+      "title": "27",
+      "summary": "Slide 27 presents examples of the sounds /l/ and /r/, highlighting that there is no clear distinction between vowels and consonants in these cases. A key acoustic feature noted is that the third formant (F3) for the sound /r/ is lower.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 28,
+      "title": "28",
+      "summary": "Slide 28 outlines primary acoustic cues for consonants based on Lass (1996), detailing how formant transitions and spectral characteristics vary by place of articulation. Stops exhibit distinct burst spectra, such as rising patterns for alveolars versus flat or falling ones for bilabials, while nasals are identified by a nasal murmur alongside specific F1 and F2 shifts. Fricatives display intense high-frequency noise above 4 kHz with varying formant increases depending on the vowel context, and glides like [w] show simultaneous increases in both F1 and F2.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 29,
+      "title": "29",
+      "summary": "Slide 29 outlines primary acoustic cues for consonants based on Lass (1996), noting that stops like [g] and [k] show increased F1 with variable F2, where the F2-F3 transition is critical. Nasals exhibit similar formant shifts accompanied by a nasal murmur, while fricatives [ʒ] and [ʃ] feature intense high-frequency noise above 3 kHz. In contrast, glottal sounds [h] and palatal stops show little formant change, with [h] specifically characterized by a weak, flat burst spectrum, whereas the glide [j] displays increases in both F1 and F2.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 30,
+      "title": "30",
+      "summary": "Semivowel glides [w] and [j] resemble diphthongs but feature greater constriction than their corresponding vowels, with transitions lasting approximately 75 ms and the constriction itself persisting for about 100 Ms. Acoustically, [w] exhibits more lip constriction than [u], lowering F1 and F2 intensity while significantly reducing F3 and higher formants; unlike [u], which requires a narrow back tongue position, [w] can be formed with any tongue placement. Consequently, the vocal tract moves faster for [w] transitions compared to vowels, creating a continuum where extending the duration of [w] transforms it…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 31,
+      "title": "31",
+      "summary": "Voiced stops ([b], [d]) and glides ([w], [j]) share similar places of articulation and formant transition directions, but differ fundamentally in manner: stops involve complete constriction creating a voice bar and release burst, whereas glides maintain strong low-frequency energy without a burst. Stops exhibit steeper intensity changes and shorter transitions (approx. 40 ms) compared to glides (approx. 75 ms), though speaking rate can perceptually shift a transition between stop and glide categories.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    }
+  ]
+}

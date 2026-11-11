@@ -1,0 +1,514 @@
+{
+  "metadata": {
+    "source_file": "Lecture_04_Untitled_Slides.pdf",
+    "created_at": "2026-10-19T04:17:38.292333+00:00",
+    "slide_count": 56,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "faculty of arts",
+      "content": "faculty of arts Natural Language Processing Lecture 4: Neural Language Modeling Tim Van de Cruys Thursday, 15 October 2026",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Reminder",
+      "content": "Reminder • Neuron = logistic regression 1 x1 x2 x3 Σ b w1 w2 w3 bias weights inputs activation function • We can feed an input vector to a bunch of logistic regression functions and get an output vector • which can be fed to another layer of logistic regression functions 2/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Feed-forward",
+      "content": "Feed-forward Architecture Multi-layer perceptron with 2 hidden layers NNMLP2(x) = y (1) h1 = g(xW1 + b1) (2) h2 = g(h1W2 + b2) (3) y = h2W3 (4) W1, W2, W3, b1, b2 = parameters of the network (θ) Use of multiple hidden layers: deep learning 3/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Word embeddings",
+      "content": "Word embeddings • Each word i is represented by a small, dense vector vi ∈Rd • d is typically several thousand in current LLMs • Matrix of size V (vocabulary size) × d (embedding size) • words are ‘embedded’ in a real-valued, low-dimensional space • Similar words have similar embeddings 4/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Feed-forward network",
+      "content": "Feed-forward network Language modeling • Predict the next word in a sequence, based on the previous word • One non-linear hidden layer, one softmax layer for classification • Choose parameters that optimize probability of correct word 5/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Model • x1: input layer (current word) • a1: hidden layer of current timestep • a0: hidden layer of previous timestep • U, W and V: weights matrices • f(·): element-wise activation function (e.g. tanh) • g(·): softmax function to ensure probability distribution a1 = f(Ux1 + Wa0) (5) y1 = g(Va1) (6) 6/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Concrete RNN architectures",
+      "content": "Concrete RNN architectures Simple RNN 7/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be source images: colah.github.io",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Concrete RNN architectures",
+      "content": "Concrete RNN architectures LSTM • Long short term memory networks • In practice, simple RNNs only able to remember narrow context (vanishing gradient) • LSTM: complex architecture able to capture long-term dependencies 8/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Concrete RNN architectures",
+      "content": "Concrete RNN architectures LSTM 9/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Transformer",
+      "content": "Transformer • Basic building block of LLMs • Like a fancy feedforward network, based on attention mechanism • Transformer computes contextualized embeddings for words, based on surrounding words • First, we’ll explore a transformer model for left to right language modeling The astronomer watched the star The audience watched the star 10/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Transformer",
+      "content": "Transformer • Basic building block of LLMs • Like a fancy feedforward network, based on attention mechanism • Transformer computes contextualized embeddings for words, based on surrounding words • First, we’ll explore a transformer model for left to right language modeling The astronomer watched the star through the telescope. The audience watched the star 10/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Transformer",
+      "content": "Transformer • Basic building block of LLMs • Like a fancy feedforward network, based on attention mechanism • Transformer computes contextualized embeddings for words, based on surrounding words • First, we’ll explore a transformer model for left to right language modeling The astronomer watched the star through the telescope. The audience watched the star in awe. 10/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Transformer",
+      "content": "Transformer Jurafsky and Martin (2026) 11/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Attention",
+      "content": "Attention • Attention in causal language modeling (left to right) • When processing xi, we attend to all inputs up to and including xi Jurafsky and Martin (2026) 12/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Attention: an intuitive simplification",
+      "content": "Attention: an intuitive simplification the the star astronomer watched the the star astronomer watched score(xi, xj) = xi · xj αij = softmax(score(xi, xj)) ∀j ≤i ai = X j≤i αijxj 13/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "An attention head",
+      "content": "An attention head • Instead of using original vectors (xi) directly, we create three derivative vectors for each xi • query: for current element, being compared to previous inputs (qi) • key: for preceding input, being compared to current element to compute similarity (ki) • value: value of preceding element that gets weighted and summed based on similarity (vi) • Three matrices WQ, WK, WV to project original vector xi into its query, key, value vector qi = xiWQ; ki = xiWK; vi = xiWV • We’ll use the dot product between qi and kj, and we’ll sum over vj 14/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "An attention head",
+      "content": "An attention head the the star astronomer watched the the star astronomer watched q k v k v k v k v k v 15/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Attention computation",
+      "content": "Attention computation qi = xiWQ; kj = xjWK; vj = xjWV score(xi, xj) = qi · kj √dk αij = softmax(score(xi, xj)) ∀j ≤i ai = X j≤i αijvj 16/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Visual representation",
+      "content": "Visual representation Jurafsky and Martin (2026) 17/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Multi-head attention",
+      "content": "Multi-head attention qc i = xiWQc; kc j = xjWKc; vc j = xjWVc; ∀c, 1 ≤c ≤h scorec(xi, xj) = qc i · kc j √dk αc ij = softmax(scorec(xi, xj)) ∀j ≤i headc i = X j≤i αc ijvc j ai = (head1 i ⊕head2 i · · · ⊕headh i )WO MultiHeadAttention(xi, [x1, · · · , xN]) = ai • Each head can focus on a specific purpose (linguistic relationships, contextual patterns) 18/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Multi-head attention: visual representation",
+      "content": "Multi-head attention: visual representation Jurafsky and Martin (2026) 19/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "The residual stream",
+      "content": "The residual stream Jurafsky and Martin (2026) 20/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Layer Norm",
+      "content": "Layer Norm • Normalization step applied to a single vector • Variation of z-score in statistics: vector with mean 0 and standard deviation of 1 µ = 1 d d X i=1 xi σ = v u u t1 d d X i=1 (xi −µ)2 ˆx = x −µ σ LayerNorm(x) = γ \u0012x −µ σ \u0013 + β 21/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Feedforward network",
+      "content": "Feedforward network • Transformer block includes standard feedforward network (one hidden layer) in order to model non-linearities FFN(xi) = ReLU(xiW1 + b1)W2 + b2 22/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Putting it all together",
+      "content": "Putting it all together ti 1 = LayerNorm(xi) ti 2 = MultiHeadAttention(ti 1, [x1 1, · · · , x1 N]) ti 3 = ti 2 + xi ti 4 = LayerNorm(ti 3) ti 5 = FFN(ti 4) hi = ti 5 + ti 3 23/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Putting it all together",
+      "content": "Putting it all together • Transformer blocks are stacked • All vectors are same dimensionality d • Note: computation can be parallelized for efficient computation 24/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Putting it all together",
+      "content": "Putting it all together Current variants • The architecture above is the original recipe; current LLMs (Llama, Qwen, Mistral, …) differ in details • RMSNorm instead of LayerNorm: only rescaling, no re-centering • Gated feed-forward layers (SwiGLU) instead of ReLU • Rotary position embeddings (RoPE): relative position encoded in the attention computation, instead of absolute position embeddings • Grouped-query attention: several query heads share one key/value head, for faster inference • The building blocks and the training objective are unchanged 25/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Input: token embeddings plus position embeddings",
+      "content": "Input: token embeddings plus position embeddings • Embedding matrix E has shape [|V| × d] • One row for each of the |V| tokens in the vocabulary • Each word is a row vector of d dimensions • Position embeddings can be implemented in different ways, e.g. absolute position • Randomly initialized embeddings, one for each position (up to maximum length) • position embeddings (e.g. the embedding for position 17) are learned along with other parameters during training • Input embedding is sum of token embedding and position embedding 26/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Visual representation",
+      "content": "Visual representation Jurafsky and Martin (2026) 27/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Language modeling head",
+      "content": "Language modeling head Jurafsky and Martin (2026) 28/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "From logits to probabilities",
+      "content": "From logits to probabilities • Logits are the unnormalized scores for each vocabulary token • Softmax turns logits into probabilities u = hL NET y = softmax(u) 29/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Decoding",
+      "content": "Decoding • The output of the model is not just one token, but a probability distribution over tokens • How to pick the next token based on that distribution? • Most likely word: greedy decoding • Choose random words relative to the probability assigned by the model: sampling E.g. random sampling: i ←1; wi ∼p(w); while wi ̸= EOS do i ←i + 1; wi ∼p(wi|w<i); end 30/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Improved decoding: restrict the vocabulary",
+      "content": "Improved decoding: restrict the vocabulary • Top-k sampling • Only select the k most likely words, and normalize the restricted set of values to a proper probability distribution • Top-p sampling (nucleus sampling) • Instead of choosing a fixed k, we restrict to the top p percent of the probability mass • Select smallest set of words such that X w∈V(p) P(w|w<t) ≥p 31/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Improved decoding: reshape the probability distribution",
+      "content": "Improved decoding: reshape the probability distribution • Temperature sampling • Terminology from thermodynamics • high temperature system is flexible and can explore many states • low temperature system will explore subset of lower energy states • Divide logit by temperature parameter τ before passing it through softmax: y = softmax(u/τ) • With lower τ, larger scores are passed to softmax • Large inputs push high probability words higher and low probability words lower: distribution becomes more greedy 32/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "The power of scale",
+      "content": "The power of scale • LLMs: transformer architecture, applied on a large scale • Lots of parameters, lots of data • Just by predicting words, LLMs learn to solve many tasks • Sentiment analysis • Question answering • Summarization • … 33/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Conditional generation",
+      "content": "Conditional generation Jurafsky and Martin (2026) 34/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Examples",
+      "content": "Examples • p(w|The sentiment of the sentence ‘The new Bond movie is fantastic’ is:) • p(w|The capital of France is) 35/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Summarization",
+      "content": "Summarization The only thing crazier than a guy in snowbound Massachusetts boxing up the powdery white stuff and offering it for sale online? People are actually buying it. For $89, self-styled entrepreneur Kyle Waring will ship you 6 pounds of Boston-area snow in an insulated Styrofoam box – enough for 10 to 15 snowballs, he says. But not if you live in New England or surrounding states. ”We will not ship snow to any states in the northeast!” says Waring’s website, ShipSnowYo.com. “We’re in the business of expunging snow!” His website and social media accounts claim to have filled more than 133 orders for snow – more than 30 on Tuesday alone, his busiest day yet. With more than 45 total inches, Boston has set a record this winter for the snowiest month in its history. According to Boston.com, it all started a few weeks ago, when Waring and his wife were shoveling deep snow from their yard in Manchester-by-the-Sea, a coastal suburb north of Boston. He joked about shipping the stuff to friends and family in warmer states, and an idea was born. Summary: Kyle Waring will ship you 6 pounds of Boston-area snow in an insulated Styrofoam box – enough for 10 to 15 snowballs, he says. But not if you live in New England or surrounding states. 36/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Summarization",
+      "content": "Summarization Jurafsky and Martin (2026) 37/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Pretraining with self-supervision",
+      "content": "Pretraining with self-supervision • First step in training LLM: pre-training on enormous amount of text • Typically enormous amounts of text extracted from the web (e.g. CommonCrawl, and curated corpora derived from it such as FineWeb and Dolma): 10–15 trillion tokens for current models • Training is ‘self-supervised’: no hand-labeled gold data, just next word as label 38/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Objective function: cross-entropy loss",
+      "content": "Objective function: cross-entropy loss • Goal: assign high probability to true word w • Incur high loss when model assigns low probability to w • As a loss function, we make use of the negative log probability assigned to the true next word w • Model weights are updated so that the loss is minimized LCE(ˆyt, yt) = − X w∈V yt[w] logˆyt[w] LCE(ˆyt, yt) = −logˆyt[wt+1] 39/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Teacher forcing",
+      "content": "Teacher forcing • At each token position t, the model sees the correct tokens w1:t • Computes the loss (negative log probability) for the next token wt+1 • At the next token position t + 1, we ignore what the model predicted for wt+1 • Instead, we take the correct word wt+1, add it to the context, and move on 40/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Visual representation",
+      "content": "Visual representation Jurafsky and Martin (2026) 41/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "Finetuning",
+      "content": "Finetuning Jurafsky and Martin (2026) 42/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "Post-training",
+      "content": "Post-training • A pretrained model predicts text; it does not follow instructions or converse. Turning it into an assistant takes further training steps • Instruction tuning: finetuning on instruction–response pairs (the loss is computed on the response tokens only) • Preference learning: human annotators compare pairs of responses; the preferences are used to train a reward model • Alignment: the model is optimized towards preferred responses, with reinforcement learning (RLHF, PPO) or directly (DPO) • Finetuning large models is costly; parameter-efficient methods (e.g. LoRA) update only a small number of extra parameters 43/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "The downside of LLMs",
+      "content": "The downside of LLMs • Hallucination • Copyright • Privacy • Bias/toxicity • Misinformation • Ecological impact 44/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "Three architectures for LLMs",
+      "content": "Three architectures for LLMs • Decoder • GPT, Llama, Qwen, … (nearly all current LLMs) • Word prediction (and many tasks that can be framed as word prediction) • Encoder • BERT: masked language modeling • Predict words based on left and right context • Usually fine-tuned with supervised data • Encoder-Decoder • T5 • Map from one sequence to another • machine translation, speech recognition 45/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Three architectures for LLMs",
+      "content": "Three architectures for LLMs • Decoder • GPT, Llama, Qwen, … (nearly all current LLMs) • Word prediction (and many tasks that can be framed as word prediction) • Encoder • BERT: masked language modeling • Predict words based on left and right context • Usually fine-tuned with supervised data • Encoder-Decoder • T5 • Map from one sequence to another • machine translation, speech recognition 45/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Bi-directional attention",
+      "content": "Bi-directional attention Causal self-attention layer Bi-directional self-attention layer Jurafsky and Martin (2026) 46/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Masked language modeling",
+      "content": "Masked language modeling Jurafsky and Martin (2026) 47/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Next sentence prediction",
+      "content": "Next sentence prediction Jurafsky and Martin (2026) 48/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Contextualized embeddings",
+      "content": "Contextualized embeddings • BERT-like encoder models are great at capturing contextualized meaning Coenen et al. (2019) 49/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "Fine-tuning for classification",
+      "content": "Fine-tuning for classification • We take our pre-trained encoder model (trained on a large amount of text using masked language modeling) • We fine-tune a classifier on a curated set of hand-labeled training data, using an appropriate head on top of the pretrained model • Pre-trained parameters can be frozen or (minimally) adjusted y = softmax(hL CLSWC) 50/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Sequence classification",
+      "content": "Sequence classification Jurafsky and Martin (2026) 51/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Sequence labeling",
+      "content": "Sequence labeling Jurafsky and Martin (2026) 52/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "Different classification configurations",
+      "content": "Different classification configurations Devlin et al. (2019) 53/53 — Neural Language Modeling — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

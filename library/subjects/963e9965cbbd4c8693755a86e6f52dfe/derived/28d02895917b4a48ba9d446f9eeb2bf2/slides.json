@@ -1,0 +1,325 @@
+{
+  "metadata": {
+    "source_file": "Lecture_06_Game_Trees_26_Oct_Slides.pdf",
+    "created_at": "2026-11-05T19:39:10.042261+00:00",
+    "slide_count": 35,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Fundamentals of Artificial Intelligence",
+      "content": "Fundamentals of Artificial Intelligence Prof. Tias Guns Lecture 06, 2026-27 Game Trees Based on the slides of CS188 @ Berkeley",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Outline",
+      "content": "Outline History / Overview Minimax for Zero-Sum Games α-β Pruning Finite lookahead and evaluation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "A brief history",
+      "content": "A brief history  Checkers:  1950: First computer player.  1959: Samuel’s self-taught program.  1994: First computer world champion: Chinook defeats Tinsley  2007: Checkers solved! Endgame database of 39 trillion states  Chess:  1945-1960: Zuse, Wiener, Shannon, Turing, Newell & Simon, McCarthy.  1997: Deep Blue defeats human champion Gary Kasparov  2021: Stockfish rating 3551 (vs 2870 for Magnus Carlsen).  Go:  1968: Zobrist’s program plays legal Go, barely (b>300!)  1968-2005: various ad hoc approaches tried, novice level  2005-2014: Monte Carlo tree search -> strong amateur  2016-2017: AlphaGo defeats human world champions  Pacman",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Game = task environment with > 1 agent",
+      "content": "Game = task environment with > 1 agent Axes: Deterministic or stochastic? Perfect information (fully observable)? One, two, or more players? Turn-taking or simultaneous? Zero sum? Want algorithms for calculating a contingent plan (a.k.a. strategy or policy) which recommends a move for every possible eventuality Types of Games",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "“Standard” Games",
+      "content": "“Standard” Games Standard games are deterministic, observable, two-player, turn-taking, zero-sum Game formulation: Initial state: s0 Players: Player(s) returns player ID whose move it is Actions: Actions(s) for player on move Transition model: Result(s,a) Terminal test: Terminal-Test(s) Terminal values: Utility(s,p) for player p Or just Utility(s) for player making the decision at root",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Zero-Sum Games",
+      "content": "Zero-Sum Games Zero-Sum Games Agents have opposite utilities Pure competition: One maximizes, the other minimizes General Games Agents have independent utilities Cooperation, indifference, competition, shifting alliances, and more are all possible",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Adversarial Search",
+      "content": "Adversarial Search",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Single-Agent Trees",
+      "content": "Single-Agent Trees 8 2 0 2 6 4 6 … …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Value of a State",
+      "content": "Value of a State 8 2 0 2 6 4 6 … … Value of a state: The best achievable outcome (utility) from that state Terminal States: V(s) = known Non-Terminal States: V(s) = max V(s’) s’ successors( ∈ s)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Tic-Tac-Toe Game Tree",
+      "content": "Tic-Tac-Toe Game Tree",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Minimax Values",
+      "content": "Minimax Values +8 -10 -5 -8 -8 -10 -8 MAX nodes: under Agent’s control V(s) = max V(s’) s’∈successors(s) Terminal States: V(s) = known MIN nodes: under Opponent’s control V(s) = min V(s’) s’∈successors(s)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Minimax algorithm",
+      "content": "Minimax algorithm Choose action leading to state with best minimax value Assumes all future moves will be optimal => rational against a rational player 12",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Implementation",
+      "content": "Implementation function minimax_value(s) returns a value if Terminal-Test(s) then return Utility(s) if Player(s) = MAX then return maxa in Actions(s) minimax_value(Result(s,a)) if Player(s) = MIN then return mina in Actions(s) minimax_value(Result(s,a)) function minimax-decision(s) returns an action return the action a in Actions(s) with the highest minimax_value(Result(s,a))",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Minimax Efficiency",
+      "content": "Minimax Efficiency How efficient is minimax? Just like (exhaustive) DFS Time: O(bm) Space: O(bm) Example: For chess, b ≈ 35, m ≈ 100 Exact solution is completely infeasible Humans can’t do this either, so how do we play chess?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Game Tree Pruning",
+      "content": "Game Tree Pruning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Minimax Example",
+      "content": "Minimax Example 12 8 5 2 3 2 14 4 6 3 2 2 3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Alpha-Beta Example",
+      "content": "Alpha-Beta Example 12 8 5 2 3 2 14 α =3 α =3 α = best option so far from any MAX node on path to root The order of generation matters: more pruning is possible if good moves come first 3 3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Alpha-Beta Quiz",
+      "content": "Alpha-Beta Quiz http://PollEv.com/tias",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Alpha-Beta Quiz 2",
+      "content": "Alpha-Beta Quiz 2 http://PollEv.com/tias",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Alpha-Beta Quiz 2",
+      "content": "1 Alpha-Beta Quiz 2 ? 10 ? ? 10 10 10 0 ? ? 2 2 ? β = α = α = α = α = β =",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Alpha-Beta Pruning",
+      "content": "Alpha-Beta Pruning General case (pruning children of MIN node) We’re computing the MIN-VALUE at some node n We’re looping over n’s children n’s estimate of the childrens’ min is dropping Who cares about n’s value? MAX Let α be the best value that MAX can get so far at any choice point along the current path from the root If n‘s value v is no better than α, MAX will avoid it, so we can prune n’s other children (it’s already bad enough that it won’t be played) Pruning children of MAX node is symmetric Let β be the best value that MIN can get so far at any choice point along the current path from the root MAX MIN MAX MIN a n",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Alpha-Beta Implementation",
+      "content": "Alpha-Beta Implementation def min-value(state , α, β): initialize v = +∞ for each successor of state: v = min(v, value(successor, α, β)) if v ≤ α return v β = min(β, v) return v α: MAX’s best option on path to root β: MIN’s best option on path to root Pruning of other successors, because we break out of the for loop",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Alpha-Beta Implementation",
+      "content": "Alpha-Beta Implementation def min-value(state , α, β): initialize v = +∞ for each successor of state: v = min(v, value(successor, α, β)) if v ≤ α return v β = min(β, v) return v def max-value(state, α, β): initialize v = -∞ for each successor of state: v = max(v, value(successor, α, β)) if v ≥ β return v α = max(α, v) return v α: MAX’s best option on path to root β: MIN’s best option on path to root",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Alpha-Beta Pruning Properties",
+      "content": "Alpha-Beta Pruning Properties Theorem: This pruning has no effect on minimax value computed for the root! Good child ordering improves effectiveness of pruning Iterative deepening helps with this With “perfect ordering”: Time complexity drops to O(bm/2) Doubles solvable depth! This is a simple example of metareasoning (reasoning about reasoning) For chess: only 3550 instead of 35100... 10 10 0 max min",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Resource Limits",
+      "content": "Resource Limits",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Resource Limits",
+      "content": "Resource Limits Problem: In realistic games, cannot search to leaves! Solution 1: Bounded lookahead Search only to a preset depth limit or horizon Use an evaluation function for non-terminal positions Guarantee of optimal play is gone More plies make a BIG difference Example: Suppose we have 100 seconds, can explore 10K nodes / sec So can check 1M nodes per move Chess with alpha-beta, 35(8/2) ≈ 1M; depth 8 is good ? ? ? ? -1 -2 4 9 4 min max -2 4",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Depth Matters",
+      "content": "Depth Matters Evaluation functions are always imperfect Deeper search => better play (usually) Or, deeper search gives same quality of play with a less accurate evaluation function [Demo: depth limited (L6D4, L6D5)]",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Pacman with Depth-2 Lookahead",
+      "content": "Pacman with Depth-2 Lookahead",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Pacman with Depth-10 Lookahead",
+      "content": "Pacman with Depth-10 Lookahead",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Depth Matters",
+      "content": "Depth Matters Evaluation functions are always imperfect Deeper search => better play (usually) Or, deeper search gives same quality of play with a less accurate evaluation function An important example of the tradeoff between complexity of features and complexity of computation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Evaluation Functions",
+      "content": "Evaluation Functions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Evaluation Functions",
+      "content": "Evaluation Functions Evaluation functions score non-terminals in depth-limited search Typically weighted linear sum of features: EVAL(s) = w1 f1(s) + w2 f2(s) + …. + wn fn(s) E.g., w1 = 9, f1(s) = (num white queens – num black queens), etc. Or a more complex nonlinear function (e.g., NN) trained by self-play RL Terminate search only in quiescent positions, i.e., no major changes expected in feature values",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Evaluation for Pacman",
+      "content": "Evaluation for Pacman",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Generalized minimax",
+      "content": "Generalized minimax What if the game is not zero-sum, or has multiple players? Generalization of minimax: Terminals have utility tuples Node values are also utility tuples Each player maximizes its own component Can give rise to cooperation and competition dynamically… 1,1,6 0,0,7 9,9,0 8,8,1 9,9,0 7,7,2 0,0,8 0,0,7 0,0,7 8,8,1 7,7,2 0,0,8 8,8,1 7,7,2 8,8,1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Summary",
+      "content": "Summary Games require decisions when optimality is impossible Bounded-depth search and approximate evaluation functions Games force efficient use of computation Alpha-beta pruning Game playing has produced important research ideas Reinforcement learning (checkers) Iterative deepening (chess) Rational metareasoning (Othello) Monte Carlo tree search (Go) Solution methods for partial-information games in economics (poker) Video games present much greater challenges – lots to do! b = 10500, |S| = 104000",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

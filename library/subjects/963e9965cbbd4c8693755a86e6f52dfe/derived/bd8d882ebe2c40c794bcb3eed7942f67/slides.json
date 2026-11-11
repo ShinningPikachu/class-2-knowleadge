@@ -1,0 +1,631 @@
+{
+  "metadata": {
+    "source_file": "Lecture_02_Untitled_Slides.pdf",
+    "created_at": "2026-09-29T03:25:03.160566+00:00",
+    "slide_count": 69,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Bias in algorithms, in data, in use...",
+      "content": "Bias in algorithms, in data, in use...",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "What would an ‘unbiased’ algorithm be?",
+      "content": "What would an ‘unbiased’ algorithm be?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Maximize Your",
+      "content": "Maximize Your Expected Utility",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Utility?",
+      "content": "Utility? Clear utility function Not so clear utility function",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Slide 5",
+      "content": "",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "What expected utility is right?",
+      "content": "What expected utility is right? In this course, everything will be unambiguous toy-ish often even But the implications of AI in the world are real Think about them, talk about them...",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Guest lecture: Ethics in AI",
+      "content": "Guest lecture: Ethics in AI On Thu 17 December we will have a Guest Lecture by Prof. Nathalie A. Smuha on Ethics of AI! Nathalie A. Smuha is an Assistant Professor of Law at the University of Toronto Faculty of Law, where she examines legal, ethical and philosophical questions around Artificial Intelligence (AI) and other digital technologies. Her research focuses particularly on the impact of AI on human rights, democracy and the rule of law. She is the author of Algorithmic Rule By Law: How Algorithmic Regulation in the Public Sector Erodes the Rule of Law, and the editor of the Cambridge Handbook on the Law, Ethics and Policy of Artificial Intelligence (2025).",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "What would an ‘unbiased’ algorithm be?",
+      "content": "What would an ‘unbiased’ algorithm be? Different societies have different norms! So: AI Alignment is hard Determining what to align to is even harder Goes back to root of what it means to be human… What “expected utility” is right?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Further reading on implications of AI",
+      "content": "Further reading on implications of AI  Website Stuart Russell, The Long Term Future of AI, also on Lethal Autonomous Weapons.  Book Stuart Russell “Human Compatible” (2019) Nick Bostrom “Superintelligence” (2014)  Moshe Vardi on jobs  Slides from Asilomar panel on Long Term AI futures at IJCAI 2009;  Research priorities for robust and beneficial artificial intelligence @ futureoflife.org  AI and Life in 2030, https://ai100.stanford.edu/sites/default/files/ai_100_report_0831fnl.pdf  EU High Level Expert Group https://ec.europa.eu/digital-single-market/en/news/ethics-guidel ines-trustworthy-ai  Preparing for the future of AI; https://obamawhitehouse.archives.gov/sites/default/files/white house_files/microsites/ostp/NSTC/preparing_for_the_future_of_ai.pdf  Beneficial ai — 23 Asilomar AI principles https://futureoflife.org/bai-2017/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "AI",
+      "content": "AI Rational Agents [reasoning & decisions] Robots [physically embodied] Machine Learning [learning decisions; sometimes independent] NLP Computer Vision Human-AI Interaction Not in this course Mach. Learning & Ind. Inf. H02C1A (ML&II is MAI mandatory) ANN & Deep Learning H02C4A Support Vector Machines H02D3A Data Mining H02C6A Reinforcement Learning H0O23A This course (MAI mandatory) reasoning by search Knowledge Representation H02C3A Advanced Prog. Lang. for AI H02A8A Analysis of LS Social Netw. H02T6A Inf. Retrieval & Search Eng. H02C8A Robotics H02A4A Computer Vision H02A5A Natural Language Processing H02B1A Speech Recognition H02A6A Speech Science H02C9A Linguistics and Artificial Intelligence H02B6A Language Engineering Applications Cognitive Science H02B2A Privacy and Big Data H00Y2A Philosophy of Mind and Artificial Intelligence H02D5A AI Ethics & Regulation H0P05A",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Fundamentals of Artificial Intelligence",
+      "content": "Fundamentals of Artificial Intelligence Prof. Tias Guns Lecture 02, 2026-27 Agents Based on the slides of CS188 @ Berkeley",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "RECAP: Designing Rational Agents",
+      "content": "RECAP: Designing Rational Agents o An agent is an entity that perceives and acts. o A rational agent selects actions that maximize its (expected) utility. o Characteristics of the percepts, environment, and action space dictate techniques for selecting rational actions o This course is about: o General AI search techniques for a variety of problem types o Learning to recognize when and how a new problem can be solved with an existing technique Agent ? Sensors Actuators Environment Percepts Ac.ons",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Environment types (1/2)",
+      "content": "Environment types (1/2) The environment type largely determines the agent design Fully or Partially observable  Are the relevant aspects of the environment accessible to the sensors?  Par$ally observable => agent requires memory (internal state) Deterministic vs. stochastic  Is the next state of the environment completely determined by the current state and the selected action?  Stochas$c => ac.ons may fail or environment may respond nondeterminis.cally, agent has to prepare for con$ngencies  If only ac.ons of other agents are nondeterminis.c, the environment is called strategic determinis/c. Static vs. dynamic  Can the environment change while the agent is deliberating? (If the environment does not change but if the agent’s performance score changes as time passes by the environment is denoted as semi-dynamic.)  Sta$c => agent has .me to compute a ra.onal decision Agent ? Sensors Actuators Environment Percepts Ac.ons",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Environment types",
+      "content": "Environment types Pacman Backgammon Taxi MS CoPilot Chat Fully or partially observable Deterministic or stochastic Static or dynamic",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Slide 15",
+      "content": "",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Environment types (2/2)",
+      "content": "Environment types (2/2) The environment type largely determines the agent design Discrete vs. continuous  Is the environment discrete (chess) or continuous (a robot moving in a room)?  Con$nuous $me => con.nuously opera.ng controller Single agent vs. multi-agent  Which entities have to be regarded as agents? There are competitive and cooperative scenarios.  Mul$-agent => agent may need to behave randomly Known environment?  Unknown physics => need for explora$on Known performance measure/evaluation function?  Unknown perf. measure => observe/interact with human principal Agent ? Sensors Actuators Environment Percepts Ac.ons",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Environment types",
+      "content": "Environment types Pacman Backgammon Taxi MS CoPilot Chat Fully or partially observable Deterministic or stochastic Static or dynamic Discrete or continuous Single-agent or multi-agent Known physics? Known perf. measure?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Example agent designs",
+      "content": "Example agent designs Agent ? Sensors Actuators Environment Percepts Ac.ons",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Simple re'ex agents",
+      "content": "Simple re'ex agents",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Pacman agent program in Python",
+      "content": "Pacman agent program in Python class GoWestAgent(Agent): def getAc.on(self, percept): if Direc.ons.WEST in percept.getLegalPacmanAc.ons(): return Direc.ons.WEST else: return Direc.ons.STOP",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Simple re'ex agents",
+      "content": "Simple re'ex agents Does not keep track of past. Only possible if environment is fully observable. Simple design, but the rules need to cover all cases...",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Eat adjacent dot, if any",
+      "content": "Eat adjacent dot, if any",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Eat adjacent dot, if any",
+      "content": "Eat adjacent dot, if any",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Pacman agent contd.",
+      "content": "Pacman agent contd. Can we (in principle) extend this re'ex agent to behave well in all standard Pacman environments? No – Pacman is not quite fully observable (power pellet dura.on) Otherwise, yes – we can (in principle) make a lookup table….. How large would it be? Can every func.on be implemented by some agent program? No – Consider agent for chess on a slow computer, NP-hard problems, hal.ng problem",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Model-based agents",
+      "content": "Model-based agents Keeping track of past? Store internal state, update it every time a percept is received Needs transition model (what my actions do/did) and sensor model (how the world evolves)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Goal-based agents",
+      "content": "Goal-based agents Reasons about reaching a (multi-step) goal, using its models. (most of the agents we will study in this course)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Goal-based Agents",
+      "content": "Goal-based Agents Goal-based agents (also called planning agents) decide based on evalua.ng future ac.on sequences Must have a model of how the world evolves in response to ac.ons Have a de:nite goal (or mul.ple ones) Op.mal: Achieve goal at lowest possible cost",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Summary",
+      "content": "Summary  An agent is something that perceives and acts. It consists of an architecture and an agent program.  A rational agent takes the action that maximizes its expected utility given the percept sequence and its knowledge of the environment.  An agent program maps from a percept to an action. There are a variety of designs Reflex agents respond immediately to percepts. Goal-based agents work towards goals. Not discussed: learning agents improve their behaviour over time.  Some environments are more demanding than others.  Environments that are partially observable, nondeterministic, dynamic, and multi-agent are the most challenging.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Precompute op.mal plan, execute it",
+      "content": "Precompute op.mal plan, execute it",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Fundamentals of Artificial Intelligence",
+      "content": "Fundamentals of Artificial Intelligence Fundamentals of Artificial Intelligence Prof. Tias Guns Lecture 03, 2026-27 Search Based on the slides of CS188 @ Berkeley",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Content",
+      "content": "Content Search Problems Uninformed Search Methods Depth-First Search Breadth-First Search Uniform-Cost Search At the end of this chapter, you are ready to solve project P1’s Q1 and Q2!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Search Problems",
+      "content": "Search Problems",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Search Problems",
+      "content": "Search Problems A search problem consists of: A state space S An ini=al state s0 Ac=ons A(s) in each state Transi=on model Result(s,a) A goal test G(s) s has no dots le# Ac=on cost c(s,a,s’) +1 per step; -10 food; -500 win; +500 die; -200 eat ghost A solu=on is an ac=on sequence that reaches a goal state An op=mal solu=on is a solu=on with minimal cost N E - 9 - 9",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Search Problems Are Models",
+      "content": "Search Problems Are Models",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "What’s in a State Space?",
+      "content": "What’s in a State Space? Problem: Pathing States: (x,y) loca=on Ac=ons: NSEW Transi=on: update x,y value Goal test: is (x,y)=des=na=on Problem: Eat-All-Dots States: {(x,y), dot Booleans} Ac=ons: NSEW Transi=on: update x,y and possibly a dot Boolean Goal test: dots all false The world state includes every last detail of the environment A search state keeps only the details needed for planning (abstrac=on)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "State Space Sizes",
+      "content": "State Space Sizes World state: Agent posi=ons: 120 Food count: 30 Ghost posi=ons: 12 Agent facing: NSEW How many World states? 120x(230)x(122)x4 States for pathing? 120 States for eat-all-dots? 120x(230)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "State Space Graphs and Search Trees",
+      "content": "State Space Graphs and Search Trees",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "State Space Graphs",
+      "content": "State Space Graphs State space graph: A mathema=cal representa=on of a search problem Ver=ces are (abstracted) world con?gura=ons Edges represent transi=ons (labeled with ac=ons) The goal test is a set of goal ver=ces (maybe only one) In a state space graph, each state occurs only once! We can rarely build this full graph in memory (it’s too big), but it’s a useful idea S E N N N N E N S E W N S E W E E S N N E E W E W E",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "State Space Graphs",
+      "content": "State Space Graphs State space graph: A mathema=cal representa=on of a search problem Ver=ces are (abstracted) world con?gura=ons Edges represent successors (ac=on results) The goal test is a set of goal nodes (maybe only one) In a state space graph, each state occurs only once! We can rarely build this full graph in memory (it’s too big), but it’s a useful idea S G d b p q c e h a f r Tiny state space graph for a 7ny search problem",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Search Trees",
+      "content": "Search Trees A search tree: A “what if” tree of plans and their outcomes The start state is the root node Children correspond to successors Nodes show states, but correspond to PLANS (=sequence of states) that achieve those states For most problems, we can never actually build the whole tree “E”, 1.0 “N”, 1.0 This is now / start Possible futures",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Search Trees through the State Space Graphs",
+      "content": "Search Trees through the State Space Graphs S a b d p a c e p h f r q q c G a q e p h f r q q c G a S G d b p q c e h a f r We construct the tree on demand – and we construct as li>le as possible. Pay a>en7on: A search tree NODE (the red G →) will represent an en7re PATH in the state space graph (← the red path) Search Tree State Space Graph",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> (sequence with one element: S) func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {<S>} (set with one element: the sequence <S>) func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "The expanding frontier",
+      "content": "The expanding frontier Node in search tree is path in state-space graph frontier / fringe: set of all nodes available for expansion node expansion: generating all successor nodes considering the available actions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {<S>} func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {} node = <S> func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {} node = <S> node.STATE = S func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {} node = <S> node.STATE = S child-state = a func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {} node = <S> node.STATE = S child-state = a child-node = <S,a> func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {<S,a>} node = <S> node.STATE = S child-state = a child-node = <S,a> func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {<S,a>} node = <S> node.STATE = S child-state = b func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {<S,a>} node = <S> node.STATE = S child-state = b child-node = <S,b> func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {<S,a>,<S,b>} node = <S> node.STATE = S child-state = b child-node = <S,b> func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {<S,a>,<S,b>} func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {<S,b>} node = <S,a> func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: start-node = <S> fron7er = {<S,b>} node = <S,a> node.STATE = a func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "On-demand tree search",
+      "content": "On-demand tree search S G b a Consider this 4-state graph: ... start-node = <S> fron7er = {<S,b>} node = <S,a> node.STATE = a func%on TREE-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Quiz: State Space Graphs vs. Search Trees",
+      "content": "Quiz: State Space Graphs vs. Search Trees S G b a Consider this 4-state graph: How big is its search tree (from S)?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Quiz: State Space Graphs vs. Search Trees",
+      "content": "Quiz: State Space Graphs vs. Search Trees S G b a Consider this 4-state graph: Important: Those who don’t know history are doomed to repeat it! How big is its search tree (from S)? s b b G a a G a G b G … …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "func%on GENERIC-SEARCH(problem) # return a solu=on or failure",
+      "content": "func%on GENERIC-SEARCH(problem) # return a solu=on or failure start-node := MAKE-NODE(problem.INITIAL-STATE()) fron7er := set consis=ng of start-node closed-states := an empty set while not IS-EMPTY(fron7er) do: node := select and remove an element from fron7er if problem.IS-GOAL-STATE(node.STATE) then return node if node.STATE not in closed-states then add node.STATE to closed-states for child-state in problem.NEIGHBOR-STATES(node.STATE) do: child-node := MAKE-NODE(child-state, node) fron7er := INSERT(child-node, fron7er) return FAILURE On-demand tree search, with loop detection* * in the CS188 course (and project), they call this graph search because it works on any graph, while tree search only works on trees in earlier versions of this course (and Prof. De Raedt’s), this would be called ‘graph search with late goal checking and closed set loop breaking’ S G b a Verify its correctness on this case at home! start-node = <S>",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "Generic Search",
+      "content": "Generic Search",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "Example: route-?nding in Romania",
+      "content": "Example: route-?nding in Romania",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "Example: Traveling in Romania",
+      "content": "Example: Traveling in Romania State space: Ci=es Ini=al state: Arad Ac=ons: Go to adjacent city Transi=on model: Reach adjacent city Goal test: s = Bucharest? Ac=on cost: Road distance from s to s’ Solu=on?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Crea=ng the search tree",
+      "content": "Crea=ng the search tree frontier",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "Crea=ng the search tree",
+      "content": "Crea=ng the search tree frontier explored",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "Crea=ng the search tree",
+      "content": "Crea=ng the search tree frontier explored",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "Key concepts",
+      "content": "Key concepts frontier / fringe: set of all nodes available for expansion node expansion: generating all successor nodes considering the available actions search strategy: defines which node is expanded next ^^ main question!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "RECAP: Pac-Man as an Agent",
+      "content": "RECAP: Pac-Man as an Agent Agent ? Sensors Actuators Environment Percepts Ac.ons",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

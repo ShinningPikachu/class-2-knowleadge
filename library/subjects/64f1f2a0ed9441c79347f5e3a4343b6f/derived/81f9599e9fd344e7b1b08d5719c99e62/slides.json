@@ -1,0 +1,622 @@
+{
+  "metadata": {
+    "source_file": "Lecture_01_Untitled_Slides.pdf",
+    "created_at": "2026-09-29T03:24:53.934435+00:00",
+    "slide_count": 68,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Machine Learning and",
+      "content": "Machine Learning and Inductive Inference Master of Artificial Intelligence and multiple other Master programs Hendrik Blockeel Sieben Bocklandt",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "This academic year…",
+      "content": "This academic year… 2 • 10 lectures; recordings made available. • Not always same location: check schedule • Exercise sessions: • Exercises made available on Toledo, with solutions (separately) • Try to make them yourself, then check your solution • If still questions: come to one of the exercise sessions • There are multiple parallel series of sessions (A-F). Please register for one series: see Toledo, “course information” / “registration for exercise sessions”",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Lecture 1 : Introduction",
+      "content": "Lecture 1 : Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Questions:",
+      "content": "4 Questions: What, according to you, is “machine learning”? What can you use it for? What does “inductive inference” mean?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "The RoboSail project",
+      "content": "The RoboSail project 5 • Pieter Adriaans (Univ. of Amsterdam), around 2003: first auto- pilot for sailing boats (www.robosail.com) • No suitable mathematical theory => had to learn how to sail • Boat full of AI technology (agents, sensors, ...), including machine learning components",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Language learning",
+      "content": "Language learning 6 • Children learn language by simply hearing sentences being used in a certain context • Can a computer do the same: given examples (sentence + description of context), learn the meaning of words/sentences? “Mike is kicking the ball” Dataset: Zitnick et al., 2013 Mental Model",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Autonomous cars",
+      "content": "Autonomous cars 7 • Very first race with fully autonomous cars was in… 2004 • DARPA grand challenge : have autonomous cars race each other on desert roads • In 2004, no winner - “best” car got about 12 km far • In 2005, five cars made it to the finish (212 km) Censored",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "The Robot Scientist",
+      "content": "The Robot Scientist 8 • King et al., Nature, 2004 • Scientific research, e.g., in drug discovery, is iterative: • Determine what experiment to perform • Perform the experiment • Interpret the results • Robot Scientist removes the human from the loop, by reasoning about its own learning process: which new experiments will be most informative? Feedback 2nd version, “Eve” (2015) discovered lead against malaria on first run",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Automating manual tasks",
+      "content": "Automating manual tasks 9 Illustration from L. De Raedt’s SYNTH project, picture by G. De Smet • E.g.: nurse rostering in a hospital: need to accommodate non-obvious constraints (e.g., leave enough time between shifts) • Hard to automate, unless constraints can be learned from earlier examples",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Other applications…",
+      "content": "Other applications… 10 • Recommender systems • Google, Facebook, Amazon, … try to show you ads you might like • Email spam filters • By observing which mails you flag as “spam”, try to learn your preferences • Natural language processing • Sentiment analysis: is this written review mostly positive or negative? • … and many, many more • The Master Algorithm (P. Domingos) provides an excellent account of how machine learning affects our daily life",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Definitions of machine learning?",
+      "content": "Definitions of machine learning? 11 • Tom Mitchell, 1996: Machine learning is the study of how to make programs improve their performance on certain tasks from (own) experience • “performance” = speed, accuracy, … • “experience” = earlier observations • “Improve performance” in the most general meaning: this includes learning from scratch. • Useful (in principle) for anything that we don’t know how to program - computer “programs itself” • Vision: recognizing faces, traffic signs, … • Game playing, e.g., AlphaGo • Using natural language: conversations, translating, … • Link to artificial intelligence : computer solves hard problems autonomously",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Machine learning vs. other AI",
+      "content": "Machine learning vs. other AI 12 • In machine learning, the key is data • Examples of questions & their answer • Observations of earlier attempts to solve some problem • “Inductive inference” = reasoning from specific to general • Statistics: sample → population • Philosophy of science: concrete observations → general theory • This aspect of machine learning links it to data mining, data analysis, statistics, …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Machine learning and AI",
+      "content": "Machine learning and AI 13 • Many misconceptions about machine learning these days • In the recent 5 years or so, “Deep Learning” has received a lot of attention: it revolutionized computer vision, speech recognition, natural language processing • Avalanche of new researchers drawn to the field, without knowledge of the broader field of AI, or history of ML (“AI = ML = deep learning”) • See, e.g., A. Darwiche, https://www.youtube.com/watch?v=UTzCwCic-Do (also published in Communications of the ACM, October 2018) Logic, expert systems Machine Learning Deep Learning “did not work”, “not precise” “precise”, “formal”, “worked much better” “works best!”, “forget all the rest” AI 1970 1980 1990 2000 2010 Timeline",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Machine learning and AI",
+      "content": "Machine learning and AI 14 • My personal view on this : there is still progress on all fronts, deep learning is just one of them • This course reflects that viewpoint • (schema below is incomplete, just to illustrate complexity of scientific impact) Logic Works well for some problems Too rigid for other problems (noise, uncertainty) Constraint solving SAT solvers, ASP, … Probabilistic Logics Statistical Relational Learning Agents “Subsymbolic” methods Deep learning Machine Learning Lifted Learning & Inference Neural networks Works Doesn’t AI Inductive log. prog. AI ML DL",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "The machine learning landscape",
+      "content": "The machine learning landscape 15 Reinforcement learning Clustering Classification Regression Matrix factorization Transfer learning Learning theory Convex optimization Greedy search Neural networks Support vector machines Probabilistic graphical models Decision trees Rule learners Nearest neighbors Deep learning Bayesian learning Statistical relational learning Automata Recommender systems Vision Natural language processing Speech Tasks Techniques Models Applications",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Related courses",
+      "content": "Related courses 16 Machine learning and inductive inference Neural Computing Support vector machines Genetic algorithms and Evolutionary computing Uncertainty in AI Data mining",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "About this course…",
+      "content": "About this course… 17 • Primary goal of the course: provide an overview of machine learning, and insight in how the different methods work • Secondary goal: enable you to apply machine learning • 10 plenary lectures + 5 exercise sessions in smaller groups • Same session held several times per week • Only meant for answering questions, no full explanation of solutions • Optional course text (Machine learning and inductive inference, H. Blockeel) available at Acco bookshop • Lectures slides and exercises available on Toledo",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "About the exam…",
+      "content": "About the exam… 18 • Written exam, closed book (formula sheet provided) • Focus on insight, understanding, and the ability to reason about methods and simulate how they work • Both theory and exercises",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Some basic concepts",
+      "content": "Some basic concepts and terminology",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Machine learning",
+      "content": "Machine learning 20 • ML in its typical form: • Input = dataset • Output = some kind of model • ML in its most general form: • input = knowledge • output = a more general form of knowledge • Learning = inferring general knowledge from more specific knowledge (observations ➔ model) = inductive inference • Learning methods are often categorized according to the format of the input and output, and according to the goal of the learning process (but there are many more dimensions along which they can be categorized)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Example: Iris dataset",
+      "content": "Example: Iris dataset 21 Learning task: learn a model that, given a description of a flower (length & width of sepals and petals), tells us what species of iris this is. I.e., learn a mathematical function such that . f f(SL, SW, PL, PW) = S",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Example: classifying pictures",
+      "content": "Example: classifying pictures 22 Learning task: learn a model that, given a picture of a flower, tells us what species of iris this is. - Method 1: estimate SL, SW, PL, PW from picture, then use . - Method 2: “end-to-end”: , where is a data structure that represents the entire picture (e.g., an array of pixels) f(SL, SW, PL, PW) = S f(P) = S P “Classic” methods “Deep learning” methods “Iris Versicolor”",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Example: generating pictures",
+      "content": "Example: generating pictures 23 Learning task: learn a model that, given a textual description, outputs a picture that fits that description. , where is a data structure that represents a picture and is a textual description. f(S) = P P S “Generative AI” “Iris Versicolor”",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Predictive versus descriptive",
+      "content": "Predictive versus descriptive 24 • Predictive learning : learn a model that can predict a particular property / attribute / variable from inputs • Many tasks are special cases of predictive learning • E.g., face recognition: given a picture of a face, say who it is • E.g., spam filtering: given an email, say whether it’s spam or not Name of task Learns a model that can … Concept learning / Binary classification Distinguish instances of class C from other instances Classification Assign a class C (from a given set of classes) to an instance Regression Assign a numerical value to an instance Multi-label classification Assign a set of labels (from a given set) to an instance Multivariate regression Assign a vector of numbers to an instance Multi-target prediction Assign a vector of values (numerical, categorical) to an instance Ranking Assign ≤ or > to a pair of instances",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Predictive versus descriptive",
+      "content": "Predictive versus descriptive 25 • Descriptive learning : given a data set, describe certain patterns in the dataset (or in the population it is drawn from) • E.g., analyzing large databases: • “Bank X always refuses loans to people who earn less than 1200 euros per month” • “99.7% of all pregnant patients in this hospital are female” • “At supermarket X, people who buy cheese are twice as likely to also buy wine”",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Function learning",
+      "content": "Function learning 26 • Task : learn a function X →Y that fits the given data (with X and Y sets of variables that occur in the data) • Such a function will obviously be useful for predicting Y from X • May also be descriptive, if we can understand the function • Often, some family of functions F is given, and we need to estimate the parameters of the function f in F that best fits the data • e.g., linear regression : determine and such that fits the data as well as possible • What does “fit the data” mean? Measured by a so-called loss function • e.g., quadratic loss: with f the learned function and D the dataset a b y = ax + b ∑ (x,y)∈D ( f(x) −y)2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Distribution learning",
+      "content": "Distribution learning 27 • Task: given a data set drawn from a distribution, estimate this distribution • Often made distinction: parametric vs. non-parametric • Parametric: a family of distributions is given (e.g., “Gaussian”), we only need to estimate the parameters of the target distribution • Non-parametric: no specific family is assumed • Often made distinction: generative vs. discriminative • Generative: learn the joint probability distribution (JPD) over all variables (once you have that, you can generate new instances by random sampling from it) • Discriminative: learn a conditional probability distribution of Y given X, for some given set of variables X (called input variables) and Y (called target variables) . . .. . . .. . . . .. . . .. . Parametric Non-parametric",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "These categorizations are somewhat",
+      "content": "These categorizations are somewhat fuzzy… 28 • A descriptive pattern may be useful for prediction • “Bank X always refuses loans to people who earn less than 1200 euros per month” (description) • Bob earns 1100 euros per month => Bank X will not give him a loan • While functions are directly useful for prediction, a probability distribution can be used just as well • Given known information X, predict as value for Y, the value with the highest conditional probability given X",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Parametric vs. non-parametric",
+      "content": "Parametric vs. non-parametric 29 • Parametric: a family of functions (or distributions, or …) is given, and each function is uniquely defined by the values of a fixed set of parameters • e.g. (function learning): linear regression • e.g. (distribution learning): fitting a gaussian • Non-parametric: no specific family of functions is assumed • Typically, we are searching a space that contains models with varying structure, rather than just different parameter values • This often requires searching a discrete space • E.g.: decision trees, rules, …. (see later)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Link with “explainable AI”",
+      "content": "Link with “explainable AI” 30 • Explainable AI (XAI) refers to the study of AI systems that can explain their decisions / whose decisions we can understand • Two different levels here: • We understand the (learned) model used for decision making • We understand the individual decision • E.g. “I could not get a loan because I earn too little”: we can understand this decision even if we don’t know the whole decision process the bank uses • A learned model that is not straightforward to interpret, is called a black- box model • Machine learning poses additional challenges for XAI, as it often learns black-box models",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Responsible AI : challenges",
+      "content": "Responsible AI : challenges 31 • Privacy-preserving data analysis • We need lots of data to learn from; this may include personal data • How can we guarantee that the analysis of these data will not violate the privacy of the people described by the data? • When data is collected, consent is needed for a specific purpose, and data can only be used for that purpose. How can we guarantee it won’t be abused? • Learning “safe” models : models that will not violate certain constraints that are imposed (including constraints on bias, discrimination, privacy, …)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Predictive learning",
+      "content": "Predictive learning 32 • A very large part of machine learning focuses on predictive learning • In the following, we introduce some more concepts and terminology in that setting",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Prediction: task definition",
+      "content": "Prediction: task definition 33 The prediction task, in general: o Given: a description of some instance o Predict: some property of interest (the “target”) Examples: o classify emails as spam / non-spam o classify fish as salmon / bass o forecast tomorrow’s weather based on today’s measurements How? By analogy to cases seen before",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Terminology",
+      "content": "Terminology 34 • Training set: a set of examples, instance descriptions that include the target property (a.k.a. labeled instances) • Prediction set: a set of instance descriptions that do not include the target property (“unlabeled” instances) • Prediction task : predict the labels of the unlabeled instances Dog Dog Dog Cat Cat Cat ??? ???",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Inductive vs. transductive learning",
+      "content": "Inductive vs. transductive learning 35 We can consider as outcome of the learning process, either • the predictions themselves: transductive learning • or: a function that can predict the label of any unlabeled instance: inductive learning .(x1,y1) .(x2,y2) .(x3,y3) .(x4, ) .(x5, ) .(x1,y1) .(x2,y2) .(x3,y3) .(x4, ) .(x5, ) Transduction: outcome=predictions Induction: outcome = function for making predictions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Inductive vs. transductive learning",
+      "content": "Inductive vs. transductive learning 36 We can consider as outcome of the learning process, either • the predictions themselves: transductive learning • or: a function that can predict the label of any unlabeled instance: inductive learning Transduction: outcome=predictions Induction: outcome = function for making predictions .(x1,y1) .(x2,y2) .(x3,y3) .(x4,y4) .(x5,y5) .(x1,y1) .(x2,y2) .(x3,y3) .(x4, ) .(x5, ) f: X→Y",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Inductive vs. transductive learning",
+      "content": "Inductive vs. transductive learning 37 We can consider as outcome of the learning process, either • the predictions themselves: transductive learning • or: a function that can predict the label of any unlabeled instance: inductive learning Transduction: outcome=predictions Induction: outcome = function for making predictions .(x1,y1) .(x2,y2) .(x3,y3) .(x4,y4) .(x5,y5) .(x1,y1) .(x2,y2) .(x3,y3) .(x4,f(x4)) .(x5,f(x5)) f: X→Y",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "• “Occam’s razor”: among equally accurate models, choose",
+      "content": "• “Occam’s razor”: among equally accurate models, choose the simpler one • Trade-off: explain data vs. simplicity • Both overfitting and underfitting are harmful Overfitting and underfitting 38",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Levels of supervision",
+      "content": "Levels of supervision 39 • Supervised learning: learning a (predictive) model from labeled instances (as in cats & dogs example) • Unsupervised learning: learning a model from unlabeled instances • such models are usually not directly predictive (without any information on what to predict, how could you learn from that?) • still useful indirectly, or for non-predictive tasks: see later • Semi-supervised learning: learn a predictive model from a few labeled and many unlabeled examples",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Semi-supervised learning",
+      "content": "Semi-supervised learning 40 • How can unlabeled examples help learn a better model? + - + - ? This illustration: - 2 classes, called + and - - Representing instances in a 2-dimensional space",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Semi-supervised learning",
+      "content": "Semi-supervised learning 41 • How can unlabeled examples help learn a better model? + - + - ? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . .",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Semi-supervised learning",
+      "content": "Semi-supervised learning 42 • How can unlabeled examples help learn a better model? + - + - ? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . .",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Unsupervised learning",
+      "content": "Unsupervised learning 43 • Can you see three classes here? • Even though we don’t know the names of the classes, we still see some structure (clusters) that we could use to predict which class a new instance belongs to • Identifying this structure is called clustering • From a predictive point of view, this is unsupervised learning . . . . . . . . . . . .. . . . . . . . . . . . . ..",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "PU-learning",
+      "content": "PU-learning 44 • PU-learning is a special case of semi-supervised learning • PU stands for “positive / unlabeled” • All the labeled examples belong to one class (called the “positive” class) + . . . . . . . . . .. . . . . Learning the meaning of “kicking the ball” requires PU-learning because: When Mike kicks the ball, the sentence may mention this, or not. When Mike does not kick the ball, it is never mentioned that he does not. “Mike is kicking the ball” + . . .",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "Weakly supervised learning",
+      "content": "Weakly supervised learning 45 • Weakly supervised learning is a generalized form of semi-supervised learning • Semi-supervised: for a single instance, we either know its label or we do not • Weakly supervised: we may have partial information about a label • e.g., it is certainly a member of a given set (= superset learning) • e.g., at least one instance among a given set of instances has the label, but we do not know which one (= multi-instance learning) • e.g., we know two instances have the same label, but we don’t know which one it is (= constraint-based clustering) • … “This is either a Ferrari or a Lamborghini” “There’s a Lamborghini in this picture”",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Relationship between different",
+      "content": "Relationship between different supervision settings 46 Supervised Learning Weakly supervised Unsupervised Learning Predictive learning Semi-supervised learning Multi-instance learning PU-learning Superset learning Constraint-based clustering",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "Reinforcement learning",
+      "content": "Reinforcement learning 47 • Learning setting: an agent can be in a number of different states. It can take actions, which change its state and may yield a reward. The agent’s goal is to maximize its rewards in the long run. • Think of, e.g., chess: state = board state; action = make a move. You want to make moves that cause you to win in the long run • The learning task is to learn a function that, for any state , predicts the best action to take. But supervision is indirect: the learner is not told what the best action is. Instead, it sees sequences where • is some action (not necessarily the best) that was taken in state , • is the corresponding reward, and • taking action in state led to state • The best action is not necessarily the one that leads to the highest immediate reward! An action can lead to states with higher reward opportunities later on • Cf. chess: you might want to sacrifice a piece to gain benefits in the long term • This is a more complex learning setting that deserves its own study f s (xi, yi, ri) yi xi ri yi xi xi+1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Format of input data",
+      "content": "Format of input data 48 • Input is often assumed to be a set of instances that are all described using the same variables (features, attributes) • The data are “i.i.d.”: “independent and identically distributed” • The training set can be seen as a random sample from one distribution • The training set can be shown as a table (instances x variables) : tabular data • This is also called the standard setting • There are other formats: instances can be • nodes in a graph • whole graphs • elements of a sequence • …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Format of input data: tabular",
+      "content": "Format of input data: tabular 49 Sepal length Sepal width Petal length Petal width Class 5.1 3.5 1.4 0.2 Setosa 4.9 3.0 1.4 0.2 Setosa 7.0 3.2 4.7 1.4 Versicolor 6.3 3.3 6.0 2.5 Virginica Sepal length Sepal width Petal length Petal width Class 4.8 3.2 1.3 0.3 ? 7.1 3.3 5.2 1.7 ? Training set Prediction set",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Format of input data: sequences",
+      "content": "Format of input data: sequences 50 • Learning from sequences: • 1 prediction per sequence? • 1 prediction per element? • 1 element in sequence can be … • A number (e.g., time series) • A symbol (e.g., strings) • A tuple • A more complex structure abababab: + aabbaabb: -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Format of input data: trees",
+      "content": "Format of input data: trees 51 • 1 prediction per tree / per node in the tree • Nodes can be … • Unlabeled • Labeled with symbols (e.g., HTML/XML structures) • … ul <li> <li> <b> <li> (text) “Adress:” + - - - - - - E.g.: this tree indicates a “positive” a text field preceded by Address: in a list context",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Format of input data: graph",
+      "content": "Format of input data: graph 52 • Example: Social network • Target value known for some nodes, not for others • Predict node label • Predict edge • Predict edge label • … • Use network structure for these predictions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "Format of input data: raw data",
+      "content": "Format of input data: raw data 53 • “Raw” data are in a format that seems simple (e.g., a vector of numbers), but components ≠ meaningful features • Example: photo (vector of pixels) • Raw data often need to be processed in a non-trivial way to obtain meaningful features; on the basis of these features, a function can be learned • This is what deep learning excels at (Image: Nielsen, 2017, Neural networks and deep learning)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Format of input data: knowledge",
+      "content": "Format of input data: knowledge 54 • “Knowledge” can consist of facts, rules, definitions, …. • We can represent knowledge about some domain in a knowledge representation language (such languages are often based on logic) ... hacc(M,A):- atm(M,A,o,2,_,_,_). hacc(M,A):- atm(M,A,o,3,_,_,_). hacc(M,A):- atm(M,A,s,2,_,_,_). hacc(M,A):- atm(M,A,n,ar,_,_,_). zincsite(M,A):- atm(M,A,du,_,_,_,_). hdonor(M,A) :- atm(M,A,h,_,_,_,_), not(carbon_bond(M,A)), !. ... atm(m1,a1,o,2,3.43,-3.11,0.04). atm(m1,a2,c,2,6.03,-1.77,0.67). ... bond(m1,a2,a3,2). bond(m1,a5,a6,1). bond(m1,a6,a7,du). ...",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Data preprocessing",
+      "content": "Data preprocessing 55 • Data may not be in a format that your learner can handle • Data wrangling: bring it into the right format • Even if it’s in a format you learner can handle (e.g., tabular), the features it contains may not be very informative, or there may be very few relevant features among many irrelevant ones. • E.g.: individual pixels in an image are usually not very informative • Feature selection: select among many input features the most informative ones • Feature construction: construct new features, derived from the given ones",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "What learning method to use?",
+      "content": "What learning method to use? 56 • Which learners are suitable for your problem, depends strongly (but not solely!) on the structure of the input data • Most learners use the standard format • A set of instances, where each instance is described by a fixed set of attributes (a.k.a. features, variables) • also called attribute-value format or tabular format • At the other extreme, inductive logic programming handles any kind of knowledge that can be represented using clausal logic • This includes sequences, graphs, …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "What learning method to use?",
+      "content": "What learning method to use? 57 • The data format and the learning task impose strong constraints on which learning methods can be used • Other aspects determine whether the method performs well: • Inductive bias (see later) • Ability to handle missing values • Ability to handle noise • Ability to handle high-dimensional data • Ability to handle large datasets • Ability to generalize from small datasets (avoid overfitting) • We’ll cover many of these aspects at different points in the course",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "Output formats,",
+      "content": "Output formats, methods (overview)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Output formats",
+      "content": "Output formats 59 • The output of a learning system is a model • Many different types of model exist • The learning algorithm or method is strongly linked to the type of model",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Different views of the landscape",
+      "content": "Different views of the landscape 60 Domingos: “five tribes” Flach: “three types of models” - Symbolists - Connectionists - Evolutionaries - Bayesians - Analogizers - Probabilistic - Geometric - Logical Bishop: “it’s all Bayesian” - Bayes - Bayes - Bayes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "Parametrized functions",
+      "content": "Parametrized functions 61 • Typically, a certain format for the functions is provided; e.g.: linear functions of the inputs • Within this set, we look for the parameter values that best fit the data • Standard example: linear regression ● ● ● ● ● ● ● ● ● ●● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●● ●● ● ● ● ● ● ● ● ● ● ●● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● 1 2 3 4 5 6 7 0.5 1.0 1.5 2.0 2.5 Petal.Length Petal.Width y = ax + b width = 0.416*length - 0.363",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "Conjunctive concepts",
+      "content": "Conjunctive concepts 62 • A conjunctive concept is expressed as a set of conditions, all of which must be true • “x has class C if and only if <condition1> and <condition2> and … and <condition k>” • E.g.: accept application for mortgage if and only if : salary ≥ 3 * monthly payback and no other mortgage running",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "• A rule set is a set of rules of the form “if … then …” or “if … then",
+      "content": "• A rule set is a set of rules of the form “if … then …” or “if … then … else …” • Example: definition of leap years Rule sets 63 If year is a multiple of 400 then leap else if year is a multiple of 100 then not leap else if year is multiple of 4 then leap else not leap Examples of leap years: 1900, 1992, 2004, … Examples of non-leap years: 1993, 2000, 2011, 2018, … Input Output",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "Decision trees",
+      "content": "Decision trees 64 • A decision tree represents a stepwise procedure to arrive at some decision Is today a good day to play tennis?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Neural networks",
+      "content": "Neural networks 65 • A neural network is a complex structure of neurons, each of which aggregate multiple input signals into a single output signal x y z Out h11 = f(a11x+b11y+c11z)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "Probabilistic graphical models",
+      "content": "Probabilistic graphical models 66 • A PGM represents a (high-dimensional) joint distribution over multiple variables as a product of (low-dimensional) factors • Different type of PGMs: Bayesian networks, Markov networks, factor graphs, … P(A, B, C, D, E) = P(A) ⋅P(B) ⋅P(C|A, B) ⋅P(D|C) ⋅P(E|C) f(a, b, c, d, e) = f1(a) ⋅f2(b) ⋅f3(a, b, c) ⋅f4(c, d) ⋅f5(c, e) A B C D E f1(a) f2(a) f3(a, b, c) f5(c, e) f4(c, d) Example: Bayesian network",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "Instance-based learning",
+      "content": "Instance-based learning (a.k.a. “nearest neighbor methods”) 67 • The “model” is simply the data set itself • Predictions for new cases are made by comparing it to earlier observed cases • If it’s similar for observed features, it’s probably also similar for unobserved (to be predicted) features . . . . . . . . . .. . . . . . . . .. ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "Coming lectures…",
+      "content": "Coming lectures… 68 • In the rest of this course, we will have a closer look at many of these different methods • Starting next week with a closer look at learning predictive functions and nearest neighbor methods",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "source_file": "Lecture_02_Speech_Science_19_Oct_Slides.pdf",
+    "created_at": "2026-11-05T04:57:34.297165+00:00",
+    "slide_count": 17,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Speech Science 2 2026-2027",
+      "content": "Speech Science 2 2026-2027 Astrid van Wieringen Professor Experimental ORL, Dept Neurosciences, KU Leuven",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Experimenta",
+      "content": "Experimenta l ORL 2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Time (s)",
+      "content": "Time (s) 0 1.292 -0.6658 0.6297 0 The cat caught a mouse 3 Characteristics of speech waveforms: pressure and time periodic: nasals, vowels and approximants aperiodic: fricatives quiescent: silence preceding the plosive, voice onset time transient: release",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Time (s)",
+      "content": "Time (s) 0 0.03027 -0.6467 0.4969 0 5 periods of the vowel /a/ from the cat caught a mouse 4 Duration Calculate F0 (fundamental frequency) from time signal: 0.03027/ 5 periods= 0.00605 s. 1/ 0.00605= 165 Hz F0 is not same from period to period, check several periods for a good average F0 1 period = 1/0.006 = 165 Hz Time (s) 0 0.00210884 -0.9992 0.9989 0 (a) (b) (c) (f=(1/T))",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Experimenta",
+      "content": "Experimenta l ORL 5 Time (s) 0 0.383628 -0.8545 0.8741 0 /s/ /o/ /l/ /d/ /ier/ A Time (s) 0 0.140272 -0.8545 0.8741 0 (a) (b?) B",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Each (vowel) sound has a characteristic spectrum shape depending on formant frequency",
+      "content": "• Each (vowel) sound has a characteristic spectrum shape depending on formant frequency locations (bandpass filtering). 6 Source-filter theory (developed by Fant (1960)) Source fall of -12 dB/oct of average glottal spectrum + 6 dB/oct due to radiation characteristics at the mouth Slope of effective glottal spectrum = -6 dB/oct. Filter: amplifies the harmonics near the resonant frequencies Figures from Borden & Harris, 1984",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "• Usually only the first three formants are considered. Exact values depend on length and shape of VT (place of constriction and",
+      "content": "• Usually only the first three formants are considered. Exact values depend on length and shape of VT (place of constriction and degree of narrowness of constriction) • F1 = lowest resonant frequency, F2 = second formant, F3 = third formant, etc. • F1 and F2 most important formant frequencies for specifying speech sounds. Vowel can be identified on the basis of F1 and F2 alone. F3 of importance for some vowels and contributes to vowel quality. F4, F5 and higher relatively constant regardless of changes of vocal tract. • Frequency region for speech sounds 0-5000 Hz (some high frequency sounds - 8000 Hz) • Spectra display formants as peaks. Note: it is not the sound that has formants, but the vocal tract • Conversion of frequency to wavelength: the higher the pitch, the shorter the wavelength: () = air velocity / frequency: Sound velocity in air = 344 m/s / 100 Hz (male) = 3.4 m or 344/ 200 Hz (women)= 1.72 m • in daily speech the low frequency sounds travel further than the high frequency sounds. Hardly hear high frequency sounds when spoken in another room. • Source-filter theory: how the glottal sound is filtered according to the frequency response of the vocal tract. Same F0 and harmonics of glottal source are present, but the amplitudes of the harmonics have been modified, resulting in a specific sound quality. 7 From linguistic units to speech sound...",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Experimenta",
+      "content": "Experimenta l ORL 8 Perceptual / physiologic and acoustic aspects",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Relation between acoustics and physiology",
+      "content": "9 Relation between acoustics and physiology Frequency of F1 versus F2 for 10 vowels spoken by 76 American English speakers (Peterson and Barney, 1952). Note the variation in estimation!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "16",
+      "content": "16 Formant frequencies of Dutch vowels spoken in the Dutch-speaking part of Belgium (1997) 1200 1000 800 600 400 200 3000 2500 2000 1500 1000 500 0 WD- female MD - male JW - male AG- female     a a a a i i i i I I I o o o     y y y    e e e     u u u u Second formant frequency (Hz) First formant frequency (Hz) F1 dimension: open/low /a/ -close/high /i/ + rounded /u/- unrounded /a/ F2 dimension: front /i/ -back /u/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "17",
+      "content": "17 F1 and F2 of 8 cardinal American-English vowels from: Borden and Harris, 1984; not a triangle, but a quadrilateral",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "18",
+      "content": "18 Relation between acoustics and physiology Frequency of F1 versus F2 for 10 vowels spoken by 76 American English speakers (Peterson and Barney, 1952). Note the variation in estimation!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Front vowels /i, I, e, ɛ, ᴂ/",
+      "content": "• Front vowels /i, I, e, ɛ, ᴂ/ • Phonetic features: front tongue position • Acoustic cues: large separation between F1 and F2, relatively close positioning between F2 and F3 • F1 reflects tongue height! The higher the tongue position the lower the F1 value • Some high vowels have higher intrinsic F0 than others (inherent F0 is relative F0) • The vowels / i, e, ᴂ/ (long, tense vowels) have a long inherent duration (inherent duration = relative duration) • Short vowels / I, ɛ / have a short inherent duration • Note: Dutch example & freq. range of plot is from 0-10000 Hz 19 Summary of spectral and temporal properties of front vowels Lass, 1996; Kent & Read, 1992 Time (s) 0 0.2 0 104 /i/ from 'piet' Time (s) 0 0.0294331 -0.1642 0.259 0 f= 1/T",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Phonemes /u, ʊ, o, ɔ, ɑ/",
+      "content": "• Phonemes /u, ʊ, o, ɔ, ɑ/ • Phonetic features: back tongue position, various degrees of tongue height • Acoustic cues: small separation between F1 and F2, large separation between F2 and F3 • These sounds vary primarily in the frequency of F1 with varies with vowel height • The lower the tongue position, the higher the F1 frequency • The phonemes / u, o, ɔ, ɑ/ have an inherently long duration, / ʊ / has short duration 20 Summary of spectral and temporal properties of back vowels Lass, 1996; Kent & Read, 1992 Time (s) 0 0.2 0 104 /u/ from 'poet' Time (s) 0 0.0322222 -0.2856 0.3335 0",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Phonemes /ʌ, ə/",
+      "content": "• Phonemes /ʌ, ə/ • Phonetic features: central tongue position • Acoustic cues: a uniform formant pattern (formant frequencies tend to be equally spaced) • Duration: / ʌ / longer than / ə / 21 Summary of spectral and temporal properties of central vowels; Lass, 1996; Kent & Read, 1992 Time (s) 0 0.2 0 104 /schwa/ from 'put' Time (s) 0 0.0269161 -0.2263 0.268 0",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "• No fixed value for vowel duration (inherent duration). Duration is influenced by:",
+      "content": "• No fixed value for vowel duration (inherent duration). Duration is influenced by: • syllable stress • speaking rate • voicing of preceding or following consonant • place of articulation of preceding and following cons. • utterance position (syntactic feature) • word familiarity • Summary of acoustic features for vowels: • formant pattern • spectrum (slope, rate-of-frequency change in spectrum) • duration • fundamental frequency • formant bandwidth • formant amplitude 22 Vowel duration Lass, 1996; Kent & Read, 1992",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "• Diphthongs /ai/, /au/:",
+      "content": "• Diphthongs /ai/, /au/: • Are produced with a relatively open vocal tract • Have well-defined formant structure (first steady-state formant, then transition, then again steady-state part) • Have no single-formant pattern • Have relatively SLOW dynamic changes • Have specified by on- and off-glide • Display considerable variation in on- and off-glide values in different contexts or at different rate • RATE of formant frequency may be a characteristic feature of diphthong production : A perceptual study by Gay (1968): rate-of- frequency change seems to be more ‘invariant’ than onset or offset values 23 Vowel duration Lass, 1996; Kent & Read, 1992",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

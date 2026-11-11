@@ -1,0 +1,581 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 03",
+    "section_label": "Slide",
+    "completed": 114,
+    "total": 114,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Decision trees",
+      "summary": "Decision trees"
+    },
+    {
+      "slide": 2,
+      "title": "What are decison",
+      "summary": "What are decision trees?"
+    },
+    {
+      "slide": 3,
+      "title": "What is a decision tree?",
+      "summary": "A decision tree represents a procedure starting with one question, where each answer determines the next question until a final decision is reached. In this context, questions are termed \"tests\" and the final decision is a \"prediction\". Because trees are interpretable, they can be easily represented as a set of if-then rules that summarize the logic used to make these predictions."
+    },
+    {
+      "slide": 4,
+      "title": "Example decision tree",
+      "summary": "This slide illustrates a decision tree for determining whether to play tennis based on weather conditions. The process begins by testing the outlook: an overcast sky guarantees playing, while sunny conditions require checking humidity (high prevents playing) and rainy conditions require checking wind strength. These sequential tests continue until a final prediction is reached."
+    },
+    {
+      "slide": 5,
+      "title": "What does the tree represent?",
+      "summary": "The decision tree represents a mathematical function mapping an input space $X$ to a target attribute $Y$. Given input attributes $X_1, \\dots, X_n$, any point in the input space is a vector $\\mathbf{x} = (x_1, \\dots, x_n)$ that maps to exactly one value for $Y$. While questions within the tree can involve any input attribute, the final decision assigns a specific predicted value to the target."
+    },
+    {
+      "slide": 6,
+      "title": "Illustration",
+      "summary": "This decision tree maps inputs Outlook, Humidity, and Wind to a Tennis prediction (Yes/No) across 14 cases. The data splits into Sunny (5 cases), Overcast (4 cases), and Rainy (5 cases), leading to three leaf nodes where two predict \"No\" and one predicts \"Yes\". Aggregating these outcomes shows that 10 of the 14 cases result in \"No,\" establishing it as the majority prediction regardless of the specific missing value."
+    },
+    {
+      "slide": 7,
+      "title": "Representation power",
+      "summary": "Decision trees can represent any imaginable Boolean function by testing all input variables and assigning the correct output for each combination. While simple functions like OR, AND, and XOR are easily represented, complex formulas may require inefficient tree structures because the tree format cannot share subtrees, forcing redundant copies of logic paths. Thus, although representation is always possible, it does not guarantee a compact or efficient model."
+    },
+    {
+      "slide": 8,
+      "title": "Continuous input attributes",
+      "summary": "When input attributes are continuous, such as numbers between 0 and 1, decision trees cannot create a separate child node for every possible value due to infinite possibilities. Instead, the system employs comparative tests using thresholds to ensure a finite number of outcomes. This approach generates binary splits based on inequalities, directing instances left or right depending on whether the attribute value is less than or greater than a specific threshold like 0.5."
+    },
+    {
+      "slide": 9,
+      "title": "Types of trees",
+      "summary": "Trees are categorized based on the type of target variable they predict. If the target variable is nominal, the structure is termed a classification tree; if the target variable is numerical, it is called a regression tree. The material notes that additional types of trees exist but will be addressed in later sections."
+    },
+    {
+      "slide": 10,
+      "title": "Why trees?",
+      "summary": "Decision trees are preferred over alternatives like neural networks primarily for their efficiency and interpretability. They can be learned and used for prediction extremely quickly, often matching the speed of data reading, while remaining transparent enough to explain specific predictions unlike \"black box\" models. Additionally, they achieve high predictive accuracy on tabular data, which improves further when combined into ensembles."
+    },
+    {
+      "slide": 11,
+      "title": "How can we learn",
+      "summary": "This slide introduces the fundamental question of how to learn decision trees directly from data. It identifies the existence of a basic learning algorithm designed to address this process, serving as the foundational concept for constructing these models."
+    },
+    {
+      "slide": 12,
+      "title": "Learning decision trees",
+      "summary": "Predictive learning aims to learn an unknown function $f: X \\to Y$ from a dataset of examples $(x, f(x))$. The objective is to find a decision tree $T: X \\to Y$ that approximates this function while fulfilling a specific criterion $C$, the definition of which depends on the task. This process involves extracting a suitable tree structure directly from the training data to represent the underlying functional relationship."
+    },
+    {
+      "slide": 13,
+      "title": "Learning decision trees: task 1",
+      "summary": "Task 1 in learning decision trees involves finding the smallest tree consistent with the training data, ensuring it predicts every label exactly. This approach acts as data compression and provides insight by revealing the simplest explanation of how inputs relate to outputs. However, this task is primarily of theoretical interest because perfect consistency on a sample does not guarantee accuracy over the larger underlying distribution or unseen cases."
+    },
+    {
+      "slide": 14,
+      "title": "Learning decision trees: task 2",
+      "summary": "Task 2 in learning decision trees aims to find a tree $T$ where predictions $T(x)$ are maximally similar to true values $f(x)$ on average for inputs drawn from distribution $\\mathcal{D}$. This similarity is quantified by a loss function $\\ell$, measuring prediction error, while the expected loss over the population defines the model's risk. The objective is restated as finding the tree with minimal risk, acknowledging that practical algorithms must approximate this since the true population distribution is unknown."
+    },
+    {
+      "slide": 15,
+      "title": "Learning decision trees: task 2",
+      "summary": "Since the true distribution $\\mathcal{D}$ is typically unknown, computing a decision tree's risk or finding the minimal-risk tree is impossible. Consequently, practical algorithms employ heuristics to construct trees that are small enough to provide insight into the relationship between $X$ and $Y$, while also generalizing well for predictions outside the training data $T$."
+    },
+    {
+      "slide": 16,
+      "title": "Hardness of decision tree learning",
+      "summary": "Complexity theory establishes that learning decision trees is NP-hard, specifically referring to the computationally difficult task of finding the smallest tree consistent with training data. While this optimal search provides guarantees of minimality, practical learners do not attempt it; instead, they use efficient algorithms designed to find trees with low risk on the population rather than the provably smallest one."
+    },
+    {
+      "slide": 17,
+      "title": "Learning DTs: the basic principle",
+      "summary": "The basic principle of learning decision trees is known as Top-down induction of decision trees (TDIDT) or recursive partitioning. This process starts with the full dataset, finds a test where examples sharing an outcome tend to share the same target value $Y$, and splits the data into subsets based on that test. The procedure repeats recursively on each subset until they are sufficiently \"pure\" (all elements have the same $Y$) or no further splits are possible."
+    },
+    {
+      "slide": 18,
+      "title": "Example: cocktail drinking",
+      "summary": "This slide illustrates a classification problem where the goal is to predict if a new cocktail will cause sickness based on past experiences. The dataset consists of previous cocktails labeled as either causing sickness or not, with features including glass shape, drink color, and ingredient content. The objective is to determine if any of these properties correlate with the outcome to effectively split positive cases (sick) from negative ones (not sick)."
+    },
+    {
+      "slide": 19,
+      "title": "The data set D: 8 examples",
+      "summary": "Slide 19 introduces the dataset D, which consists of exactly eight examples."
+    },
+    {
+      "slide": 20,
+      "title": "Data set in tabular form",
+      "summary": "Slide 20 presents a data set in tabular form containing eight entries with four attributes: Shape, Color, Content volume, and Sick status. The table lists various combinations of shapes (Cylinder, Coupe, Trapezoid), colors, and volumes (10cl, 15cl, 25cl) to indicate whether the subject is sick. Specifically, three entries marked \"Yes\" for being sick are all Coupes or Trapezoids with Orange color and either 10cl or 15cl content, while all other combinations are marked \"No\"."
+    },
+    {
+      "slide": 21,
+      "title": "Observation 1: shape is important",
+      "summary": "Observation 1 establishes that shape is an important factor. The slide explicitly highlights \"shape\" as the central concept for this observation."
+    },
+    {
+      "slide": 22,
+      "title": "Observation 2: Sometimes, color is",
+      "summary": "Observation 2 states that sometimes color is also important alongside shape. This slide highlights the dual consideration of both shape and color as relevant visual features in specific contexts."
+    },
+    {
+      "slide": 23,
+      "title": "The decision tree",
+      "summary": "Slide 23 introduces the concept of a decision tree using a classification example based on shape and color. The structure distinguishes between \"orange\" and \"non-orange\" categories, indicated by a question mark that suggests a decision point or query is required to determine the outcome."
+    },
+    {
+      "slide": 24,
+      "title": "Rule representation of tree",
+      "summary": "Decision trees can be represented as a series of if-then rules that are often simplifiable. The slide illustrates this with two rule sets: one using nested conditions where a cylindrical shape or non-orange color results in a positive outcome, while the other uses a conjunction where a non-cylindrical shape combined with an orange color yields a negative result."
+    },
+    {
+      "slide": 25,
+      "title": "Two main questions…",
+      "summary": "Following the illustration of the basic principle, two critical implementation details must be addressed. First, a method is required to determine how to select the \"best\" test for a node. Second, criteria must be established to decide when to stop splitting nodes during the process."
+    },
+    {
+      "slide": 26,
+      "title": "How to choose the tests?",
+      "summary": "Choosing optimal tests is analogous to the \"20 questions\" game, where effective binary questions should eliminate approximately 50% of cases regardless of the answer. Asking a balanced question like gender is superior to specific queries, such as naming Dolly Parton, which likely yield. This constraint ensures fairness by preventing open-ended questions that could disproportionately reduce the search space."
+    },
+    {
+      "slide": 27,
+      "title": "Choosing a test: classification",
+      "summary": "This slide focuses on classification trees where the target variable is nominal. A good test is defined as one that carries significant information about the class. Information theory quantifies this using \"entropy,\" or missing information, which represents the average number of bits required to convey a piece of information under optimal encoding."
+    },
+    {
+      "slide": 28,
+      "title": "Information",
+      "summary": "To encode four classes (A, B, C, D), fixed-length codes require 2 bits per object, which is optimal only if all classes are equally likely. When frequencies vary, variable-length encoding assigns shorter bit sequences to frequent classes and longer ones to rare classes, provided the code remains unambiguous. For instance, with A at 50% frequency, an optimized scheme reduces the average requirement to 1.7 bits, whereas equal probabilities result in a less efficient average of 2.25 bits using variable lengths."
+    },
+    {
+      "slide": 29,
+      "title": "Information",
+      "summary": "Entropy represents the inherent information content and the minimal average number of bits required to encode a randomly drawn value from a set with known probabilities. It is calculated by summing the product of each class proportion and its binary logarithm across all classes, then applying a negative sign to ensure a positive result. This metric defines the optimal encoding efficiency based on the distribution of values."
+    },
+    {
+      "slide": 30,
+      "title": "Class entropy",
+      "summary": "Class entropy quantifies the uncertainty regarding the class of a particular instance within a set of objects $S$. It is calculated using the formula $CE(S) = -\\sum_{i=1}^{k} p_i \\log_2(p_i)$, where $p_i$ represents the proportion of elements in $S$ belonging to class $c_i$. This metric aggregates the distribution of $k$ possible classes to determine the overall impurity or unpredictability of the dataset."
+    },
+    {
+      "slide": 31,
+      "title": "Entropy: example",
+      "summary": "Entropy measures uncertainty in class prediction, calculated as the negative sum of class proportions multiplied by their log base 2 probabilities. High entropy occurs when many possibilities are equally likely (e.g., 8A and 8B yields CE=1), while low entropy arises when few outcomes exist or one is highly probable (e.g., 15A and 1B yields CE=0.34). This metric quantifies the bits of information needed to identify a random element's class, ranging from maximal uncertainty in balanced distributions to minimal uncertainty in skewed ones."
+    },
+    {
+      "slide": 32,
+      "title": "Information gain",
+      "summary": "Entropy reflects missing information, quantifying the uncertainty within a dataset. Information gain measures the expected reduction in this entropy when answering a question, serving as a metric for how informative a split is in classification trees. It is calculated as the difference between the original class entropy and the weighted average of the class entropies resulting from the split subsets."
+    },
+    {
+      "slide": 33,
+      "title": "Example",
+      "summary": "This tennis example analyzes a dataset of 14 cases (9 positive, 5 negative) by calculating information gain for Humidity and Wind attributes. Splitting by Humidity yields subsets with entropies of 0.985 and 0.592, resulting in an information gain of 0.151. In contrast, splitting by Wind produces a lower gain of 0.048, demonstrating that Humidity provides more useful information for classification than Wind in this specific scenario."
+    },
+    {
+      "slide": 34,
+      "title": "Choosing a test: regression",
+      "summary": "When the target variable is numerical, regression tests are chosen by evaluating how well a split minimizes prediction error. Since predictions typically use the mean of the subset values, the optimal test creates groups where instances have similar values, ensuring the mean closely approximates the actual data points. This reduces average loss by preventing predictions from deviating significantly from real values."
+    },
+    {
+      "slide": 35,
+      "title": "Variance reduction",
+      "summary": "Variance reduction serves as a heuristic for decision trees when dealing with continuous values, aiming to create subsets where examples have similar values by minimizing spread rather than maximizing information gain. It is calculated as the original set's variance minus the weighted average variance of the resulting subsets, where greater reduction indicates better splits. Maximal reduction occurs when all values in the resulting subsets are identical, yielding a variance of zero."
+    },
+    {
+      "slide": 36,
+      "title": "When to stop splitting nodes?",
+      "summary": "In principle, node splitting continues until every subset contains instances with identical Y values, creating pure leaves. While this approach is optimal for Task 1 where generalization is unnecessary, it poses a significant risk of overfitting in Task 2. Consequently, stopping the splitting process earlier than achieving complete purity is often required to ensure better model performance on new data."
+    },
+    {
+      "slide": 37,
+      "title": "37",
+      "summary": "Slide 37 illustrates a decision tree structure where internal nodes perform binary tests in the form of $X < \\dots$ or $Y < \\dots$. The visual representation uses sequences of plus and minus signs to denote the resulting classification outcomes along different branches. This diagram demonstrates how splitting on variables X and Y partitions the data space into distinct regions based on these threshold comparisons."
+    },
+    {
+      "slide": 38,
+      "title": "38",
+      "summary": "Slide 38 illustrates a decision tree structure that utilizes comparison tests in the form of $X < \\dots$ or $Y < \\dots$. The specific example provided demonstrates a node evaluating the condition $Y < 4$, which branches into \"yes\" and \"no\" outcomes based on the variable values. This visual representation highlights how such trees partition data using simple inequality thresholds."
+    },
+    {
+      "slide": 39,
+      "title": "39",
+      "summary": "Slide 39 illustrates a decision tree that classifies data points as positive (+) or negative (-) using tests of the form $X < \\dots$ or $Y < \\dots$. The specific example shows a root node testing $Y < 4$, which branches to a \"yes\" outcome (positive) and a \"no\" path leading to a secondary test of $X < 3$. This structure demonstrates how sequential threshold comparisons on variables X and Y partition the feature space into distinct classification regions."
+    },
+    {
+      "slide": 40,
+      "title": "40",
+      "summary": "This slide illustrates constructing a decision tree using two input variables, X and Y, where tests take the form of inequalities like $Y < 4$ or $X < 3$. The first split at $Y < 4$ effectively separates most negative instances from the rest, while a subsequent split at $X < 3$ further refines the classification. Although this tree structure successfully groups the data points, the professor notes that it remains imperfect because it does not achieve a completely pure separation of positive and negative outputs."
+    },
+    {
+      "slide": 41,
+      "title": "Overfitting: effect on generalization",
+      "summary": "Overfitting increases a decision tree's consistency with the training dataset (D) but reduces its accuracy on instances outside that set. As the tree size grows, performance on the training data improves while generalization to unseen data declines, marking the onset of overfitting where the model fails to generalize effectively beyond the specific examples it was trained on."
+    },
+    {
+      "slide": 42,
+      "title": "How to avoid overfitting?",
+      "summary": "To avoid overfitting in decision trees, two primary strategies are employed. The first is \"cautious splitting,\" which restricts node division unless the split is confirmed to be meaningful and unlikely to cause overfitting. The second approach is \"post-pruning,\" where a large tree is constructed without immediate concern for overfitting, followed by the removal of branches that provide little contribution."
+    },
+    {
+      "slide": 43,
+      "title": "1. Cautious splitting",
+      "summary": "Cautious splitting addresses when to stop growing a decision tree to avoid overfitting, which occurs when accuracy on training data increases while accuracy on unseen data declines. The goal is to identify the \"turning point\" where generalization performance peaks before it drops due to excessive tree size. Although using predicted accuracy directly as a splitting criterion is ineffective, practical approaches involve setting minimum instance thresholds for subtrees rather than splitting until perfect separation is achieved."
+    },
+    {
+      "slide": 44,
+      "title": "44",
+      "summary": "To estimate the turning point when performance curves rely on unseen data, a validation set is employed. This approach involves setting aside a specific subset of data that is excluded from the tree-growing process. Instead, this reserved set is used exclusively to evaluate accuracy on unseen data, providing an unbiased estimate of model performance."
+    },
+    {
+      "slide": 45,
+      "title": "2. Post-pruning",
+      "summary": "Post-pruning addresses the risk of stopping tree growth too early due to temporary accuracy dips by first growing the tree to its full size. The algorithm then evaluates nodes starting from the bottom, calculating validation set accuracy if each branch were removed. If removing a node does not lower accuracy, that branch is cut, resulting in a smaller tree with comparable or improved predictive performance."
+    },
+    {
+      "slide": 46,
+      "title": "Illustration",
+      "summary": "Illustration 46 demonstrates pruning subtrees in a specific sequence, removing nodes A, D, C, and others only when accuracy remains unchanged. The slide presents this ordered process alongside a numerical list from 1 to 7 and explicitly questions why the order of pruning is important for maintaining model performance."
+    },
+    {
+      "slide": 47,
+      "title": "47",
+      "summary": "Slide 47 outlines the relationship between decision tree size and model performance, specifically comparing accuracy on training data versus accuracy on unseen data. The slide highlights how the size of the tree influences these metrics and introduces the concept of pruning as a method to affect overall accuracy."
+    },
+    {
+      "slide": 48,
+      "title": "Post-pruning vs. cautious splitting",
+      "summary": "Modern tree learners prefer post-pruning over cautious splitting (pre-pruning) because, despite requiring more effort to build and then reduce a large tree, it yields slightly more accurate results. Since tree learning is highly efficient, the additional computational cost is generally acceptable. Conversely, failing to prune a tree at all is typically inadvisable as it leads to overfitting."
+    },
+    {
+      "slide": 49,
+      "title": "A generic algorithm",
+      "summary": "Slide 49 introduces the concept of a generic algorithm, highlighting the common structural framework shared by Decision Tree (DT) learners. It further notes that while these learners share this foundational structure, distinct differences exist between specific implementations."
+    },
+    {
+      "slide": 50,
+      "title": "A generic TDIDT algorithm",
+      "summary": "TDIDT stands for \"top-down induction of decision trees,\" also known as recursive partitioning. While most learners follow this basic approach to efficiently create small, low-risk trees, they differ in specific details. The process typically involves two phases: first, growing the tree by adding and splitting nodes, followed by a second phase of pruning."
+    },
+    {
+      "slide": 51,
+      "title": "A generic TDIDT algorithm",
+      "summary": "The generic TDIDT algorithm constructs a decision tree by first growing a full tree and then pruning it. The recursive `grow_tree` function selects the best test to partition examples into subsets; if a stopping criterion is met, it returns a leaf node, otherwise it recursively builds subtrees for each outcome. Functions like `generate_tests` allow for variations in how tests are created based on attribute types, such as nominal attributes with multiple outcomes."
+    },
+    {
+      "slide": 52,
+      "title": "A generic TDIDT algorithm",
+      "summary": "A generic Top-Down Induction of Decision Trees (TDIDT) algorithm relies on five key functions where specific implementations differ. These include `prune_tree` for post-construction pruning, `generate_tests` to identify candidate tests, and `best_test` to select the optimal test using heuristics. Additionally, the algorithm defines a `stop_criterion` to determine when splitting ceases and specifies `info` for data stored in leaf nodes."
+    },
+    {
+      "slide": 53,
+      "title": "generate_tests",
+      "summary": "While standard decision trees create one subtree per nominal value or two subtrees for numerical attributes using $X<c$, alternatives exist for complex scenarios. For nominal attributes with many values, splits can group values into sets to produce binary outcomes. Numerical attributes offer further flexibility through interval tests ($X \\in [c_1, c_2]$) or linear combinations ($aX_1 + bX_2 < c$), alongside the critical challenge of determining the optimal threshold constant $c$."
+    },
+    {
+      "slide": 54,
+      "title": "Illustration: effect of type of tests",
+      "summary": "Slide 54 illustrates how different test types affect decision boundaries using a dataset of positive and negative instances. It contrasts \"oblique trees,\" which utilize linear combinations of features in the form $aX+bY<c$, against standard axis-parallel tests defined by individual thresholds like $X<c$ or $Y<c$. This comparison highlights the geometric differences between diagonal splits and orthogonal splits when separating classes."
+    },
+    {
+      "slide": 55,
+      "title": "Type of tests affects expressiveness",
+      "summary": "Oblique trees are more expressive than non-oblique trees because they use linear combinations of variables to create diagonal class boundaries, often requiring fewer splits to separate data. However, they are significantly harder to learn as determining the optimal test involves optimizing multiple parameters rather than a single threshold. Consequently, despite their theoretical advantages in specific cases, non-oblique trees remain much more common in practice due to their faster construction and lower computational cost."
+    },
+    {
+      "slide": 56,
+      "title": "best_test",
+      "summary": "For classification trees, best_test selection typically uses information gain (entropy reduction) or Gini impurity reduction, while regression trees rely on variance or standard deviation reduction. The professor illustrates that a split yielding identical class distributions in child nodes results in zero information gain, whereas a split creating at least one pure leaf reduces entropy and provides positive gain. Algorithms like C4.5 use gain ratio as an alternative to information gain, while CART specifically minimizes Gini impurity."
+    },
+    {
+      "slide": 57,
+      "title": "• Tests with many possible outcomes have an (unfair?) advantage over tests with few",
+      "summary": "Tests with many possible outcomes possess an unfair advantage in decision trees because they can generate higher information gain than binary tests. To address this bias, which can lead to overfitting, the Gain Ratio normalizes Information Gain by dividing it by \"Split Information,\" a measure of the test's maximum potential gain based on outcome distribution. This heuristic ensures fairer comparisons between attributes with varying numbers of values."
+    },
+    {
+      "slide": 58,
+      "title": "• Typically a binary split of the form x < c is made",
+      "summary": "For numerical attributes, a binary split of the form $x < c$ is typically created by testing multiple candidate values for the threshold $c$. The optimal $c$ is selected as the one yielding the best heuristic value, such as Information Gain or Gini index. Although evaluating many potential thresholds appears computationally expensive, efficient methods exist to determine this optimal split with performance comparable to handling nominal data."
+    },
+    {
+      "slide": 59,
+      "title": "info",
+      "summary": "For classification trees, leaves typically store the most frequent class, though they may alternatively retain the full class distribution or all relevant training examples to support uncertainty assessment. In regression trees, the leaf value is usually the mean of target values, with alternatives including the median or variance. These storage options allow users to decide prediction thresholds based on confidence levels rather than relying solely on a single point estimate."
+    },
+    {
+      "slide": 60,
+      "title": "stop_criterion",
+      "summary": "Although post-pruning is generally preferred over early stopping, specific criteria justify halting tree growth immediately. These include cases where all instances share the same class or when too few examples remain to split further. To ensure meaningful generalization and avoid leaves of size one, splitting should only proceed if tests yield subtrees containing at least two examples each."
+    },
+    {
+      "slide": 61,
+      "title": "A note on heuristics for classification",
+      "summary": "While C4.5 uses entropy and CART uses Gini as impurity measures, using predictive accuracy directly as a heuristic fails because it does not distinguish between splits that improve class purity versus those that do not. As demonstrated by comparing two split scenarios, accuracy can remain unchanged even when one split creates a perfectly pure node, rendering it ineffective for guiding tree construction. Consequently, established impurity metrics like Gini and Information Gain are preferred over simple accuracy to ensure meaningful test selection."
+    },
+    {
+      "slide": 62,
+      "title": "Impurity measures",
+      "summary": "Impurity measures quantify uncertainty as a function of class proportion $p$ in binary classification, where entropy reaches zero at pure nodes and peaks at a 50-50 split. Classification error, defined as one minus accuracy, decreases linearly from the majority class proportion until reaching 0.5 before rising again. A key observation is that effective impurity measures must be strictly concave, exhibiting curved behavior rather than straight lines to properly reflect uncertainty changes."
+    },
+    {
+      "slide": 63,
+      "title": "Good impurity measures are strictly",
+      "summary": "Good impurity measures must be strictly concave functions, as established by Breiman et al. (1984). Information gain is calculated as the vertical difference between the original entropy point at proportion $p$ and the weighted average entropy of the split nodes, which lies on the straight line connecting the child nodes' entropies. Because accuracy or error measures form a straight line rather than a concave curve, they yield zero information gain, making them ineffective for determining optimal splits."
+    },
+    {
+      "slide": 64,
+      "title": "Good impurity measures are strictly",
+      "summary": "Good impurity measures must be strictly concave. In contrast, accuracy is often too restrictive because it only improves if a child node's majority class differs from its parent's; otherwise, many valid tests yield zero accuracy gain. This limitation arises because linear interpolation between points results in no gain, failing to capture the benefits of splitting when the majority class remains unchanged."
+    },
+    {
+      "slide": 65,
+      "title": "Good impurity measures are strictly",
+      "summary": "Good impurity measures must be strictly concave to ensure consistent improvement. In contrast, accuracy only yields a non-zero gain if a split changes the majority class of at least one child node relative to its parent. This requirement is often too restrictive because small, incremental improvements in purity result in zero accuracy gain, making metrics like Information Gain or Gini preferable for decision tree construction."
+    },
+    {
+      "slide": 66,
+      "title": "How much work is it?",
+      "summary": "Slide 66 introduces the topic of computational complexity regarding decision trees, specifically addressing the amount of work required for both learning and using them. The slide poses the central question of quantifying this effort."
+    },
+    {
+      "slide": 67,
+      "title": "Computational complexity of tree",
+      "summary": "This section analyzes the computational complexity of tree learning by examining how dataset size influences effort. Given a dataset D with N instances and m attributes, the analysis investigates how increasing rows (N) or columns (m) affects the work required to learn a tree. The discussion specifically focuses on determining the best test for a node, noting that computing thresholds for numerical variables represents significant computational work despite the overall efficiency of the learning process."
+    },
+    {
+      "slide": 68,
+      "title": "Splitting one node",
+      "summary": "To split a node, the algorithm identifies the best test by evaluating every possible candidate. For each test, it partitions the dataset and computes a quality metric, such as entropy, to determine its score. The test yielding the highest quality is selected, and the data is finally repartitioned according to this optimal split before proceeding to the next node."
+    },
+    {
+      "slide": 69,
+      "title": "Computing the quality of one test",
+      "summary": "To compute the quality of a single test, use information gain, defined as the reduction in entropy. This requires calculating class entropy for the parent node and its subsets by determining the proportion ($p_i$) of each class within those sets. The proportion is found by counting instances of a specific class in a subset and dividing by the total number of instances in that set."
+    },
+    {
+      "slide": 70,
+      "title": "Computing the quality of one test",
+      "summary": "Slide 70 demonstrates computing the quality of a single test using a dataset with attributes A, B, and C against positive and negative classes. The slide presents counts for each attribute's distribution across classes, noting that for attribute C, the probability of being positive (ppos) is 0.5 and the probability of being negative (pneg) is 0.5. This calculation relies on the provided frequency table where attribute C appears once in the positive class and once in the negative class out of two total instances."
+    },
+    {
+      "slide": 71,
+      "title": "Computing the quality of one test:",
+      "summary": "To efficiently evaluate continuous attribute thresholds, start with a threshold below all values where no cases satisfy the condition. As the threshold increases to the next value, update the contingency table by moving only the single affected case from the \"no\" column to the \"yes\" column. This incremental update avoids recalculating the entire table for every possibility, significantly reducing the computational work required to assess test quality across all thresholds."
+    },
+    {
+      "slide": 72,
+      "title": "Efficiently computing test quality for",
+      "summary": "To efficiently compute test quality for continuous attributes, first sort all tuples by the attribute value from smallest to largest. By gradually moving the threshold and simply updating the class count tables, testing all possible thresholds requires only slightly more work than testing a single one. This incremental approach avoids redundant calculations while evaluating split points."
+    },
+    {
+      "slide": 73,
+      "title": "Efficiently computing test quality for",
+      "summary": "To efficiently compute test quality for continuous attributes, first sort all tuples by the attribute value from small to large. By gradually moving the threshold and simply updating the count tables, testing all possible thresholds requires only slightly more work than testing a single one. This approach avoids redundant calculations while evaluating split points like A < 2.5."
+    },
+    {
+      "slide": 74,
+      "title": "Efficiently computing test quality for",
+      "summary": "To efficiently compute test quality for continuous attributes, first sort all tuples by the attribute value from smallest to largest. By gradually moving the threshold through this sorted list, class count tables can be updated incrementally rather than recalculated from scratch. This approach ensures that testing all possible thresholds requires only slightly more computational effort than evaluating a single threshold."
+    },
+    {
+      "slide": 75,
+      "title": "Computing the quality of one test",
+      "summary": "Computing test quality requires a single scan of the dataset for both nominal and continuous attributes. For nominal attributes, Information Gain (IG) is calculated once after building the table, whereas continuous attributes require sorting the data initially and then updating the table to compute IG for each intermediate split during one pass. Although continuous attributes involve more calculations, this adds only a constant factor, ensuring that finding the best test for a node remains linear in the number of instances."
+    },
+    {
+      "slide": 76,
+      "title": "Splitting one node",
+      "summary": "When splitting a single node containing $n$ instances (distinct from the total dataset size $N$), the computational work scales linearly with $n$. Since the number of tests is typically proportional to the number of attributes $m$, and computing the quality of each test requires $O(n)$ time, the total complexity to evaluate all tests is $O(nm)$. This overall workload corresponds directly to the size of the data table for that specific node."
+    },
+    {
+      "slide": 77,
+      "title": "Splitting multiple nodes",
+      "summary": "Splitting a node increases the number of nodes but reduces the data elements in each, keeping the total instances per tree level constant at N. Consequently, the overall work remains the same for each level because processing time scales linearly with instance count; for example, splitting 10,000 instances into 2,000 and 8,000 results in combined processing times of 0.2ms and 0.8ms, totaling the original 1Ms. This work only diminishes when leaf nodes are created."
+    },
+    {
+      "slide": 78,
+      "title": "Overall complexity",
+      "summary": "If decision tree splits are balanced, the tree height is O(log N), resulting in an overall learning complexity of O(m N log N), where N is the number of instances and m is the number of attributes. This makes tree growing nearly linear relative to dataset size because the logarithmic factor grows slowly. However, if splits are unbalanced, the complexity can degrade to O(m N²)."
+    },
+    {
+      "slide": 79,
+      "title": "Overall complexity: unbalanced trees",
+      "summary": "In unbalanced decision trees, the height can reach O(N), a scenario that is possible in practice when splits are highly skewed. However, effective heuristics like Information Gain (IG) generally promote balanced splits to avoid this worst-case complexity. The slide illustrates how uneven instance distribution at each node contributes to this linear growth in tree depth."
+    },
+    {
+      "slide": 80,
+      "title": "Making predictions",
+      "summary": "Making predictions with decision trees is highly efficient, requiring only *h* tests where *h* is the tree height. Heuristics like information gain create balanced splits that minimize height by rapidly reducing entropy or variance to reach pure leaf nodes. Consequently, a single prediction typically involves just 5–6 tests, enabling millions of cases to be processed per second."
+    },
+    {
+      "slide": 81,
+      "title": "Complexity: conclusions",
+      "summary": "Under mild assumptions, decision tree learning is highly efficient, making it particularly advantageous for processing big data. Additionally, prediction using decision trees is extremely fast, typically completing in less than one microsecond. These properties highlight the algorithm's scalability and speed in practical applications."
+    },
+    {
+      "slide": 82,
+      "title": "Handling missing",
+      "summary": "Slide 82: Handling missing values."
+    },
+    {
+      "slide": 83,
+      "title": "What about missing values?",
+      "summary": "When computing test quality, ignore instances with missing values for that specific attribute while retaining them for other tests. During splitting, handle missing values by either imputing the most likely value or partially assigning the example to multiple branches proportional to their probabilities. For prediction, generate a weighted vote among all leaves where the example (partially) ends up based on these branching possibilities."
+    },
+    {
+      "slide": 84,
+      "title": "Distribution: illustration",
+      "summary": "Slide 84 illustrates a classification problem using a dataset of weather attributes (Outlook, Humidity, Wind) to predict whether to \"Play\". It demonstrates calculating class probabilities for a new instance [?, high, strong], where the distribution shows 10/14 instances as \"no\" and 4/14 as \"yes\". Based on this majority vote, the slide concludes that the predicted classification for the example is \"no.\""
+    },
+    {
+      "slide": 85,
+      "title": "Model trees",
+      "summary": "Model trees are defined as more complex versions of regression trees. This slide introduces them as an advanced structure that builds upon the foundational concepts of regression trees."
+    },
+    {
+      "slide": 86,
+      "title": "Representation power of",
+      "summary": "Regression trees possess the representation power to model piecewise constant functions. As illustrated by the decision structure involving thresholds at $X < 1$ and $X < 2$, these trees partition the input space into distinct regions where the output $Y$ remains constant, such as values of 0.5, 1.5, or 2 depending on the specific path taken through the tree nodes."
+    },
+    {
+      "slide": 87,
+      "title": "Representation power of",
+      "summary": "Slide 87 illustrates the representation power of regression trees by attempting to model the linear target function Y=X. The slide depicts a tree structure using split conditions like X<0.5 and X<1 to produce constant predictions (e.g., Y=0.25, Y=0.75) within specific intervals. This demonstrates that regression trees approximate continuous functions through piecewise constant segments rather than capturing the linear relationship directly."
+    },
+    {
+      "slide": 88,
+      "title": "Model trees",
+      "summary": "Model trees are a variation of regression trees where each leaf node contains a linear model rather than a single constant value. This structure allows the tree to represent piecewise linear functions, enabling it to fit complex relationships that standard piecewise constant regression trees cannot capture effectively."
+    },
+    {
+      "slide": 89,
+      "title": "A model tree learner: M5",
+      "summary": "M5, proposed by Quinlan (1992) and implemented as M5' in Weka (Wang & Witten, 1997), is a prominent model tree learner. It performs standard regression tree learning but replaces leaf values with linear models once tree construction concludes. Although M5 selects tests to minimize variance, the slide notes this criterion is no longer optimal for this specific approach, prompting consideration of better alternatives."
+    },
+    {
+      "slide": 90,
+      "title": "RETIS",
+      "summary": "A subset is considered good if its data can be well approximated by a linear model, noting that Y variance is not necessarily a reliable indicator of this quality. Consequently, M5's heuristics are appropriate for regression trees with constant leaf predictions but fail when leaves utilize linear models. The splitting procedure aims to find tests where subsets share similar target values, repeating until all subsets contain identical Y values."
+    },
+    {
+      "slide": 91,
+      "title": "RETIS",
+      "summary": "The RETIS system (Karalic, 1992) improves subset splitting by performing linear regression in each potential subset and selecting the test that minimizes the average residual variance. However, determining the optimal test has a computational complexity of O(m³), where m is the number of variables, due to the requirements of multiple regression. Consequently, RETIS becomes computationally prohibitive and very slow when applied to datasets with a high number of variables."
+    },
+    {
+      "slide": 92,
+      "title": "Mauve",
+      "summary": "Mauve is a model tree learner that selects tests by evaluating the reduction of residual variance after univariate linear regression ($Y=aX+b$). It produces smaller and more accurate trees than M5, with performance speed slightly slower than M5 but faster than RETIS. This approach is based on the heuristic proposed by Vens et al. (2006) for learning model trees."
+    },
+    {
+      "slide": 93,
+      "title": "Mauve: motivating example",
+      "summary": "Slide 93 presents a motivating example for Mauve using a target function defined as f(x)=x for 0<x<1 and f(x)=1-x for 1<x<2. The slide notes that a decision tree exists to express this function perfectly, specifically splitting on the condition X<1 to yield Y=X or Y=1-X. It then poses the critical question of whether the M5 algorithm can successfully identify this optimal tree structure."
+    },
+    {
+      "slide": 94,
+      "title": "Mauve: motivating example",
+      "summary": "Slide 94 presents a motivating example demonstrating that minimizing average variance does not necessarily yield an optimal split in decision trees. The provided data shows that while the average variance is maximally reduced at a threshold of approximately $c \\approx 0.4$, it fails to decrease for $c=1$, which represents the actual optimal test. This discrepancy highlights the limitation of using average variance minimization as a sole criterion for determining split quality."
+    },
+    {
+      "slide": 95,
+      "title": "Mauve: motivating example",
+      "summary": "Slide 95 presents a motivating example where the M5 algorithm constructs a complex decision tree to model scattered data points. The resulting structure features ten leaf nodes (LM1–LM10), each defined by specific linear regression equations or constant values derived from split conditions such as x ≤ 1.6 and x ≤ 0.51. This visualization demonstrates how M5 partitions the input space to fit local linear models across different regions."
+    },
+    {
+      "slide": 96,
+      "title": "Mauve vs. M5’",
+      "summary": "Slide 96 presents an experimental comparison of Mauve and M5' on synthetic data, visualized through multiple plots. The slide includes axis labels ranging from 0.0 to 2.0 and 0.0 to 1.2, alongside a legend identifying \"Mauve,\" \"M5',\" and \"Random splits\"."
+    },
+    {
+      "slide": 97,
+      "title": "Multi-target trees",
+      "summary": "Multi-target trees are a method for predicting multiple variables simultaneously using a single decision tree. This approach consolidates the prediction of several target outputs into one unified model structure, rather than building separate trees for each variable. The core concept focuses on efficiency and integration within the tree-based learning framework."
+    },
+    {
+      "slide": 98,
+      "title": "Multi-target trees",
+      "summary": "While classification and regression trees typically predict a single target variable, the principle of variance reduction can be generalized to handle vector predictions. This extension enables a single tree to simultaneously predict multiple variables. The slide concludes by posing the critical question of whether this multi-target approach performs effectively in practice."
+    },
+    {
+      "slide": 99,
+      "title": "Multi-label classification",
+      "summary": "Multi-label classification involves predicting a set of labels for each instance rather than a single class. A primary example is assigning multiple keywords to texts, where the input $X$ represents the text description (e.g., bag-of-words) and the output $Y$ is a set of relevant keywords like {animals, climate change, North Pole}. The core challenge addressed is determining how to learn a model capable of predicting these label sets."
+    },
+    {
+      "slide": 100,
+      "title": "Multi-label classification",
+      "summary": "Multi-label classification employs two primary approaches: binary relevance and label powersets. Binary relevance trains one independent binary decision tree for each individual label to predict yes/no outcomes. In contrast, label powersets treats every possible combination of labels as a distinct class, resulting in $2^n$ combined labels from $n$ original labels, which are then predicted by a single decision tree."
+    },
+    {
+      "slide": 101,
+      "title": "Multi-label classification",
+      "summary": "Multi-label classification can be implemented in decision trees using vector encoding, where each label set is represented as a binary 0/1 vector. This approach requires minimal algorithmic changes: the split criterion uses the variance of these vectors instead of scalar targets, and leaf nodes store the mean vector representing class proportions. For instance, averaging multiple binary vectors in a leaf yields a probability vector like [1, 1, 0, 0.67, 0.33]."
+    },
+    {
+      "slide": 102,
+      "title": "Multi-label trees: prediction",
+      "summary": "Multi-label trees predict sets of labels rather than a single label by locating the leaf for a new instance and selecting all labels where the proportion exceeds a given threshold, typically 0.5. For example, a leaf distribution of [1, 1, 0, 0.67, 0.33] yields the predicted set {a, b, d}. This approach allows one tree to simultaneously make multiple predictions, such as for protein functions, often outperforming separate trees for each label."
+    },
+    {
+      "slide": 103,
+      "title": "Hierarchical multilabel classification",
+      "summary": "Hierarchical multilabel classification extends standard multilabel problems by organizing labels into a hierarchy where a label can only appear if all its ancestors are also present. This constraint ensures that predictions respect the structural relationships between categories. Common applications include classifying texts into newsgroups and assigning functions to proteins."
+    },
+    {
+      "slide": 104,
+      "title": "Hierarchical multilabel classification",
+      "summary": "Hierarchical multilabel classification with decision trees utilizes the same vector encoding approach as regular multilabel classification. This method automatically satisfies the constraint that a label can only appear if all its ancestors are present in the instance's label set. Additionally, weights can be assigned to different labels to penalize high-level mistakes more strongly than low-level ones."
+    },
+    {
+      "slide": 105,
+      "title": "An application & empirical validation",
+      "summary": "This slide presents an application of Hierarchical Multilabel Classification (HMC) in functional genomics to predict protein biological functions from their descriptions. The task involves distinguishing among 250 hierarchically organized functions, where a single protein can possess multiple roles in intracellular processes. This case study is based on Blockeel et al. (2006), which utilizes decision trees for this specific classification challenge."
+    },
+    {
+      "slide": 106,
+      "title": "“Normal” classification trees",
+      "summary": "While \"normal\" classification trees are advantageous for being fast and interpretable, learning a separate tree for each function undermines these benefits. In scenarios with 250 functions, generating 250 distinct trees results in a system that is no longer fast or interpretable. This approach contrasts the efficiency of single-tree models with the complexity introduced by scaling to multiple descriptive attributes and labels."
+    },
+    {
+      "slide": 107,
+      "title": "HMC trees",
+      "summary": "HMC trees learn a single decision tree to predict a 250-dimensional class vector representing multiple labels. For heuristic calculations, \"variance\" is defined as the mean squared distance to the mean within this 250-dimensional space. The model maps descriptive attributes (A1 through An) to specific label combinations, such as instances G1 and G2 predicting distinct subsets of the 250 possible classes."
+    },
+    {
+      "slide": 108,
+      "title": "Good interpretability",
+      "summary": "Converting decision trees into if-then rule format yields short, interpretable rules. For instance, a specific set of conditions involving nitrogen depletion and stress factors predicts classes such as 40/3 with high precision (0.97), meaning 97% of cases meeting these criteria are correctly classified. However, the recall is low at 0.15, indicating this rule covers only 15% of all actual class 40/3 instances."
+    },
+    {
+      "slide": 109,
+      "title": "Decision trees in",
+      "summary": "Decision trees in practice"
+    },
+    {
+      "slide": 110,
+      "title": "Weka",
+      "summary": "Weka is a popular, free, and easy-to-use data mining tool available for download at http://www.cs.waikato.ac.nz/ml/weka/. It includes highly optimized learners such as J48 for decision trees and M5' for model trees. These algorithms are variants of the C4.5 and M5 methods, respectively."
+    },
+    {
+      "slide": 111,
+      "title": "Python: scikit-learn",
+      "summary": "Python's scikit-learn package is widely used in machine learning and provides basic decision tree support. The slide demonstrates loading the Iris dataset, training a `DecisionTreeClassifier`, and visualizing the resulting tree using `matplotlib` and `tree.plot_tree`. This workflow illustrates how to load data, fit a model, and plot the decision structure directly within Python."
+    },
+    {
+      "slide": 112,
+      "title": "Python: scikit-learn",
+      "summary": "Slide 112 introduces the topic of using the scikit-learn library within the Python programming environment."
+    },
+    {
+      "slide": 113,
+      "title": "Python: scikit-learn",
+      "summary": "Slide 113 introduces the `scikit-learn` library in Python, specifically highlighting that certain methods are defined for `DecisionTreeClassifier` objects. The slide serves as a header indicating the availability of these methods but does not list or describe specific functions within the provided text."
+    },
+    {
+      "slide": 114,
+      "title": "Other software",
+      "summary": "Many decision tree learners are available as stand-alone applications or integrated within data analysis platforms like R, SAS, and SPSS. Consequently, almost all modern statistical software packages now include decision trees as a standard analysis method."
+    }
+  ]
+}

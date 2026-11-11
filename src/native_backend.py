@@ -361,12 +361,15 @@ class NativeBackend:
         )
 
     def _lecture_bundle(self, document: Any) -> dict[str, Any]:
+        from src.lecture_artifacts import artifact_dir
+
         suffix = document.stored_path.suffix.lower()
         related = self._related_documents(document)
         source_job = self._matching_lecture_job(document)
+        portable = artifact_dir(self.library, document)
         empty = {"kind": "none", "source_job": None, "slides": [], "paragraphs": [], "translations": {}}
         if suffix in {".pdf", ".ppt", ".pptx"}:
-            slides_path = self._find_related_artifact(related, ("slides", "extracted")) or self._result_path(source_job, "slides_path")
+            slides_path = (portable / "slides.json" if (portable / "slides.json").is_file() else None) or self._find_related_artifact(related, ("slides", "extracted")) or self._result_path(source_job, "slides_path")
             slide_payload = self._read_json(slides_path)
             slides = [item for item in slide_payload.get("slides", []) if isinstance(item, dict)]
             is_named_pdf_deck = suffix == ".pdf" and "slides" in re.sub(
@@ -390,7 +393,7 @@ class NativeBackend:
                 except Exception:
                     is_deck = False
             if is_deck and slides:
-                summaries_path = self._find_related_artifact(related, ("slide", "summaries")) or self._result_path(source_job, "slide_summaries_path")
+                summaries_path = (portable / "slide_summaries.json" if (portable / "slide_summaries.json").is_file() else None) or self._find_related_artifact(related, ("slide", "summaries")) or self._result_path(source_job, "slide_summaries_path")
                 if summaries_path is None:
                     manual_summaries = self._manual_slide_summaries_path(document)
                     summaries_path = manual_summaries if manual_summaries.is_file() else None
@@ -400,7 +403,7 @@ class NativeBackend:
                     for item in summary_payload.get("slides", [])
                     if isinstance(item, dict) and str(item.get("slide", "")).isdigit()
                 }
-                alignment_path = self._find_related_artifact(related, ("alignment",)) or self._result_path(source_job, "alignment_path")
+                alignment_path = (portable / "alignment.json" if (portable / "alignment.json").is_file() else None) or self._find_related_artifact(related, ("alignment",)) or self._result_path(source_job, "alignment_path")
                 alignment_payload = self._read_json(alignment_path)
                 alignment = {
                     str(int(item["slide"])): [value for value in item.get("paragraphs", []) if isinstance(value, dict)]
@@ -460,7 +463,7 @@ class NativeBackend:
                     "translations": {},
                 }
         if suffix in {".mp3", ".wav", ".m4a", ".aac", ".flac", ".ogg", ".opus", ".mp4", ".mov", ".mkv", ".webm", ".m4v"}:
-            transcript_path = next((
+            transcript_path = (portable / "transcript.json" if (portable / "transcript.json").is_file() else None) or next((
                 item.stored_path for item in related
                 if "transcript_cleaned" in re.sub(r"[^a-z0-9]+", "_", item.original_name.casefold()).strip("_")
                 and item.stored_path.suffix.lower() == ".json"

@@ -12,7 +12,7 @@ from src.library import LibraryStore
 
 
 class LectureLibraryHandoffTest(unittest.TestCase):
-    def test_only_learner_facing_sources_and_concise_pdf_are_saved(self) -> None:
+    def test_lecture_sources_and_portable_links_are_saved(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             store = LibraryStore(root / "library")
@@ -69,6 +69,13 @@ class LectureLibraryHandoffTest(unittest.TestCase):
             documents = store.list_documents(subject.id)
             names = {document.original_name for document in documents}
             folder_counts = [folder.document_count for folder in store.list_folders(subject.id)]
+            folder = store.list_folders(subject.id)[0]
+            derived = store.subjects_root / subject.id / "derived" / folder.id
+            self.assertEqual(
+                {path.name for path in derived.iterdir()},
+                {"slides.json", "slide_summaries.json", "alignment.json", "transcript.json", "transcript.txt"},
+            )
+            self.assertEqual((derived / "transcript.json").read_text(encoding="utf-8"), transcript.read_text(encoding="utf-8"))
 
         self.assertEqual(
             names,
@@ -78,7 +85,7 @@ class LectureLibraryHandoffTest(unittest.TestCase):
                 "Summary.pdf",
             },
         )
-        self.assertEqual(len(messages), 3)
+        self.assertEqual(len(messages), 4)
         self.assertEqual(
             {document.folder_name for document in documents},
             {"Introduction to AI"},

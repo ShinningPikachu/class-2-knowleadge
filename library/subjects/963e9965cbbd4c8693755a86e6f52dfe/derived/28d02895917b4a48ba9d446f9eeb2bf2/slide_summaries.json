@@ -1,0 +1,326 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 6: Game Trees (26 Oct)",
+    "section_label": "Slide",
+    "completed": 35,
+    "total": 35,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Fundamentals of Artificial Intelligence",
+      "summary": "This lecture introduces the fundamentals of artificial intelligence, specifically focusing on game trees within the context of Professor Tias Guns' course for the 2026-27 academic year. The material presented is derived from and based on the slides of CS188 at Berkeley.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "Outline",
+      "summary": "This lecture outline introduces the foundational concepts of game-playing algorithms, beginning with a historical overview. The core technical topics include the Minimax algorithm for zero-sum games, the optimization technique known as α-β pruning, and the practical application of finite lookahead combined with evaluation functions.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 3,
+      "title": "A brief history",
+      "summary": "This slide traces AI game history, starting with Checkers: from the first player (1950) and Samuel's self-taught program (1959) to Chinook defeating the world champion (1994), culminating in the game being \"solved\" in 2007 via a 39-trillion-state endgame database that guarantees optimal play. Chess progressed from early theoretical work (1945–1960) to Deep Blue's victory over Kasparov (1997); unlike Checkers, it remains unsolved due to its vast state space, though modern engines like Stockfish vastly exceed human ratings. Go, characterized by a branching factor exceeding 300, evolved from barely legal play…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 4,
+      "title": "Game = task environment with > 1 agent",
+      "summary": "A game is defined as a task environment involving more than one agent, characterized by axes such as determinism, information visibility, player count, turn structure, and zero-sum properties. The objective is to develop algorithms that calculate a contingent plan, or strategy, which recommends an optimal move for every possible eventuality. This approach assumes rational agents who maximize their own utility, often necessitating strategies that anticipate opponents minimizing the agent's utility in competitive scenarios.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 5,
+      "title": "“Standard” Games",
+      "summary": "\"Standard\" games are defined as deterministic, observable, two-player, turn-taking, zero-sum interactions formulated by an initial state, a function identifying the current player, and available actions. The formulation includes a transition model that maps states and legal actions to new states, alongside a terminal test replacing the previous goal test to identify end states. Finally, utility functions assign values to these terminal states for the relevant players, resolving any ambiguity regarding decision-making at the root.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 6,
+      "title": "Zero-Sum Games",
+      "summary": "Zero-sum games represent pure competition where agents possess opposite utilities, meaning the sum of their payoffs is always zero; consequently, one agent maximizes while the other minimizes. In these scenarios, any gain by one player corresponds directly to an equal loss for the opponent, such as a win yielding +1 and a loss -1, or a draw resulting in 0 for both. This stands in contrast to general games where agents have independent utilities, allowing for cooperation, indifference, or shifting alliances rather than strict opposition.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 7,
+      "title": "Adversarial Search",
+      "summary": "Adversarial search addresses decision-making in environments involving multiple agents with conflicting goals, where an agent's outcome depends on the actions of opponents. Unlike single-agent search, this paradigm requires anticipating and countering adversarial moves to maximize utility under competitive conditions. The provided sources introduce this fundamental concept.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 8,
+      "title": "Single-Agent Trees",
+      "summary": "Slide 8 introduces the concept of Single-Agent Trees, visually represented by a sequence of numerical values (8, 2, 0, 2, 6, 4, 6) and ellipses indicating continuation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 9,
+      "title": "Value of a State",
+      "summary": "The value of a state represents the best achievable utility from that point, defined as a known quantity for terminal states and the maximum value among successor states for non-terminal ones. When exact calculation is impossible, a deterministic evaluation function provides an estimated utility to guide search algorithms like alpha-beta pruning. However, relying on these estimates means optimality cannot be guaranteed unless all visited states are terminal, as the resulting values remain approximations rather than precise outcomes.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 10,
+      "title": "Tic-Tac-Toe Game Tree",
+      "summary": "Slide 10 introduces the concept of a Tic-Tac-Toe game tree, which represents the sequence of possible moves and resulting board states in the game.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 11,
+      "title": "Minimax Values",
+      "summary": "Minimax values are determined by the node type: MAX nodes, controlled by the agent, select the maximum value among successors ($V(s) = \\max_{s' \\in \\text{successors}(s)} V(s')$), while MIN nodes, controlled by the opponent, select the minimum value ($V(s) = \\min_{s' \\in \\text{successors}(s)} V(s')$). For terminal states, the value $V(s)$ is already known. This recursive evaluation propagates values up the game tree to determine optimal moves for both players.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 12,
+      "title": "Minimax algorithm",
+      "summary": "The Minimax algorithm selects the action leading to the state with the best minimax value by assuming all future moves will be optimal. It operates on the principle that while the agent maximizes its own score, a rational opponent will simultaneously maximize their score, which effectively minimizes the agent's outcome. Consequently, this approach ensures the agent acts rationally against another rational player by anticipating the opponent's best possible counter-moves.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 13,
+      "title": "Implementation",
+      "summary": "The implementation defines two recursive functions: `minimax_value` calculates the utility of a state by returning the terminal utility if reached, or recursively selecting the maximum value for MAX players and minimum value for MIN players across all possible actions. The `minimax-decision` function then determines the optimal move by identifying the specific action that yields the highest resulting `minimax_value`.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 14,
+      "title": "Minimax Efficiency",
+      "summary": "Minimax efficiency mirrors exhaustive Depth-First Search, requiring both time and space complexity of O(b^m). In chess, with a branching factor b ≈ 35 and depth m ≈ 100, calculating an exact solution is computationally infeasible. Since humans also cannot perform this exhaustive search, the algorithm necessitates alternative strategies to play the game effectively.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 15,
+      "title": "Game Tree Pruning",
+      "summary": "Game Tree Pruning",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 16,
+      "title": "Minimax Example",
+      "summary": "Slide 16 presents a specific Minimax example featuring a game tree with the numerical values 12, 8, 5, 2, 3, 2, 14, 4, 6, 3, 2, 2, and 3. These figures represent the terminal node utilities used to demonstrate the backward induction process where MAX and MIN players select optimal moves.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 17,
+      "title": "Alpha-Beta Example",
+      "summary": "This slide illustrates an Alpha-Beta pruning example where alpha ($\\alpha$) represents the best option found so far for any MAX node on the path to the root, shown here as $\\alpha=3$. The professor emphasizes that the order of move generation is critical: generating good moves first maximizes pruning efficiency by establishing tighter bounds earlier. Consequently, the algorithm can discard inferior branches sooner, reducing the total number of nodes evaluated while guaranteeing the optimal decision remains unchanged.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 18,
+      "title": "Alpha-Beta Quiz",
+      "summary": "Slide 18 introduces an interactive quiz on the Alpha-Beta pruning algorithm, directing students to access it via the URL http://PollEv.com/tias.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 19,
+      "title": "Alpha-Beta Quiz 2",
+      "summary": "Slide 19 introduces the second quiz on the Alpha-Beta pruning algorithm, directing students to access the interactive poll at http://PollEv.com/tias.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 20,
+      "title": "Alpha-Beta Quiz 2",
+      "summary": "Slide 20 presents an Alpha-Beta pruning quiz featuring a game tree with specific leaf values (10, 10, 10, 0, 2, 2) and unknown nodes marked by question marks. The slide requires determining the final alpha ($\\alpha$) and beta ($\\beta$) values at various decision points to identify which branches are pruned during the search process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 21,
+      "title": "Alpha-Beta Pruning",
+      "summary": "Alpha-Beta pruning optimizes search by eliminating branches where a node's value is already worse than the best alternative available to the maximizing player (α) or minimizing player (β). When computing a MIN node's value, if it drops below α, MAX will avoid this path, allowing immediate pruning of remaining children. With perfect move ordering, this technique effectively halves the search depth by pruning all but one child at alternating layers, rendering intermediate layers nearly irrelevant while maintaining the original branching factor as the base.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 22,
+      "title": "Alpha-Beta Implementation",
+      "summary": "The `min-value` function initializes the value $v$ to positive infinity and iterates through each successor to update $v$ as the minimum of its current value and the recursive result. It defines $\\alpha$ as MAX's best option on the path to the root and $\\beta$ as MIN's best option; if $v$ becomes less than or equal to $\\alpha$, the function returns immediately, pruning remaining successors by breaking out of the loop. Otherwise, it updates $\\beta$ with the minimum of $\\beta$ and $v$ before returning the final value.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 23,
+      "title": "Alpha-Beta Implementation",
+      "summary": "The Alpha-Beta implementation defines recursive `min-value` and `max-value` functions that initialize values to positive and negative infinity, respectively. During traversal, the algorithm prunes branches immediately if a successor's value falls outside the current bounds: `min-value` returns when $v \\le \\alpha$, while `max-value` returns when $v \\ge \\beta$. Here, $\\alpha$ represents MAX's best option on the path to the root, and $\\beta$ represents MIN's best option, allowing the search to terminate early without affecting the final decision.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 24,
+      "title": "Alpha-Beta Pruning Properties",
+      "summary": "Alpha-beta pruning preserves the minimax value at the root while significantly improving efficiency through better child ordering, often aided by iterative deepening. With perfect ordering, time complexity drops to O(b^(m/2)), effectively doubling the solvable depth; for chess, this reduces required nodes from 35^100 to roughly 35^50. This optimization exemplifies metareasoning, where reasoning about the search process itself guides algorithmic performance.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 25,
+      "title": "Resource Limits",
+      "summary": "Resource Limits",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 26,
+      "title": "Resource Limits",
+      "summary": "Because realistic games like chess are too large to search to terminal leaves, bounded lookahead limits exploration to a preset depth or horizon. When the search stops at non-terminal positions, an evaluation function estimates their utility, though this sacrifices the guarantee of optimal play. Given computational constraints, such as exploring one million nodes per move, increasing the search depth significantly improves decision quality, making deeper plies critical for performance.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 27,
+      "title": "Depth Matters",
+      "summary": "Although evaluation functions are inherently imperfect, deeper search generally yields better play or maintains quality with less accurate evaluations by revealing future consequences invisible at shallow horizons. For instance, a depth-10 lookahead exposes that moving toward an orange ghost forces the blue ghost to commit first, enabling a successful evasion that a short-sighted view would miss. This demonstrates how increased depth uncovers strategic solutions by allowing the agent to anticipate and manipulate opponent decisions before they occur.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 28,
+      "title": "Pacman with Depth-2 Lookahead",
+      "summary": "Slide 28 introduces the concept of \"Pacman with Depth-2 Lookahead,\" indicating a scenario where the agent evaluates moves two steps into the future.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 29,
+      "title": "Pacman with Depth-10 Lookahead",
+      "summary": "Slide 29 introduces the concept of a Pacman agent utilizing a depth-10 lookahead strategy. This specific configuration indicates that the search algorithm explores the game tree ten moves ahead to evaluate potential future states before selecting an action.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 30,
+      "title": "Depth Matters",
+      "summary": "Since evaluation functions are inherently imperfect, deeper search generally leads to better play or allows a less accurate function to achieve the same quality. Designers must balance the complexity of features against computational limits by choosing an appropriate depth limit (measured in plies) within available time constraints. This tradeoff is illustrated when shallow searches fail to detect critical future interactions, whereas deeper lookaheads reveal necessary strategic moves that simple evaluation metrics miss.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 31,
+      "title": "Evaluation Functions",
+      "summary": "Evaluation Functions",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 32,
+      "title": "Evaluation Functions",
+      "summary": "Evaluation functions assign scores to non-terminal states in depth-limited search, typically using a weighted linear sum of features like piece counts (e.g., $EVAL(s) = w_1 f_1(s) + \\dots$). While complex nonlinear functions trained via self-play reinforcement learning are also used, the search must terminate only in quiescent positions where no major feature value changes are expected.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 33,
+      "title": "Evaluation for Pacman",
+      "summary": "Evaluation for Pacman",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 34,
+      "title": "Generalized minimax",
+      "summary": "Generalized minimax extends the standard algorithm to handle multi-player, non-zero-sum games where terminal states and node values are represented as utility tuples rather than single scores. In this framework, each player independently maximizes only its own component within the tuple, a mechanism that dynamically enables both cooperation and competition among agents. This approach is algorithmically similar to traditional minimax but accommodates scenarios like the course project involving multiple distinct entities with individual scoring objectives.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 35,
+      "title": "Summary",
+      "summary": "Games necessitate decision-making when optimality is unattainable, relying on bounded-depth search and approximate evaluation functions to force efficient computation through techniques like alpha-beta pruning. This domain has driven pivotal AI research, including reinforcement learning in checkers, iterative deepening in chess, rational metareasoning in Othello, Monte Carlo tree search in Go, and partial-information solutions for poker. Video games present even greater challenges due to massive branching factors and state spaces, highlighting the ongoing need for advanced algorithmic development.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,2999 @@
+{
+  "metadata": {
+    "paragraph_count": 50,
+    "method_counts": {
+      "semantic": 50
+    },
+    "semantic_threshold": 0.2
+  },
+  "paragraph_alignment": [
+    {
+      "paragraph_id": 1,
+      "slide": 4,
+      "start": 0.27,
+      "end": 62.21,
+      "start_time": "00:00:00",
+      "end_time": "00:01:02",
+      "confidence": 0.8303,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 2,
+      "slide": 7,
+      "start": 62.21,
+      "end": 132.87,
+      "start_time": "00:01:02",
+      "end_time": "00:02:13",
+      "confidence": 0.7836,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 3,
+      "slide": 7,
+      "start": 133.67,
+      "end": 195.51,
+      "start_time": "00:02:14",
+      "end_time": "00:03:16",
+      "confidence": 0.8867,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 18,
+      "slide": 4,
+      "start": 1037.8,
+      "end": 1108.04,
+      "start_time": "00:17:18",
+      "end_time": "00:18:28",
+      "confidence": 0.8051,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 19,
+      "slide": 7,
+      "start": 1108.04,
+      "end": 1177.56,
+      "start_time": "00:18:28",
+      "end_time": "00:19:38",
+      "confidence": 0.6614,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 20,
+      "slide": 13,
+      "start": 1177.8,
+      "end": 1256.76,
+      "start_time": "00:19:38",
+      "end_time": "00:20:57",
+      "confidence": 0.8059,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 21,
+      "slide": 14,
+      "start": 1256.76,
+      "end": 1338.2,
+      "start_time": "00:20:57",
+      "end_time": "00:22:18",
+      "confidence": 0.8293,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 22,
+      "slide": 15,
+      "start": 1339.08,
+      "end": 1413.54,
+      "start_time": "00:22:19",
+      "end_time": "00:23:34",
+      "confidence": 0.7449,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 23,
+      "slide": 15,
+      "start": 1413.54,
+      "end": 1496.62,
+      "start_time": "00:23:34",
+      "end_time": "00:24:57",
+      "confidence": 0.7292,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 24,
+      "slide": 16,
+      "start": 1498.46,
+      "end": 1523.34,
+      "start_time": "00:24:58",
+      "end_time": "00:25:23",
+      "confidence": 0.6889,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 25,
+      "slide": 15,
+      "start": 1526.14,
+      "end": 1601.9,
+      "start_time": "00:25:26",
+      "end_time": "00:26:42",
+      "confidence": 0.7596,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 26,
+      "slide": 15,
+      "start": 1602.86,
+      "end": 1668.3,
+      "start_time": "00:26:43",
+      "end_time": "00:27:48",
+      "confidence": 0.6252,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 27,
+      "slide": 16,
+      "start": 1668.3,
+      "end": 1739.69,
+      "start_time": "00:27:48",
+      "end_time": "00:29:00",
+      "confidence": 0.6327,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 28,
+      "slide": 19,
+      "start": 1739.69,
+      "end": 1802.85,
+      "start_time": "00:29:00",
+      "end_time": "00:30:03",
+      "confidence": 0.5668,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 29,
+      "slide": 4,
+      "start": 1803.77,
+      "end": 1891.14,
+      "start_time": "00:30:04",
+      "end_time": "00:31:31",
+      "confidence": 0.7142,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 30,
+      "slide": 19,
+      "start": 1891.14,
+      "end": 1958.9,
+      "start_time": "00:31:31",
+      "end_time": "00:32:39",
+      "confidence": 0.7572,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 31,
+      "slide": 21,
+      "start": 1958.9,
+      "end": 1991.04,
+      "start_time": "00:32:39",
+      "end_time": "00:33:11",
+      "confidence": 0.8566,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 32,
+      "slide": 21,
+      "start": 1994.1,
+      "end": 2228.46,
+      "start_time": "00:33:14",
+      "end_time": "00:37:08",
+      "confidence": 0.8325,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 33,
+      "slide": 21,
+      "start": 2228.46,
+      "end": 2321.84,
+      "start_time": "00:37:08",
+      "end_time": "00:38:42",
+      "confidence": 0.6092,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 34,
+      "slide": 25,
+      "start": 2321.84,
+      "end": 2399.84,
+      "start_time": "00:38:42",
+      "end_time": "00:40:00",
+      "confidence": 0.6286,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 35,
+      "slide": 25,
+      "start": 2399.84,
+      "end": 2480.84,
+      "start_time": "00:40:00",
+      "end_time": "00:41:21",
+      "confidence": 0.6968,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 36,
+      "slide": 18,
+      "start": 2480.84,
+      "end": 2548.84,
+      "start_time": "00:41:21",
+      "end_time": "00:42:29",
+      "confidence": 0.7233,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 37,
+      "slide": 7,
+      "start": 2548.84,
+      "end": 2633.36,
+      "start_time": "00:42:29",
+      "end_time": "00:43:53",
+      "confidence": 0.7338,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 38,
+      "slide": 33,
+      "start": 2633.36,
+      "end": 2705.95,
+      "start_time": "00:43:53",
+      "end_time": "00:45:06",
+      "confidence": 0.7086,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 39,
+      "slide": 29,
+      "start": 2705.95,
+      "end": 2788.93,
+      "start_time": "00:45:06",
+      "end_time": "00:46:29",
+      "confidence": 0.768,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 40,
+      "slide": 29,
+      "start": 2788.93,
+      "end": 2870.42,
+      "start_time": "00:46:29",
+      "end_time": "00:47:50",
+      "confidence": 0.7426,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 41,
+      "slide": 31,
+      "start": 2870.42,
+      "end": 2949.92,
+      "start_time": "00:47:50",
+      "end_time": "00:49:10",
+      "confidence": 0.8096,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 42,
+      "slide": 33,
+      "start": 2949.92,
+      "end": 3033.2,
+      "start_time": "00:49:10",
+      "end_time": "00:50:33",
+      "confidence": 0.763,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 43,
+      "slide": 33,
+      "start": 3033.2,
+      "end": 3106.2,
+      "start_time": "00:50:33",
+      "end_time": "00:51:46",
+      "confidence": 0.8476,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 45,
+      "slide": 37,
+      "start": 3183.69,
+      "end": 3250.69,
+      "start_time": "00:53:04",
+      "end_time": "00:54:11",
+      "confidence": 0.7786,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 46,
+      "slide": 33,
+      "start": 3250.69,
+      "end": 3326.69,
+      "start_time": "00:54:11",
+      "end_time": "00:55:27",
+      "confidence": 0.8132,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 47,
+      "slide": 7,
+      "start": 3326.69,
+      "end": 3408.69,
+      "start_time": "00:55:27",
+      "end_time": "00:56:49",
+      "confidence": 0.7402,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 48,
+      "slide": 45,
+      "start": 3408.69,
+      "end": 3491.69,
+      "start_time": "00:56:49",
+      "end_time": "00:58:12",
+      "confidence": 0.736,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 49,
+      "slide": 36,
+      "start": 3491.69,
+      "end": 3551.69,
+      "start_time": "00:58:12",
+      "end_time": "00:59:12",
+      "confidence": 0.7222,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 51,
+      "slide": 52,
+      "start": 3615.94,
+      "end": 3675.92,
+      "start_time": "01:00:16",
+      "end_time": "01:01:16",
+      "confidence": 0.6813,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 52,
+      "slide": 50,
+      "start": 3675.92,
+      "end": 3736.09,
+      "start_time": "01:01:16",
+      "end_time": "01:02:16",
+      "confidence": 0.7899,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 53,
+      "slide": 50,
+      "start": 3736.09,
+      "end": 3813.92,
+      "start_time": "01:02:16",
+      "end_time": "01:03:34",
+      "confidence": 0.7496,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 54,
+      "slide": 7,
+      "start": 3815.14,
+      "end": 3890.11,
+      "start_time": "01:03:35",
+      "end_time": "01:04:50",
+      "confidence": 0.7887,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 55,
+      "slide": 15,
+      "start": 3890.11,
+      "end": 3963.6,
+      "start_time": "01:04:50",
+      "end_time": "01:06:04",
+      "confidence": 0.6355,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 56,
+      "slide": 52,
+      "start": 3963.6,
+      "end": 4043.28,
+      "start_time": "01:06:04",
+      "end_time": "01:07:23",
+      "confidence": 0.6532,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 57,
+      "slide": 7,
+      "start": 4054.54,
+      "end": 4112.86,
+      "start_time": "01:07:35",
+      "end_time": "01:08:33",
+      "confidence": 0.7062,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 58,
+      "slide": 7,
+      "start": 4116.16,
+      "end": 4231.21,
+      "start_time": "01:08:36",
+      "end_time": "01:10:31",
+      "confidence": 0.7378,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 59,
+      "slide": 50,
+      "start": 4231.21,
+      "end": 4296.64,
+      "start_time": "01:10:31",
+      "end_time": "01:11:37",
+      "confidence": 0.6749,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 60,
+      "slide": 50,
+      "start": 4296.64,
+      "end": 4358.82,
+      "start_time": "01:11:37",
+      "end_time": "01:12:39",
+      "confidence": 0.6748,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 61,
+      "slide": 52,
+      "start": 4358.82,
+      "end": 4429.56,
+      "start_time": "01:12:39",
+      "end_time": "01:13:50",
+      "confidence": 0.808,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 62,
+      "slide": 52,
+      "start": 4429.56,
+      "end": 4503.56,
+      "start_time": "01:13:50",
+      "end_time": "01:15:04",
+      "confidence": 0.8272,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 63,
+      "slide": 54,
+      "start": 4503.56,
+      "end": 4555.26,
+      "start_time": "01:15:04",
+      "end_time": "01:15:55",
+      "confidence": 0.6813,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 64,
+      "slide": 54,
+      "start": 4558.72,
+      "end": 4629.37,
+      "start_time": "01:15:59",
+      "end_time": "01:17:09",
+      "confidence": 0.7061,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 65,
+      "slide": 52,
+      "start": 4629.37,
+      "end": 4639.69,
+      "start_time": "01:17:09",
+      "end_time": "01:17:20",
+      "confidence": 0.6202,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 66,
+      "slide": 52,
+      "start": 4643.81,
+      "end": 4709.69,
+      "start_time": "01:17:24",
+      "end_time": "01:18:30",
+      "confidence": 0.7071,
+      "method": "semantic"
+    }
+  ],
+  "slides": [
+    {
+      "slide": 1,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 2,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 3,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 4,
+      "slide_time": "00:00:00",
+      "paragraph_ids": [
+        1,
+        18,
+        29
+      ],
+      "paragraphs": [
+        {
+          "id": 1,
+          "start": 0.27,
+          "end": 62.21,
+          "start_time": "00:00:00",
+          "end_time": "00:01:02",
+          "text": "often, but I'm fairly confident that you interact with it on a daily basis. You most certainly rely on search engines to look for information that you're interested in. I hope you're interested in natural language processing, for example. You rely on spell checkers, because who can spell correctly? And you probably rely on machine translation to translate between, for example, when you're working in a foreign language and the local language. So, generally, what is natural language processing? It's the field of science and engineering that's focused on the development and study of automatic systems that understand and generate natural languages; so natural just means human, as opposed to synthetic or artificial languages. And so, natural language processing has two main parts, right? We want to understand, and machine translation is a good example of that.",
+          "segment_ids": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "alignment": {
+            "paragraph_id": 1,
+            "slide": 4,
+            "start": 0.27,
+            "end": 62.21,
+            "start_time": "00:00:00",
+            "end_time": "00:01:02",
+            "confidence": 0.8303,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 18,
+          "start": 1037.8,
+          "end": 1108.04,
+          "start_time": "00:17:18",
+          "end_time": "00:18:28",
+          "text": "What is NLP, and what is its current state? Now, 14 years ago, Dan Jurafsky, who is the first author of the textbook 'Speech and Language Processing' and a well-known figure in the field, made this figure that described the progress at the time of NLP. He said that detecting if an email is spam or not was solved. Part-of-speech tagging, where we determine what is the grammatical category of words in the sentence like 'colorless' as an adjective, et cetera, that was solved. Named entity recognition, where we identified",
+          "segment_ids": [
+            252,
+            253,
+            254,
+            255,
+            256,
+            257,
+            258,
+            259,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267,
+            268,
+            269,
+            270,
+            271
+          ],
+          "alignment": {
+            "paragraph_id": 18,
+            "slide": 4,
+            "start": 1037.8,
+            "end": 1108.04,
+            "start_time": "00:17:18",
+            "end_time": "00:18:28",
+            "confidence": 0.8051,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 29,
+          "start": 1803.77,
+          "end": 1891.14,
+          "start_time": "00:30:04",
+          "end_time": "00:31:31",
+          "text": "automatic translation, and then working in that language. I personally think that this is not a great solution. And as you mentioned, do we now have any benchmarks or metrics to quantify this bias? That's a big part of the problem: the benchmarks tend to be translated, and sometimes even automatically translated. So you take the English dataset, you automatically translate it into another language, sometimes not even verified by a human, and just call it a gold standard. That's, of course, a problem. So yes, there are efforts towards creating better benchmarks, but that's really a problem, an unsolved problem. What are the general challenges of processing natural language? One challenge is, one prevalent challenge is ambiguity. I'm a linguist; I love ambiguity more than most people. There are two interpretations to this sentence. The charitable one,",
+          "segment_ids": [
+            406,
+            407,
+            408,
+            409,
+            410,
+            411,
+            412,
+            413,
+            414,
+            415,
+            416,
+            417,
+            418,
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426
+          ],
+          "alignment": {
+            "paragraph_id": 29,
+            "slide": 4,
+            "start": 1803.77,
+            "end": 1891.14,
+            "start_time": "00:30:04",
+            "end_time": "00:31:31",
+            "confidence": 0.7142,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 5,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 6,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 7,
+      "slide_time": "00:01:02",
+      "paragraph_ids": [
+        2,
+        3,
+        19,
+        37,
+        47,
+        54,
+        57,
+        58
+      ],
+      "paragraphs": [
+        {
+          "id": 2,
+          "start": 62.21,
+          "end": 132.87,
+          "start_time": "00:01:02",
+          "end_time": "00:02:13",
+          "text": "First, we need to understand what the English sentence means, and then we need to generate the translation. Now, you might tell me, I don't use these tools anymore. I have my friend in my pocket who can do all of these things. I don't need these different apps anymore. My friend can do spell checking, translation, and give me information that I'm interested in. Now, of course, this is a still relatively recent evolution, right, of natural language processing, and it has really transformed the field, but it might look like there's not much that we can still do to improve these systems, but that's not true, right? I don't know if you've tried to ask, for example, a question: which entity teaches NLP in the North Pole? It is going to tell you confidently that in the North Pole, you'll probably find Santa Claus teaching NLP. So, not everything is solved, right?",
+          "segment_ids": [
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ],
+          "alignment": {
+            "paragraph_id": 2,
+            "slide": 7,
+            "start": 62.21,
+            "end": 132.87,
+            "start_time": "00:01:02",
+            "end_time": "00:02:13",
+            "confidence": 0.7836,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 3,
+          "start": 133.67,
+          "end": 195.51,
+          "start_time": "00:02:14",
+          "end_time": "00:03:16",
+          "text": "So what this course is about is that we're going to look at the building blocks of the state-of-the-art NLP systems, and we're going to ask the question: what challenges have we overcome in processing, so in understanding it, and in generating natural language? And what challenges are still open? What research is there still to do in the field? We'll look at tasks that cover all levels of linguistic processing. These words might not mean anything to you, but morphology looks at the internal structure of words, syntax at the structure of sentences, and semantics at meaning. And we'll look at example applications of natural language processing with a lecture on machine translation and one that is more about conversational agents, like your friend, as you can see. So the learning goal of the course is that you should be able at the end of the course",
+          "segment_ids": [
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52
+          ],
+          "alignment": {
+            "paragraph_id": 3,
+            "slide": 7,
+            "start": 133.67,
+            "end": 195.51,
+            "start_time": "00:02:14",
+            "end_time": "00:03:16",
+            "confidence": 0.8867,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 19,
+          "start": 1108.04,
+          "end": 1177.56,
+          "start_time": "00:18:28",
+          "end_time": "00:19:38",
+          "text": "that Einstein is a person, UN an organization, and Princeton a location. These were all already solved at the time. Other tasks were not solved but making good progress, such as determining the sentiment of a sentence—for example, 'best roast chicken in San Francisco' is positive—determining that 'Carter' refers to 'he' here, syntactic parsing, machine translation, and then information extraction. At the time, question answering and dialogue systems were still really hard; chatbots at the time were just a joke application. Some people who worked with it were doing that for fun; it was not serious. Obviously, that has changed. So how would I recategorize this taxonomy today? I think we can say that syntactic parsing is now",
+          "segment_ids": [
+            272,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278,
+            279,
+            280,
+            281,
+            282,
+            283
+          ],
+          "alignment": {
+            "paragraph_id": 19,
+            "slide": 7,
+            "start": 1108.04,
+            "end": 1177.56,
+            "start_time": "00:18:28",
+            "end_time": "00:19:38",
+            "confidence": 0.6614,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 37,
+          "start": 2548.84,
+          "end": 2633.36,
+          "start_time": "00:42:29",
+          "end_time": "00:43:53",
+          "text": "They are all relevant to non-English languages. The law of Zipf has been verified across many languages, and for some, so depending on the language, it manifests more at the word level or at the morpheme level, but it is definitely a prevalent phenomenon of language. That's definitely been verified across languages, and then the other, I think the ambiguity of language is definitely not language specific to English. This is, indeed, typically motivated by English, but I think for these, you can also say this is not just about English. Other questions? Let's do a little bit of NLP. I suggest that we don't take a break because I think this should take no more than 10 minutes, and then it will be course overview practical information, so it shouldn't require too much of your brain. So let's do a little bit of NLP. How do we represent words and sentences?",
+          "segment_ids": [
+            569,
+            570,
+            571,
+            572,
+            573,
+            574,
+            575,
+            576,
+            577,
+            578,
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585,
+            586,
+            587,
+            588,
+            589,
+            590,
+            591,
+            592,
+            593,
+            594
+          ],
+          "alignment": {
+            "paragraph_id": 37,
+            "slide": 7,
+            "start": 2548.84,
+            "end": 2633.36,
+            "start_time": "00:42:29",
+            "end_time": "00:43:53",
+            "confidence": 0.7338,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 47,
+          "start": 3326.69,
+          "end": 3408.69,
+          "start_time": "00:55:27",
+          "end_time": "00:56:49",
+          "text": "who is also teaching the computational linguistics course. And then we'll look at a foundational application, machine translation, where given some sentence in a language here, English, we use an encoder-decoder to generate the sentence in here, Spanish. So we'll see the specifics of this encoder-decoder architecture and using machine translation, but also some limits of machine translation and so on. The week after, we'll learn how to predict POS tags of words in a sentence. So for example, Janet is a noun, will is an auxiliary, etc. Then we'll take a look at how to analyze the internal structure of words that is called morphology. Then we'll see how we can analyze the structure of sentences. This is called syntactic parsing, where we predict a tree structure over the sentence. Now it may not be obvious to you that this is a tree, but this is the root, and so these are the arcs,",
+          "segment_ids": [
+            858,
+            859,
+            860,
+            861,
+            862,
+            863,
+            864,
+            865,
+            866,
+            867,
+            868,
+            869,
+            870,
+            871,
+            872,
+            873,
+            874,
+            875,
+            876,
+            877,
+            878,
+            879,
+            880,
+            881,
+            882,
+            883,
+            884,
+            885,
+            886,
+            887,
+            888,
+            889,
+            890
+          ],
+          "alignment": {
+            "paragraph_id": 47,
+            "slide": 7,
+            "start": 3326.69,
+            "end": 3408.69,
+            "start_time": "00:55:27",
+            "end_time": "00:56:49",
+            "confidence": 0.7402,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 54,
+          "start": 3815.14,
+          "end": 3890.11,
+          "start_time": "01:03:35",
+          "end_time": "01:04:50",
+          "text": "The different aspects of linguistic processing are still relevant. Questions about this before I go through the practical information? Any other questions? Many researchers in academia would say that traditional NLP is basically dead. So what are your views on this? Is this a new or symbolic approach to the future? Yeah. So I think this view is very much what I was describing here. The view that original systems would first do POS tagging, parsing, and semantic analysis, and then use that for applications such as machine translation, question answering, and so on. Like I said, for English, this works. Bypassing this and learning the task end-to-end works, but for other languages, it's not clear to me that this is the paradigm that works because it requires massive amounts of data. And if we look at world languages, English is really an outlier in terms of data availability.",
+          "segment_ids": [
+            1036,
+            1037,
+            1038,
+            1039,
+            1040,
+            1041,
+            1042,
+            1043,
+            1044,
+            1045,
+            1046,
+            1047,
+            1048,
+            1049,
+            1050,
+            1051,
+            1052,
+            1053,
+            1054,
+            1055,
+            1056,
+            1057
+          ],
+          "alignment": {
+            "paragraph_id": 54,
+            "slide": 7,
+            "start": 3815.14,
+            "end": 3890.11,
+            "start_time": "01:03:35",
+            "end_time": "01:04:50",
+            "confidence": 0.7887,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 57,
+          "start": 4054.54,
+          "end": 4112.86,
+          "start_time": "01:07:35",
+          "end_time": "01:08:33",
+          "text": "No, I mean, rule-based per se, not so much, right? There are three main paradigms in NLP: rule-based systems, where you really have to have a human who thinks about all the edge cases. This is very difficult for language, because you might have noticed that there are rules, and then there are as many exceptions as examples that follow the rules. And so that's why statistical models have replaced rule-based as the dominant paradigm before neural networks replaced statistical models. We will look at statistical models, and rule-based systems, not really except next week; we'll take a brief look at regular expressions, which you could say are rule-based, but in a sense, we'll still try to capture rules of language by studying the task, but we will focus on.",
+          "segment_ids": [
+            1097,
+            1098,
+            1099,
+            1100,
+            1101,
+            1102,
+            1103,
+            1104,
+            1105,
+            1106,
+            1107,
+            1108,
+            1109,
+            1110,
+            1111,
+            1112,
+            1113,
+            1114,
+            1115
+          ],
+          "alignment": {
+            "paragraph_id": 57,
+            "slide": 7,
+            "start": 4054.54,
+            "end": 4112.86,
+            "start_time": "01:07:35",
+            "end_time": "01:08:33",
+            "confidence": 0.7062,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 58,
+          "start": 4116.16,
+          "end": 4231.21,
+          "start_time": "01:08:36",
+          "end_time": "01:10:31",
+          "text": "Yeah, supervised systems using these, but looking at these different structures of language. So it's not just about the architecture; it is about how these architectures can process language with all these aspects of language. I don't know if that's an excellent question. I don't know the answer to this, and no researcher knows the answer to this. Interoperability in AI and NLP is very much an open research area. And there are no clear answers. It's really at the edge. Yeah, there is so much to find out about what these models learn. We're only scratching the surface right now in interpretability. So I don't have a good answer to that, and this goes a little bit beyond the scope of the course to go into that. The main contribution, I think, in the course towards that is seeing these different linguistic structures, which can be used then to probe if a model has learned.",
+          "segment_ids": [
+            1116,
+            1117,
+            1118,
+            1119,
+            1120,
+            1121,
+            1122,
+            1123,
+            1124,
+            1125,
+            1126,
+            1127,
+            1128,
+            1129,
+            1130,
+            1131,
+            1132,
+            1133,
+            1134,
+            1135,
+            1136,
+            1137
+          ],
+          "alignment": {
+            "paragraph_id": 58,
+            "slide": 7,
+            "start": 4116.16,
+            "end": 4231.21,
+            "start_time": "01:08:36",
+            "end_time": "01:10:31",
+            "confidence": 0.7378,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 8,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 9,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 10,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 11,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 12,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 13,
+      "slide_time": "00:19:38",
+      "paragraph_ids": [
+        20
+      ],
+      "paragraphs": [
+        {
+          "id": 20,
+          "start": 1177.8,
+          "end": 1256.76,
+          "start_time": "00:19:38",
+          "end_time": "00:20:57",
+          "text": "also in this category of mostly solved. I hate the word 'solved' and I'll come back to that, but I could rant about this for a long time, which I'm not going to do. These other tasks are not solved but still making very good progress. Now, apps such as dialogue and also summarization and question answering are also in the category of making really good progress. What was already true at the time is that it hasn't really improved over time. But first, this figure is a nice summary of the evolution of NLP from 2015 compared to the evolution of computer vision. So what do we have in this figure? We have MNIST, ImageNet, and Switchboard; these are computer vision benchmarks, while BlueSquad and SQuAD 2 are NLP benchmarks. What we see is that zero is the human performance, so this characterizes how far models are from human performance.",
+          "segment_ids": [
+            284,
+            285,
+            286,
+            287,
+            288,
+            289,
+            290,
+            291,
+            292,
+            293,
+            294,
+            295
+          ],
+          "alignment": {
+            "paragraph_id": 20,
+            "slide": 13,
+            "start": 1177.8,
+            "end": 1256.76,
+            "start_time": "00:19:38",
+            "end_time": "00:20:57",
+            "confidence": 0.8059,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 14,
+      "slide_time": "00:20:57",
+      "paragraph_ids": [
+        21
+      ],
+      "paragraphs": [
+        {
+          "id": 21,
+          "start": 1256.76,
+          "end": 1338.2,
+          "start_time": "00:20:57",
+          "end_time": "00:22:18",
+          "text": "We can see the trend in computer vision was slow progress from 2000 to 2010. Progress started when we met human performance when neural networks became the standard between 2010 and 2015. While NLP progress just shot up immediately; the benchmarks were developed in 2016 and they immediately reached human performance. So this shows that the progress of NLP was really rapid, and with the rise of neural networks, the benchmarks that were developed were not difficult for very long. But like I said, there is a but: there are still open challenges of current NLP systems. This is a summary of challenges of open-domain QA, and we'll come back to that in the course. The idea is that when you have the task to answer the question,",
+          "segment_ids": [
+            296,
+            297,
+            298,
+            299,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            306
+          ],
+          "alignment": {
+            "paragraph_id": 21,
+            "slide": 14,
+            "start": 1256.76,
+            "end": 1338.2,
+            "start_time": "00:20:57",
+            "end_time": "00:22:18",
+            "confidence": 0.8293,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 15,
+      "slide_time": "00:22:19",
+      "paragraph_ids": [
+        22,
+        23,
+        25,
+        26,
+        55
+      ],
+      "paragraphs": [
+        {
+          "id": 22,
+          "start": 1339.08,
+          "end": 1413.54,
+          "start_time": "00:22:19",
+          "end_time": "00:23:34",
+          "text": "if you've seen a related question in the training data, then you can do well. But if you have to generalize compositionally from different examples—so I've seen 'in a sentence' and another 'in national animal research country'—composing the meaning of these two is still difficult. And if there is a new entity that your model has never seen, like a song 'Gloria Bluff', then the model still cannot really handle this easily. The other big but is that this is all true for English natural language processing. Of course, machine translation also always involves another language piece, but the other tasks are really English-centric. When we consider the world population and the languages spoken across the world, we can see a large disparity in the performance of NLP systems across these languages. This is nicely represented by this figure, which",
+          "segment_ids": [
+            307,
+            308,
+            309,
+            310,
+            311,
+            312,
+            313,
+            314,
+            315,
+            316,
+            317,
+            318,
+            319,
+            320,
+            321,
+            322
+          ],
+          "alignment": {
+            "paragraph_id": 22,
+            "slide": 15,
+            "start": 1339.08,
+            "end": 1413.54,
+            "start_time": "00:22:19",
+            "end_time": "00:23:34",
+            "confidence": 0.7449,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 23,
+          "start": 1413.54,
+          "end": 1496.62,
+          "start_time": "00:23:34",
+          "end_time": "00:24:57",
+          "text": "shows a score of named entity recognition. The system is the information system according to the language. The width of the bar for the language represents the number of speakers of that language. So we see that the English system is very, very accurate. We see the Spanish systems are still quite accurate. And then we see that, I believe this is [unclear]. This is basically around 50%. It's so really not very useful; for this big chunk of population, the NER systems are not very good. Then for half of the world, there is just not even a named entity recognition tool. The situation in named entity recognition is actually better than in other tasks where the situation can be worse because we don't even have any data. For example, there are tasks for which we only have English data, so for many tasks the situation is even worse than for named entity recognition.",
+          "segment_ids": [
+            323,
+            324,
+            325,
+            326,
+            327,
+            328,
+            329,
+            330,
+            331,
+            332,
+            333,
+            334,
+            335,
+            336,
+            337,
+            338,
+            339
+          ],
+          "alignment": {
+            "paragraph_id": 23,
+            "slide": 15,
+            "start": 1413.54,
+            "end": 1496.62,
+            "start_time": "00:23:34",
+            "end_time": "00:24:57",
+            "confidence": 0.7292,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 25,
+          "start": 1526.14,
+          "end": 1601.9,
+          "start_time": "00:25:26",
+          "end_time": "00:26:42",
+          "text": "All right, questions about the state of NLP? Yes. So again, yes, I would say I would characterize the changes since 2015 to have mostly affected English models. The trend is to make multilingual models: we take the models that work well on English, we throw multilingual data at it, and hope that it learns something. Surprisingly, it can to some extent give an entire lecture about that—I don't have the time for this—but anyway, the rough idea is that this is how you treat non-English languages that are not also high-resource like German, French, and Chinese. You have specialized models, but for the majority of world languages, you rely on these multilingual models. The trend is that these models are increasingly bigger and they're increasingly trained on more data.",
+          "segment_ids": [
+            345,
+            346,
+            347,
+            348,
+            349,
+            350,
+            351,
+            352,
+            353,
+            354,
+            355
+          ],
+          "alignment": {
+            "paragraph_id": 25,
+            "slide": 15,
+            "start": 1526.14,
+            "end": 1601.9,
+            "start_time": "00:25:26",
+            "end_time": "00:26:42",
+            "confidence": 0.7596,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 26,
+          "start": 1602.86,
+          "end": 1668.3,
+          "start_time": "00:26:43",
+          "end_time": "00:27:48",
+          "text": "Scraping the internet means more multilingual but also more English-dominated. So the trend is actually that people claim that models are getting more and more multilingual, but in practice, the proportions of data are increasingly more English because they rely on web-scraped data, which is English-dominated. For example, there's a purpose—I don't know if you've come across it—they're like 'oh, we're going to stop doing multilingual by accident' because that's what a lot of models are like Llama for example: they're designed for English, but then because they use web-scraped data, they're multilingual because there is multilingual data. That's called 'multilingual by accident'. So Alpaca said, 'oh, let's make a model that is multilingual by design', and so we're going to increase the proportion of non-English data.",
+          "segment_ids": [
+            356,
+            357,
+            358,
+            359,
+            360,
+            361,
+            362,
+            363,
+            364,
+            365
+          ],
+          "alignment": {
+            "paragraph_id": 26,
+            "slide": 15,
+            "start": 1602.86,
+            "end": 1668.3,
+            "start_time": "00:26:43",
+            "end_time": "00:27:48",
+            "confidence": 0.6252,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 55,
+          "start": 3890.11,
+          "end": 3963.6,
+          "start_time": "01:04:50",
+          "end_time": "01:06:04",
+          "text": "Like this Zipf's law that we saw, it's even worse. You have English here, then the next high-resource language, like for example German, Chinese, and French, I guess Spanish would be here, and then you have a very long tail of languages going through much less data. So here, English is an outlier, and there's really this prevalent idea that non-English languages need more data, but it's never going to happen that other languages will have as much data as English. So that's why I think this view that all you need is data is wrong; it's English-centric. I don't know if that answers your question. I think we don't have time for discussion. Yeah, yeah. I mean, the reason I'm emphasizing this, so I'll come back to these arguments in the question-answering lecture, but I had some students who made this point.",
+          "segment_ids": [
+            1058,
+            1059,
+            1060,
+            1061,
+            1062,
+            1063,
+            1064,
+            1065,
+            1066,
+            1067,
+            1068,
+            1069,
+            1070,
+            1071,
+            1072,
+            1073,
+            1074,
+            1075,
+            1076,
+            1077,
+            1078,
+            1079,
+            1080
+          ],
+          "alignment": {
+            "paragraph_id": 55,
+            "slide": 15,
+            "start": 3890.11,
+            "end": 3963.6,
+            "start_time": "01:04:50",
+            "end_time": "01:06:04",
+            "confidence": 0.6355,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 16,
+      "slide_time": "00:24:58",
+      "paragraph_ids": [
+        24,
+        27
+      ],
+      "paragraphs": [
+        {
+          "id": 24,
+          "start": 1498.46,
+          "end": 1523.34,
+          "start_time": "00:24:58",
+          "end_time": "00:25:23",
+          "text": "So the progress is really much more for English than for other languages. We've seen progress also for French, German, and other high-resource languages, but for languages that have fewer resources—even if they can be widely spoken, like for example Tamil in India—the systems are much, much worse.",
+          "segment_ids": [
+            340,
+            341,
+            342,
+            343,
+            344
+          ],
+          "alignment": {
+            "paragraph_id": 24,
+            "slide": 16,
+            "start": 1498.46,
+            "end": 1523.34,
+            "start_time": "00:24:58",
+            "end_time": "00:25:23",
+            "confidence": 0.6889,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 27,
+          "start": 1668.3,
+          "end": 1739.69,
+          "start_time": "00:27:48",
+          "end_time": "00:29:00",
+          "text": "The proportion of English data is still 60 percent of that model which is multilingual by design. So I would say that the gap is actually only increasing. There is more like: we like 10 years ago there was nothing for a language, now we would do something, but it's so poor that it's not really better than nothing. There is an impression of progress, but this impression is a little bit wrong. I could rant about this for ages, but that's not here. If you're interested, you can also talk outside of this course. But why can we just do all the time to translate into English and for response translate from English to me? Just as I say, is it a good approach to translate from English to whatever language we want? Yeah, so that's an approach that people take, and that also I dislike because then you propagate the biases of English into your language.",
+          "segment_ids": [
+            366,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375,
+            376,
+            377,
+            378,
+            379,
+            380
+          ],
+          "alignment": {
+            "paragraph_id": 27,
+            "slide": 16,
+            "start": 1668.3,
+            "end": 1739.69,
+            "start_time": "00:27:48",
+            "end_time": "00:29:00",
+            "confidence": 0.6327,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 17,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 18,
+      "slide_time": "00:41:21",
+      "paragraph_ids": [
+        36
+      ],
+      "paragraphs": [
+        {
+          "id": 36,
+          "start": 2480.84,
+          "end": 2548.84,
+          "start_time": "00:41:21",
+          "end_time": "00:42:29",
+          "text": "It's much more frequent than the second most frequent word, and is itself much more frequent than the third one, and there's a linear relationship between the frequency of occurrences and the rank of the words, so these are words ranked by their frequency. And perhaps most importantly, there's a long tail of very infrequent words, and so it's easy to come up with models that do well on the frequent aspects of language, and this is true for words, but for many other aspects of language, but once you want to capture the long tail, that's when it becomes more difficult. This problem will come up again and again during the course. Questions about general challenges? Yes? How many of these general challenges are generally applicable throughout different languages, and how specific are they to English? These are clearly informed by English, but to my knowledge.",
+          "segment_ids": [
+            546,
+            547,
+            548,
+            549,
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568
+          ],
+          "alignment": {
+            "paragraph_id": 36,
+            "slide": 18,
+            "start": 2480.84,
+            "end": 2548.84,
+            "start_time": "00:41:21",
+            "end_time": "00:42:29",
+            "confidence": 0.7233,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 19,
+      "slide_time": "00:29:00",
+      "paragraph_ids": [
+        28,
+        30
+      ],
+      "paragraphs": [
+        {
+          "id": 28,
+          "start": 1739.69,
+          "end": 1802.85,
+          "start_time": "00:29:00",
+          "end_time": "00:30:03",
+          "text": "Because then you automatically... I mean, translation can be problematic in the sense that it does not... Like, human translation sometimes does not really represent the language that you're translating into because you're... I mean, depending on the type of translation, but sometimes if you do literal translation, you translate, for example, something about the Super Bowl and that's your data into target language, but who cares about the Super Bowl if you're a resident of India, for example? So that's culture-specific translation that translates these concepts, and that's better. The problem is that automatic translation doesn't do that; it doesn't be culture-specific, and that's one problem. Of course, automatic translation is errorful, and so the biases that you then have in English propagate through your language. So a lot of people think that this is the solution,",
+          "segment_ids": [
+            381,
+            382,
+            383,
+            384,
+            385,
+            386,
+            387,
+            388,
+            389,
+            390,
+            391,
+            392,
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            403,
+            404,
+            405
+          ],
+          "alignment": {
+            "paragraph_id": 28,
+            "slide": 19,
+            "start": 1739.69,
+            "end": 1802.85,
+            "start_time": "00:29:00",
+            "end_time": "00:30:03",
+            "confidence": 0.5668,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 30,
+          "start": 1891.14,
+          "end": 1958.9,
+          "start_time": "00:31:31",
+          "end_time": "00:32:39",
+          "text": "where I love ambiguity more than most people love ambiguity, and the slightly less charitable one, where I love ambiguity more than I love most people. This is just a funny meme, of course. Such sentences don't occur on a daily basis; this is purposefully ambiguous to make you laugh. But ambiguity is prevalent across language. And here is a maybe more common example: the sentence 'I made her duck,' without more context, can be interpreted in many different ways. It can mean I cooked duck for her, or I cooked a duck that belonged to her, or I created the duck which belongs to her, or I caused her to lower her head, or I turned her into a duck. Why not? And it's not that difficult to disambiguate; you just need a little bit more context, right? But this is, you do need that context. Just relying on the analysis of the sentence is insufficient to know what is meant.",
+          "segment_ids": [
+            427,
+            428,
+            429,
+            430,
+            431,
+            432,
+            433,
+            434,
+            435,
+            436,
+            437,
+            438,
+            439,
+            440,
+            441,
+            442,
+            443,
+            444,
+            445,
+            446,
+            447
+          ],
+          "alignment": {
+            "paragraph_id": 30,
+            "slide": 19,
+            "start": 1891.14,
+            "end": 1958.9,
+            "start_time": "00:31:31",
+            "end_time": "00:32:39",
+            "confidence": 0.7572,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 20,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 21,
+      "slide_time": "00:32:39",
+      "paragraph_ids": [
+        31,
+        32,
+        33
+      ],
+      "paragraphs": [
+        {
+          "id": 31,
+          "start": 1958.9,
+          "end": 1991.04,
+          "start_time": "00:32:39",
+          "end_time": "00:33:11",
+          "text": "So there are different types of ambiguity. Lexical ambiguity is when words can mean different things. So for example, here: 'I saw a bat.' There are two interpretations. One where it's the past tense of see, and bat is the flying mammal. And the other where it's the present tense of the verb saw, and then the bat would more likely be a wooden club. Or you could also have this and this, but that's weird.",
+          "segment_ids": [
+            448,
+            449,
+            450,
+            451,
+            452,
+            453,
+            454,
+            455,
+            456
+          ],
+          "alignment": {
+            "paragraph_id": 31,
+            "slide": 21,
+            "start": 1958.9,
+            "end": 1991.04,
+            "start_time": "00:32:39",
+            "end_time": "00:33:11",
+            "confidence": 0.8566,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 32,
+          "start": 1994.1,
+          "end": 2228.46,
+          "start_time": "00:33:14",
+          "end_time": "00:37:08",
+          "text": "And then structural ambiguity: 'I saw a man with a telescope,' classic. Who does the telescope belong to? The man or me? Semantic: 'John and Mary are married.' Are they married to each other or to other people? And then anaphoric: 'Margaret invited Susan, and she gave her a sandwich.' She was referring either to Susan or to Margaret. All right, let's see if you're still awake and identify a small exercise to identify ambiguities in this sentence, and I guess I give it two or three minutes. It's here; yeah, this way we don't see your answers scrolling. And thank you. We give a chance to everyone to figure it out. Don't hesitate to figure this out with your neighbor. Old or not, which was a type of what ambiguity? So this, what is the type of ambiguity? What's that type of ambiguity? Yeah. I do have a solution so that we have exactly structural.",
+          "segment_ids": [
+            457,
+            458,
+            459,
+            460,
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467,
+            468,
+            469,
+            470,
+            471,
+            472,
+            473,
+            474,
+            475,
+            476,
+            477,
+            478,
+            479,
+            480
+          ],
+          "alignment": {
+            "paragraph_id": 32,
+            "slide": 21,
+            "start": 1994.1,
+            "end": 2228.46,
+            "start_time": "00:33:14",
+            "end_time": "00:37:08",
+            "confidence": 0.8325,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 33,
+          "start": 2228.46,
+          "end": 2321.84,
+          "start_time": "00:37:08",
+          "end_time": "00:38:42",
+          "text": "The old men and women: who is old? And then, yeah, right, exactly. So collapse is a semantic ambiguity: is it the financial collapse or the physical collapse? And then anaphoric ambiguity: does 'they' refer to... so who does 'they' refer to? Is that clear? So another issue in language processing, especially since, as I mentioned, right, we nowadays work mostly with web script data, and this is what web data can look like, where we have things that are quite particular to social media, for example, these hashtags or slang like 'wanna', abbreviations like 'MT' or 'HMU', and we'll talk more about that next week. And then another issue is neologisms, where some of these words would not have made sense to any of you if we had seen them five years ago, maybe a bit more, and you might say, but neologisms are not that common, right?",
+          "segment_ids": [
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488,
+            489,
+            490,
+            491,
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498
+          ],
+          "alignment": {
+            "paragraph_id": 33,
+            "slide": 21,
+            "start": 2228.46,
+            "end": 2321.84,
+            "start_time": "00:37:08",
+            "end_time": "00:38:42",
+            "confidence": 0.6092,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 22,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 23,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 24,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 25,
+      "slide_time": "00:38:42",
+      "paragraph_ids": [
+        34,
+        35
+      ],
+      "paragraphs": [
+        {
+          "id": 34,
+          "start": 2321.84,
+          "end": 2399.84,
+          "start_time": "00:38:42",
+          "end_time": "00:40:00",
+          "text": "You don't see new words every day, but that's not really true. If you look at the New York Times, or there's a chapter on Bluesky and other social media, that every time there's a word in the New York Times that has not appeared ever in the New York Times, it comes up as a post. And so of course not all of them are actual new words; these I guess are, this is just a typo, but it does show, I mean, almost every day there are new words that come up. And then the last challenge is that sometimes for some sentences you need some external knowledge to understand what's going on. Given the sentence here: 'Jack needed some money, so he went and shook his piggy bank. He was disappointed when it made no sound.' If you're a machine, it's without context, it's not clear why he's disappointed. You need to know a lot about how the world works, and common sense knowledge.",
+          "segment_ids": [
+            499,
+            500,
+            501,
+            502,
+            503,
+            504,
+            505,
+            506,
+            507,
+            508,
+            509,
+            510,
+            511,
+            512,
+            513,
+            514,
+            515,
+            516,
+            517,
+            518,
+            519,
+            520
+          ],
+          "alignment": {
+            "paragraph_id": 34,
+            "slide": 25,
+            "start": 2321.84,
+            "end": 2399.84,
+            "start_time": "00:38:42",
+            "end_time": "00:40:00",
+            "confidence": 0.6286,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 35,
+          "start": 2399.84,
+          "end": 2480.84,
+          "start_time": "00:40:00",
+          "end_time": "00:41:21",
+          "text": "And you need to know what a piggy bank is, what happens if you shake it, and what should be in it, and what is expected to be in it, and why you're disappointed, because not having any money is not great. So knowledge of the broader context. And domain knowledge is knowing what a piggy bank is, and common sense knowledge of the physical and social world is knowing that if you shake a piggy bank, you expect that the coin drops, comes out and makes a sound. It was not the last challenge; this is the last challenge, I think, which is known as the law of Zipf, which says that, so if we look at the frequency distributions of the words in our vocabulary, so the occurrences of words, and for example this is done for Romeo and Juliet, we'll see that there are words, so the word that is most frequent, here it seems to be 'the' for English.",
+          "segment_ids": [
+            521,
+            522,
+            523,
+            524,
+            525,
+            526,
+            527,
+            528,
+            529,
+            530,
+            531,
+            532,
+            533,
+            534,
+            535,
+            536,
+            537,
+            538,
+            539,
+            540,
+            541,
+            542,
+            543,
+            544,
+            545
+          ],
+          "alignment": {
+            "paragraph_id": 35,
+            "slide": 25,
+            "start": 2399.84,
+            "end": 2480.84,
+            "start_time": "00:40:00",
+            "end_time": "00:41:21",
+            "confidence": 0.6968,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 26,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 27,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 28,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 29,
+      "slide_time": "00:45:06",
+      "paragraph_ids": [
+        39,
+        40
+      ],
+      "paragraphs": [
+        {
+          "id": 39,
+          "start": 2705.95,
+          "end": 2788.93,
+          "start_time": "00:45:06",
+          "end_time": "00:46:29",
+          "text": "By making each word in the vocabulary a dimension in your vector space and then counting for a word its occurrences with this. So the dimension 'sky' we're going to count for a word, for example, 'helicopter', how many times it occurs with the... with the word 'sky'. So here, based on this vector, how many times does it occur with 'sky'? You know how vectors work, right? Four. So helicopter in this... You can verify if you want, but helicopter is here with 'sky', here again with 'sky'. It occurs four times with 'sky', two times with 'engine', and zero times with 'wings'. And then you can do the same for the other words in your vocabulary. I won't do this for this because I don't want to insult your intelligence, but because this is easy and a bit boring, but in case you haven't worked with vectors before and this is useful to you, then to really convince yourself of what this is doing.",
+          "segment_ids": [
+            623,
+            624,
+            625,
+            626,
+            627,
+            628,
+            629,
+            630,
+            631,
+            632,
+            633,
+            634,
+            635,
+            636,
+            637,
+            638,
+            639,
+            640,
+            641,
+            642,
+            643,
+            644,
+            645,
+            646,
+            647,
+            648,
+            649,
+            650,
+            651,
+            652,
+            653
+          ],
+          "alignment": {
+            "paragraph_id": 39,
+            "slide": 29,
+            "start": 2705.95,
+            "end": 2788.93,
+            "start_time": "00:45:06",
+            "end_time": "00:46:29",
+            "confidence": 0.768,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 40,
+          "start": 2788.93,
+          "end": 2870.42,
+          "start_time": "00:46:29",
+          "end_time": "00:47:50",
+          "text": "Can be useful to make this exercise. And when you've done so, the thing to realize from doing this is that the resulting vector space has words that are more similar; they are closer in the vector space than words that are less similar. So for example, helicopter, drone, and rocket are closer together in the vector space than goose, eagle, and bee. That's just a kind of proof of concept. So now that we have a vector representing each word in the vocabulary, how do we go about representing a full sentence? Say we have 'Mary ate a pizza'. We can take the vectors of each word in the sentence and we can either just sum or multiply these vectors together. We get one vector that represents the sentence. And this is called a bag of words. Can you think of why? What information is this not capturing? The order? Exactly. Sequence, word order. So the vector representation.",
+          "segment_ids": [
+            654,
+            655,
+            656,
+            657,
+            658,
+            659,
+            660,
+            661,
+            662,
+            663,
+            664,
+            665,
+            666,
+            667,
+            668,
+            669,
+            670,
+            671,
+            672,
+            673,
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            680,
+            681,
+            682,
+            683
+          ],
+          "alignment": {
+            "paragraph_id": 40,
+            "slide": 29,
+            "start": 2788.93,
+            "end": 2870.42,
+            "start_time": "00:46:29",
+            "end_time": "00:47:50",
+            "confidence": 0.7426,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 30,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 31,
+      "slide_time": "00:47:50",
+      "paragraph_ids": [
+        41
+      ],
+      "paragraphs": [
+        {
+          "id": 41,
+          "start": 2870.42,
+          "end": 2949.92,
+          "start_time": "00:47:50",
+          "end_time": "00:49:10",
+          "text": "For the sentence 'pizza ate a Mary' is going to be exactly the same as the vector representation of 'Mary ate a pizza'. So that's why bag of words can be useful to capture some topic of relevance. But when you really want to model the sequence of the sentence, then you need something a little bit more advanced. And so that's how recurrent neural networks emerged about 10 years ago. So you take these vectors, so you take the vector for 'Mary', and then you pass it to a function, a recurrent cell, that takes the input, so the vector of 'Mary' and the vector of 'ate' as input, and then pass the output of that function, of that recurrent cell, so that's the output here, to the next cell, which takes up as other input and composes these two representations. And so you model the sequence by going through each word step by step. Now, these have advantages and disadvantages. As you go along the sequence.",
+          "segment_ids": [
+            684,
+            685,
+            686,
+            687,
+            688,
+            689,
+            690,
+            691,
+            692,
+            693,
+            694,
+            695,
+            696,
+            697,
+            698,
+            699,
+            700,
+            701,
+            702,
+            703,
+            704,
+            705,
+            706,
+            707,
+            708,
+            709,
+            710,
+            711,
+            712,
+            713
+          ],
+          "alignment": {
+            "paragraph_id": 41,
+            "slide": 31,
+            "start": 2870.42,
+            "end": 2949.92,
+            "start_time": "00:47:50",
+            "end_time": "00:49:10",
+            "confidence": 0.8096,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 32,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 33,
+      "slide_time": "00:43:53",
+      "paragraph_ids": [
+        38,
+        42,
+        43,
+        46
+      ],
+      "paragraphs": [
+        {
+          "id": 38,
+          "start": 2633.36,
+          "end": 2705.95,
+          "start_time": "00:43:53",
+          "end_time": "00:45:06",
+          "text": "It always all starts with a corpus. A corpus: we want to model language, we need to rely on data. What is our data? It's a corpus. A corpus is a collection of texts which we hope is going to be representative of the language we're trying to model. Here, this is just a toy corpus for exemplifying. Obviously, this is not a very good representation of the English language, but it can be useful for illustrative purposes. Once we have a corpus, we need to determine what are the words, what is the vocabulary, what are the units that we're going to work with. So let's just assume these are the words in the vocabulary. Now, the first step is typically to construct a vector space based on this. So for each word in the vocabulary, we're going to want to construct a vector that represents it. And the early methods which influenced how the field is still working now constructed such vectors.",
+          "segment_ids": [
+            595,
+            596,
+            597,
+            598,
+            599,
+            600,
+            601,
+            602,
+            603,
+            604,
+            605,
+            606,
+            607,
+            608,
+            609,
+            610,
+            611,
+            612,
+            613,
+            614,
+            615,
+            616,
+            617,
+            618,
+            619,
+            620,
+            621,
+            622
+          ],
+          "alignment": {
+            "paragraph_id": 38,
+            "slide": 33,
+            "start": 2633.36,
+            "end": 2705.95,
+            "start_time": "00:43:53",
+            "end_time": "00:45:06",
+            "confidence": 0.7086,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 42,
+          "start": 2949.92,
+          "end": 3033.2,
+          "start_time": "00:49:10",
+          "end_time": "00:50:33",
+          "text": "You start forgetting information, and then issues about vanishing and exploding gradients emerge. I'm not going to go into details of that. And this is not easily parallelizable. And so that's why transformers emerged as the current, still de facto standard architecture in NLP, but also across modalities in AI, where you model each word in the sentence. So the sentence is a function of each word together with each of the other words in the sentence. So you're modeling Mary by composing the representation of Mary with each other word in the sentence, and then to get a representation of the sentence itself, you have this dummy CLS token, which represents the full sentence. Now, with this, you again run into this issue that you're not modeling the sequence again. And the solution to that is what is called position embedding, where each before, so this is a self-attention model",
+          "segment_ids": [
+            714,
+            715,
+            716,
+            717,
+            718,
+            719,
+            720,
+            721,
+            722,
+            723,
+            724,
+            725,
+            726,
+            727,
+            728,
+            729,
+            730,
+            731,
+            732,
+            733,
+            734,
+            735,
+            736,
+            737,
+            738,
+            739,
+            740
+          ],
+          "alignment": {
+            "paragraph_id": 42,
+            "slide": 33,
+            "start": 2949.92,
+            "end": 3033.2,
+            "start_time": "00:49:10",
+            "end_time": "00:50:33",
+            "confidence": 0.763,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 43,
+          "start": 3033.2,
+          "end": 3106.2,
+          "start_time": "00:50:33",
+          "end_time": "00:51:46",
+          "text": "of the self-attention network. You'll find out much more about that in lecture four. But then as input to this self-attention mechanism, you have not just the word, but also the position of the word within the sentence. So Mary is the first word, ate is the second. And so this gives you back this word order information. Now, of course, this is a massive simplification. Word vectors are typically, so I explain vectors as these co-occurrence vectors, where you count word co-occurrences in a corpus. Nowadays, they are typically, we don't use that anymore. We just let the neural network learn these word vectors as part of a big model. This F is complex, right? It's a complex recurrent cell for recurrent neural networks and even more complex for transformers. It has many components to it. You'll see that in lecture four. And neural networks are deep and they consist of multiple layers.",
+          "segment_ids": [
+            741,
+            742,
+            743,
+            744,
+            745,
+            746,
+            747,
+            748,
+            749,
+            750,
+            751,
+            752,
+            753,
+            754,
+            755,
+            756,
+            757,
+            758,
+            759,
+            760,
+            761,
+            762,
+            763,
+            764,
+            765,
+            766,
+            767,
+            768
+          ],
+          "alignment": {
+            "paragraph_id": 43,
+            "slide": 33,
+            "start": 3033.2,
+            "end": 3106.2,
+            "start_time": "00:50:33",
+            "end_time": "00:51:46",
+            "confidence": 0.8476,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 46,
+          "start": 3250.69,
+          "end": 3326.69,
+          "start_time": "00:54:11",
+          "end_time": "00:55:27",
+          "text": "and it leads to a large vocabulary size. And so the current de facto standard is instead to compromise between word and character levels and use subwords. We'll see that next week. What units do we even use and how do we split text into these units? The week after, we'll see the probabilistic foundations of language modeling where we'll see how we can estimate the probability of a sentence by making some Markov assumptions and looking only at a restricted context and how this can be used to generate language. And so that's the premise of the current language models, which are neural networks. And that will be dealt with in lecture four, where we'll see how to do language modeling with recurrent neural networks and then with transformers. So the goal is to train a neural network to predict the next word based on some context. That lecture will be taught by Tim van de Cruys,",
+          "segment_ids": [
+            829,
+            830,
+            831,
+            832,
+            833,
+            834,
+            835,
+            836,
+            837,
+            838,
+            839,
+            840,
+            841,
+            842,
+            843,
+            844,
+            845,
+            846,
+            847,
+            848,
+            849,
+            850,
+            851,
+            852,
+            853,
+            854,
+            855,
+            856,
+            857
+          ],
+          "alignment": {
+            "paragraph_id": 46,
+            "slide": 33,
+            "start": 3250.69,
+            "end": 3326.69,
+            "start_time": "00:54:11",
+            "end_time": "00:55:27",
+            "confidence": 0.8132,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 34,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 35,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 36,
+      "slide_time": "00:58:12",
+      "paragraph_ids": [
+        49
+      ],
+      "paragraphs": [
+        {
+          "id": 49,
+          "start": 3491.69,
+          "end": 3551.69,
+          "start_time": "00:58:12",
+          "end_time": "00:59:12",
+          "text": "or how at least traditional models used all of these different aspects of the pipeline, POS tagging, syntactic parsing, semantic processing, to do this question answering, but we'll also see that newer models actually skip all of this linguistic analysis and just learn the task end-to-end. And so now you're going to say, but why do we bother with these intermediate steps if we actually don't need direct production? I'll come back to that in a moment. But first, let me finish the course overview. Lecture 12 is not a lecture, it's just a question and answer session, and I'm still experimenting with the best format of these sessions. Originally, I just came here and let you ask any questions you had about the content. You can imagine how that turned out. There was one student asking me 10 questions, very detailed, that I could not even necessarily answer",
+          "segment_ids": [
+            923,
+            924,
+            925,
+            926,
+            927,
+            928,
+            929,
+            930,
+            931,
+            932,
+            933,
+            934,
+            935,
+            936,
+            937,
+            938,
+            939,
+            940,
+            941,
+            942,
+            943,
+            944,
+            945,
+            946,
+            947,
+            948,
+            949,
+            950,
+            951
+          ],
+          "alignment": {
+            "paragraph_id": 49,
+            "slide": 36,
+            "start": 3491.69,
+            "end": 3551.69,
+            "start_time": "00:58:12",
+            "end_time": "00:59:12",
+            "confidence": 0.7222,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 37,
+      "slide_time": "00:53:04",
+      "paragraph_ids": [
+        45
+      ],
+      "paragraphs": [
+        {
+          "id": 45,
+          "start": 3183.69,
+          "end": 3250.69,
+          "start_time": "00:53:04",
+          "end_time": "00:54:11",
+          "text": "it doesn't take your brain. So does anyone strongly want to pause a break? No. All right, so then we continue. So quite briefly, the course will first go through, so we've done the introduction. Next week, we'll first look at the fundamentals. Then we'll have an interlude looking at the foundational application. Then we'll go through the different levels of linguistic processing before returning to other applications, question answering and conversational agents. But I have one slide per lecture to just give you a rough idea. So next week, we'll talk about tokenization. And the question here is, what is the unit that we want to work with? You could say, let's work with characters and just segment your text into characters. But of course, this leads to long sequences or you can just take words. But this can lead to having very rare words in your vocabulary",
+          "segment_ids": [
+            800,
+            801,
+            802,
+            803,
+            804,
+            805,
+            806,
+            807,
+            808,
+            809,
+            810,
+            811,
+            812,
+            813,
+            814,
+            815,
+            816,
+            817,
+            818,
+            819,
+            820,
+            821,
+            822,
+            823,
+            824,
+            825,
+            826,
+            827,
+            828
+          ],
+          "alignment": {
+            "paragraph_id": 45,
+            "slide": 37,
+            "start": 3183.69,
+            "end": 3250.69,
+            "start_time": "00:53:04",
+            "end_time": "00:54:11",
+            "confidence": 0.7786,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 38,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 39,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 40,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 41,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 42,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 43,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 44,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 45,
+      "slide_time": "00:56:49",
+      "paragraph_ids": [
+        48
+      ],
+      "paragraphs": [
+        {
+          "id": 48,
+          "start": 3408.69,
+          "end": 3491.69,
+          "start_time": "00:56:49",
+          "end_time": "00:58:12",
+          "text": "so you'll see that this actually can be represented as a tree. Then we'll look at semantics, how can we disambiguate between the sink noun interpretation of the word sink, and the little bit less nice verb interpretation of that word, and semantic role labeling, where we identify essentially in a sentence who does what to whom. So here we have the one who does the action, the action itself, and to what and when. Then we'll look, beyond sentences at this course, where we want to analyze how sentences relate to each other, and in particular a relevant task here is coreference resolution, where we want to determine that she refers to Anna, and it here refers to natural language processing. And then we'll come back to an application of NLP, which is question answering, where the user asks a question, and the system gives an answer. And we'll see in that lecture how we can use,",
+          "segment_ids": [
+            891,
+            892,
+            893,
+            894,
+            895,
+            896,
+            897,
+            898,
+            899,
+            900,
+            901,
+            902,
+            903,
+            904,
+            905,
+            906,
+            907,
+            908,
+            909,
+            910,
+            911,
+            912,
+            913,
+            914,
+            915,
+            916,
+            917,
+            918,
+            919,
+            920,
+            921,
+            922
+          ],
+          "alignment": {
+            "paragraph_id": 48,
+            "slide": 45,
+            "start": 3408.69,
+            "end": 3491.69,
+            "start_time": "00:56:49",
+            "end_time": "00:58:12",
+            "confidence": 0.736,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 46,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 47,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 48,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 49,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 50,
+      "slide_time": "01:01:16",
+      "paragraph_ids": [
+        52,
+        53,
+        59,
+        60
+      ],
+      "paragraphs": [
+        {
+          "id": 52,
+          "start": 3675.92,
+          "end": 3736.09,
+          "start_time": "01:01:16",
+          "end_time": "01:02:16",
+          "text": "One argument is that LLMs are really, they are black boxes. People... There are many parameters, so many that it's impossible to know what they learn and how they make decisions. So understanding the challenges in processing language to me is, what I think other people share this view, is essential to interpretability. If you don't know where the challenges are in processing natural language, you're not going to be able to interpret. If you're not going to be able to interpret natural language, then you cannot analyze the errors of your model, and you don't know how to improve it. That's the second point, what I just said. And so about interpretability more generally, to know what the models can do and cannot do. And as I made this point, because LLMs currently do not work well for low-resource languages, it's possible that the...",
+          "segment_ids": [
+            999,
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013
+          ],
+          "alignment": {
+            "paragraph_id": 52,
+            "slide": 50,
+            "start": 3675.92,
+            "end": 3736.09,
+            "start_time": "01:01:16",
+            "end_time": "01:02:16",
+            "confidence": 0.7899,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 53,
+          "start": 3736.09,
+          "end": 3813.92,
+          "start_time": "01:02:16",
+          "end_time": "01:03:34",
+          "text": "this pipeline approach is still relevant for these languages. So even if, so English has so much data that it's made these internal, intermediate parts of the pipeline unnecessary, but this might not be true for other languages. And finally, LLMs have massive amounts of parameters. And if we want to make these models more sustainable, then maybe we need to go back to this pipeline or at least rethink how our models should work by using these subtasks. So this is an idea I have that I would like to work on, but have not really had the time, but I think the future is potentially neuro-symbolic for this, where neuro-symbolic allows you to approach this, to give knowledge in the model, using this information that we know about language and making them more sustainable. This is more of my opinion, but I do know that some people share this view. So I think linguistic,",
+          "segment_ids": [
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020,
+            1021,
+            1022,
+            1023,
+            1024,
+            1025,
+            1026,
+            1027,
+            1028,
+            1029,
+            1030,
+            1031,
+            1032,
+            1033,
+            1034,
+            1035
+          ],
+          "alignment": {
+            "paragraph_id": 53,
+            "slide": 50,
+            "start": 3736.09,
+            "end": 3813.92,
+            "start_time": "01:02:16",
+            "end_time": "01:03:34",
+            "confidence": 0.7496,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 59,
+          "start": 4231.21,
+          "end": 4296.64,
+          "start_time": "01:10:31",
+          "end_time": "01:11:37",
+          "text": "A specific linguistic structure, because if it hasn't, then that allows you to course correct. But your question is a research question. It's not something that is really easy; it's an open problem. But yeah, I think maybe we should have the discussion outside of the course because it goes beyond the content of the course. Because there's even the question: if you want, I mean, if you can't focus, there are some people whose focus is on making the user accept the model output. But to me, that's not right as a goal. Because what if the model is wrong? So the first thing is to understand what the model is doing before you can convince the user. If you're not convinced of your model that it might be taking decisions for the wrong reasons, right? So, but I think we should maybe stop this discussion here.",
+          "segment_ids": [
+            1138,
+            1139,
+            1140,
+            1141,
+            1142,
+            1143,
+            1144,
+            1145,
+            1146,
+            1147,
+            1148,
+            1149,
+            1150,
+            1151,
+            1152,
+            1153,
+            1154,
+            1155,
+            1156
+          ],
+          "alignment": {
+            "paragraph_id": 59,
+            "slide": 50,
+            "start": 4231.21,
+            "end": 4296.64,
+            "start_time": "01:10:31",
+            "end_time": "01:11:37",
+            "confidence": 0.6749,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 60,
+          "start": 4296.64,
+          "end": 4358.82,
+          "start_time": "01:11:37",
+          "end_time": "01:12:39",
+          "text": "Because like I said, it goes a little bit beyond that. I think we can talk about that outside if you want. This is, like I said, an unresolved problem. Yes? Can you go one step back? The final point, I did not... can you give an example of how a model may become more sustainable if you were trying a linguistic structure? Because it could, for example, constrain the space of words to consider. So consider a language model which has to put in the next words. You could constrain the model to only output words with a certain POS tag, for example. That reduces the search space. That's just one way. I don't have a complete answer. There might be, like this is something, like I said, I want to research, but I have not really found the time for it.",
+          "segment_ids": [
+            1157,
+            1158,
+            1159,
+            1160,
+            1161,
+            1162,
+            1163,
+            1164,
+            1165,
+            1166,
+            1167,
+            1168,
+            1169,
+            1170,
+            1171,
+            1172,
+            1173,
+            1174,
+            1175,
+            1176,
+            1177
+          ],
+          "alignment": {
+            "paragraph_id": 60,
+            "slide": 50,
+            "start": 4296.64,
+            "end": 4358.82,
+            "start_time": "01:11:37",
+            "end_time": "01:12:39",
+            "confidence": 0.6748,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 51,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 52,
+      "slide_time": "01:00:16",
+      "paragraph_ids": [
+        51,
+        56,
+        61,
+        62,
+        65,
+        66
+      ],
+      "paragraphs": [
+        {
+          "id": 51,
+          "start": 3615.94,
+          "end": 3675.92,
+          "start_time": "01:00:16",
+          "end_time": "01:01:16",
+          "text": "So your friends, chat with each other, and so on. And it will be given by Thomas Winters. This is not part of the course material, because there's already quite a lot. Of course, it's very relevant, right? And I think a lot of you are interested in it. Also, Thomas is a very fun speaker. He is actually on the side doing improv. So I can only encourage you to come to the lecture, because I think it's... useful and actually fun. So, coming back to that question, why do we bother about linguistic structures if they're not used in production? I'll make some arguments. I will make these arguments again stronger in the last lecture, in the question-answering lecture, but to give you an idea of why I think this is important and that you don't just completely doze out during the course and say, I don't care about this, I'll try to make these arguments now. So one argument.",
+          "segment_ids": [
+            981,
+            982,
+            983,
+            984,
+            985,
+            986,
+            987,
+            988,
+            989,
+            990,
+            991,
+            992,
+            993,
+            994,
+            995,
+            996,
+            997,
+            998
+          ],
+          "alignment": {
+            "paragraph_id": 51,
+            "slide": 52,
+            "start": 3615.94,
+            "end": 3675.92,
+            "start_time": "01:00:16",
+            "end_time": "01:01:16",
+            "confidence": 0.6813,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 56,
+          "start": 3963.6,
+          "end": 4043.28,
+          "start_time": "01:06:04",
+          "end_time": "01:07:23",
+          "text": "That they were thinking through the course that it's not that relevant, these lectures, and I want to avoid this, because if you think this is not relevant, then you're going to be less motivated. So that's why I think it's important to emphasize the relevance. So if you're not convinced of that, then I do think it's useful to have this discussion. But if you're at least willing to think that this might be the case, then I think I can make that point here in the last lecture, and hopefully keep you motivated at any time. That's what I'm trying to say.",
+          "segment_ids": [
+            1081,
+            1082,
+            1083,
+            1084,
+            1085,
+            1086,
+            1087,
+            1088,
+            1089,
+            1090,
+            1091,
+            1092,
+            1093,
+            1094,
+            1095,
+            1096
+          ],
+          "alignment": {
+            "paragraph_id": 56,
+            "slide": 52,
+            "start": 3963.6,
+            "end": 4043.28,
+            "start_time": "01:06:04",
+            "end_time": "01:07:23",
+            "confidence": 0.6532,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 61,
+          "start": 4358.82,
+          "end": 4429.56,
+          "start_time": "01:12:39",
+          "end_time": "01:13:50",
+          "text": "But I think there are many other ways. This is just one example. But if anyone is interested in looking into that, definitely interested in, for example, providing a master thesis around that, that's definitely something interesting. All right. Relax your brains. Now we can just look at practical information. So I'll start with my views on teaching. Why? Because that motivates the choices I make in terms of course design and how I deliver everything. And yeah, I'm always happy to find ways to improve because I have views that are based also on, like I said earlier, my brief time up north. And it's easy to have these views when you have a class of 30 students. I'm still finding out how you can have these views with a class size of... Okay, close to 200. So my view, and it's a view that conflicts a bit with the Belgian system.",
+          "segment_ids": [
+            1178,
+            1179,
+            1180,
+            1181,
+            1182,
+            1183,
+            1184,
+            1185,
+            1186,
+            1187,
+            1188,
+            1189,
+            1190,
+            1191,
+            1192,
+            1193,
+            1194,
+            1195,
+            1196,
+            1197,
+            1198,
+            1199,
+            1200,
+            1201
+          ],
+          "alignment": {
+            "paragraph_id": 61,
+            "slide": 52,
+            "start": 4358.82,
+            "end": 4429.56,
+            "start_time": "01:12:39",
+            "end_time": "01:13:50",
+            "confidence": 0.808,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 62,
+          "start": 4429.56,
+          "end": 4503.56,
+          "start_time": "01:13:50",
+          "end_time": "01:15:04",
+          "text": "So my view is that traditional lectures where I'm here talking to you and trying to just have a one-way conversation is not the best. I think you learn best if you're trying to activate your brain rather than just listening passively. And so that's why I think it's important to encourage interaction. So that's why, for example, I introduce these polls. I try to leave room for questions. And so generally I want you to feel encouraged to come to class. I want you to have added value in coming here. But you should not feel obliged to come. If you're sick, please keep your germs home. And yeah, so like I said, the Belgian system, I think it's not great, where you just leave everything to the block and don't look at your course material before that. It's not great, because I think it takes time. And so with these in mind, I make all the content material available on the platform.",
+          "segment_ids": [
+            1202,
+            1203,
+            1204,
+            1205,
+            1206,
+            1207,
+            1208,
+            1209,
+            1210,
+            1211,
+            1212,
+            1213,
+            1214,
+            1215,
+            1216,
+            1217,
+            1218,
+            1219,
+            1220
+          ],
+          "alignment": {
+            "paragraph_id": 62,
+            "slide": 52,
+            "start": 4429.56,
+            "end": 4503.56,
+            "start_time": "01:13:50",
+            "end_time": "01:15:04",
+            "confidence": 0.8272,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 65,
+          "start": 4629.37,
+          "end": 4639.69,
+          "start_time": "01:17:09",
+          "end_time": "01:17:20",
+          "text": "The content is the same in the lecture. But as in the videos, the difference is really these interactions and doing these exercises together.",
+          "segment_ids": [
+            1254,
+            1255,
+            1256
+          ],
+          "alignment": {
+            "paragraph_id": 65,
+            "slide": 52,
+            "start": 4629.37,
+            "end": 4639.69,
+            "start_time": "01:17:09",
+            "end_time": "01:17:20",
+            "confidence": 0.6202,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 66,
+          "start": 4643.81,
+          "end": 4709.69,
+          "start_time": "01:17:24",
+          "end_time": "01:18:30",
+          "text": "Yeah, and this gives you the opportunity to ask for clarifications. So if we don't have time to cover the full material, that's OK because it's in the video. So I try to give you the chance. It's better to stop and make sure something is understood, then continue and have everyone read and just lost. Yeah, I always welcome feedback on how to make the most of these lectures so that they're most useful to you. And yeah, I try to give some informal exam tips. And like I said, I'll try to introduce these exam questions and going through them together for it. I think there are a few lectures where there was some space for this. So I'll try to integrate that this year. There are seven labs. Each takes two hours. And there are two groups. You should be assigned automatically to a group. You should also see what the other group is and don't hesitate to go to the group that you're not assigned.",
+          "segment_ids": [
+            1257,
+            1258,
+            1259,
+            1260,
+            1261,
+            1262,
+            1263,
+            1264,
+            1265,
+            1266,
+            1267,
+            1268,
+            1269,
+            1270,
+            1271,
+            1272,
+            1273,
+            1274,
+            1275,
+            1276,
+            1277,
+            1278,
+            1279
+          ],
+          "alignment": {
+            "paragraph_id": 66,
+            "slide": 52,
+            "start": 4643.81,
+            "end": 4709.69,
+            "start_time": "01:17:24",
+            "end_time": "01:18:30",
+            "confidence": 0.7071,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 53,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 54,
+      "slide_time": "01:15:04",
+      "paragraph_ids": [
+        63,
+        64
+      ],
+      "paragraphs": [
+        {
+          "id": 63,
+          "start": 4503.56,
+          "end": 4555.26,
+          "start_time": "01:15:04",
+          "end_time": "01:15:55",
+          "text": "And this includes not the live recordings. I don't like the live record. Also because I'll... I think... So I'm sorry. I want you to feel free to ask your questions. And you might feel less free if there was a live recording. So what I do is I prerecord the lectures. Now for this year, it will most likely just remain the same videos as last year, just for time reasons. I'll see if I can update them where needed. But I think that the content, I don't intend to really modify the content. So that should work. And then slides are online. There are required readings. This is the Jurafsky and Martin textbook for the most part.",
+          "segment_ids": [
+            1221,
+            1222,
+            1223,
+            1224,
+            1225,
+            1226,
+            1227,
+            1228,
+            1229,
+            1230,
+            1231,
+            1232,
+            1233,
+            1234,
+            1235,
+            1236,
+            1237
+          ],
+          "alignment": {
+            "paragraph_id": 63,
+            "slide": 54,
+            "start": 4503.56,
+            "end": 4555.26,
+            "start_time": "01:15:04",
+            "end_time": "01:15:55",
+            "confidence": 0.6813,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 64,
+          "start": 4558.72,
+          "end": 4629.37,
+          "start_time": "01:15:59",
+          "end_time": "01:17:09",
+          "text": "And then we'll do, in the class, some exercises. So I'll stop the lecture to see if you've understood what I've talked about so far and try to work out together how some algorithms work. And so these are put online together with the solutions. The labs are also online with solutions and don't require you to go to the lab. So generally, the slides give you the high-level intuitive explanations. But to really understand the models and the algorithms in the details that are necessary for the exam, you really have to do the... So the lectures, as you know, you're here, right, Thursdays 11 to 1, with an exception due to conference traveling on the 30th of October. This should all be in the time edit. But just pointing this out in case you don't have this in mind. So like I said, I'm not recording the in-person lectures.",
+          "segment_ids": [
+            1238,
+            1239,
+            1240,
+            1241,
+            1242,
+            1243,
+            1244,
+            1245,
+            1246,
+            1247,
+            1248,
+            1249,
+            1250,
+            1251,
+            1252,
+            1253
+          ],
+          "alignment": {
+            "paragraph_id": 64,
+            "slide": 54,
+            "start": 4558.72,
+            "end": 4629.37,
+            "start_time": "01:15:59",
+            "end_time": "01:17:09",
+            "confidence": 0.7061,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 55,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 56,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 57,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 58,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 59,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 60,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 61,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 62,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 63,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    }
+  ]
+}

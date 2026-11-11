@@ -1,0 +1,1036 @@
+{
+  "metadata": {
+    "source_file": "Lecture_03_Untitled_Slides.pdf",
+    "created_at": "2026-10-09T15:50:32.218879+00:00",
+    "slide_count": 114,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Decision trees",
+      "content": "Decision trees",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "What are decison",
+      "content": "What are decison trees?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "What is a decision tree?",
+      "content": "What is a decision tree? 3 • A decision tree represents a decision procedure where • you start with one question • the answer to that question determines which question you should ask next • and so on, until you reach a decision • We will usually call the questions “tests”, and the decision a “prediction”",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Example decision tree",
+      "content": "Example decision tree 4 Do I want to play tennis today, or not? The tree below represents one possible decision procedure (which takes the weather conditions into account). Outlook Humidity Wind No Yes No Yes Yes Sunny Overcast Rainy High Normal Strong Weak",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "What does the tree represent?",
+      "content": "What does the tree represent? 5 • Assume given a set of input attributes and a target attribute • The questions can involve any • The decision assigns a value to • We will denote the input space by ; points in are vectors • Any is mapped to exactly one value for • Hence, the tree represents a function from to X1, X2, …, Xn Y Xi Y X X x = (x1, x2, …, xn) x y Y X Y",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Illustration",
+      "content": "Illustration 6 Here, = Outlook, with possible values {Sunny, Overcast, Rainy}; = Humidity (High, Normal), = Wind (Strong, Weak), = Tennis (Yes, No) The tree represents a function Outlook × Humidity × Wind Tennis X1 X2 X3 Y → Outlook Humidity Wind No Yes No Yes Yes Sunny Overcast Rainy High Normal Strong Weak",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Representation power",
+      "content": "Representation power 7 • Assume that the input attributes and the output attribute are boolean (true/false) • Trees then represent boolean functions • Can every imaginable boolean function be represented? • Try to write down a tree for: • , the OR function : = true if X1, or X2, or both are true • , the AND function: = true if X1 and X2 are both true • , the XOR function: = true if exactly one of X1 and X2 is true • (¬ means NOT: ¬D = true if D = false) X1, X2, …, Xn Y ∨ X1 ∨X2 ∧ X1 ∧X2 ⊕ X1 ⊕X2 (A ∧B) ∨(C ∧¬D ∧E)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Continuous input attributes",
+      "content": "Continuous input attributes 8 • What if one of the input attributes is a continuous attribute? E.g., is a number between 0 and 1 • We cannot make a different child node for each possible value! • Tests must have a finite number of possible outcomes • Solution: use comparative tests, e.g., (two possible outcomes: yes, no) X1 X1 < 0.5",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Types of trees",
+      "content": "Types of trees 9 • When is nominal, the tree is called a classification tree • When is numerical, the tree is called a regression tree • (There are other types of trees: see later) Y Y",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Why trees?",
+      "content": "Why trees? 10 • If we want to learn a predictive function , why would we want to learn it in the form of a decision tree? • there are many alternatives: neural network, support vector machine, probabilistic model, … • Main reasons (as we will see later on): • learning and using trees is very efficient • they tend to have good predictive accuracy, even better when combined into ensembles (see elsewhere) • they are interpretable: we can understand what the tree says, and we can explain its predictions f : X →Y",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "How can we learn",
+      "content": "How can we learn decision trees from data? The basic learning algorithm",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Learning decision trees",
+      "content": "Learning decision trees 12 • A decision tree represents a function • Predictive learning is about learning such functions from data • We assume given: • existence of some unknown function • a dataset containing “examples” with • We want to find: • a tree that fulfills some criterion ( depends on the task) T : X →Y f : X →Y D (x, f(x)) x ∈X T : X →Y C C",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Learning decision trees: task 1",
+      "content": "Learning decision trees: task 1 13 Find the smallest tree such that (= smallest tree consistent with the data) • Useful: uncovers the link between and in the data set • tells us under what conditions takes certain values • this provides insight in the data • smallest tree = simplest explanation • Mostly of theoretical interest • Often, is only a sample from some larger distribution 𝒟, and we want to be accurate over 𝒟, not only T ∀(x, f(x)) ∈D : T(x) = f(x) X Y Y D T D",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Learning decision trees: task 2",
+      "content": "Learning decision trees: task 2 14 Find the tree such that for drawn from 𝒟, is (on average) maximally similar to • This is formally expressed using a loss function • indicates how bad it is to predict when you should have predicted (the higher the number, the worse) • The risk of , relative to f, is (the expected value of , with drawn from 𝒟) • Task, restated: find the tree with minimal risk T x T(x) f(x) ℓ: Y × Y →ℝ ℓ(y1, y2) y1 y2 R T Ex∼𝒟[(ℓ(T(x), f(x)] ℓ(T(x), f(x)) x",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Learning decision trees: task 2",
+      "content": "Learning decision trees: task 2 15 • In practice, we usually do not know 𝒟, so we cannot compute the risk of a tree , let alone find the tree with minimal risk • Practical algorithms for learning decision trees will therefore use heuristics to find a tree that, hopefully, • is small (so it provides insight in the connection between and ) • generalizes well (so it can be used to make predictions outside ) using only the data in T X Y D D",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Hardness of decision tree learning",
+      "content": "Hardness of decision tree learning 16 • Known result from complexity theory: “learning decision trees is NP-hard” • What is meant here, is that finding the smallest tree that is consistent with the data is NP-hard • In practice, that is not what learners try to do • We will see later on that practical algorithms for learning decision trees are in fact very efficient",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Learning DTs: the basic principle",
+      "content": "Learning DTs: the basic principle 17 This approach is known as “Top-down induction of decision trees” (TDIDT), or as “recursive partitioning” • Start with the full data set • Find a test such that examples in with the same outcome for the test tend to have the same value of • Split into subsets, one for each outcome of that test • Repeat this procedure on each subset that is not yet sufficiently “pure” (meaning, not all elements have the same ) • Keep repeating until no further splits possible D D Y D Y",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Example: cocktail drinking",
+      "content": "Example: cocktail drinking 18 ? Will I get sick if I drink this, or not?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "The data set D: 8 examples",
+      "content": "The data set D: 8 examples 19",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Data set in tabular form",
+      "content": "Data set in tabular form 20 Shape Color Content Sick? Cilinder Orange 25cl No Cilinder Black 25cl No Coupe White 10cl No Trapezoid Green 15cl No Coupe Yellow 15cl No Trapezoid Orange 15cl Yes Coupe Orange 15cl Yes Coupe Orange 10cl Yes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Observation 1: shape is important",
+      "content": "Observation 1: shape is important 21 Shape",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Observation 2: Sometimes, color is",
+      "content": "Observation 2: Sometimes, color is important too 22 Shape Color",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "The decision tree",
+      "content": "The decision tree 23 Shape Color orange Non-orange ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Rule representation of tree",
+      "content": "Rule representation of tree 24 • Trees can be written as if-then-rules • Rules can be simplified if shape = cilindric then 😀 else if color ≠ orange then 😀 else 🤢 if shape ≠ cilindric and color = orange then 🤢 else 😀",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Two main questions…",
+      "content": "Two main questions… 25 • The basic principle has just been illustrated • Two important details need to be filled in: • How to choose the “best” test • When to stop splitting nodes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "How to choose the tests?",
+      "content": "How to choose the tests? 26 • Think of the game “20 questions”, where you need to guess which person another player is thinking of, by asking questions that can only be answered by “yes” or “no”. • What’s a good criterion for choosing the questions?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Choosing a test: classification",
+      "content": "Choosing a test: classification 27 • We focus on classification trees ( is nominal) • A good test is a test that carries much information about the class • What is information? • Information theory defines “entropy” or “missing information” • how many bits needed, on average, to convey a piece of information, if an optimal encoding is used Y",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Information",
+      "content": "Information 28 • Assume I need to tell you for 100 objects what their class is, out of four possibilities (A,B,C,D) • Could encode A as 00, B as 01, C as 10, D as 11: 2 bits per objects needed • Can we do better? • If all classes are equally likely: no • If some classes are frequent and others are rare: yes! Use shorter encoding for more frequent class. • E.g. A: 0, B: 10, C: 110, D: 111 • 25% each: on average (1+2+3+3)/4 = 2.25 bits (worse than 2) • 50% A, 30%B, 10%C, 10%D: 0.5 + 0.6 + 0.3 + 0.3 = 1.7 bits",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Information",
+      "content": "Information 29 • More clever encodings can be devised • Given a set of values with respective probabilities , an encoding exists that uses, on average, bits for representing a randomly drawn value, where (with the binary logarithm: ) • This number reflects the minimal number of bits that you will need, on average, to encode one value. It is the inherent information content, or entropy c1, c2, …, ck p1, p2, …, pk e log2 a = log2(b) ⇔b = 2a e e = − k ∑ i=1 pi log2(pi)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Class entropy",
+      "content": "Class entropy 30 • The class entropy of a set of objects , where can be any of classes , is defined as • It measures how much uncertainty there is about the class of a particular instance S (x, y) y k ci (proportion of elements in with class ) S ci CE(S) = − k ∑ i=1 pi log2(pi) with pi = |{(x, y) ∈S|y = ci}| |S|",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Entropy: example",
+      "content": "Entropy: example 31 • S contains 6 elements with classes A, A, B, B, B, C: • CE(S) = - 1/3 1/3 - 1/2 1/2 - 1/6 1/6 = 1.46 • S contains 16 elements with 8xA, 8xB: • CE(S) = - 1/2 1/2 - 1/2 1/2 = 1 • S contains 16 elements, 15xA, 1xB: • CE(S) = -15/16 15/16 - 1/16 1/16 = 0.34 • High entropy = “many possibilities, all equally likely” • Low entropy = “few possibilities”, or possibly: “many possibilities, but most are highly unlikely” • Entropy measures uncertainty log2 log2 log2 log2 log2 log2 log2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Information gain",
+      "content": "Information gain 32 • Entropy reflects missing information • The information gain of a question = the expected reduction of entropy by obtaining the answer to the question • In the case of classification trees: expected reduction of class entropy: with a test, the number of possible outcomes of , and the subset of for which the ’th outcome was obtained t o t Si S i IG(S, t) = CE(S) −E[CE(Si)] = CE(S) − o ∑ i=1 |Si| |S| CE(Si)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Example",
+      "content": "Example 33 Tennis: assume set S has 9 “yes” (+) and 5 “no” (-)examples Humidity Wind High Normal Strong Weak S: [9+,5-] S: [9+,5-] S: [3+,4-] S: [6+,1-] S: [6+,2-] S: [3+,3-] E = 0.985 E = 0.592 E = 0.811 E = 1.0 E = 0.940 E = 0.940 Gain(S, Humidity) = .940 - (7/14).985 - (7/14).592 = 0.151 Gain(S, Wind) = .940 - (8/14).811 - (6/14)1.0 = 0.048 IG(S, Humidity) IG(S, Wind)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Choosing a test: regression",
+      "content": "Choosing a test: regression 34 • Now assume is numerical • How would you now choose the test? Y A1! A2! {1,3,4,7,8,12}! {1,3,4,7,8,12}! {1,4,12}! {3,7,8}! {1,3,4}! {7,8,12}!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Variance reduction",
+      "content": "Variance reduction 35 • Try to create subsets such that examples in one subset have similar values • Instead of information gain: variance reduction • The variance of in a set of instances is • Variance reduction is defined similarly to information gain: Y Y S (x, y) V R(S, t) = V ar(S) − o X i=1 |Si| |S| V ar(Si) Var(S) = ∑(x,y)∈S (y −¯y)2 |S| −1 with ¯y = ∑(x,y)∈S y |S|",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "When to stop splitting nodes?",
+      "content": "When to stop splitting nodes? 36 • In principle, keep splitting until all instances in a subset have the same Y value • Useful for Task 1 (no generalization needed) • Less useful for Task 2: risk of overfitting",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "37",
+      "content": "37 + + + + + + + - - - - - - - - - - - - - - + - - - - - Tree with tests of the form X<… or Y<… X Y",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "38",
+      "content": "38 + + + + + + + - - - - - - - - - - - - - - + - - - - - Tree with tests of the form X<… or Y<… X Y 4 Y < 4 ? ? yes no",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "39",
+      "content": "39 + + + + + + + - - - - - - - - - - - - - - + - - - - - Tree with tests of the form X<… or Y<… X Y 4 3 Y < 4 ? X<3 yes no + -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "40",
+      "content": "40 + + + + + + + - - - - - - - - - - - - - - + - - - - - Tree with tests of the form X<… or Y<… X Y 4 3 Y < 4 X<4 X<3 yes no + - - Y<3 - +",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Overfitting: effect on generalization",
+      "content": "Overfitting: effect on generalization 41 • Overfitting improves the consistency of the tree with the given data set , but may decrease accuracy for instances outside D D size of tree accuracy overfitting starts about here accuracy on D accuracy on 𝒟",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "How to avoid overfitting?",
+      "content": "How to avoid overfitting? 42 Two options: 1. “cautious splitting”: do not split a node unless you are certain that the split is meaningful (will not lead to overfitting) 2. “post-pruning”: don’t bother about overfitting while splitting nodes, but once the (large) tree has been built, prune away branches that turned out not to contribute much",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "1. Cautious splitting",
+      "content": "1. Cautious splitting 43 • How do we know when not to split a node any further? • Multiple criteria possible • A simple approach: try to guess when accuracy on unseen data is going down (the “turning point” in the red curve) size of tree accuracy overfitting starts about here accuracy on D accuracy on 𝒟",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "44",
+      "content": "44 • But how can we guess this turning point, if the red curve is based on “unseen data”? • Solution: “validation set” • set aside a subset of the data • this set is not used for growing the tree, only for estimating accuracy on “unseen” data",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "2. Post-pruning",
+      "content": "2. Post-pruning 45 • What if the red curve has a dip, then rises again? • Risk of ending the growth phase too early • Possible solution: compute the whole red curve in advance, then find its highest point • “Post-pruning” principle: • grow the tree to its full size, then cut away branches that did not contribute to getting better predictions • Specifically: check for each node in the tree, starting at the bottom: “what would be the accuracy (on the validation set) if I cut the tree here?” • If that accuracy is not lower, cut the tree",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Illustration",
+      "content": "Illustration 46 • Try pruning subtrees in the indicated order; whenever no loss of accuracy, prune A D C … … … C … … B … E D … … … 1 2 3 4 5 6 7 (Why is the order important?)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "47",
+      "content": "47 accuracy on training data accuracy on unseen data size of tree accuracy effect of pruning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Post-pruning vs. cautious splitting",
+      "content": "Post-pruning vs. cautious splitting 48 • Post-pruning requires more effort (build a large tree, then throw away most of it), but tends to give more accurate trees (for the reasons mentioned) • Not pruning at all is usually a bad idea (overfitting)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "A generic algorithm",
+      "content": "A generic algorithm The common structure of DT learners The differences between them",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "A generic TDIDT algorithm",
+      "content": "A generic TDIDT algorithm 50 • TDIDT = “top-down induction of decision trees”, also referred to as “recursive partitioning” • Most decision tree learners follow the same basic approach, but differ in the details • We will have a look at the commonalities and differences",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "A generic TDIDT algorithm",
+      "content": "A generic TDIDT algorithm 51 function TDIDT(E: set of examples) returns tree; T' = grow_tree(E ); T = prune_tree(T’ ); return T; function grow_tree(E: set of examples) returns tree; T = generate_tests(E); t = best_test(T, E); (call t’s outcomes v1…vk) P = {E1, E2, …, Ek} with Ei={x∈E | t(x)=vi} (P = partition induced on E by t) if stop_criterion(E, P) then return leaf(info(E)) else for all Ei in P: Ti := grow_tree(Ei); return node(t, {(v1,T1), (v2, T2), … (vk, Tk)} );",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "A generic TDIDT algorithm",
+      "content": "A generic TDIDT algorithm 52 The blue functions are where implementations differ • prune_tree : how to prune the tree afterwards (see before) • generate_tests : which tests to consider • best_test : which test to select (uses heuristics) • stop_criterion : when to stop • info : what information to store in the leaf",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "generate_tests",
+      "content": "generate_tests 53 Up till now, we assumed • one subtree per value for nominal attributes • two subtrees for numerical attributes (X<c) Alternative for nominal attributes with many values: • one subtree per set of values For numerical attributes: • how to determine c? • alternatives: tests of the form X∈[c1,c2], or aX1+bX2<c, or …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Illustration: effect of type of tests",
+      "content": "Illustration: effect of type of tests 54 + + + + + + + + - - - - - - - - - - - - + + + + + - + + + + + + + + - - - - - - - - - - - - + + + + + - - - - - - - tests of the form aX+bY<c : “oblique trees” tests of the form X<c, Y<c",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Type of tests affects expressiveness",
+      "content": "Type of tests affects expressiveness 55 Oblique trees are more expressive… • easier to represent “diagonal” class boundaries … but also much harder to learn • the number of tests to consider is much higher • optimal test is harder to determine (requires optimization of many parameters) In practice, non-oblique trees are much more common + + + + + + + - - - - - - - - - + + + + + + + + + + + + - - - - - - - - - + + + + +",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "best_test",
+      "content": "best_test 56 For classification trees: • information gain = reduction of entropy: • alternatives based on information theory have been proposed, e.g., C4.5 / J48 use gain ratio (see next slide) • CART reduces “Gini impurity” instead of entropy: For regression trees: • reduction of variance, reduction of standard deviation, … Gini(S) = 1 − k ∑ i=1 p2 i CE(S) = − k ∑ i=1 pi log pi",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "• Tests with many possible outcomes have an (unfair?) advantage over tests with few",
+      "content": "• Tests with many possible outcomes have an (unfair?) advantage over tests with few outcomes • cf. “20 questions”: only yes/no answers allowed. Questions with many possible answers, such as “what’s their profession?” or even “what’s their first name?” make the game too easy • To make the comparison between binary and non-binary tests fairer, “normalize” the gain by dividing it by some kind of maximum potential gain: the “split information” (SI) • For a test that splits into subsets : (Note: this is the “t-entropy” in S; cf. class entropy) • The Gain Ratio is: t S n Si SI(S, t) = − n ∑ i=1 |Si| |S| log2 |Si| |S| GR(S, t) = IG(S, t)/SI(S, t) Gain ratio heuristic 57",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "• Typically a binary split of the form x < c is made",
+      "content": "• Typically a binary split of the form x < c is made • So for one attribute, we have many possible tests, depending on how we fill in c • How to determine c? • Typically, all values are tried, and the c that yields the best heuristic value (IG, GR, Gni, …) is selected • Complexity? Not as bad as you might think - see later Numerical inputs 58",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "info",
+      "content": "info 59 For classification trees: • usually the most frequent class in this leaf • can also store the class distribution, e.g. “30%A, 60%B, 10%C” • some variants store all training examples relevant for that leaf For regression trees: • usually the mean of all target values in that leaf • possible alternatives: median, …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "stop_criterion",
+      "content": "stop_criterion 60 As explained before, post-pruning is usually preferred over stopping early Still, there may be “obvious” cases where you can stop early: • Classification: all instances have the same class • Too few examples to continue splitting • From a generalization viewpoint, leaves of size one do not make sense • Therefore, only allow tests that yield subtrees with at least two examples each",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "A note on heuristics for classification",
+      "content": "A note on heuristics for classification 61 • C4.5, J48 use entropy as impurity measure • CART uses Gini as impurity measure • Question: why not use a more obvious impurity measure, based on pi instead of pi blog(pi) or pi2 ? For instance: predictive accuracy of expanded tree • This actually has been proposed by some. But it does not work well. • Which test gives the most accurate tree? • Which is best according to Gini or IG? A! 80-, 20+! 40-,0+! 40-,20+! B! 80-, 20+! 40-,10+! 40-,10+!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "Impurity measures",
+      "content": "Impurity measures 62 Impurity as a function of p, when there are only two classes Observation: good impurity measures are strictly concave Error Entropy Gini",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "Good impurity measures are strictly",
+      "content": "Good impurity measures are strictly concave (Breiman et al., 1984) 63 E! E1! E2! (n1/n)E1+(n2/n)E2! p! p2! p1! Gain! Assume node with size n, entropy E and proportion of positives p is split into 2 nodes with n1, E1, p1 and n2, E2 p2. We have p = (n1/n)p1 + (n2/n) p2 , so the average entropy E’ = (n1/n)E1+(n2/n)E2 is found by linear interpolation between (p1,E1) and (p2,E2) at p. Information gain = difference in height between (p, E) and (p,E’).",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "Good impurity measures are strictly",
+      "content": "Good impurity measures are strictly concave 64 Accuracy will only improve if at least one child node has a majority class different from that of its parent This is often too restrictive: many good tests yield 0 accuracy gain linear interpolation = original point: no gain p1 p p2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Good impurity measures are strictly",
+      "content": "Good impurity measures are strictly concave 65 Accuracy will only improve if at least one child node has a majority class different from that of its parent This is often too restrictive: many good tests yield 0 accuracy gain non-zero gain p1 p p2 }",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "How much work is it?",
+      "content": "How much work is it? Computational complexity of learning and using a decision tree",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "Computational complexity of tree",
+      "content": "Computational complexity of tree learning 67 • Given a data set D consisting of N instances (x,y), where x has m components (attributes) • How do N and m influence the computational effort required to learn a tree?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "Splitting one node",
+      "content": "Splitting one node 68 For each node, we need to “find the best test” : • for each possible test, evaluate its quality • partition the dataset according to this test • compute quality based on this partition • for the test with highest quality: • partition data according to that test",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "Computing the quality of one test",
+      "content": "Computing the quality of one test 69 • Consider information gain = reduction of entropy • We need to compute class entropy for the node and for its subsets • This means we need to compute the proportions for each class in each subset CE(S) = − k X i=1 pi blog(pi) with pi = |{(x, y) 2 S|y = Ci}| |S| IG(S, t) = CE(S) − o X i=1 |Si| |S| CE(Si)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 70,
+      "title": "Computing the quality of one test",
+      "content": "Computing the quality of one test 70 A A B C Class a pos b neg a pos c pos b neg c neg a pos b pos a neg a b c pos neg I I I I I I I I I counts a b c pos 3 1 1 neg 1 2 1 all 4 3 2 |Si| for c: ppos=0.5 pneg=0.5",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 71,
+      "title": "Computing the quality of one test:",
+      "content": "Computing the quality of one test: continuous attributes 71 A<3.5 A B C Class 3 pos 4 neg 3 pos 5 pos 7 neg 8 neg 6 pos 3 pos 2 neg yes no counts yes no pos 3 2 neg 1 3 all 4 5 How to choose the threshold? Evaluate all possibilities? A lot of work! A<4.5 yes no counts yes no pos 3 2 neg 2 2 all 5 4 … and so on, for 2.5, 5.5, 6.5, 7.5",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 72,
+      "title": "Efficiently computing test quality for",
+      "content": "Efficiently computing test quality for continuous attributes 72 A<1.5 A B C Class 2 neg 3 pos 3 pos 3 pos 4 neg 5 pos 6 pos 7 neg 8 neg yes no counts yes no pos 0 5 neg 0 4 all 0 9 • First sort all tuples according to A, small to large • We can then gradually move the threshold, and simply update the tables • Thus, testing all thresholds is only slightly more work than testing one! |Syes|=0, |Sno|=9 no: ppos=5/9, pneg=4/9",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 73,
+      "title": "Efficiently computing test quality for",
+      "content": "Efficiently computing test quality for continuous attributes 73 A<2.5 A B C Class 2 neg 3 pos 3 pos 3 pos 4 neg 5 pos 6 pos 7 neg 8 neg yes no counts yes no pos 0 5 neg 1 3 all 1 8 • First sort all tuples according to A, small to large • We can then gradually move the threshold, and simply update the tables • Thus, testing all thresholds is only slightly more work than testing one! |Syes|=1, |Sno|=8 no: ppos=5/8, pneg=3/8 yes: …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 74,
+      "title": "Efficiently computing test quality for",
+      "content": "Efficiently computing test quality for continuous attributes 74 A<3.5 A B C Class 2 neg 3 pos 3 pos 3 pos 4 neg 5 pos 6 pos 7 neg 8 neg yes no counts yes no pos 3 2 neg 1 3 all 4 5 • First sort all tuples according to A, small to large • We can then gradually move the threshold, and simply update the tables • Thus, testing all thresholds is only slightly more work than testing one! |Syes|=1, |Sno|=8 no: ppos=2/5, pneg=3/5 yes: …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 75,
+      "title": "Computing the quality of one test",
+      "content": "Computing the quality of one test 75 • For nominal attributes: 1 scan, gradually building the table; compute IG once, at the end • For continuous attributes: 1 scan, gradually updating the table; compute IG for each intermediate table. (This assumes we’ve sorted the dataset according to this attribute - but that can be done once, in the beginning, we don’t need to redo that each time.) • Hence, continuous is a bit more work (calculating IG multiple times), but only by a constant factor • Computing the best test for a node is linear in the number of instances in that node",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 76,
+      "title": "Splitting one node",
+      "content": "Splitting one node 76 • Let n be the number of instances in that node (not the total number of instances N) • In practice, usually: • #tests is proportional to #attributes m • “compute quality of test” is O(n) • Compute quality of all tests is then O(nm)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 77,
+      "title": "Splitting multiple nodes",
+      "content": "Splitting multiple nodes 77 • After splitting a node into multiple children, we have more nodes, but each of them has fewer data elements • The total at one level of the tree is always N • So, the overall amount of work stays the same for each level in the tree (or diminishes, when leaves are created) 10000 instances 2000 inst. 8000 inst. 1ms 3000 5000 500 1500 0.2 ms 0.8 ms total time for this level (milliseconds) 1ms 1ms 1ms",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 78,
+      "title": "Overall complexity",
+      "content": "Overall complexity 78 • If splits are balanced, height of tree is O(log(N)) • Then overall complexity of tree growing is O(m N log(N)), with • N total number of instances in the dataset • m total number of attributes • Under these assumptions, tree learning has very good complexity in #instances and #attributes! • However, can be O(m N2) if splits are unbalanced",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 79,
+      "title": "Overall complexity: unbalanced trees",
+      "content": "Overall complexity: unbalanced trees 79 10000 instances 100 inst. 9900 inst. 200 9700 9500 200 9400 100 9200 200 For unbalanced trees, height can be O(N)… This can happen in practice! Good heuristics (e.g., IG) tend to favor balanced splits. 9100 100 …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 80,
+      "title": "Making predictions",
+      "content": "Making predictions 80 Using a tree to make predictions is usually very fast: h tests, with h the height of the tree Tree learners try to find trees with small height • remember: heuristics try to reduce entropy or variance • the faster you can reduce these, the faster you find “pure” sets, with (near) zero variance/entropy, which become leaves So, decision trees are very efficient at prediction time",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 81,
+      "title": "Complexity: conclusions",
+      "content": "Complexity: conclusions 81 • Under mild assumptions, decision tree learning is very efficient • That’s an excellent property when learning from big data ! • Prediction using decision trees is extremely fast (<1µs)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 82,
+      "title": "Handling missing",
+      "content": "Handling missing values",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 83,
+      "title": "What about missing values?",
+      "content": "What about missing values? 83 • When computing quality of a given test: just ignore instances where this value is missing • When splitting on an attribute, where should an example with a missing value go? Two options: • 1: guess its most likely value, then choose the corresponding branch (imputation) • 2: partially assign the example to multiple branches, proportional to probability of each branch (distribution) • When making a prediction: weighted vote among all leaves where the example (partially) ends up",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 84,
+      "title": "Distribution: illustration",
+      "content": "Distribution: illustration 84 Outlook Hum. Wind Play 1 Sunny High Weak No 2 sunny high strong No 3 overcast High weak yes 4 rain High Weak yes 5 rain normal weak yes 6 rain normal strong no 7 overcast normal strong yes 8 sunny high weak no 9 Sunny normal weak yes 10 rain normal weak yes 11 Sunny normal strong yes 12 overcast high Strong yes 13 overcast normal weak yes 14 rain high strong No Outlook Humidity Wind No Yes No Yes Yes Sunny Overcast Rainy High Normal Strong Weak How to classify e : [15, ?, high, strong] ? 5/14 4/14 5/14 e 5/14 e 4/14 e 5/14 e: 10/14 no, 4/14 yes => guess no",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 85,
+      "title": "Model trees",
+      "content": "Model trees More complex versions of regression trees",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 86,
+      "title": "Representation power of",
+      "content": "Representation power of regression trees 86 Regression trees represent piecewise constant functions 0 1 2 X Y X<1? X<2? Y=1 yes no X<1.5? Y=0.5 Y=2 Y=1.5",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 87,
+      "title": "Representation power of",
+      "content": "Representation power of regression trees 87 What if the target function is Y=X? 0 1 2 X Y X<0.5? X<1? Y=0.25 yes no X<1.4? Y=1.2 … Y=0.75",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 88,
+      "title": "Model trees",
+      "content": "Model trees 88 Model trees are regression trees in which each leaf does not contain a constant, but a linear model They represent piecewise linear functions X1<1? X2<3? Y=5-3X1+X2 yes no Y=2X2 Y=2X1+X2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 89,
+      "title": "A model tree learner: M5",
+      "content": "A model tree learner: M5 89 Probably the best known model tree learner (Quinlan, 1992) Weka implementation: M5’ (Wang & Witten, 1997) Standard regression tree learning, but when tree building ends, builds a linear model in each leaf. Note : M5 still chooses test that minimize variance, but this is no longer optimal in this case (Why not? What would be better?)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 90,
+      "title": "RETIS",
+      "content": "RETIS 90 Observation: • a subset is good if the data in that subset can be approximated well by a linear model • the variance of Y is not necessarily a good indicator of that! M5’s heuristics make sense if we will have constant predictions in the leaves, not if we will have linear models making the predictions 0 1 2 X Y What is a good split here, - for regression trees ? - for model trees ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 91,
+      "title": "RETIS",
+      "content": "RETIS 91 A better criterion, when splitting into subsets, is to: • perform linear regression in each subset • compute the residual variance of this regression • choose the test that minimizes the average residual variance The RETIS system (Karalic, 1992) does exactly that. The bad news is: deciding the optimal test is O(m3), with m the number of variables (due to multiple regression) (Torgo, 2002). This makes RETIS very slow for high m.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 92,
+      "title": "Mauve",
+      "content": "Mauve 92 Model tree learner Mauve chooses tests based on univariate regression • slightly slower than M5, but not as slow as RETIS • smaller & more accurate trees than M5 Basic idea: evaluate a test X<c based on reduction of residual variance after univariate linear regression (Y=aX+b) Vens et al. (2006): A simple regression based heuristic for learning model trees. Intelligent Data Analysis 10(3): 215-236.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 93,
+      "title": "Mauve: motivating example",
+      "content": "Mauve: motivating example 93 • Consider target function: f(x)=x if 0<x<1, 1-x for 1<x<2 • A tree exists that expresses it perfectly • Does M5 find this tree? 0 1 2 X Y X<1? Y=X Y=1-X yes no",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 94,
+      "title": "Mauve: motivating example",
+      "content": "Mauve: motivating example 94 Minimization of average variance does not yield a good split X<c? yes no 0 2 1 1 X Y c (a) 0.06 0.065 0.07 0.075 0.08 0.085 0 0.2 0.4 0.6 0.8 1 average variance (b) Average variance is not reduced for c=1 (optimal test), and is maximally reduced for c ≈ 0.4",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 95,
+      "title": "Mauve: motivating example",
+      "content": "Mauve: motivating example 95 As a result, M5 builds a complex tree on such data 0.0 0.5 1.0 1.5 2.0 0.0 0.4 0.8 1.2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . .. . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . x ≤1.6 x ≤0.51 LM1 x ≤1.32 x ≤0.715 x ≤0.665 LM2 LM3 x ≤1.19 x ≤0.861 LM4 x ≤1.11 x ≤0.919 LM5 LM6 LM7 LM8 LM9 LM10 LM1: y = 0.003 + 1.010x LM2: y = 0.577 LM3: y = 0.713 LM4: y = 0.470 + 0.411x LM5: y = 2.163 - 1.449x LM6: y = 1.260 - 0.296x LM7: y = 0.859 LM8: y = 0.730 LM9: y = 1.630 - 0.744x LM10: y = 1.806 - 0.895x",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 96,
+      "title": "Mauve vs. M5’",
+      "content": "Mauve vs. M5’ 96 Experimental comparison on synthetic data 0.0 0.5 1.0 1.5 2.0 0.0 0.4 0.8 1.2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . .. . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 0 1 2 3 4 0.0 0.35 0.7 1.05 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . 0.0 0.5 1.0 1.5 2.0 0.0 0.4 0.8 1.2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . .. . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 0.0 0.5 1.0 1.5 2.0 0.0 0.4 0.8 1.2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . .. . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 0 1 2 3 4 0.0 0.35 0.7 1.05 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . 0.0 0.5 1.0 1.5 2.0 0.0 0.4 0.8 1.2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . .. . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 0.0 0.5 1.0 1.5 2.0 0.0 0.4 0.8 1.2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . .. . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 0 1 2 3 4 0.0 0.35 0.7 1.05 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . 0.0 0.5 1.0 1.5 2.0 0.0 0.4 0.8 1.2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . .. . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . Mauve M5’ Random splits",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 97,
+      "title": "Multi-target trees",
+      "content": "Multi-target trees Predicting multiple variables with one tree",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 98,
+      "title": "Multi-target trees",
+      "content": "Multi-target trees 98 Classification and regression trees are very popular for predicting one target variable But the principle of variance reduction is easily generalized to predicting vectors ! This allows us to predict multiple variables at the same time, using one tree Question: will that work well?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 99,
+      "title": "Multi-label classification",
+      "content": "Multi-label classification 99 Multi-label classification : predict for each instance a set of labels E.g., assigning keywords to texts: • X = description of the text (e.g., bag-of-words) • Y = a set of keywords (e.g., {animals, climate change, North Pole}) How can we learn a model that predicts a set of labels? How can we predict the sets?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 100,
+      "title": "Multi-label classification",
+      "content": "Multi-label classification 100 Two straightforward approaches are often mentioned: Option 1: (“binary relevance”) • Learn one binary (yes/no) decision tree for each label • TreeA predicts a (yes/no), TreeB predicts b, etc. Option 2: (“label powersets”) • Consider each set as a separate label • For 5 original labels a,b,c,d,e, we get 32 combined labels: -, a, b, c, d, e, ab, ac, ad, ae, bc, …, abc, … • Generally, from n labels, we get 2n combined labels • Learn a tree that predicts the combined label",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 101,
+      "title": "Multi-label classification",
+      "content": "Multi-label classification 101 A third approach, very simple to implement with decision trees: Option 3: (vector encoding) • encode each set as a 0/1 vector, e.g. {a,b,d} = [1,1,0,1,0] • use a learner that can learn models that predict vectors Very straightforward for decision trees: requires almost no changes in the algorithm • best_test: variance of Y becomes variance of vectors • info: store the mean vector of all instances in that leaf (= vector of proportions) E.g., leaf contains { [1,1,0,1,0], [1,1,0,0,0], [1,1,0,1,1] } → [1, 1, 0, 0.67, 0.33]",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 102,
+      "title": "Multi-label trees: prediction",
+      "content": "Multi-label trees: prediction 102 • To make a prediction for a new instance: • find the leaf it belongs to • predict all labels for which the proportion in the label is above some given threshold (often 0.5, but could be other) • E.g., [1, 1, 0, 0.67, 0.33] → {a,b,d}",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 103,
+      "title": "Hierarchical multilabel classification",
+      "content": "Hierarchical multilabel classification 103 Similar to the previous problem, but now the labels are organized into a hierarchy. A label can only occur in a set if all its ancestors also occur Example applications: • Classifying texts into newsgroups • Assigning functions to proteins",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 104,
+      "title": "Hierarchical multilabel classification",
+      "content": "Hierarchical multilabel classification 104 With decision trees: we can do exactly the same as regular multilabel classification (vector encoding) Constraint “a label can only occur in an instance’s label set if all its ancestors also occur” is automatically fulfilled We can assign weights to different labels, to punish high-level mistakes more strongly than low-level mistakes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 105,
+      "title": "An application & empirical validation",
+      "content": "An application & empirical validation in functional genomics 105 • Predict the biological functions of a protein based on a description of it • 250 functions are distinguished, organized hierarchically • A single protein may have multiple functions in intracellular processes • So this is an HMC problem Blockeel et al. (2006), Decision Trees for Hierarchical Multilabel Classification: A Case Study in Functional Genomics. In Proc. of PKDD 2006: 18-29.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 106,
+      "title": "“Normal” classification trees",
+      "content": "“Normal” classification trees 106 • Advantage of trees: fast and interpretable • Learn a separate tree for each function? 250 functions = 250 trees: not so fast and interpretable anymore! Name A1 A2 A3 ….. An 1 2 3 4 5 … 249 250 G1 … … … … x x x x G2 … … … … x x x G3 … … … … x x x … … … … … … … … … … … … … 1 2 250 … Descriptive attributes Labels",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 107,
+      "title": "HMC trees",
+      "content": "HMC trees 107 • Learn 1 tree that predicts a 250-dimensional class vector • “Variance” (for heuristics) = mean squared distance to mean in 250-D space Name A1 A2 A3 ….. An 1 2 3 4 5 … 249 250 G1 … … … … x x x x G2 … … … … x x x G3 … … … … x x x … … … … … … … … … … … … … 1,2 8,145 Descriptive attributes Labels 1,5 3,17,83",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 108,
+      "title": "Good interpretability",
+      "content": "Good interpretability 108 Converting trees to if-then rule format gives short and interpretable rules IF Nitrogen_Depletion_8_h <= -2.74 AND Nitrogen_Depletion_2_h > -1.94 AND 1point5_mM_diamide_5_min > -0.03 AND 1M_sorbitol___45_min_ > -0.36 AND 37C_to_25C_shock___60_min > 1.28 THEN 40, 40/3, 5, 5/1 For class 40/3: Recall = 0.15; precision = 0.97. (rule covers 15% of all class 40/3 cases, and 97% of the cases fulfilling these conditions are indeed 40/3)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 109,
+      "title": "Decision trees in",
+      "content": "Decision trees in practice",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 110,
+      "title": "Weka",
+      "content": "Weka 110 A popular, easy-to-use, free data mining tool Available for download at http://www.cs.waikato.ac.nz/ml/weka/ Includes a highly optimized decision tree learner J48 and model tree learner M5’ (variants of C4.5 and M5, respectively)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 111,
+      "title": "Python: scikit-learn",
+      "content": "Python: scikit-learn 111 • Python has become increasingly popular among data scientists • Python package scikit-learn is very popular for machine learning; includes (basic!) decision tree support >>> from sklearn.datasets import load_iris >>> from sklearn import tree >>> iris = load_iris() >>> clf = tree.DecisionTreeClassifier() >>> clf = clf.fit(iris.data, iris.target) >>> from matplotlib import pyplot as plt >>> fig = plt.figure(figsize=(25,20)) >>> _ = tree.plot_tree(clf, feature_names=iris.feature_names, class_names=iris.target_names, filled=True) >>> fig.show() Example by Piotr Płoński, https://mljar.com/blog/visualize-decision-tree/ Load data & learn a decision tree from it Plot the tree",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 112,
+      "title": "Python: scikit-learn",
+      "content": "Python: scikit-learn 112",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 113,
+      "title": "Python: scikit-learn",
+      "content": "Python: scikit-learn 113 Some methods defined for DecisionTreeClassifier objects:",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 114,
+      "title": "Other software",
+      "content": "Other software 114 Many other decision tree learners exist, either as stand-alone software, or integrated in data analysis software (R, SAS, SPSS, …) Almost all statistical packages, these days, offer decision trees as an analysis method",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

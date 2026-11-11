@@ -7,6 +7,7 @@ from typing import Any
 
 from .library import DuplicateDocumentError, LibraryError, LibraryFolder, LibraryStore
 from .lecture_naming import infer_lecture_identity
+from .lecture_artifacts import save_portable_artifacts
 from .utils import clean_text
 
 
@@ -35,10 +36,8 @@ def save_lecture_result(
 ) -> list[str]:
     """Store the learner-facing lecture set in one subject folder.
 
-    Processing evidence remains in the durable run directory and is resolved by
-    the Library when it needs a cleaned transcript, slide summary, or alignment.
-    Keeping those implementation files out of the file explorer leaves one
-    recording, one class deck, and one concise notes PDF for the learner.
+    Portable slide, alignment, and transcript data are saved under the library's
+    derived folder so they survive a fresh clone without cluttering the explorer.
     """
     subject = library.get_subject(subject_id)
     messages: list[str] = []
@@ -84,4 +83,7 @@ def save_lecture_result(
             messages.append(str(exc))
         except LibraryError as exc:
             messages.append(f"Could not add {filename or path.name} to {subject.name}: {exc}")
+    saved = save_portable_artifacts(library, subject_id, folder.id, result.run_dir)
+    if saved:
+        messages.append(f"Saved slide links and transcript for {subject.name} / {folder.name}.")
     return messages

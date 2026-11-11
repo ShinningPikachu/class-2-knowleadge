@@ -1,0 +1,1018 @@
+{
+  "metadata": {
+    "source_file": "Lecture_06_Evaluation_5_Nov_Slides.pdf",
+    "created_at": "2026-11-05T20:46:39.819150+00:00",
+    "slide_count": 112,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Lecture 6: Evaluation",
+      "content": "Lecture 6: Evaluation Machine learning and inductive inference Sieben Bocklandt Slides based on slidedecks from Jesse Davis’ lectures in Principles of Machine Learning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "– Metrics",
+      "content": "– Metrics – Classification, Regression, Probability estimation – Understand strengths and weaknesses of metrics and know how to map them to a real problem – Be able to construct ROC and PR curves and understand what they show – Know the metrics and their behaviour by heart Goals of this lecture 2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "– Metrics",
+      "content": "– Metrics – Classification, Regression, Probability estimation – Understand strengths and weaknesses of metrics and know how to map them to a real problem – Be able to construct ROC and PR curves and understand what they show – Know the metrics and their behaviour by heart – Methodology – Know how to perform cross validation – Understand why we need independent training-validation-test sets – Know standard feature transformation and feature selection techniques Goals of this lecture 3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Evaluation metrics",
+      "content": "Evaluation metrics 4",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Slide 5",
+      "content": "5",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "M1",
+      "content": "M1 M2 6",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "M1",
+      "content": "M1 M2 Which model is better? 7",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "M1",
+      "content": "M1 M2 Which model is better? How good is each model? 8",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "M1",
+      "content": "M1 M2 Which model is better? How good is each model? → How do we measure performance? 9",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "– Two natural performance measures for classification: Error rate and accuracy",
+      "content": "– Two natural performance measures for classification: Error rate and accuracy – Success: instance’s class is predicted correctly – Error: instance’s class is predicted incorrectly Accuracy and Error M1 M2 10",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "– Two natural performance measures for classification: Error rate and accuracy",
+      "content": "– Two natural performance measures for classification: Error rate and accuracy – Success: instance’s class is predicted correctly – Error: instance’s class is predicted incorrectly 𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦= #𝑠𝑢𝑐𝑐𝑒𝑠𝑠𝑒𝑠 #𝑖𝑛𝑠𝑡𝑎𝑛𝑐𝑒𝑠 Accuracy and Error M1 M2 11",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "– Two natural performance measures for classification: Error rate and accuracy",
+      "content": "– Two natural performance measures for classification: Error rate and accuracy – Success: instance’s class is predicted correctly – Error: instance’s class is predicted incorrectly 𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦= #𝑠𝑢𝑐𝑐𝑒𝑠𝑠𝑒𝑠 #𝑖𝑛𝑠𝑡𝑎𝑛𝑐𝑒𝑠 𝐸𝑟𝑟𝑜𝑟 𝑟𝑎𝑡𝑒= #𝑒𝑟𝑟𝑜𝑟𝑠 #𝑖𝑛𝑠𝑡𝑎𝑛𝑐𝑒𝑠 Accuracy and Error M1 M2 12",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "– Two natural performance measures for classification: Error rate and accuracy",
+      "content": "– Two natural performance measures for classification: Error rate and accuracy – Success: instance’s class is predicted correctly – Error: instance’s class is predicted incorrectly 𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦= #𝑠𝑢𝑐𝑐𝑒𝑠𝑠𝑒𝑠 #𝑖𝑛𝑠𝑡𝑎𝑛𝑐𝑒𝑠 𝐸𝑟𝑟𝑜𝑟 𝑟𝑎𝑡𝑒= #𝑒𝑟𝑟𝑜𝑟𝑠 #𝑖𝑛𝑠𝑡𝑎𝑛𝑐𝑒𝑠 𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦= 1 −𝐸𝑟𝑟𝑜𝑟 𝑟𝑎𝑡𝑒 Accuracy and Error M1 M2 13",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "– Two natural performance measures for classification: Error rate and accuracy",
+      "content": "– Two natural performance measures for classification: Error rate and accuracy – Success: instance’s class is predicted correctly – Error: instance’s class is predicted incorrectly 𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦= #𝑠𝑢𝑐𝑐𝑒𝑠𝑠𝑒𝑠 #𝑖𝑛𝑠𝑡𝑎𝑛𝑐𝑒𝑠 𝐸𝑟𝑟𝑜𝑟 𝑟𝑎𝑡𝑒= #𝑒𝑟𝑟𝑜𝑟𝑠 #𝑖𝑛𝑠𝑡𝑎𝑛𝑐𝑒𝑠 𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦= 1 −𝐸𝑟𝑟𝑜𝑟 𝑟𝑎𝑡𝑒 Accuracy and Error M1 M2 Which model has a higher accuracy? 14",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Predicted True",
+      "content": "Predicted True Predicted False Actually True Actually False Predictions explained: Confusion matrix or Contingency table for Binary Classification M1 15",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Predicted True",
+      "content": "Predicted True Predicted False Actually True True Positive (TP) 8 Actually False Predictions explained: Confusion matrix or Contingency table for Binary Classification M1 16",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Predicted True",
+      "content": "Predicted True Predicted False Actually True True Positive (TP) 8 Actually False True Negative (TN) 12 Predictions explained: Confusion matrix or Contingency table for Binary Classification M1 17",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Predicted True",
+      "content": "Predicted True Predicted False Actually True True Positive (TP) 8 False Negative (FN) 3 Actually False True Negative (TN) 12 Predictions explained: Confusion matrix or Contingency table for Binary Classification M1 18",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Predicted True",
+      "content": "Predicted True Predicted False Actually True True Positive (TP) 8 False Negative (FN) 3 Actually False False Positive (FP) 4 True Negative (TN) 12 Predictions explained: Confusion matrix or Contingency table for Binary Classification M1 19",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Predicted True",
+      "content": "Predicted True Predicted False Actually True True Positive (TP) 8 False Negative (FN) 3 Actually False False Positive (FP) 4 True Negative (TN) 12 Predictions explained: Confusion matrix or Contingency table for Binary Classification M1 𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦= 𝑇𝑃+𝑇𝑁 𝑇𝑃+𝑇𝑁+𝐹𝑃+𝐹𝑁 𝐸𝑟𝑟𝑜𝑟 𝑟𝑎𝑡𝑒= 𝐹𝑃+𝐹𝑁 𝑇𝑃+𝑇𝑁+𝐹𝑃+𝐹𝑁 𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦= 1 −𝐸𝑟𝑟𝑜𝑟 𝑟𝑎𝑡𝑒 20",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Multiclass confusion matrix",
+      "content": "Multiclass confusion matrix Confusion matrix for genre prediction (3-NN) Confusion matrix for genre prediction (XGBoost) 21",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "– Let class skew be 𝜋=",
+      "content": "– Let class skew be 𝜋= | 𝑥𝑖 𝑦𝑖= 1 | 𝑁 – Define true positive rate 𝑇𝑃𝑅= 𝑇𝑃 𝑇𝑃+𝐹𝑁 and true negative rate 𝑇𝑁𝑅= 𝑇𝑁 𝑇𝑁+𝐹𝑃 – Accuracy = weighted average of 𝑇𝑃𝑅 and 𝑇𝑁𝑅: 𝐴𝑐𝑐= 𝜋× 𝑇𝑃𝑅+ (1 −𝜋) × 𝑇𝑁𝑅 ➔ Verify this at home! Accuracy is sensitive to class skew 22",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "– Let class skew be 𝜋=",
+      "content": "– Let class skew be 𝜋= | 𝑥𝑖 𝑦𝑖= 1 | 𝑁 – Define true positive rate 𝑇𝑃𝑅= 𝑇𝑃 𝑇𝑃+𝐹𝑁 and true negative rate 𝑇𝑁𝑅= 𝑇𝑁 𝑇𝑁+𝐹𝑃 – Accuracy = weighted average of 𝑇𝑃𝑅 and 𝑇𝑁𝑅: 𝐴𝑐𝑐= 𝜋× 𝑇𝑃𝑅+ (1 −𝜋) × 𝑇𝑁𝑅 ➔ Verify this at home! – Let 𝑇𝑃𝑅= 0.6 and 𝑇𝑁𝑅 = 0.8 If 𝜋= 0.5, then acc = 0.7 If 𝜋= 0.9, then acc = 0.62 – Balanced accuracy often used in research (setting 𝜋= 0.5 independent of the actual skew) Accuracy is sensitive to class skew 23",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "– Is 99% accuracy good?",
+      "content": "– Is 99% accuracy good? Problems with accuracy 24",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "– Is 99% accuracy good?",
+      "content": "– Is 99% accuracy good? Problems with accuracy Predicted True Predicted False Actually True 990 10 Actually False 10 990 Predicted True Predicted False Actually True 0 20 Actually False 0 1980 25",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Problems with accuracy",
+      "content": "Problems with accuracy M1 M2 26",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Problems with accuracy",
+      "content": "Problems with accuracy M1 M2 Both have the same accuracy, but in some settings, one is preferred over the other. 27",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "– Suppose we have misclassification costs",
+      "content": "– Suppose we have misclassification costs 𝐶𝐹𝑃: Cost of a false positive 𝐶𝐹𝑁: Cost of a false negative Incorporating Costs 28",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "– Suppose we have misclassification costs",
+      "content": "– Suppose we have misclassification costs 𝐶𝐹𝑃: Cost of a false positive 𝐶𝐹𝑁: Cost of a false negative – Expected cost of one prediction 𝐶= 𝐶𝐹𝑁× 𝜋× 𝑃(ℎ𝑥= 0|𝑦= 1) + 𝐶𝐹𝑃× (1 −𝜋) × 𝑃(ℎ𝑥= 1|𝑦= 0) Incorporating Costs 29",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "– Suppose we have misclassification costs",
+      "content": "– Suppose we have misclassification costs 𝐶𝐹𝑃: Cost of a false positive 𝐶𝐹𝑁: Cost of a false negative – Expected cost of one prediction 𝐶= 𝐶𝐹𝑁× 𝜋× 𝑃(ℎ𝑥= 0|𝑦= 1) + 𝐶𝐹𝑃× (1 −𝜋) × 𝑃(ℎ𝑥= 1|𝑦= 0) – We approximate this by substituting with FPR and FNR 𝐶= 𝐶𝐹𝑁× 𝜋× 𝑭𝑵𝑹+ 𝐶𝐹𝑃× (1 −𝜋) × 𝑭𝑷𝑹 where 𝐹𝑁𝑅= 𝐹𝑁 𝐹𝑁+𝑇𝑃 and 𝐹𝑃𝑅= 𝐹𝑃 𝑇𝑁+𝐹𝑃 Incorporating Costs 30",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "– Suppose we have misclassification costs",
+      "content": "– Suppose we have misclassification costs 𝐶𝐹𝑃: Cost of a false positive 𝐶𝐹𝑁: Cost of a false negative – Expected cost of one prediction 𝐶= 𝐶𝐹𝑁× 𝜋× 𝑃(ℎ𝑥= 0|𝑦= 1) + 𝐶𝐹𝑃× (1 −𝜋) × 𝑃(ℎ𝑥= 1|𝑦= 0) – We approximate this by substituting with FPR and FNR 𝐶= 𝐶𝐹𝑁× 𝜋× 𝑭𝑵𝑹+ 𝐶𝐹𝑃× (1 −𝜋) × 𝑭𝑷𝑹 where 𝐹𝑁𝑅= 𝐹𝑁 𝐹𝑁+𝑇𝑃 and 𝐹𝑃𝑅= 𝐹𝑃 𝑇𝑁+𝐹𝑃 – 𝐶 is not computable from accuracy alone Incorporating Costs 31",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "– Receiver Operating Characteristic curves",
+      "content": "– Receiver Operating Characteristic curves – Started during research on radars during WWII – Works for binary classification problems – ROC curves visually show two aspects of performance by plotting FPR and TPR Overcoming these issues: ROC curves TPR FPR 0.0 1.0 1.0 Model 1 Model 2 Random Guessing 32",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "– Receiver Operating Characteristic curves",
+      "content": "– Receiver Operating Characteristic curves – Started during research on radars during WWII – Works for binary classification problems – ROC curves visually show two aspects of performance by plotting FPR and TPR Overcoming these issues: ROC curves TPR FPR 0.0 1.0 1.0 Model 1 Model 2 Random Guessing What is shown by , and ? 33",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "– Given: numeric outputs for each test example (e.g. 𝑃(𝑦= 1|𝑥))",
+      "content": "– Given: numeric outputs for each test example (e.g. 𝑃(𝑦= 1|𝑥)) – Approach 1. Sort output values for test set 2. Locate boundaries between examples with different labels 3. Compute the FPR and TPR for each of these boundaries 4. Plot each (FPR,TPR) point 5. Connect the points to construct the curve Constructing a ROC curve 34",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Predicted",
+      "content": "Predicted Score Label 0.95 + 0.12 - 0.61 - 0.37 - 0.73 + 0.63 - 0.93 + 0.33 + 0.05 - 0.52 + ROC: example TPR FPR 0.0 1.0 1.0 35",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Predicted",
+      "content": "Predicted Score Label 0.95 + 0.12 - 0.61 - 0.37 - 0.73 + 0.63 - 0.93 + 0.33 + 0.05 - 0.52 + ROC: example Predicted Score Label 0.95 + 0.93 + 0.73 + 0.63 - 0.61 - 0.52 + 0.37 - 0.33 + 0.12 - 0.05 - TPR FPR 0.0 1.0 1.0 36",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Predicted",
+      "content": "Predicted Score Label 0.95 + 0.12 - 0.61 - 0.37 - 0.73 + 0.63 - 0.93 + 0.33 + 0.05 - 0.52 + ROC: example Predicted Score Label 0.95 + 0.93 + 0.73 + 0.63 - 0.61 - 0.52 + 0.37 - 0.33 + 0.12 - 0.05 - TPR FPR 0.0 1.0 1.0 FPR= 0.0, TPR= 0.0 37",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Predicted",
+      "content": "Predicted Score Label 0.95 + 0.12 - 0.61 - 0.37 - 0.73 + 0.63 - 0.93 + 0.33 + 0.05 - 0.52 + ROC: example Predicted Score Label 0.95 + 0.93 + 0.73 + 0.63 - 0.61 - 0.52 + 0.37 - 0.33 + 0.12 - 0.05 - FPR= 0.0, TPR= 0.6 TPR FPR 0.0 1.0 1.0 FPR= 0.0, TPR= 0.0 38",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Predicted",
+      "content": "Predicted Score Label 0.95 + 0.12 - 0.61 - 0.37 - 0.73 + 0.63 - 0.93 + 0.33 + 0.05 - 0.52 + ROC: example Predicted Score Label 0.95 + 0.93 + 0.73 + 0.63 - 0.61 - 0.52 + 0.37 - 0.33 + 0.12 - 0.05 - FPR= 0.4, TPR= 0.6 FPR= 0.0, TPR= 0.6 TPR FPR 0.0 1.0 1.0 FPR= 0.0, TPR= 0.0 39",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Predicted",
+      "content": "Predicted Score Label 0.95 + 0.12 - 0.61 - 0.37 - 0.73 + 0.63 - 0.93 + 0.33 + 0.05 - 0.52 + ROC: example Predicted Score Label 0.95 + 0.93 + 0.73 + 0.63 - 0.61 - 0.52 + 0.37 - 0.33 + 0.12 - 0.05 - FPR= 0.4, TPR= 0.6 FPR= 0.4, TPR= 0.8 FPR= 0.0, TPR= 0.6 TPR FPR 0.0 1.0 1.0 FPR= 0.0, TPR= 0.0 40",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Predicted",
+      "content": "Predicted Score Label 0.95 + 0.12 - 0.61 - 0.37 - 0.73 + 0.63 - 0.93 + 0.33 + 0.05 - 0.52 + ROC: example Predicted Score Label 0.95 + 0.93 + 0.73 + 0.63 - 0.61 - 0.52 + 0.37 - 0.33 + 0.12 - 0.05 - FPR= 0.6, TPR= 0.8 FPR= 0.4, TPR= 0.6 FPR= 0.4, TPR= 0.8 FPR= 0.0, TPR= 0.6 TPR FPR 0.0 1.0 1.0 FPR= 0.0, TPR= 0.0 41",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Predicted",
+      "content": "Predicted Score Label 0.95 + 0.12 - 0.61 - 0.37 - 0.73 + 0.63 - 0.93 + 0.33 + 0.05 - 0.52 + ROC: example Predicted Score Label 0.95 + 0.93 + 0.73 + 0.63 - 0.61 - 0.52 + 0.37 - 0.33 + 0.12 - 0.05 - FPR= 0.6, TPR= 0.8 FPR= 0.4, TPR= 0.6 FPR= 0.4, TPR= 0.8 FPR= 0.0, TPR= 0.6 FPR= 0.6, TPR= 1.0 TPR FPR 0.0 1.0 1.0 FPR= 0.0, TPR= 0.0 42",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Predicted",
+      "content": "Predicted Score Label 0.95 + 0.12 - 0.61 - 0.37 - 0.73 + 0.63 - 0.93 + 0.33 + 0.05 - 0.52 + ROC: example Predicted Score Label 0.95 + 0.93 + 0.73 + 0.63 - 0.61 - 0.52 + 0.37 - 0.33 + 0.12 - 0.05 - FPR= 0.6, TPR= 0.8 FPR= 0.4, TPR= 0.6 FPR= 0.4, TPR= 0.8 FPR= 0.0, TPR= 0.6 FPR= 0.6, TPR= 1.0 FPR= 1.0, TPR= 1.0 TPR FPR 0.0 1.0 1.0 FPR= 0.0, TPR= 0.0 43",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "Convex hull of a ROC curve",
+      "content": "Convex hull of a ROC curve TPR FPR 0.0 1.0 1.0 – Each point in the ROC space is a classifier – Best classifier depends on operating conditions – Costs – Class skew – Convex hull: Set of best classifiers under some operating condition – Classifiers that are not on the hull → Never optimal under the considered linear cost settings. – How do we get all the classifiers on the hull? → Interpolation 44",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "– Two (FPR, TPR) points",
+      "content": "– Two (FPR, TPR) points – M1 (0.0, 0.6) – M2 (0.8,1.0) – Goal: FPR=0.2 , TPR=0.7 – Flip biased coin – Select M1 with p=0.75 – Select M2 with p=0.25 – Coin flipping allows linear interpolation Interpolation in ROC space TPR FPR 0.0 1.0 1.0 45",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "– Area under the ROC curve (AUC)",
+      "content": "– Area under the ROC curve (AUC) – Wilcoxon-Mann-Whitney statistic: Probability that any random positive example is ranked ahead of any random negative example Summarizing ROC curves 46",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "– Area under the ROC curve (AUC)",
+      "content": "– Area under the ROC curve (AUC) – Wilcoxon-Mann-Whitney statistic: Probability that any random positive example is ranked ahead of any random negative example What are the ROC curves and AUC values for random guessing and a perfect model? Summarizing ROC curves 47",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "– ROC can be misleading if:",
+      "content": "– ROC can be misleading if: #positive examples << # negative examples – ROC looks at fractions, not total numbers – If lots and lots of negative examples, then a very low FPR can still mean lots of FPs – E.g., Cancer diagnosis, search results, anomalies – Solution: Precision and Recall ROC: class skew 48",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "– Primarily arise out of the literature on information retrieval (web search)",
+      "content": "– Primarily arise out of the literature on information retrieval (web search) – Useful when there are lots of negative examples, but you really care about the positive class (e.g. Cancer research) – Arguable, these are the metrics you often want Precision-Recall (PR) Curves 49",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "– Primarily arise out of the literature on information retrieval (web search)",
+      "content": "– Primarily arise out of the literature on information retrieval (web search) – Useful when there are lots of negative examples, but you really care about the positive class (e.g. Cancer research) – Arguable, these are the metrics you often want – PR curves plot – Recall = 𝑇𝑃 𝑇𝑃+𝐹𝑁 (How many of the positive examples are classified positive) – Precision= 𝑇𝑃 𝑇𝑃+𝐹𝑃 (How many of the classified positives are actually positives) Precision-Recall (PR) Curves Precision Recall 0.0 1.0 1.0 M1 M2 50",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "content": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004]) Problem 1: Linear interpolation in PR space Data ROC PR TP FP TPR FPR Recall Precision 500 500 51",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "content": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004]) Problem 1: Linear interpolation in PR space Data ROC PR TP FP TPR FPR Recall Precision 500 500 0.50 0.06 52",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "content": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004]) Problem 1: Linear interpolation in PR space Data ROC PR TP FP TPR FPR Recall Precision 500 500 0.50 0.06 0.50 0.50 53",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "content": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004]) Problem 1: Linear interpolation in PR space Data ROC PR TP FP TPR FPR Recall Precision 500 500 0.50 0.06 0.50 0.50 1000 9000 1.00 1.00 1.00 0.10 54",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "content": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004]) Problem 1: Linear interpolation in PR space Data ROC PR TP FP TPR FPR Recall Precision 500 500 0.50 0.06 0.50 0.50 750 4750 1000 9000 1.00 1.00 1.00 0.10 55",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "content": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004]) Problem 1: Linear interpolation in PR space Data ROC PR TP FP TPR FPR Recall Precision 500 500 0.50 0.06 0.50 0.50 750 4750 0.75 0.53 1000 9000 1.00 1.00 1.00 0.10 56",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "content": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004]) Problem 1: Linear interpolation in PR space Data ROC PR TP FP TPR FPR Recall Precision 500 500 0.50 0.06 0.50 0.50 750 4750 0.75 0.53 0.75 0.14 1000 9000 1.00 1.00 1.00 0.10 57",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "Interpolation in PR space",
+      "content": "Interpolation in PR space TP FP Recall Precision A 5 5 0.25 0.5 6 10 0.30 0.375 7 15 0.35 0.318 8 20 0.40 0.286 9 25 0.45 0.265 B 10 30 0.50 0.25 Dataset with 20 positives and 2000 negatives 58",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Interpolation in PR space",
+      "content": "Interpolation in PR space TP FP Recall Precision A 5 5 0.25 0.5 6 10 0.30 0.375 7 15 0.35 0.318 8 20 0.40 0.286 9 25 0.45 0.265 B 10 30 0.50 0.25 Dataset with 20 positives and 2000 negatives 59",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Problem 2: Changes in skew",
+      "content": "Problem 2: Changes in skew 60",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "– In ROC space, all models are possible",
+      "content": "– In ROC space, all models are possible – In PR space, it depends on the skew Problem 3: Unachievable region Precision Recall 0.0 1.0 1.0 Unachievable region: Not enough negative examples in the test set to construct the confusion matrix for these models Only depends on the skew 61",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "– Key Insight: ROC and PR curves are constructed from a fixed dataset",
+      "content": "– Key Insight: ROC and PR curves are constructed from a fixed dataset – Implication: number of positive and negative examples are fixed – Suppose: P=100, N=1000 – Suppose i want Recall=0.9 and Precision=0.05 – Recall = 𝑇𝑃 𝑇𝑃+𝐹𝑁 ➔ TP=90 ; FN=10 – Precision = 𝑇𝑃 𝑇𝑃+𝐹𝑃 ➔ 0.05 = 90 90+𝐹𝑃 ➔ FP=1710 1710 > 1000 ➔ Model not possible Problem 3: Unachievable region 62",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "– Two models",
+      "content": "– Two models – M1: Prec=0.80 Rec=0.80 – M2: Prec=0.60 Rec=0.90 – Which one is better? – Based on situation, but in general? Problem 4: comparison of 2 metrics 63",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "– Two models",
+      "content": "– Two models – M1: Prec=0.80 Rec=0.80 – M2: Prec=0.60 Rec=0.90 – Which one is better? – Based on situation, but in general? – E.g. F1-score combines precision and recall: 𝐹1 = 2 𝑃𝑟𝑒𝑐×𝑅𝑒𝑐 𝑃𝑟𝑒𝑐+𝑅𝑒𝑐= 2×𝑇𝑃 2×𝑇𝑃+𝐹𝑃+𝐹𝑁 F1(M1)=0.80 ; F1(M2)=0.72 Problem 4: comparison of 2 metrics 64",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "– All metrics are based on a finite set",
+      "content": "– All metrics are based on a finite set – How confident are we that it’s correct? – 𝛼% Confidence intervals: if we repeatedly sampled datasets and constructed intervals this way, approximately 𝛼 % of those intervals would contain the true value. – For large samples, a good approximation is to assume error is normally distributed 𝐶𝑜𝑛𝑓𝑖𝑑𝑒𝑛𝑐𝑒 𝑖𝑛𝑡𝑒𝑟𝑣𝑎𝑙 𝑓𝑜𝑟 𝑚𝑒𝑡𝑟𝑖𝑐 𝑀𝑒: 𝐶𝐼𝑀𝑒= 𝑀𝑒± 𝑧𝑀𝑒× (1 −𝑀𝑒) 𝑁𝑀𝑒 𝐶𝐼𝑃𝑟𝑒𝑐= 𝑃𝑟𝑒𝑐± 𝑧𝑃𝑟𝑒𝑐× (1 −𝑃𝑟𝑒𝑐) 𝑇𝑃+ 𝐹𝑃 𝐶𝐼𝑅𝑒𝑐= 𝑅𝑒𝑐± 𝑧𝑅𝑒𝑐× (1 −𝑅𝑒𝑐) 𝑇𝑃+ 𝐹𝑁 How certain are we that these numbers are correct? CI Width 80% 90% 95% 99% z 1.28 1.64 1.96 2.58 65",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "– All metrics are based on a finite set",
+      "content": "– All metrics are based on a finite set – How confident are we that it’s correct? – 𝛼% Confidence intervals: if we repeatedly sampled datasets and constructed intervals this way, approximately 𝛼 % of those intervals would contain the true value. – For large samples, a good approximation is to assume error is normally distributed 𝐶𝑜𝑛𝑓𝑖𝑑𝑒𝑛𝑐𝑒 𝑖𝑛𝑡𝑒𝑟𝑣𝑎𝑙 𝑓𝑜𝑟 𝑚𝑒𝑡𝑟𝑖𝑐 𝑀𝑒: 𝐶𝐼𝑀𝑒= 𝑀𝑒± 𝑧𝑀𝑒× (1 −𝑀𝑒) 𝑁𝑀𝑒 𝐶𝐼𝑃𝑟𝑒𝑐= 𝑃𝑟𝑒𝑐± 𝑧𝑃𝑟𝑒𝑐× (1 −𝑃𝑟𝑒𝑐) 𝑇𝑃+ 𝐹𝑃 𝐶𝐼𝑅𝑒𝑐= 𝑅𝑒𝑐± 𝑧𝑅𝑒𝑐× (1 −𝑅𝑒𝑐) 𝑇𝑃+ 𝐹𝑁 How certain are we that these numbers are correct? CI Width 80% 90% 95% 99% z 1.28 1.64 1.96 2.58 66",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "– Practice: Accurate probabilities are calibrated probabilities",
+      "content": "– Practice: Accurate probabilities are calibrated probabilities Probability estimation Actual probability Predicted probability 0.0 1.0 1.0 Perfectly calibrated 67",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "– Practice: Accurate probabilities are calibrated probabilities",
+      "content": "– Practice: Accurate probabilities are calibrated probabilities Probability estimation Actual probability Predicted probability 0.0 1.0 1.0 Perfectly calibrated Overconfident 68",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "– Practice: Accurate probabilities are calibrated probabilities",
+      "content": "– Practice: Accurate probabilities are calibrated probabilities Probability estimation Actual probability Predicted probability 0.0 1.0 1.0 Perfectly calibrated Overconfident Underconfident 69",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 70,
+      "title": "– Many classifiers are NOT well calibrated",
+      "content": "– Many classifiers are NOT well calibrated – Can post-process scores to calibrate – Isotonic Regression – Beta calibration – Brier score measures calibration for N examples and C classes 𝐵𝑟𝑖𝑒𝑟 𝑆𝑐𝑜𝑟𝑒= 1 𝑁෍ 𝑖=1 𝑁 ෍ 𝑗=1 𝐶 𝑦𝑖,𝑗−𝑝𝑖,𝑗 2 Calibration 70",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 71,
+      "title": "– Root mean squared error: 𝑅𝑀𝑆𝐸=",
+      "content": "– Root mean squared error: 𝑅𝑀𝑆𝐸= 1 𝑁σ𝑖=1 𝑁 𝑓𝑥𝑖−𝑦𝑖2 – Mean absolute error: 𝑀𝐴𝐸= 1 𝑁σ𝑖=1 𝑁 |𝑓𝑥𝑖−𝑦𝑖| – Relative Error = σ𝑖=1 𝑁 𝑓𝑥𝑖−𝑦𝑖2 σ𝑖=1 𝑁 ത𝑦−𝑦𝑖 2 1 = no better than always predicting the mean of the possible values 0 = perfect prediction Evaluating Regression models (real-valued outputs) 71",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 72,
+      "title": "Evaluation methodology",
+      "content": "Evaluation methodology 72",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 73,
+      "title": "– Predict the price of stocks",
+      "content": "– Predict the price of stocks – Predict the risk of cancer – Predict whether an email is spam or not – Predict whether a song belongs to a playlist or not Suppose you want to deploy a model 73",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 74,
+      "title": "– Predict the price of stocks",
+      "content": "– Predict the price of stocks – Predict the risk of cancer – Predict whether an email is spam or not – Predict whether a song belongs to a playlist or not Question: Independent of a metric, what is a key performance property that we’d need to actually be able to use these models? Suppose you want to deploy a model 74",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 75,
+      "title": "Methodology: Generalization",
+      "content": "Methodology: Generalization 75",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 76,
+      "title": "– Idea 1: Evaluate the performance on the data used to learn the model (training data)",
+      "content": "– Idea 1: Evaluate the performance on the data used to learn the model (training data) 𝐹1 𝑀, 𝑡𝑟𝑎𝑖𝑛= 0.818 𝐸𝑟𝑟𝑜𝑟 𝑟𝑎𝑡𝑒𝑀, 𝑡𝑟𝑎𝑖𝑛= 0.154 – Idea 2: use an independent test set consisting of instances that played no part in the formation of the classifier 𝐹1 𝑀, 𝑡𝑒𝑠𝑡= 0.714 𝐸𝑟𝑟𝑜𝑟 𝑟𝑎𝑡𝑒𝑀, 𝑡𝑒𝑠𝑡= 0.286 Generalization M M 76",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 77,
+      "title": "– Dilemma: need both a large training set and a large test set",
+      "content": "– Dilemma: need both a large training set and a large test set – More training data → better classifier – More test data → better error estimate for generalization Solution 1: Split data into train and test data 77",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 78,
+      "title": "– Dilemma: need both a large training set and a large test set",
+      "content": "– Dilemma: need both a large training set and a large test set – More training data → better classifier – More test data → better error estimate for generalization – Problem: (labeled) data is often limited and expensive to obtain – Research: open-source benchmark datasets, not method-specific – Industry: data initially doesn’t immediately generate value/revenue, so gathering and labelling large datasets have low priority Solution 1: Split data into train and test data 78",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 79,
+      "title": "– Dilemma: need both a large training set and a large test set",
+      "content": "– Dilemma: need both a large training set and a large test set – More training data → better classifier – More test data → better error estimate for generalization – Problem: (labeled) data is often limited and expensive to obtain – Research: open-source benchmark datasets, not method-specific – Industry: data initially doesn’t immediately generate value/revenue, so gathering and labelling large datasets have low priority – Solution: use more sophisticated techniques – Can we mimic a large dataset with a small dataset? Solution 1: Split data into train and test data 79",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 80,
+      "title": "– Partition examples into k disjoint sets",
+      "content": "– Partition examples into k disjoint sets – Create k training sets – Each set is union of all folds except one – So each set has 𝑘−1 𝑘 of the original training data Solution 2: Cross validation 80",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 81,
+      "title": "– Five-fold cross validation with 250 examples",
+      "content": "– Five-fold cross validation with 250 examples – 50 examples per fold Cross validation example Training folds Testing fold Correct Incorrect Accuracy 1 2 3 4 5 35 15 0.70 1 2 3 5 4 30 20 0.60 1 2 4 5 3 37 13 0.74 1 3 4 5 2 33 17 0.66 2 3 4 5 1 40 10 0.80 Overall accuracy = 175/250 = 0.70 81",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 82,
+      "title": "– Smaller data → More folds",
+      "content": "– Smaller data → More folds – If you have very little data (<100 examples), you can use leave-one-out cross validation – Set number of folds to the number of examples – For n examples, train your classifier n times on n-1 examples – Involves no random subsampling, every instance is used n-1 times as training data and once as test data – Typically, people use 5-fold or 10-fold cross validation – With large datasets (>1 million examples), a single split into train-test is OK! Cross validation in practice 82",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 83,
+      "title": "– Representativeness problem:",
+      "content": "– Representativeness problem: – All examples from a whole (infrequent) class might be missing in the training data – Error estimate is then meaningless One potential problem 83",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 84,
+      "title": "– Representativeness problem:",
+      "content": "– Representativeness problem: – All examples from a whole (infrequent) class might be missing in the training data – Error estimate is then meaningless – Solution: Stratification – Ensure that each class is represented with its original class proportion in both train and test sets – Error estimates bear meaning – Variance in estimates will reduce One potential problem 84",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 85,
+      "title": "– Possible that held aside test data is not representative of new data gathered",
+      "content": "– Possible that held aside test data is not representative of new data gathered as test data! – Even with correct methodology: – Positive and negative examples collected differently – Features acquired differently for different classes – The split should mimic deployment and keep dependent observations together! – Examples: – Cancer samples processed by different people or on different days than normal samples – Song belongs to a playlist on one day, not on the other Big Pitfall: is test data representative of real data? 85",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 86,
+      "title": "– Data is stratified before the cross validation is performed",
+      "content": "– Data is stratified before the cross validation is performed – All data is used for testing! – The predictions over the test folds are concatenated or the error estimates are averaged to yield an overall error estimate – Because we use multiple training sets in Cross-Validation, we are evaluating a learning method as opposed to an individual learned model – Did I tweak my algorithm a million times until I get good results? – Solution: Use one or two datasets for development, then expand evaluation Notes on cross-validation 86",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 87,
+      "title": "Methodology: Manipulating the feature space",
+      "content": "Methodology: Manipulating the feature space 87",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 88,
+      "title": "– This can be for a variety of reasons:",
+      "content": "– This can be for a variety of reasons: – Tools may support only real-valued features or only discrete features – Can improve computational efficiency – String comparisons are slower than integer comparisons – Fewer options to try = faster run time – Can improve accuracy – Two categories of operations – Manipulating the values a feature can take on – Removing features Manipulating the feature space 88",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 89,
+      "title": "– Convert ordinal to numeric which enables using > or <",
+      "content": "– Convert ordinal to numeric which enables using > or < – E.g. Tempo={Very slow, slow, quite slow, normal, quite fast, fast, very fast} →Very slow=1; slow=2; quite slow=3; normal=4, … – One-hot encoding of nominal features – One binary indicator per value Transforming ordinals and nominals Genre Jazz Punk Opera Genre=Jazz Genre=Punk Genre=Opera 1 0 0 0 1 0 0 0 1 Note: converting to integers incorrectly implies there’s an ordering or relation between categories when there isn’t 89",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 90,
+      "title": "– Group values into categories by hand",
+      "content": "– Group values into categories by hand – Map e.g. US states to regions; subgenres into genres; years into decades – If many infrequent values, group them (e.g., new category “other”) – Target encoding: Replace each feature value with a statistic derived from the target – Real: e.g. Average of target for each value – Discrete: e.g. Conditional probability of target for each value Handling features with many possible values Artist Plays Skipped Target Encoding ABBA 100.000 20.000 0.20 Green Day 50.000 20.000 0.40 Eminem 75.000 25.000 0.33 Skrillex 33.000 27.000 0.81 90",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 91,
+      "title": "– Group values into categories by hand",
+      "content": "– Group values into categories by hand – Map e.g. US states to regions; subgenres into genres; years into decennia – If many infrequent values, group them (e.g., new category “other”) – Target encoding: Replace each feature value with a statistic derived about the target – Real: e.g. Average of target for each value – Discrete: e.g. Conditional probability of target for each value Handling features with many possible values Artist Plays Skipped Target Encoding ABBA 100.000 20.000 0.20 Green Day 50.000 20.000 0.40 Eminem 75.000 25.000 0.33 Skrillex 33.000 27.000 0.81 91 Warning: in k-fold cross validation, it has to be done per fold",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 92,
+      "title": "– BPM values: 50 70 80 100 110 120 130 140 160 180 190 240",
+      "content": "– BPM values: 50 70 80 100 110 120 130 140 160 180 190 240 Equal Width Equal Height Continuous to Discrete: Binning [50,100) [100,150) [150,200) [200,250) [50,90) [90,130) [130,170) [170,250) 92",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 93,
+      "title": "– Feature selection: Remove features prior to learning",
+      "content": "– Feature selection: Remove features prior to learning – Why? – Easier learning: Fewer parameters (good if |Features| ≫|Data|) – More interpretable models: Gain domain insights – Improve efficiency: Fewer features = less memory / runtime – Better performance: Irrelevant attributes degrade performance – How? – Filter-based approaches – Wrapper-based approaches Feature selection 93",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 94,
+      "title": "– Idea: Measure each feature’s usefulness in isolation (i.e., independent of other",
+      "content": "– Idea: Measure each feature’s usefulness in isolation (i.e., independent of other features) – Pro: Scales to large feature sets or large data sets – Cons: – Misses feature interactions – May select redundant features Filter-based feature selection All features Feature selection Algorithm: assign a score to each feature Pick top k features 94",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 95,
+      "title": "– Metric that computes a “correlation”",
+      "content": "– Metric that computes a “correlation” – Information gain with S the data and A the feature: – Pearson correlation coefficient with fi the ith feature and y the target: – Single-variable classifier: Select based on predictive performance – Build classifier with just one variable – Discrete: Decision stump – Continuous: Threshold the feature’s value – Measure performance Two filter-based approaches 95",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 96,
+      "title": "– Feature selection = search",
+      "content": "– Feature selection = search – State = set of features – Start state – Forward: No features – Backward: All features – Operators: – Forward: Add a feature – Backward: Remove a feature – Scoring function: Model’s performance when using the state’s feature set Wrapper-Based feature selection 96",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 97,
+      "title": "Forward wrapper-based feature selection",
+      "content": "Forward wrapper-based feature selection 97",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 98,
+      "title": "Backward wrapper-based feature selection",
+      "content": "Backward wrapper-based feature selection 98",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 99,
+      "title": "– Forward",
+      "content": "– Forward – Faster in early steps because fewer features to test – Fast for choosing a small subset of the features – Misses features whose usefulness requires other features (feature synergy) – Backward – Fast for choosing all but a small subset of the features – Preserves features whose usefulness requires other features (e.g., area requires both length & width) Forward vs backward 99",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 100,
+      "title": "Methodology: configuring the pipeline",
+      "content": "Methodology: configuring the pipeline 100",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 101,
+      "title": "– How should I set the value of k in kNN?",
+      "content": "– How should I set the value of k in kNN? – How many trees should I use in my ensemble? – How many features should I use? – Idea 1: evaluate all choices on the training data, pick the best one – Problem: How to avoid overfitting? Practical questions 101",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 102,
+      "title": "– Add an extra split: Training – Validation – Test",
+      "content": "– Add an extra split: Training – Validation – Test – For each considered algorithm configuration (e.g., number of trees in the ensemble, with/without feature selection): – Learn model on train – Evaluate model on validation – Pick the model with the best performance on the validation set: Compute and report its test set performance Tuning: subdivide the data 102",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 103,
+      "title": "– Single validation set can be unreliable",
+      "content": "– Single validation set can be unreliable – Do cross validation on the training data – Pick setting with best average performance – Learn model with chosen configuration using all training data Internal or Nested Cross Validation 103",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 104,
+      "title": "– Single validation set can be unreliable",
+      "content": "– Single validation set can be unreliable – Do cross validation on the training data – Pick setting with best average performance – Learn model with chosen configuration using all training data Internal or Nested Cross Validation 104 Internal Cross validation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 105,
+      "title": "– Single validation set can be unreliable",
+      "content": "– Single validation set can be unreliable – Do cross validation on the training data – Pick setting with best average performance – Learn model with chosen configuration using all training data Internal or Nested Cross Validation 105 Internal Cross validation Nested Cross validation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 106,
+      "title": "– Problem: Often have to tune multiple parameters:",
+      "content": "– Problem: Often have to tune multiple parameters: – E.g. Random forests: number of trees, depth of trees, width of trees, … – Approach: Treat as a search problem – Grid search: Try all possible values – Random search: Sample possible values – is often quite effective (why?) Hyperparameter Search 106",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 107,
+      "title": "– Problem: Often have to tune multiple parameters:",
+      "content": "– Problem: Often have to tune multiple parameters: – E.g. Random forests: number of trees, depth of trees, width of trees, … – Approach: Treat as a search problem – Grid search: Try all possible values – Random search: Sample possible values – is often quite effective (why?) → Random search works well because usually only a few hyperparameters strongly affect performance, so it tests more distinct values of those parameters than a grid with the same budget. Hyperparameter Search 107",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 108,
+      "title": "Automated Hyperparameter Tuning: -AutoWeka or",
+      "content": "Automated Hyperparameter Tuning: -AutoWeka or auto-sklearn [from hutter] 108",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 109,
+      "title": "– Decision trees",
+      "content": "– Decision trees – Minimum number of examples in leaf – Depth of tree – Ensembles: Size of ensemble – kNN: Value of k – Random forest: max_features, number of trees, … – Models: Linear and logistic regression – Regularization (L2, L1,…) – Regularization parameter λ – With or without feature selection What to tune 109",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 110,
+      "title": "– Need a reasonable spread of values:",
+      "content": "– Need a reasonable spread of values: – Good: t = 50, 100, 500, 1000 – Bad: t = 40, 45, 50, 55, 60 – Good: k = 1, 5, 15, 25 – Bad: k = 1, 3, 5 – Good: λ = 0.01, 0.05, 0.1, 0.5, … – Bad : λ = 0.01, 0.02, 0.03 – Reasoning: Spread between values is important – Idea: Use log-spaced values for scale parameters and choose bounds based on plausible values and computational budget. Values to be considered 110",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 111,
+      "title": "– Information from outside the training set leaks into the training data (i.e., test",
+      "content": "– Information from outside the training set leaks into the training data (i.e., test set is no longer independent) – Happens more often than you think – Common errors: – Global preprocessing, e.g., feature selection or target encoding before cross validation. Must repeat entire data processing pipeline on every fold of CV using only that fold’s TRAINING DATA – Temporal dependencies: Use future data to predict the past – Incorrect or misaligned time stamps – Multiple examples for each entity: Must do cross validation on the subject level and not the example level Leakage 111",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 112,
+      "title": "Questions?",
+      "content": "Questions? 112",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

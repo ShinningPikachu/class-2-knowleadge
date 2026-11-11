@@ -1,0 +1,371 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 7: Text processing (4 Nov)",
+    "section_label": "Slide",
+    "completed": 40,
+    "total": 40,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "faculty of arts",
+      "summary": "This lecture introduces the seventh session on scripting languages within the Faculty of Arts, focusing specifically on text processing, errors, and exceptions. Delivered by Tim Van de Cruys on Wednesday, November 4, 2026, the session establishes the foundational context for exploring how scripts handle textual data and manage runtime issues.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "Text processing",
+      "summary": "Text processing has so far relied on basic Python machinery, specifically the `str` object and its methods like `split`, `join`, `lower`, `strip`, `isalpha`, and `isnumeric`. For instance, `doc.split()` interprets a string as a list of words. However, these fundamental tools are limited and only function effectively up to a certain extent, indicating the need for more advanced approaches beyond simple string manipulation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 3,
+      "title": "Splitting on whitespace",
+      "summary": "Splitting a string on whitespace using `s.split()` separates text only at spaces, leaving punctuation attached to adjacent words and keeping quoted phrases intact as single tokens. For example, splitting \"Mr. J. Simpson said: 'Astounding!'\" results in the list [\"Mr.\", \"J.\", \"Simpson\", \"said:\", \"'Astounding!'\"], demonstrating that colons remain with \"said\" and quotes are not removed. This method does not detect sentence boundaries or isolate punctuation marks from words.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 4,
+      "title": "Preprocessing",
+      "summary": "Preprocessing is an essential step that converts raw text into a structured representation through word segmentation (tokenization), sentence detection, and normalization like lemmatization. Rather than implementing these steps manually, students should utilize established Python modules containing evolved algorithms to ensure accurate handling of complex cases, such as preserving dots within abbreviations. This structured output is strictly necessary before any text analysis can be performed.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 5,
+      "title": "Tokenization",
+      "summary": "Tokenization defines and marks word boundaries within text encoded as a string of characters, where words, spaces, and punctuation are initially treated identically. This process converts the entire text into a list of individual tokens, such as the approximately 260,000 tokens generated from the *Moby Dick* example including proper punctuation handling. These tokens are then passed to a `Text` object, creating a specific class instance that qualifies the data for further analysis.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 6,
+      "title": "Tokenization",
+      "summary": "Tokenization is the fundamental, automated task of splitting a text string into individual units called tokens, which include words, punctuation marks, and other elements. While various algorithms exist to perform this operation using cues like whitespace and punctuation, no single method is perfect. For instance, applying tokenization to the sentence '\"Hark! A vagrant,\" he said.' correctly separates it into distinct components such as quotation marks, capitalized words, and individual punctuation symbols.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 7,
+      "title": "Tricky tokenization cases",
+      "summary": "Tokenization presents challenges when determining whether specific phrases should be treated as one token or multiple distinct tokens. Key examples of these ambiguous cases include compound titles like \"prime minister,\" proper nouns such as \"New York,\" and contractions like \"I'm\". These scenarios highlight the complexity of defining word boundaries in natural language processing tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 8,
+      "title": "Tricky tokenization cases",
+      "summary": "Tokenization becomes complex when deciding whether multi-word entities like \"prime minister\" or \"New York,\" possessives such as \"John's bike,\" and hyphenated phrases should be treated as single or multiple tokens. Additional challenges arise with abbreviated forms, chemical formulas, web addresses, hashtags, and emoticons, where standard rules for separating punctuation or whitespace may not apply. These cases require careful definition of token boundaries to ensure proper handling of diverse text structures.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 9,
+      "title": "Sentence detection",
+      "summary": "Sentence detection distinguishes between unambiguous terminators like question and exclamation marks and the highly ambiguous period. While a final dot often ends a sentence, periods within abbreviations such as \"U.N.\" or \"etc.\" must not trigger segmentation. Because simple algorithms fail to differentiate these cases without extensive exception handling, context is essential for accurate detection, necessitating the use of evolved existing modules rather than custom rule-based approaches.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 10,
+      "title": "Normalization",
+      "summary": "Normalization via lemmatization reduces different word forms, such as \"walks\" or \"walking,\" to their single dictionary lemma, like \"walk\". This process requires language-specific tools containing linguistic knowledge to handle irregular verbs and plurals correctly, often utilizing libraries like NLTK's `WordNetLemmatizer`. Although many studies skip this step for simplicity because distinct forms can carry useful information, proper implementation relies on external modules rather than custom functions.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 11,
+      "title": "Spacy & NLTK",
+      "summary": "Spacy and NLTK are two distinct NLP libraries offering preprocessing pipelines for tokenization, sentence detection, and lemmatization to support linguistic annotation and keyword statistics. While both serve educational exploration, NLTK relies on complex rule-based algorithms, whereas Spacy utilizes machine learning models trained on text, making it more efficient and better organized for large-scale industrial processing. Additionally, Spacy provides specific attributes that facilitate advanced filtering steps within the preprocessing workflow.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 12,
+      "title": "NLTK",
+      "summary": "NLTK provides tokenization functionality to split text strings into individual units, such as handling complex cases like abbreviations and punctuation in \"Mr. J. Simpson said: 'Astounding!'\". In a typical preprocessing workflow, the `word_tokenize` function generates a list of tokens that are often lowercased, while sentence segmentation can alternatively divide the same string into sentences rather than words.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 13,
+      "title": "NLTK",
+      "summary": "NLTK improves upon basic whitespace splitting by using `word_tokenize` and `sent_tokenize` to accurately segment text into tokens and sentences. Unlike simple split methods, NLTK correctly preserves abbreviations like \"Mr.\" and \"J.\" as single tokens while separating punctuation marks such as colons and exclamation points into distinct elements. Although not perfect, this approach provides a significantly more robust foundation for processing complex strings compared to standard whitespace-based tokenization.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 14,
+      "title": "NLTK",
+      "summary": "NLTK's `WordNetLemmatizer` reduces words to their base lemma form, such as converting \"rocks\" to \"rock\" and \"corpora\" to \"corpus\". While the default behavior interprets input as a noun, specifying the part-of-speech argument (e.g., `pos=\"a\"` for adjectives) is essential for accurate reduction of words like \"better\" to \"good,\" preventing incorrect defaults.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 15,
+      "title": "NLTK: explore keywords in context",
+      "summary": "The NLTK Text object enables keyword exploration through concordances, similar words, common contexts, and collocations. After importing NLTK and tokenizing a text file like *Moby Dick* or *Sense and Sensibility*, users can identify frequent word pairings, such as \"sperm whale\" or character names, which reveal significant entities within the corpus. This functionality supports general text analysis by allowing researchers to quickly observe how specific words are used and which tokens frequently appear together based on their context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 16,
+      "title": "Concordance",
+      "summary": "A concordance, also known as Key Word In Context (KWIC), displays every occurrence of a specific word within its surrounding text to facilitate exploratory text analysis. By examining these contexts, such as the various uses of \"monstrous\" in *Moby Dick*, researchers can quickly assess a word's rhetorical sense and grammatical function. This method also enables the identification of similar words based on shared contextual patterns rather than just lexical similarity.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 17,
+      "title": "Similar words",
+      "summary": "Analyzing similar words for \"monstrous\" reveals distinct usage patterns: *Moby Dick* associates it with adjectives like \"contemptible\" and \"mystifying,\" reflecting a literal sense, whereas Jane Austen's *Sense and Sensibility* pairs it with adverbs of degree such as \"very,\" \"exceedingly,\" and \"remarkably\". This contrast demonstrates that Austen employs \"monstrous\" functionally as an intensifier with a positive meaning (e.g., \"monstrous glad\"), differing significantly from its usage in other texts.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 18,
+      "title": "Common contexts",
+      "summary": "The slide illustrates the concept of common contexts by demonstrating how the words \"monstrous\" and \"very\" share syntactic environments, specifically appearing before adjectives like \"pretty\" or in constructions with verbs such as \"glad\" and \"lucky\". This example highlights that these distinct terms can occupy identical grammatical slots within sentences, a key observation for understanding distributional properties in scripting languages.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 19,
+      "title": "Common contexts",
+      "summary": "The `common_contexts` method identifies shared syntactic environments for specific words, such as demonstrating that \"monstrous\" and \"very\" both precede adjectives like \"pretty\" or follow verbs like \"am glad\" in *Sense & Sensibility*. This reveals that the novel uses \"monstrous\" functionally similarly to \"very,\" as seen in phrases like \"a monstrous pretty girl\". The `concordance` method further supports this by listing all 11 occurrences of \"monstrous\" within the text, providing concrete examples of its usage.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 20,
+      "title": "Collocations",
+      "summary": "A collocation is a sequence of words that co-occur more frequently than expected based on their individual frequencies, such as \"red wine,\" where the presence of one word significantly increases the likelihood of the other. In contrast, common pairings like \"the wine\" are not collocations because high-frequency function words like \"the\" appear with almost everything, making their co-occurrence unsurprising. The core concept involves comparing observed co-occurrence against expected co-occurrence to identify statistically significant word associations.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 21,
+      "title": "Collocations: examples",
+      "summary": "NLTK identifies collocations as sequences of tokens occurring more frequently together than expected, revealing distinct patterns across texts. In *Moby Dick* and *Sense and Sensibility*, character names and titles dominate the results, demonstrating how strong collocations reflect novelistic structures. While specific examples like \"Sperm Whale\" or \"Mrs. Jennings\" illustrate these findings, the lecture notes that detailed measures for calculating these associations will be explored further in the practical session.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 22,
+      "title": "Spacy",
+      "summary": "Spacy processes text by first loading a specific language model, such as the small English core trained on Wikipedia, into an `nlp` object. Passing a raw string through this pipeline executes tokenization, sentence detection, lemmatization, part-of-speech tagging, and dependency parsing simultaneously in a single call. The result is a `Doc` object that encapsulates all these annotations, transforming the input string into a structured format with full access to Spacy's analytical functionalities.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 23,
+      "title": "Spacy: tokenization and sentences",
+      "summary": "This slide demonstrates Spacy's tokenization and sentence processing by iterating through a document to print individual tokens. Using the example \"Mr. J. Simpson said : ' Astounding ! '\", it illustrates how the library breaks text into discrete units, separating punctuation marks like colons, quotes, and exclamation points from words and abbreviations.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 24,
+      "title": "Spacy: tokenization and sentences",
+      "summary": "SpaCy processes input strings into a `doc` object where token boundaries are marked internally rather than by newlines, which appear only when printing individual tokens. The library performs sentence segmentation via `doc.sents`, correctly identifying sentence boundaries even with abbreviations like \"Mr.\" and \"J.\", unlike simpler methods that might split prematurely. While generally effective as a machine learning approach, the professor notes that advanced modules can still occasionally make errors, such as retaining quotation marks attached to tokens.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 25,
+      "title": "Spacy: linguistic annotations",
+      "summary": "spaCy automatically annotates tokens with linguistic features such as `token.lemma_` for the base form (e.g., \"said\" becomes \"say\"), `token.pos_` for part-of-speech tags like PROPN or VERB, and `token.is_stop` to identify frequent words typically excluded from analysis. The library also provides access to syntactic dependencies (`token.dep_`) and character patterns (`token.shape_`). In the provided example, tokens like \"Mr.\" and \"Simpson\" are correctly identified as proper nouns, while none are flagged as stop words.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 26,
+      "title": "A class for a text",
+      "summary": "This custom `Text` class extends previous versions by replacing simple string splitting with `nltk.word_tokenize` for accurate word lists and adding `nltk.sent_tokenize` to store sentences. It includes a `word_count` method returning the token list length and a `most_common` method utilizing Python's `Counter`—a specialized dictionary that automatically tallies item frequencies—to identify the top *n* words. This implementation ensures proper tokenization is used for analysis rather than basic testing approaches.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 27,
+      "title": "Using the class",
+      "summary": "To use the class, instantiate `Text` objects with file paths and call methods like `word_count()`, access `sentences`, or retrieve top terms via `most_common()`. While the interface remains unchanged despite improved tokenization, punctuation is still included in counts by default. To exclude punctuation, an additional filtering step using a list comprehension within the constructor is required, leveraging Spacy's capabilities to identify and remove non-word tokens.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 28,
+      "title": "A corpus of texts",
+      "summary": "A corpus of texts demonstrates composition by containing a list of `Text` objects. The `Corpus` class initializes by using `glob` to find files matching a pattern, sorting them, and instantiating a `Text` object for each filename. Its `word_count` method aggregates the total word count by iterating through all contained texts and summing their individual counts, as shown when creating a corpus from 'books/*.txt'.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 29,
+      "title": "Errors",
+      "summary": "Programs frequently fail due to unexpected issues like wrong input or missing files, which Python identifies as exceptions such as `FileNotFoundError`, `UnicodeDecodeError`, and `KeyError`. By default, these exceptions halt program execution, though developers often need to handle them to allow the code to continue. When errors arise from incorrect arguments or notation, it is safest to verify solutions online rather than relying solely on AI, marking the beginning of the debugging process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 30,
+      "title": "Types of exceptions",
+      "summary": "Python raises specific exceptions for distinct errors: SyntaxError occurs when code violates grammar rules, such as missing colons in loops; NameError results from typos referencing non-existent variables; IndexError happens when accessing list elements beyond their length; KeyError indicates a missing dictionary key; AttributeError arises from accessing undefined class attributes; and TypeError occurs when mixing incompatible types like strings and integers. While the slide lists additional errors like ValueError and FileNotFoundError, this overview is not exhaustive.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 31,
+      "title": "Tracebacks",
+      "summary": "A traceback is the chain of function calls leading to an error, designed to pinpoint the specific cause and location of a failure. In the provided example, calling `.lower()` on a list object (created by splitting a string) triggers an `AttributeError` because lists lack this method, whereas strings do. While simple tracebacks identify immediate issues like incorrect types, complex ones can reveal errors originating deep within nested modules or files, allowing developers to trace the exact function responsible for the crash.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 32,
+      "title": "Tracebacks",
+      "summary": "A traceback displays the chain of function calls leading to an error and should be read from the bottom up: the final line states what went wrong, while preceding lines indicate where. Although errors may appear in system modules like `os.path`, they are typically caused by incorrect arguments in your own code, such as passing a list instead of a string to `splitext`. Therefore, focus on the last line referencing your code to identify the root cause, and consult online resources if the error message remains unclear.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 33,
+      "title": "Debugging: general strategy",
+      "summary": "The general debugging strategy involves thinking carefully about the code's logic before inserting print statements. These statements are used to inspect intermediate steps and determine exactly what is happening during execution, allowing developers to trace the program flow and identify where errors occur.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 34,
+      "title": "Debugging: general strategy",
+      "summary": "Debugging requires thinking like a computer by analyzing each line of code to verify if the actual execution matches the intended logic. Use intermediate print statements to confirm inputs, outputs, and specific values at critical points, particularly checking if errors arise from special input cases. Since difficult problems often involve complex interactions, expect an iterative process of modifying code, re-executing, and chasing new errors until the issue is resolved.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 35,
+      "title": "Exception handling",
+      "summary": "While `if`-statements can prevent some exceptions, Python's `try-except-else` mechanism provides backup functionality to catch unforeseen errors and prevent program termination. The `try` block executes risky code, such as division, while the `except` block handles specific errors like `ZeroDivisionError`, and the `else` block runs only if no exception occurs. Crucially, developers should target unique exceptions rather than catching all general errors, ensuring that significant coding faults remain visible for proper debugging.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 36,
+      "title": "Exception handling",
+      "summary": "While `if`-statements can prevent some errors, Python's `try-except` mechanism catches unforeseen exceptions like `ZeroDivisionError` to prevent program termination. In the provided example where `i=10` and `j=0`, the `except` block executes backup code printing \"cannot divide by zero\" instead of crashing. Conversely, if the division succeeds without error, the `else` block runs to print the calculated result, ensuring the program handles both failure and success scenarios gracefully.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 37,
+      "title": "Exception handling",
+      "summary": "While appropriate if-statements can prevent some exceptions, programmers cannot always foresee every potential error, necessitating Python's built-in mechanism to catch them. This is demonstrated using a `try` block to attempt division, an `except ZeroDivisionError` clause to handle the specific case of dividing by zero, and an `else` block that executes only if no exception occurs, printing the successful result.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 38,
+      "title": "Try / except: a practical example",
+      "summary": "This practical example demonstrates using `try/except` to process multiple files where some may have encoding issues, such as non-Unicode text. By catching the specific `UnicodeDecodeError`, the script skips problematic files and continues processing the rest, preventing a single bad file from stopping the entire batch. However, broadly catching all exceptions is dangerous because it can hide real bugs; therefore, always target specific errors to ensure graceful failure without masking underlying code issues.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 39,
+      "title": "Try it: catching an error",
+      "summary": "This exercise demonstrates using a `try-except` block to convert mixed string data into integers without an `if` statement, specifically handling lists containing valid numbers like '12' alongside invalid entries such as 'twelve' or '3.5'. The approach attempts to append the integer conversion of each item; if the conversion succeeds, the value is added, but if it fails due to non-numeric characters or decimals, the exception handler skips that item. This ensures the program processes valid sequences of digits (0–9) while gracefully ignoring strings that cannot be interpreted as integers.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 40,
+      "title": "Practical session / reading",
+      "summary": "Students are directed to complete Practical Session 6 by studying Chapter 1 of the NLTK book and accessing the lecture's code-along notebook on Toledo. The primary objective is to re-run the provided examples at home to reinforce understanding of scripting languages through hands-on practice.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    }
+  ]
+}

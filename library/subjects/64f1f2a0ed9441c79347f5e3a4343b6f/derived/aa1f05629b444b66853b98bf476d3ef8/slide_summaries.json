@@ -1,0 +1,1019 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 6: Evaluation (5 Nov)",
+    "section_label": "Slide",
+    "completed": 112,
+    "total": 112,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Lecture 6: Evaluation",
+      "summary": "Lecture 6 introduces the topic of evaluation within machine learning, specifically focusing on its relationship to inductive inference. Presented by Sieben Bocklandt, this session utilizes slide decks originally developed by Jesse Davis for the Principles of Machine Learning course. The lecture establishes the foundational context for assessing how machine learning models generalize from observed data to unseen instances through inductive reasoning.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "– Metrics",
+      "summary": "This lecture covers evaluation metrics for classification, regression, and probability estimation, emphasizing the need to understand each metric's strengths and weaknesses to map them effectively to real-world problems. Students must master constructing and interpreting ROC and PR curves while memorizing the specific behavior of these metrics by heart.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 3,
+      "title": "– Metrics",
+      "summary": "This lecture covers evaluation metrics for classification, regression, and probability estimation, emphasizing the need to understand their strengths, weaknesses, and application to real problems. Students must master specific metrics like accuracy, precision, recall, ROC, and AUC by heart, as these are critical for job interviews and require knowing how to construct and interpret ROC and PR curves. The session also addresses methodology for fair evaluation, including cross-validation techniques and the necessity of independent training, validation, and test sets.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 4,
+      "title": "Evaluation metrics",
+      "summary": "Evaluation metrics",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 5,
+      "title": "Slide 5",
+      "summary": "Slide 5",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 6,
+      "title": "M1",
+      "summary": "M1, M2",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 7,
+      "title": "M1",
+      "summary": "Slide 7 introduces the comparative evaluation of two models, labeled M1 and M2, by posing the central question of which model performs better.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 8,
+      "title": "M1",
+      "summary": "Slide 8 introduces the fundamental challenge of comparing two models, labeled M1 and M2. The core objective is to determine which model performs better and to evaluate the specific quality or goodness of each individual model. This section establishes the necessity of assessment criteria for distinguishing between competing models.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 9,
+      "title": "M1",
+      "summary": "This section introduces the challenge of comparing two classification models, M1 and M2, using a running example where songs are classified as playlist positives or negatives based on beats per minute and energy features. Each model defines a decision boundary separating these classes, raising the critical question of which model performs better. Since visual inspection alone is insufficient to determine superiority, the lecture emphasizes the necessity of establishing specific metrics to objectively measure and evaluate model performance.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 10,
+      "title": "– Two natural performance measures for classification: Error rate and accuracy",
+      "summary": "Two fundamental performance measures for evaluating classification models are error rate and accuracy. A prediction is defined as a success when the model correctly identifies an instance's class, whereas it constitutes an error if the predicted class is incorrect. These metrics provide a direct assessment of how often a classifier succeeds or fails in assigning the correct labels to data instances.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 11,
+      "title": "– Two natural performance measures for classification: Error rate and accuracy",
+      "summary": "Two fundamental performance measures for classification are error rate and accuracy. A prediction is defined as a success when the instance's class is predicted correctly, whereas an error occurs when the prediction is incorrect. Accuracy is calculated by dividing the total number of successes by the total number of instances.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 12,
+      "title": "– Two natural performance measures for classification: Error rate and accuracy",
+      "summary": "Two fundamental performance measures for classification are accuracy and error rate, which quantify prediction outcomes based on individual instances. A success occurs when an instance's class is predicted correctly, while an error denotes an incorrect prediction. Accuracy is calculated as the ratio of successes to total instances, whereas the error rate is the ratio of errors to total instances.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 13,
+      "title": "– Two natural performance measures for classification: Error rate and accuracy",
+      "summary": "Two fundamental performance measures for classification are accuracy and error rate, defined by whether an instance's class is predicted correctly (success) or incorrectly (error). Accuracy is calculated as the ratio of successes to total instances, while the error rate is the ratio of errors to total instances. These metrics are mathematically complementary, meaning accuracy equals one minus the error rate.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 14,
+      "title": "– Two natural performance measures for classification: Error rate and accuracy",
+      "summary": "To quantify classification performance beyond vague assertions, two natural measures are used: accuracy and error rate. Accuracy represents a positive view by calculating the ratio of correct predictions (successes) to total instances, while error rate offers a negative view by measuring incorrect predictions; mathematically, accuracy equals one minus the error rate. Comparing models M1 and M2 illustrates that higher accuracy corresponds to more successes and fewer errors, providing a concrete metric for model evaluation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 15,
+      "title": "Predicted True",
+      "summary": "A confusion matrix, also known as a contingency table, is used to evaluate binary classification models by organizing predictions into four categories: predicted true, predicted false, actually true, and actually false. This structure allows for a clear comparison between the model's output and the actual ground truth labels.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 16,
+      "title": "Predicted True",
+      "summary": "Slide 16 introduces the confusion matrix, also known as a contingency table, used to evaluate binary classification models. It specifically identifies the \"True Positive\" (TP) outcome, which occurs when an instance is actually true and correctly predicted as true, illustrated here with a count of 8. This framework organizes predictions into categories based on their alignment with actual values to assess model performance.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 17,
+      "title": "Predicted True",
+      "summary": "Slide 17 introduces the confusion matrix, also known as a contingency table, used to evaluate binary classification models. The example provided illustrates specific outcomes where an \"Actually True\" case correctly predicted as true results in a True Positive (TP) count of 8, while an \"Actually False\" case correctly predicted as false yields a True Negative (TN) count of 12. These metrics form the foundation for assessing prediction accuracy within this classification framework.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 18,
+      "title": "Predicted True",
+      "summary": "Slide 18 presents a confusion matrix, also known as a contingency table, used to evaluate binary classification performance. The table categorizes predictions into four outcomes based on actual versus predicted labels: True Positive (TP) with 8 instances, False Negative (FN) with 3 instances, and True Negative (TN) with 12 instances. This structure visually organizes the results to distinguish between correct classifications and specific types of errors within the dataset.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 19,
+      "title": "Predicted True",
+      "summary": "A confusion matrix (or contingency table) evaluates binary classification by subdividing predictions into four categories: True Positives (correctly predicted positives), True Negatives (correctly predicted negatives), False Negatives (actual positives misclassified as negative), and False Positives (actual negatives misclassified as positive). This structure reveals model performance, where a worst-case scenario predicts only false positives with no true positives, while an ideal case contains only true positives. To construct this for a model outputting numerical probabilities, values are sorted from high to low, and boundaries between true labels are located to determine…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 20,
+      "title": "Predicted True",
+      "summary": "Slide 20 defines a confusion matrix for binary classification, categorizing outcomes into True Positives (8), False Negatives (3), False Positives (4), and True Negatives (12). Accuracy is calculated as the sum of correct predictions divided by the total instances, while the error rate represents incorrect predictions; notably, accuracy equals one minus the error rate. Although the transcript discusses shifting classification boundaries to generate true positive rates and false positives, these specific threshold examples are not reflected in the static values presented on this slide.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 21,
+      "title": "Multiclass confusion matrix",
+      "summary": "Slide 21 introduces multiclass confusion matrices as a widely used tool for evaluating classification beyond binary scenarios, illustrated by genre prediction results from an optional project using 3-NN and XGBoost. While accuracy is defined as successes (true positives and true negatives) divided by total instances, these matrices provide a deeper view by revealing specific patterns of false positives and false negatives alongside correctly classified items. This detailed breakdown allows for a more nuanced assessment of model performance than aggregate metrics alone.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 22,
+      "title": "– Let class skew be 𝜋=",
+      "summary": "Class skew (𝜋) represents the proportion of positive instances in the dataset. Accuracy is defined as a weighted average of the True Positive Rate (TPR) and True Negative Rate (TNR), calculated as Acc = 𝜋 × TPR + (1 − 𝜋) × TNR. This relationship demonstrates that accuracy is highly sensitive to class skew, meaning the distribution of classes directly influences the overall performance metric.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 23,
+      "title": "– Let class skew be 𝜋=",
+      "summary": "Accuracy is a weighted average of the true positive rate (TPR) and true negative rate (TNR), heavily influenced by class skew ($\\pi$). As demonstrated, with fixed TPR=0.6 and TNR=0.8, accuracy drops from 0.7 to 0.62 when skew increases from 0.5 to 0.9, proving its sensitivity to imbalanced datasets. Consequently, research often employs balanced accuracy by fixing $\\pi=0.5$ regardless of actual distribution to mitigate this bias.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 24,
+      "title": "– Is 99% accuracy good?",
+      "summary": "Slide 24 introduces the critical question of whether 99% accuracy is sufficient, highlighting that high accuracy alone can be misleading. This section serves as a transition to discuss specific problems associated with relying solely on accuracy as a performance metric in classification tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 25,
+      "title": "– Is 99% accuracy good?",
+      "summary": "99% accuracy is not inherently good because it can mask a model that fails to learn anything in highly imbalanced datasets. While one model correctly identifies most true and false cases, another achieves the same 99% score by simply predicting \"false\" for every instance when positives are rare (e.g., only 20 out of 2000). This demonstrates that accuracy alone is insufficient to evaluate performance when class skew exists, as a trivial strategy can yield deceptively high scores without capturing actual patterns.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 26,
+      "title": "Problems with accuracy",
+      "summary": "Problems with accuracy",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 27,
+      "title": "Problems with accuracy",
+      "summary": "Although two models, M1 and M2, may achieve identical overall accuracy, this single metric does not guarantee equal suitability for all applications. In specific settings, one model is often preferred over the other despite their matching accuracy scores, highlighting that accuracy alone can be an insufficient indicator of a model's practical performance or reliability in diverse contexts.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 28,
+      "title": "– Suppose we have misclassification costs",
+      "summary": "This section introduces the concept of incorporating misclassification costs into decision-making, specifically defining $C_{FP}$ as the cost of a false positive and $C_{FN}$ as the cost of a false negative. These parameters are essential for evaluating scenarios where different types of errors carry distinct penalties, moving beyond simple accuracy metrics to account for the specific financial or operational impact of incorrect predictions.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 29,
+      "title": "– Suppose we have misclassification costs",
+      "summary": "In real-world scenarios like autonomous driving, false positives and false negatives often carry different costs, such as stopping unnecessarily versus missing a hazard. To account for this, we define $C_{FP}$ and $C_{FN}$ as the specific costs of each error type. The expected cost of a single prediction is calculated by summing the product of the false negative cost with its probability and the false positive cost with its probability, allowing models to incorporate these asymmetric penalties into decision-making.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 30,
+      "title": "– Suppose we have misclassification costs",
+      "summary": "When misclassification costs exist, the expected cost of a prediction combines the cost of false negatives ($C_{FN}$) and false positives ($C_{FP}$), weighted by class prevalence ($\\pi$). This theoretical expectation is approximated using the False Negative Rate (FNR) and False Positive Rate (FPR), where FNR represents missed positive cases and FPR represents incorrectly flagged negative cases. The resulting formula, $C = C_{FN} \\times \\pi \\times \\text{FNR} + C_{FP} \\times (1 - \\pi) \\times \\text{FPR}$, quantifies the total expected loss by integrating these error rates with their specific financial or operational penalties.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 31,
+      "title": "– Suppose we have misclassification costs",
+      "summary": "When misclassification costs exist, the expected cost of a prediction combines the cost of false negatives ($C_{FN}$) and false positives ($C_{FP}$), weighted by class prevalence ($\\pi$) and error rates. This cost is approximated using the False Negative Rate (FNR) and False Positive Rate (FPR) rather than raw probabilities, as accuracy alone cannot compute this expected cost. The formula explicitly accounts for the distinct financial or operational penalties associated with each type of error.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 32,
+      "title": "– Receiver Operating Characteristic curves",
+      "summary": "Originating from WWII radar research, Receiver Operating Characteristic (ROC) curves are a visualization tool specifically for binary classification problems. These curves assess model performance by plotting the True Positive Rate (TPR) against the False Positive Rate (FPR). The resulting graph allows for the comparison of different models and distinguishes their effectiveness from random guessing based on their position relative to the diagonal baseline.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 33,
+      "title": "– Receiver Operating Characteristic curves",
+      "summary": "Receiver Operating Characteristic (ROC) curves originated from WWII radar research distinguishing enemy ships from waves, serving as a more informed metric than accuracy for binary classification problems. These curves visually evaluate model performance by plotting the True Positive Rate against the False Positive Rate on a scale from 0.0 to 1.0. This visualization allows for the comparison of different models and random guessing based on their ability to correctly identify positive instances while minimizing false alarms.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 34,
+      "title": "– Given: numeric outputs for each test example (e.g. 𝑃(𝑦= 1|𝑥))",
+      "summary": "To construct a Receiver Operating Characteristic (ROC) curve given numeric outputs like $P(y=1|x)$ for test examples, first sort these values and identify boundaries where predicted labels change. Calculate the False Positive Rate (FPR) and True Positive Rate (TPR) at each boundary, then plot these coordinate pairs. Finally, connect the plotted points to form the complete ROC curve, which visualizes classifier performance across varying decision thresholds.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 35,
+      "title": "Predicted",
+      "summary": "Slide 35 presents a predicted score example listing specific numerical values paired with positive (+) and negative (-) labels, alongside an introductory reference to the Receiver Operating Characteristic (ROC) curve. The slide displays initial True Positive Rate (TPR) and False Positive Rate (FPR) coordinates of 0.0 and 1.0, respectively, serving as a foundational illustration for calculating classification performance metrics based on these predicted scores.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 36,
+      "title": "Predicted",
+      "summary": "Slide 36 illustrates an ROC curve example by listing predicted scores paired with their true labels, where positive (+) and negative (-) instances are distinguished. The data demonstrates how sorting these predictions by score allows for the calculation of True Positive Rate (TPR) and False Positive Rate (FPR), which are plotted to evaluate classifier performance. This specific dataset provides the raw values necessary to trace the curve's progression from a baseline of 0.0 TPR and FPR toward higher rates as the decision threshold varies.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 37,
+      "title": "Predicted",
+      "summary": "Slide 37 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The data is sorted by descending predicted score to demonstrate how True Positive Rate (TPR) and False Positive Rate (FPR) are calculated at various thresholds, starting from the origin point where both rates equal zero. This visualization shows the progression of classification performance as the decision threshold changes across the ranked predictions.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 38,
+      "title": "Predicted",
+      "summary": "To construct an ROC curve, predicted scores are sorted in descending order, and decision boundaries are established at every point where the actual label switches. The process begins at the highest threshold (e.g., 0.95), where setting a cutoff above this value yields zero true positives and zero false positives because no instances are classified as positive. As the boundary lowers to include more predictions, points are plotted based on the resulting True Positive Rate and False Positive Rate, connecting them to visualize model performance across all thresholds.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 39,
+      "title": "Predicted",
+      "summary": "Slide 39 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using a dataset of predicted scores and binary labels. The example demonstrates how sorting predictions by score allows for the calculation of specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.6 with FPR=0.4 or TPR=0.6 with FPR=0.0, which are then plotted to visualize model performance across different thresholds.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 40,
+      "title": "Predicted",
+      "summary": "Slide 40 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using a dataset of predicted scores and binary labels. The example demonstrates how sorting these predictions by score allows for the calculation of specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.6 with FPR=0.4 or TPR=0.8 with FPR=0.4. These calculated points are then plotted on a graph with FPR on the x-axis and TPR on the y-axis to visualize model performance across different classification thresholds.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 41,
+      "title": "Predicted",
+      "summary": "Slide 41 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The slide demonstrates how sorting these predictions by score allows for the calculation of specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.8 with FPR=0.6 or TPR=0.6 with FPR=0.4. These calculated points are then plotted on a graph with FPR on the x-axis and TPR on the y-axis to visualize the classifier's performance across different thresholds.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 42,
+      "title": "Predicted",
+      "summary": "Slide 42 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The data is sorted by score to calculate specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as TPR=0.8 with FPR=0.6 or TPR=1.0 with FPR=0.6. These calculated points are plotted on a graph with FPR on the x-axis and TPR on the y-axis to visualize classifier performance across different thresholds.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 43,
+      "title": "Predicted",
+      "summary": "Slide 43 illustrates the construction of a Receiver Operating Characteristic (ROC) curve using an example dataset of predicted scores and binary labels. The data is sorted by score to calculate specific True Positive Rate (TPR) and False Positive Rate (FPR) pairs, such as FPR=0.6 with TPR=0.8, which are then plotted on a graph ranging from (0.0, 0.0) to (1.0, 1.0). This visualization demonstrates how varying classification thresholds impact model performance metrics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 44,
+      "title": "Convex hull of a ROC curve",
+      "summary": "The convex hull of a ROC curve represents the set of optimal classifiers under specific operating conditions like costs or class skew, as points below the hull yield lower true-positive rates for the same false-positive rate. To achieve any point along this hull between two existing classifiers, one applies linear interpolation by probabilistically selecting between their decision thresholds for each instance. Consequently, only classifiers on the convex hull are optimal under linear cost settings, while those strictly inside are never optimal.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 45,
+      "title": "– Two (FPR, TPR) points",
+      "summary": "To achieve a target operating point of (FPR=0.2, TPR=0.7) between two classifiers M1 (0.0, 0.6) and M2 (0.8, 1.0), one can employ randomized selection by flipping a biased coin. By choosing M1 with probability 0.75 and M2 with probability 0.25, the resulting performance linearly interpolates between the two points in ROC space. This technique demonstrates that randomization allows for the construction of any intermediate point along the line segment connecting two distinct classifiers.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 46,
+      "title": "– Area under the ROC curve (AUC)",
+      "summary": "The Area Under the ROC Curve (AUC) serves as a metric for summarizing ROC curves by quantifying classifier performance. It is mathematically equivalent to the Wilcoxon-Mann-Whitney statistic, representing the probability that a randomly selected positive example is ranked higher than a randomly selected negative example. This interpretation provides a direct measure of the model's ability to distinguish between classes based on ranking order.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 47,
+      "title": "– Area under the ROC curve (AUC)",
+      "summary": "The Area Under the ROC Curve (AUC) serves as a comparative statistic based on the Wilcoxon-Mann-Whitney statistic, representing the probability that a random positive example ranks ahead of a random negative one. An AUC of 1 indicates a perfect model where all positives exceed negatives at some threshold, while random guessing yields a diagonal line with equal true and false positive rates. Consequently, a larger area under the curve signifies a superior model by maximizing true positives for a limited number of false positives, though this metric retains inherent limitations.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 48,
+      "title": "– ROC can be misleading if:",
+      "summary": "ROC curves become misleading under class skew, where negative examples vastly outnumber positives, because they evaluate fractions rather than total counts. Consequently, a deceptively low False Positive Rate can still yield a large absolute number of false positives in scenarios like cancer diagnosis or anomaly detection. To address this limitation, Precision and Recall are preferred metrics as they provide interpretable insights into the actual quantity of correct predictions versus errors.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 49,
+      "title": "– Primarily arise out of the literature on information retrieval (web search)",
+      "summary": "Precision-Recall (PR) curves primarily originate from information retrieval literature, such as web search. These metrics are particularly valuable in scenarios with a high volume of negative examples where the positive class is the critical focus, exemplified by cancer research. Consequently, PR curves are often considered the preferred evaluation metric for such imbalanced classification problems.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 50,
+      "title": "– Primarily arise out of the literature on information retrieval (web search)",
+      "summary": "Originating from information retrieval literature, Precision-Recall curves are essential for scenarios with abundant negative examples where identifying the positive class is critical, such as cancer research. Recall measures the proportion of actual positives correctly identified, while precision assesses how many predicted positives are truly correct. As illustrated by model thresholds, selecting only top predictions yields high precision but risks missing positives; lowering the threshold increases recall but introduces false positives, demonstrating the trade-off visualized in PR curves.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 51,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "summary": "Unlike ROC space, Precision-Recall (PR) space does not support linear interpolation between models. While interpolating True Positive and False Positive counts yields valid intermediate TPR and FPR values, calculating Recall and Precision from these interpolated counts produces incorrect results that do not lie on the straight line connecting the original points. Consequently, the PR curve forms a concave shape rather than a linear segment, meaning certain performance points cannot be reached through simple linear averaging of model outputs.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 52,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "summary": "Slide 52 introduces the problem of linear interpolation within Precision-Recall (PR) space, citing Goadrich et al. (ILP 2004). The slide presents a specific data point where True Positives and False Positives are both 500, resulting in a Recall (TPR) of 0.50 and a Precision of 0.06. This example illustrates the challenges or specific behaviors encountered when applying linear interpolation methods to PR curves compared to ROC space.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 53,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "summary": "Slide 53 introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation within Precision-Recall (PR) space. The slide presents a specific data point where True Positives and False Positives are both 500, resulting in a Recall of 0.50 and a Precision of 0.50. This example serves to illustrate the challenges or behaviors encountered when applying linear interpolation methods to PR curves compared to other evaluation spaces.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 54,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "summary": "Slide 54 introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation in Precision-Recall space using a specific dataset. The provided data contrasts two operating points: one with 500 true positives and 500 false positives yielding 0.50 recall and precision, and another with 1000 true positives and 9000 false positives resulting in perfect recall but only 0.10 precision. This example illustrates how interpolation behaves when transitioning between these distinct performance metrics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 55,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "summary": "Slide 55 introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation within Precision-Recall (PR) space. The slide presents a specific dataset comparing two operating points: one with 500 True Positives and 500 False Positives yielding 0.50 Recall and 0.50 Precision, and another with 1000 True Positives and 9000 False Positives resulting in perfect Recall (1.00) but low Precision (0.10). This data illustrates the trade-offs encountered when interpolating between these performance metrics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 56,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "summary": "Linear interpolation in Precision-Recall (PR) space presents a specific problem, as illustrated by data from Goadrich et al. (2004). The slide contrasts ROC and PR metrics across three operating points where True Positives increase from 500 to 1000; while Recall reaches 1.00 at the final point, Precision drops significantly to 0.10 due to a sharp rise in False Positives. This example highlights how linear interpolation behaves differently in PR space compared to ROC space when evaluating classifier performance.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 57,
+      "title": "– What happens when we interpolate? ([Goadrich, et al., ILP 2004])",
+      "summary": "Slide 57 introduces Problem 1 from Goadrich et al. (ILP 2004), which examines the effects of linear interpolation in Precision-Recall space using a specific dataset. The slide presents three operating points with corresponding True Positives, False Positives, and calculated metrics including TPR, FPR, Recall, and Precision to illustrate how these values change across different thresholds. This data serves as the basis for analyzing the behavior of interpolation methods within this evaluation framework.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 58,
+      "title": "Interpolation in PR space",
+      "summary": "Slide 58 illustrates interpolation in Precision-Recall space using a dataset containing 20 positives and 2000 negatives. It presents specific data points where increasing True Positives (TP) from 5 to 10 results in rising Recall but declining Precision, demonstrating the inherent trade-off between these metrics as False Positives (FP) accumulate.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 59,
+      "title": "Interpolation in PR space",
+      "summary": "Slide 59 illustrates interpolation in Precision-Recall space using a dataset containing 20 positives and 2000 negatives. It presents specific data points where increasing True Positives (TP) from 5 to 10 results in rising Recall but declining Precision, demonstrating the inherent trade-off between these metrics as False Positives (FP) accumulate.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 60,
+      "title": "Problem 2: Changes in skew",
+      "summary": "Slide 60 introduces \"Problem 2: Changes in skew\" as a distinct topic heading.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 61,
+      "title": "– In ROC space, all models are possible",
+      "summary": "In ROC space, every point on the curve is theoretically achievable by some model, even if only the convex hull vertices represent optimal performance. Conversely, PR space contains unachievable regions dictated by class skew; insufficient negative examples in the test set can prevent constructing confusion matrices for certain precision-recall combinations. For instance, with 100 positives, a target recall of 0.9 and precision of 0.5 may fall into an impossible zone if the dataset lacks enough negatives to satisfy these constraints simultaneously.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 62,
+      "title": "– Key Insight: ROC and PR curves are constructed from a fixed dataset",
+      "summary": "ROC and PR curves are constructed from a fixed dataset, meaning the total counts of positive (P) and negative (N) examples remain constant. This constraint creates an \"unachievable region\" where specific combinations of Recall and Precision are mathematically impossible; for instance, with P=100 and N=1000, achieving 90% Recall requires 90 true positives, but demanding 5% Precision simultaneously necessitates 1,710 false positives. Since the required false positives exceed the available negative examples, no model can satisfy these metrics on this fixed dataset.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 63,
+      "title": "– Two models",
+      "summary": "Slide 63 presents a comparison between two models: M1 with precision and recall both at 0.80, and M2 with precision at 0.60 and recall at 0.90. The slide highlights that determining which model is superior depends on the specific situation, as there is no single general answer when metrics trade off against each other. This scenario illustrates Problem 4, emphasizing the complexity of comparing models using two distinct evaluation metrics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 64,
+      "title": "– Two models",
+      "summary": "Comparing Model 1 (Precision=0.80, Recall=0.80) and Model 2 (Precision=0.60, Recall=0.90) reveals that neither is universally superior, as the optimal choice depends on the specific situation, such as prioritizing false positives in cancer detection. While both models share the same accuracy, the F1-score provides a general metric to combine precision and recall, calculating 0.80 for Model 1 versus 0.72 for Model 2. This demonstrates that although Model 1 scores higher on the harmonic mean, real-world application requires weighing the costs of false positives against false negatives based on the context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 65,
+      "title": "– All metrics are based on a finite set",
+      "summary": "Since all metrics derive from finite datasets, confidence intervals quantify the certainty of these values by estimating the range containing the true metric if sampling were repeated. For large samples where error is approximately normally distributed, the interval is calculated as the metric plus or minus a z-score multiplied by the standard error, with specific formulas provided for accuracy, precision, and recall. The z-score corresponds to the desired confidence level, ranging from 1.28 for 80% certainty up to 2.58 for 99%.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 66,
+      "title": "– All metrics are based on a finite set",
+      "summary": "Since all metrics derive from finite datasets, confidence intervals quantify the certainty of their correctness by estimating the range containing the true value across repeated sampling. For large samples where error is approximately normally distributed, these intervals are calculated using specific formulas for metrics like accuracy, precision, and recall, incorporating a z-score that corresponds to the desired confidence level (e.g., 1.96 for 95%). This approach addresses the inherent uncertainty in evaluating model performance on limited data.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 67,
+      "title": "– Practice: Accurate probabilities are calibrated probabilities",
+      "summary": "Accurate probabilities are defined as calibrated probabilities, where the predicted likelihood of an event matches its actual observed frequency. This concept is visualized on a graph plotting predicted probability against actual probability, where perfect calibration occurs when all predictions fall along the diagonal line from (0.0, 0.0) to (1.0, 1.0).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 68,
+      "title": "– Practice: Accurate probabilities are calibrated probabilities",
+      "summary": "Accurate probabilities are defined as calibrated probabilities, where predicted likelihoods align with actual observed frequencies. A perfectly calibrated model plots along the diagonal line where predicted probability equals actual probability. In contrast, an overconficient model deviates from this ideal by consistently predicting higher probabilities than what actually occurs.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 69,
+      "title": "– Practice: Accurate probabilities are calibrated probabilities",
+      "summary": "In practice, accurate probabilities are defined as calibrated probabilities, where a model's predicted likelihood matches the actual observed frequency of events. A perfectly calibrated model ensures that if it predicts a 50% chance, the event occurs 50% of the time in reality. Deviations from this ideal manifest as overconfidence, where low predicted probabilities underestimate the true risk, or underconfidence, where high predictions fall short of the actual probability.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 70,
+      "title": "– Many classifiers are NOT well calibrated",
+      "summary": "Many classifiers produce scores that are not well calibrated, meaning their predicted probabilities do not accurately reflect true outcome frequencies. To address this, scores can be post-processed using techniques such as Isotonic Regression or Beta calibration. The quality of this calibration is quantified by the Brier score, which calculates the mean squared difference between actual class labels and predicted probabilities across all examples and classes.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 71,
+      "title": "– Root mean squared error: 𝑅𝑀𝑆𝐸=",
+      "summary": "Slide 71 defines three metrics for evaluating regression models with real-valued outputs: Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), and Relative Error. RMSE and MAE quantify the average magnitude of prediction errors, while Relative Error compares model performance against a baseline that always predicts the mean. A Relative Error score of 1 indicates the model performs no better than this baseline, whereas a score of 0 represents a perfect prediction.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 72,
+      "title": "Evaluation methodology",
+      "summary": "Evaluation methodology",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 73,
+      "title": "– Predict the price of stocks",
+      "summary": "Slide 73 illustrates diverse applications for deploying predictive models, including forecasting stock prices, assessing cancer risk, classifying emails as spam, and determining if a song fits a specific playlist. These examples demonstrate the broad utility of machine learning across financial, medical, communication, and entertainment domains. The slide concludes by framing these scenarios within the context of preparing to deploy a model.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 74,
+      "title": "– Predict the price of stocks",
+      "summary": "This section introduces diverse machine learning applications, including predicting stock prices, cancer risk, email spam, and song playlist membership, to frame the discussion on model evaluation and training. While metrics like accuracy or F1 score are important, the lecture emphasizes identifying a fundamental performance property required for practical deployment that exists independently of these specific measures. This critical property is presented as a prerequisite for effectively using trained models in real-world scenarios before addressing potential flaws in data usage during the training process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 75,
+      "title": "Methodology: Generalization",
+      "summary": "Methodology: Generalization",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 76,
+      "title": "– Idea 1: Evaluate the performance on the data used to learn the model (training data)",
+      "summary": "Evaluating a model solely on its training data often yields deceptively high performance (F1=0.818) because the model merely memorizes rather than generalizes, similar to an exam containing only practice questions. To accurately assess learning, one must use an independent test set of unseen instances, which typically reveals lower performance (F1=0.714) and a higher error rate. This split prevents data leakage from temporal dependencies or duplicate examples, ensuring the model's ability to generalize is truly measured.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 77,
+      "title": "– Dilemma: need both a large training set and a large test set",
+      "summary": "A fundamental dilemma in machine learning arises from the conflicting need for both a large training set to build a better classifier and a large test set to obtain a reliable error estimate for generalization. Since increasing one dataset size typically reduces the other, the proposed solution is to split the available data into distinct training and test subsets.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 78,
+      "title": "– Dilemma: need both a large training set and a large test set",
+      "summary": "A fundamental dilemma in machine learning is the conflicting need for large training sets to build better classifiers and large test sets to accurately estimate generalization error. This challenge is compounded because labeled data is often limited and expensive, with industry prioritizing revenue-generating tasks over costly data gathering while research relies on generic open-source benchmarks. Consequently, practitioners must address this scarcity by splitting available data into distinct training and test subsets.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 79,
+      "title": "– Dilemma: need both a large training set and a large test set",
+      "summary": "A fundamental dilemma exists because large training sets improve classifiers while large test sets yield better generalization error estimates, yet labeled data is often limited and expensive. In research, this is addressed by using open-source benchmark datasets to compare methods via metrics like F1 scores, whereas industry faces low prioritization for labeling since it incurs high costs without immediate revenue generation. Consequently, practitioners must rely on sophisticated techniques to mimic large datasets or split limited resources effectively between training and testing.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 80,
+      "title": "– Partition examples into k disjoint sets",
+      "summary": "In cross-validation, the dataset is partitioned into $k$ disjoint sets, or folds. This process generates $k$ distinct training sets, where each set comprises the union of all folds except one. Consequently, every training set contains exactly $\\frac{k-1}{k}$ of the original data, ensuring comprehensive model evaluation while systematically excluding a portion for testing.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 81,
+      "title": "– Five-fold cross validation with 250 examples",
+      "summary": "Five-fold cross validation partitions a dataset of 250 examples into five folds, with each fold containing 50 examples used once as the testing set while the remaining four serve for training. The process iterates through all five combinations, calculating individual accuracies that range from 0.60 to 0.80 based on correct and incorrect predictions in each iteration. The final overall accuracy is determined by aggregating the total correct predictions across all folds (175) divided by the total number of examples (250), resulting in a score of 0.70.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 82,
+      "title": "– Smaller data → More folds",
+      "summary": "When datasets are small, increasing the number of folds maximizes training data usage; specifically, for fewer than 100 examples, leave-one-out cross-validation trains n times using n-1 examples per iteration. While 5 or 10 folds are standard to balance accuracy with computational time, very large datasets exceeding one million examples allow a single train-test split without significant loss of distributional representation. This approach ensures every instance serves as test data exactly once while minimizing the risk of excluding rare classes from training sets.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 83,
+      "title": "– Representativeness problem:",
+      "summary": "The representativeness problem arises when all examples from an entire infrequent class are absent from the training data. In such cases, the resulting error estimate becomes meaningless because the model has never encountered that specific category during learning. This omission highlights a critical limitation where the training dataset fails to adequately reflect the true distribution of the target population.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 84,
+      "title": "– Representativeness problem:",
+      "summary": "The representativeness problem occurs when splitting data causes infrequent classes to be entirely missing from the training set, rendering error estimates meaningless; for instance, a model cannot learn to identify Icelandic faces if no such examples exist in its training data. The solution is stratification, which ensures both training and test sets maintain the original class proportions found in the total dataset. By preserving these ratios, error estimates become valid and the variance in those estimates is reduced.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 85,
+      "title": "– Possible that held aside test data is not representative of new data gathered",
+      "summary": "A major pitfall occurs when held-out test data fails to represent new real-world data, even if methodology is correct. This often happens because positive and negative examples are collected differently or features are acquired inconsistently across classes, such as measuring fuel in gallons for planes but liters for cars. To ensure validity, the data split must mimic deployment conditions by keeping dependent observations together, preventing scenarios where cancer samples processed on different days skew results compared to normal samples.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 86,
+      "title": "– Data is stratified before the cross validation is performed",
+      "summary": "In cross-validation, data is stratified before the procedure begins, ensuring every sample serves as test data across different folds. The resulting error estimate, derived by averaging or concatenating predictions, evaluates the learning methodology rather than a single trained model. Consequently, this metric cannot be compared to results from methods that did not use cross-validation, as they represent fundamentally different evaluation approaches.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 87,
+      "title": "Methodology: Manipulating the feature space",
+      "summary": "This section introduces the methodological approach of manipulating the feature space as a core strategy in data analysis. While the slide explicitly titles this concept. Consequently, the note serves solely to identify \"manipulating the feature space\" as a distinct methodological category within the broader lecture framework.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 88,
+      "title": "– This can be for a variety of reasons:",
+      "summary": "Manipulating the feature space before training is necessary because tools may require specific data types, such as real-valued or discrete features. This process improves computational efficiency by replacing slow string comparisons, like those for addresses or country names, with faster numeric operations and reducing runtime through fewer options. Additionally, altering the feature space by removing or adding features can enhance model accuracy. These operations fall into two categories: manipulating the values a feature takes and removing features entirely.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 89,
+      "title": "– Convert ordinal to numeric which enables using > or <",
+      "summary": "Ordinal features with inherent structure, such as tempo levels ranging from \"very slow\" to \"very fast,\" are converted to numeric values (e.g., 1 to 7) to enable mathematical comparisons using greater than or less than operators. In contrast, nominal features lacking any natural order, like music genres, require one-hot encoding where each category becomes a separate binary indicator. Crucially, converting nominal categories directly to integers must be avoided, as this incorrectly implies an ordering or relationship between distinct values that does not exist.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 90,
+      "title": "– Group values into categories by hand",
+      "summary": "To handle features with excessive categories, manually group values into broader pools like regions or decades, and aggregate infrequent occurrences (e.g., under 1%) into an \"other\" category for potential post-processing. Alternatively, apply target encoding by replacing each categorical value with a statistic derived from the target variable, such as the average or conditional probability. For instance, artist names can be transformed into numeric skip probabilities based on play and skip counts, converting high-cardinality nominal data into interpretable numeric values.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 91,
+      "title": "– Group values into categories by hand",
+      "summary": "To handle features with many values, manually group categories (e.g., states to regions) or aggregate infrequent ones into an \"other\" category. Alternatively, apply target encoding by replacing categorical values with a target-derived statistic, such as the average target value or conditional probability for each category. Crucially, when using k-fold cross-validation, this encoding must be calculated per fold using only training data to prevent data leakage and model bias from test set information.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 92,
+      "title": "– BPM values: 50 70 80 100 110 120 130 140 160 180 190 240",
+      "summary": "Slide 92 illustrates the transformation of continuous Beats Per Minute (BPM) data into discrete categories through binning. The professor explains that raw values, such as those ranging from 50 to 240, can be grouped into equal-width buckets like [50,100) or alternatively organized so that each resulting discrete feature maintains specific distribution properties. This process effectively converts continuous measurements into structured intervals for analysis.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 93,
+      "title": "– Feature selection: Remove features prior to learning",
+      "summary": "Feature selection involves removing or choosing specific attributes prior to model training to address scenarios where feature counts exceed data points. This process facilitates easier learning by reducing parameters, enhances model interpretability for domain insights, and improves computational efficiency through lower memory usage and faster runtimes. Additionally, eliminating irrelevant attributes prevents performance degradation, typically implemented via filter-based or wrapper-based approaches.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 94,
+      "title": "– Idea: Measure each feature’s usefulness in isolation (i.e., independent of other",
+      "summary": "Filter-based feature selection evaluates each feature's usefulness in isolation by assigning a score and selecting the top *k* features. This approach scales efficiently to large datasets because it assesses features independently without considering their combined effects. However, it risks missing critical feature interactions, such as height and weight jointly predicting volume, and may select redundant features that provide overlapping information.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 95,
+      "title": "– Metric that computes a “correlation”",
+      "summary": "Filter-based feature selection assigns scores to features to select the top performers using two primary approaches: metrics computing correlation or single-variable classifiers. Correlation metrics include Information Gain from information theory and the Pearson correlation coefficient between features and targets. Alternatively, a single-variable classifier trains on one variable at a time—using a decision stump for discrete data or thresholding for continuous data—and selects features based on their individual predictive performance.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 96,
+      "title": "– Feature selection = search",
+      "summary": "Wrapper-based feature selection frames the problem as a search where the state represents a specific set of features. Forward selection begins with no features and iteratively adds one feature at a time to maximize model performance, while backward selection starts with all features and removes them individually. The scoring function for this search is the trained model's performance on the current feature set, guiding the transition from an initial random guess toward an optimal subset.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 97,
+      "title": "Forward wrapper-based feature selection",
+      "summary": "Forward wrapper-based feature selection",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 98,
+      "title": "Backward wrapper-based feature selection",
+      "summary": "Backward wrapper-based feature selection",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 99,
+      "title": "– Forward",
+      "summary": "Forward feature selection starts with no features, making early steps fast and ideal for building small models, but it often misses synergistic features that require combinations to be useful. Because forward selection adds features only if they individually improve performance, it fails to capture correlated pairs like width and height unless one alone provides a gain. In contrast, backward elimination begins with all features, preserving these necessary interactions while efficiently removing a large subset of irrelevant ones.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 100,
+      "title": "Methodology: configuring the pipeline",
+      "summary": "Methodology: configuring the pipeline",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 101,
+      "title": "– How should I set the value of k in kNN?",
+      "summary": "Selecting hyperparameters like k in kNN, ensemble tree counts, or feature sets requires avoiding overfitting, which occurs if choices are optimized solely on training data. To ensure generalization, the dataset must be split into training and test sets, with the training set further divided into training and validation subsets. Models are trained on the training portion using specific parameters, and their performance is evaluated on the validation data to identify the optimal configuration without compromising the final test evaluation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 102,
+      "title": "– Add an extra split: Training – Validation – Test",
+      "summary": "To prevent overfitting during hyperparameter tuning, the dataset must be subdivided into three distinct sets: training, validation, and test. For each algorithm configuration, such as varying the number of trees or applying feature selection, a model is trained on the training set and evaluated on the validation set to select the best performer. The final performance metric is then computed and reported exclusively using the untouched test set to ensure an unbiased assessment.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 103,
+      "title": "– Single validation set can be unreliable",
+      "summary": "Relying on a single validation set is often unreliable for evaluating model performance. To address this, perform cross-validation on the training data and select the configuration that achieves the best average performance. Finally, train the final model using the chosen configuration on the entire training dataset, a process known as internal or nested cross-validation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 104,
+      "title": "– Single validation set can be unreliable",
+      "summary": "Relying on a single validation set is often unreliable for evaluating model performance. To address this, perform cross-validation on the training data and select the configuration that achieves the best average performance. Finally, train the final model using the chosen configuration on the entire training dataset, a process known as internal or nested cross-validation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 105,
+      "title": "– Single validation set can be unreliable",
+      "summary": "Because a single validation set can be unreliable, cross-validation on training data is preferred to select the configuration with the best average performance before retraining on all available data. Two approaches exist: internal cross-validation keeps the test set fixed while shifting the validation folds, whereas nested cross-validation applies k-folds to both the validation and test sets. Although nested cross-validation is computationally expensive, it maximizes data utility when datasets are limited.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 106,
+      "title": "– Problem: Often have to tune multiple parameters:",
+      "summary": "Tuning multiple hyperparameters, such as the number, depth, and width of trees in random forests, presents a significant challenge that is best addressed by framing it as a search problem. Two primary approaches are grid search, which exhaustively tries all possible value combinations, and random search, which samples values from the space and is often surprisingly effective.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 107,
+      "title": "– Problem: Often have to tune multiple parameters:",
+      "summary": "Tuning multiple hyperparameters, such as tree depth or ensemble size in random forests, is treated as a search problem where grid search exhaustively tests all combinations within defined ranges. Random search often proves more effective by sampling parameter sets, as it explores more distinct values for the few critical hyperparameters that strongly influence performance within the same computational budget. While this approach may not guarantee the absolute optimal configuration, it efficiently identifies high-performing parameters and can be automated through optimization learning techniques.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 108,
+      "title": "Automated Hyperparameter Tuning: -AutoWeka or",
+      "summary": "Automated hyperparameter tuning can be implemented using tools such as AutoWeka or auto-sklearn, the latter of which is attributed to Hutter. These systems automate the selection of optimal model parameters, removing the need for manual configuration. This approach streamlines the machine learning workflow by systematically searching for the best settings to improve model performance.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 109,
+      "title": "– Decision trees",
+      "summary": "This slide outlines the critical hyperparameters that require tuning across various machine learning models. For decision trees and ensembles, key settings include leaf minimums, tree depth, ensemble size, and random forest specifics like `max_features`. The list extends to kNN's `k` value, linear and logistic regression regularization types (L1, L2) with parameter $\\lambda$, and the choice of feature selection.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 110,
+      "title": "– Need a reasonable spread of values:",
+      "summary": "When tuning hyperparameters, select a reasonable spread of values rather than closely spaced ones, as nearby values often yield identical performance and waste computational resources. For scale parameters like $k$, $t$, or $\\lambda$, use log-spaced values (e.g., 1, 5, 25) to maximize the range of options tested within a given budget. This approach ensures distinct performance observations across the parameter space, avoiding redundant training on negligible variations while covering plausible bounds effectively.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 111,
+      "title": "– Information from outside the training set leaks into the training data (i.e., test",
+      "summary": "Data leakage occurs when information from outside the training set contaminates the training data, compromising test set independence more frequently than expected. Common causes include global preprocessing steps like feature selection or target encoding performed before cross-validation, which must instead be repeated within each fold using only that fold's training data. Additionally, temporal dependencies arise when future data predicts past events, and entity-level leakage happens if cross-validation is applied to individual examples rather than the subject level.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 112,
+      "title": "Questions?",
+      "summary": "Slide 112 marks the conclusion of the lecture segment by inviting students to ask questions.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    }
+  ]
+}

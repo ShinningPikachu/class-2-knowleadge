@@ -1,0 +1,559 @@
+{
+  "metadata": {
+    "source_file": "Lecture_07_Morphological_processing_5_Nov_Slides.pdf",
+    "created_at": "2026-11-05T23:04:11.857047+00:00",
+    "slide_count": 61,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Natural Language Processing:",
+      "content": "Natural Language Processing: Morphological processing H02B1A Miryam de Lhoneux Department of Computer Science KU Leuven",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Introduction",
+      "content": "Introduction Outline Introduction Morphology Processing morphology: tasks Rule-based morphological processing Data-driven morphological processing Morphologically-informed subword tokenization Summary 1 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Introduction",
+      "content": "Introduction Morphological analysis of the word independently Morphology The study of the internal structure of words. 2 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Introduction",
+      "content": "Introduction Morphological analysis of the word independently Morphemes The smallest unit of meaning. Stem: (or lemma) supplies the main meaning Aﬃx: adds additional meaning 2 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Introduction",
+      "content": "Introduction Why is it useful? Example morphological analysis The dogs chase the cat and they fall Number Plur Sing Plur • Informs natural language understanding e.g. coreference resolution Useful in downstream tasks e.g. question answering: Q Who is falling? A The dogs 3 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Introduction",
+      "content": "Introduction Why is it useful? Example morphological analysis The dogs chase the cat and they fall Number Plur Sing Plur • Informs natural language understanding e.g. coreference resolution • Helps with natural language generation e.g. machine translation. Source (English): The dogs Target (French): Les chiens 3 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Introduction",
+      "content": "Introduction Why is it useful? Indirectly Can help preprocess or normalize text (see also lecture 2). E.g. lemmatization for information retrieval Example of the use of lemmatization for a search engine 4 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Introduction",
+      "content": "Introduction Why is it useful? Indirectly Can inform subword tokenization Example tokenization result by GPT-4o. Try it out yourself: frequency-based: nons-ens-ical morphologically informed: non-sens-ical 5 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Morphology",
+      "content": "Morphology Outline Introduction Morphology Processing morphology: tasks Rule-based morphological processing Data-driven morphological processing Morphologically-informed subword tokenization Summary 6 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Morphology",
+      "content": "Morphology Morphemes The smallest unit of meaning. Stem: supplies the main meaning Also called lemma, base form, root, lexeme Aﬃx: adds additional meaning Morphemes Bound: Cannot appear as a word by itself s (dog-s), ly (quick-ly), ed (walk-ed) Free: Can appear as a word by itself, may combine with other morphemes of, the, dog (dog-s), walk (walk-ed) 7 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Morphology",
+      "content": "Morphology Inﬂectional morphemes • Examples: dog (NOUN) + s = dogs (NOUN) eat (VERB) + s = eats (VERB) eat (VERB) + ing = eating (VERB) • Bound morphemes used to make grammatical distinctions • Change the form of the word but not its POS tag or key meaning 8 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Morphology",
+      "content": "Morphology Derivational morphemes • Examples: appoint (VERB) + ee = appointee (NOUN) help (VERB) + less = helpless (ADJ) strength (NOUN) + en = strengthen (VERB) • Bound morphemes used to create new words • Change the form, POS tag and meaning of the word 9 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Morphology",
+      "content": "Morphology Concatenative morphology Stem + aﬃx(es). Aﬃxes • Preﬁxes: disestablish • Suﬃxes: establishment Can be combined: disestablishment 10 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Morphology",
+      "content": "Morphology Non-concatenative morphology Inﬁxes: e.g., Tagalog: hingi (borrow) →humingi (borrower) Circumﬁxes e.g., German: sagen (say) →gesagt (said) Reduplication e.g., Motu: mahuta (to sleep) →mahutamahuta (to sleep constantly) 11 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Morphology",
+      "content": "Morphology Morphological typology Languages vary in how they use morphology English: We learned these new words Chinese: Wˇomen xué le zhè xi sh¯engcí I.PL.AN learn .PAST this .PL new word Russian: My vyučili eti novyje slova We.NOM learn.PAST.PL this.ACC.PL new.ACC.PL word.ACC.PL • Russian (synthetic) has more morphemes per word than Chinese (isolating) • English is in between, it’s a continuum Examples borrowed from Kat Vyloma 12 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Morphology",
+      "content": "Morphology Morphological typology Languages on a continuum of morphemes per word, estimated by Greenberg (1960), ﬁgure by Jurafsky and Martin (2025) 13 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Morphology",
+      "content": "Morphology Morphological typology West Greenlandic (polysynthetic) Nannu-n-niuti-kkuminar-tu-rujussu-u-vuq polar.bear-catch-instrument.for.achieving-something.good.for- PART-big-be-3SG.INDIC It (a dog) is really good for catching polar bears with. Example from Fortescue (2017) 14 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Morphology",
+      "content": "Morphology Morphological typology Agglutinative: Morphemes have one meaning (e.g. Turkish) Fusional: Morphemes may have multiple meanings (e.g. Russian) This is also a continuum 15 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Morphology",
+      "content": "Morphology Morphological typology • Agglutinative and fusional languages are more morphologically complex than isolating languages • Large consensus that morphologically complex languages are underserved by current NLP models • Ongoing research on: • quantifying and explaining the diﬃculty, e.g. Park et al. (2021); Poelman et al. (2025) • addressing the inequality, e.g. Ataman et al. (2020) 16 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Processing morphology: tasks",
+      "content": "Processing morphology: tasks Outline Introduction Morphology Processing morphology: tasks Rule-based morphological processing Data-driven morphological processing Morphologically-informed subword tokenization Summary 17 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Processing morphology: tasks",
+      "content": "Processing morphology: tasks Morphological analysis Tasks Input: puppies • Lemmatization: puppies →puppy • Segmentation: puppies →puppy|s • Tagging: detailed morphological summary Lemma: puppy POS: NOUN Number: plural 18 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Processing morphology: tasks",
+      "content": "Processing morphology: tasks Analysis in isolation Input: saw 1. Lemma: see POS: VERB Number: singular Tense: past 2. Lemma: saw POS: VERB Number: singular Tense: present 3. Lemma: saw POS: NOUN Number: singular 19 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Processing morphology: tasks",
+      "content": "Processing morphology: tasks Analysis in context Input: cooler • Context: The cooler was full of orange juice Lemma: cooler POS: NOUN Number: singular • Context: The daisy prefers cooler weather Lemma: cool POS: ADJ Degree: comparative 20 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Processing morphology: tasks",
+      "content": "Processing morphology: tasks Morphological generation Inﬂection generation Given a lemma and a morphological speciﬁcation (inﬂection), generate the appropriate inﬂected form. English: permaban V;V.PTCP;PST permabanned German: Stiefvater N;ACC;PL Stiefväter Hungarian: homeosztázis N;DAT;PL homeosztázisoknak 21 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Processing morphology: tasks",
+      "content": "Processing morphology: tasks Morphological generation Paradigm generation Given a lemma, generate the full inﬂectional paradigm. schleichen: schleiche V;1;SG;PRS schleichst V;2;SG;PRS schleicht V;3;SG;PRS geschlichen V;V.PTCP;PST ... 22 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Processing morphology: tasks",
+      "content": "Processing morphology: tasks Morphological generation Generation in context Given a lemma, generate the correct inﬂection form using sentential context. Input: The dog are barking Output: dogs 23 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Rule-based morphological processing",
+      "content": "Rule-based morphological processing Outline Introduction Morphology Processing morphology: tasks Rule-based morphological processing Data-driven morphological processing Morphologically-informed subword tokenization Summary 24 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Rule-based morphological processing",
+      "content": "Rule-based morphological processing English noun inﬂection Singular Plural Regular cat cats thrush thrushes Irregular mouse mice ox oxen 25 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Rule-based morphological processing",
+      "content": "Rule-based morphological processing Finite-state automaton (FSA) An abstract machine used to recognize patterns in input sequences. (Used also to implement regular expressions, see lecture 2) A FSA for English nominal inﬂection (Jurafsky and Martin, 2009) 26 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Rule-based morphological processing",
+      "content": "Rule-based morphological processing Needs • A list of stems (reg-noun) • A list of singular and plural irregular nouns →A lexicon A FSA for English nominal inﬂection (Jurafsky and Martin, 2009) 26 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Rule-based morphological processing",
+      "content": "Rule-based morphological processing A FSA for English verbal inﬂection (Jurafsky and Martin, 2009) reg-verb-stem: walk fry talk irreg-verb-stem: catch speak sing irreg-past-verb-form: caught spoke sang • walk + past = walked • walk + present participle = walking • walk + 3sg = walks 27 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Rule-based morphological processing",
+      "content": "Rule-based morphological processing A FSA for English nominal inﬂection (Jurafsky and Martin, 2009) 28 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Rule-based morphological processing",
+      "content": "Rule-based morphological processing Use of FSAs • Word recognition • Helpfulness • Helpfully • Helpfulization • Generalized to Finite State Transducers (FSTs) • Morphological analysis • Morphological generation 29 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Rule-based morphological processing",
+      "content": "Rule-based morphological processing Limitations of FSAs • Require linguistic annotation which is costly • Need to be updated when new words appear in the vocabulary • Cannot handle reduplication where arbitrarily long sequences are copied We won’t see more details. See Chapter 3 of Jurafsky and Martin (2009) if you are interested. 30 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Outline Introduction Morphology Processing morphology: tasks Rule-based morphological processing Data-driven morphological processing Morphologically-informed subword tokenization Summary 31 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Morphological analysis • Most tasks in morphological analysis can be framed as word-level tagging tasks • Tagging models can be applied directly (see lecture 6) Lemma Morphology Le le Deﬁnite=Def|Gender=Masc|Number=Sing chat chat Gender=Masc|Number=Sing chasse chasser Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin les le Deﬁnite=Def|Gender=Masc|Number=Sing chiens chien Gender=Masc|Number=Plur . . _ 32 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Multitask architecture for joint POS, morphology, lemma tagging and dependency parsing (Kondratyuk and Straka, 2019). 33 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Tagging in Kondratyuk and Straka (2019) • Input representation: word represented using a transformer • Passed to a softmax • Argmax of softmax is selected as tag 34 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Morphological analysis as tagging • Tasks learned sequentially: lemmatizing →POS tagging →morphology jointly: Multi-task learning • Morphological tags: all-in-one: Tag: Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin split: Tag 1: Mood=Ind, Tag 2: Number=Sing etc. In practice, joint learning of all-in-one category works best. 35 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Instead of using an encoder architecture, some of these tasks can be modelled with an encoder-decoder architecture. 36 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Visualization of the diﬀerent NN architectures for sequence processing. See lecture 4. 37 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Encoder-decoder architecture for lemmatization (Kanerva et al., 2021). The model exploits character-level information and reduces sparsity. 38 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Morphological generation For morphological generation tasks, the encoder-decoder (or sequence-to-sequence paradigm) can be applied. 39 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Seq2seq model for inﬂection generation. The model produces the simple past form of the verb dun (Senuma and Aizawa, 2017). 40 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "Data-driven morphological processing",
+      "content": "Data-driven morphological processing Evaluation and SOTA • Evaluation metric: depends on task but usually word-level accuracy • SOTA for morphological analysis: lower than POS tagging with more variation (∼50 to 95 if enough data) • Even more language dependent • Check out more on sigmorphon if you are interested 41 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization Outline Introduction Morphology Processing morphology: tasks Rule-based morphological processing Data-driven morphological processing Morphologically-informed subword tokenization Summary 42 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization Remember BPE? (Lecture 2) Corpus 5 l o w _ 2 l o w e s t _ 6 n e w er_ 3 w i d er_ 2 n e w _ Vocabulary _, d, e, i, l, n, o, r, s, t, w, er, er_ First merge e r →er Second merge er _ →er_ 43 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization Representing BPE merges as a tree newer_ new ne n e w er_ er e r _ Merge rules M1 (e, r) M2 (er, _) M3 (n, e) M4 (ne, w) M7 (new, er_) 44 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization So the tree for independently should look roughly like this, right? independently independent in i n dependent depend de d e pend p p pend en e n d ent en e n t ly l y Imaginary BPE tree consistent with morphological boundaries. 45 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization Well... ˙Gindependently ˙Gindepend ˙Gind ˙Gin ˙G in i n d epend ep e p end en e n d ently ent en e n t ly l y RoBERTa BPE tree, generated with the TkTkT library by Thomas Bauwens. 46 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization • You might say it does not matter if the end result is consistent with morphological boundaries • But in some cases it is not BPE tree of the word horseshoe by RoBERTa 47 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization • BPE segments text deterministically • Some morphemes like ly may be in the vocabulary but underused in segmentation ⇒undertrained • Limits compositional generalization: • initially • inherentently • dependable 48 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization What can we do about it? ˙Gindependently ˙Gindepend ? ˙Gin ˙G ? i n d epend ep e p ? en e n d ? ent ? e n t ly l y BPE-dropout (Provilkov et al., 2020) • Randomly disable merges (temporarily) • Can produce multiple segmentations of the same input • Empirically improves downstream performance 49 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization What can we do about it? ˙Gindependently ˙Gindepend ˙Gin ˙G in i n d epend ep e p end en e n d ent en e n t ly l y BPE-knockout (Bauwens and Delobelle, 2024) • Disable bad merges • Bad merges are determined based on a morphological lexicon • Outperforms BPE-dropout downstream 50 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization BPE-knockout result for independently ˙Gin ˙G in i n dependent depend d epend ep e p end en e n d ent en e n t ly l y BPE-knockout tree, generated with the TkTkT library by Thomas Bauwens. 51 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "Morphologically-informed subword tokenization",
+      "content": "Morphologically-informed subword tokenization BPE-knockout conclusion • Morphological information can be used to inform subword tokenization • This improves downstream performance • Disadvantage: relies on handcrafted lexicon • Still room for improvement 52 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "Summary",
+      "content": "Summary Outline Introduction Morphology Processing morphology: tasks Rule-based morphological processing Data-driven morphological processing Morphologically-informed subword tokenization Summary 53 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "Summary",
+      "content": "Summary Summary • Morphology: the study of the internal structure of words • Morphological processing tasks: tagging and generation • FSAs: rule-based methods applied to these tasks • Neural network based methods • How to inform subword tokenization using morphology 54 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Summary",
+      "content": "Summary Outlook • Direct use of morphology is no longer relevant for English • May still be relevant for languages with more complex morphology • Models of morphological processing can still be improved for some languages • Indirect use of morphology in subword tokenization holds promise even for English 55 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Summary",
+      "content": "Summary Acknowledgments The morphology slides took inspiration from Jimmy Lin . The processing morphology tasks slides took inspiration from Kyle Gorman . 56 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "Summary",
+      "content": "Summary References Duygu Ataman, Wilker Aziz, and Alexandra Birch. 2020. A latent morphology model for open-vocabulary neural machine translation. In International Conference on Learning Representations. Thomas Bauwens and Pieter Delobelle. 2024. BPE-knockout: Pruning pre-existing BPE tokenisers with backwards-compatible morphological semi-supervision. In Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers). Michael Fortescue. 2017. The eskimo-aleut language family. In Alexandra Y. Aikhenvald and R. M. W. Dixon, editors, The Cambridge Handbook of Linguistic Typology, Cambridge Handbooks in Language and Linguistics, pages 651–682. Cambridge University Press, Cambridge. Joseph Harold Greenberg. 1960. A quantitative approach to the morphological typology of language. International Journal of American Linguistics, 26:178 – 194. Daniel Jurafsky and James H. Martin. 2009. Speech and Language Processing (2nd Edition). Prentice-Hall, Inc., Upper Saddle River, NJ, USA. Daniel Jurafsky and James H. Martin. 2025. Speech and Language Processing: An Introduction to Natural Language Processing, Computational Linguistics, and Speech Recognition, with Language Models, 3rd edition. Online manuscript released August 24, 2025. Jenna Kanerva, Filip Ginter, and Tapio Salakoski. 2021. Universal lemmatizer: A sequence-to-sequence model for lemmatizing universal dependencies treebanks. Natural Language Engineering, 27(5):545 – 574. Dan Kondratyuk and Milan Straka. 2019. 75 languages, 1 model: Parsing Universal Dependencies universally. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP). Hyunji Hayley Park, Katherine J. Zhang, Coleman Haley, Kenneth Steimel, Han Liu, and Lane Schwartz. 2021. Morphology matters: A multilingual language modeling analysis. Transactions of the Association for Computational Linguistics, 9:261–276. Wessel Poelman, Thomas Bauwens, and Miryam de Lhoneux. 2025. Confounding factors in relating model performance to morphology. In To appear at EMNLP 2025. Ivan Provilkov, Dmitrii Emelianenko, and Elena Voita. 2020. BPE-dropout: Simple and eﬀective subword regularization. In Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics. Hajime Senuma and Akiko Aizawa. 2017. Seq2seq for morphological reinﬂection: When deep learning fails. In Proceedings of the CoNLL SIGMORPHON 2017 Shared Task: Universal Morphological Reinﬂection. 57 NLP: Morphological processing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

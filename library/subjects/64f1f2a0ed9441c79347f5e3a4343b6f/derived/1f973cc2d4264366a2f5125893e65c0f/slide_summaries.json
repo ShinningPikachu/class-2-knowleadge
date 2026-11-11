@@ -1,0 +1,353 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 05",
+    "section_label": "Slide",
+    "completed": 38,
+    "total": 38,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Lecture 5: Inductive bias, Learning",
+      "summary": "This lecture introduces the foundational concepts of inductive bias and learning theory. As the opening segment of Lecture 5, it establishes the thematic focus for exploring how assumptions guide machine learning models in generalizing from data to unseen examples.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "• The theoretical study of",
+      "summary": "Learning theory is the theoretical study of what is learnable, how much data is required, and the computational work involved. These questions are addressed within the fields of Computational Learning Theory and Statistical Learning Theory. This lecture introduces a sample of these concepts by beginning with the fundamental idea of inductive bias.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 3,
+      "title": "Inductive bias",
+      "summary": "Inductive bias",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 4,
+      "title": "• Every learning method makes certain assumptions about the data",
+      "summary": "Every learning method relies on specific assumptions about the data, collectively termed its inductive bias, which is distinct from statistical bias in the bias-variance tradeoff. Theoretical results establish that learning without such bias is impossible; for instance, linear regression inherently assumes linearity while decision trees make different structural assumptions. A learner performs optimally only when its inductive bias aligns with the true underlying patterns of the data, though practitioners often struggle to identify the ideal match due to limited understanding of both the algorithms' implicit assumptions and the data's nature.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 5,
+      "title": "• “Linear model” :",
+      "summary": "A linear model typically defines the \"best fit\" as the line minimizing the sum of squared vertical deviations, known as the least squares method, though this is a specific choice among possible loss functions. The general form expresses the outcome $Y$ as an intercept plus weighted inputs ($a + b_1X_1 + \\dots + b_mX_m$). For instance, predicting iris petal width from length yields the specific least squares predictor: $\\text{width} = 0.416 \\times \\text{length} - 0.363$.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 6,
+      "title": "What is the meaning of the",
+      "summary": "The coefficient $b_i$ represents the expected increase in $Y$ when $X_i$ increases by one unit while all other variables remain constant, a relationship termed the \"effect\" of $X_i$ on $Y$. Crucially, this effect is not necessarily causal; it describes observed correlations rather than outcomes of manual intervention. For instance, while light clothing correlates with warm temperatures, dressing lightly does not cause the weather to warm up, illustrating that changing $X_i$ manually does not guarantee a predictable change in $Y$ unless causality is established.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 7,
+      "title": "• The linear regression model implicitly assumes:",
+      "summary": "The linear regression model implicitly assumes that the effect of each variable on the target is constant and independent of other variables; if this constancy fails, the interpretation of coefficients becomes meaningless. Additionally, it assumes that the effects of different variables are cumulative, meaning they simply add up to determine the outcome. In statistical terminology, these conditions collectively represent an assumption of \"no interaction\" between variables, while more technical assumptions are considered irrelevant for this context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 8,
+      "title": "• After splitting on",
+      "summary": "After splitting on a feature $X_i$, each branch in a decision tree is developed entirely independently, allowing a variable $X_j$ to exert a positive effect in one branch and a negative effect in another. Unlike linear regression, where effects are assumed constant and additive across the entire dataset, decision trees make no assumption that a variable has the same effect everywhere. This fundamental difference means decision trees capture complex interactions by growing branches on distinct data subsets without enforcing global consistency.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 9,
+      "title": "Trees vs. linear regression",
+      "summary": "When predicting salary based on age, sex, country, and job, linear regression enforces a rigid assumption that the difference between roles (e.g., professors earning $500 more than postdocs) remains constant across all countries. This global constraint is often unrealistic because the salary gap likely varies by location, yet the linear model maintains this fixed relationship even when evidence suggests otherwise. In contrast, decision trees avoid this restrictive assumption, allowing the impact of job type to differ depending on other factors like country.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 10,
+      "title": "10",
+      "summary": "Linear regression models assume a constant effect across all groups, predicting that female professors aged 40–50 earn $500 more than postdocs based on patterns observed in other demographics despite having no data for this specific group. This approach relies on the assumption that missing segments behave identically to existing ones, a claim the slide challenges by demanding empirical evidence before accepting such extrapolations. The example highlights the risk of blindly trusting linear assumptions when data gaps exist, contrasting this with the skepticism required to validate predictions without direct observation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 11,
+      "title": "• Which method performs best? Largely depends on your problem!",
+      "summary": "No single method performs best universally; effectiveness depends entirely on how well a learner's \"inductive bias\"—its implicit assumptions—aligns with the specific problem. Since problems and learners are often not sufficiently understood to make principled decisions, selecting a model frequently involves trial and error. For instance, linear models assume cumulative effects while decision trees allow for interactions, illustrating how different biases suit different data conditions.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 12,
+      "title": "• Many different machine learning methods exist",
+      "summary": "Numerous machine learning methods, such as Naive Bayes and discriminant analysis, serve various predictive modeling tasks. Each method possesses a unique bias defined by implicit assumptions about the true model's properties, which dictates how it generalizes to unseen data. For instance, nearest neighbors create complex, zigzagging boundaries that closely follow data shapes, whereas linear models like SVMs produce smoother, straight-line separations, illustrating how distinct biases lead to different modeling outcomes.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 13,
+      "title": "13",
+      "summary": "Slide 13 presents a two-dimensional visualization of various classifiers, utilizing source code from the Scikit-Learn documentation to illustrate their decision boundaries.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 14,
+      "title": "• Theoretical proofs exist that bias-free learning is impossible",
+      "summary": "Theoretical proofs demonstrate that bias-free learning is impossible because no single method outperforms all others across every possible problem. Wolpert's \"no free lunch\" theorem states that for any scenario where learner A beats B, another exists where B beats A, meaning all learners perform equally on average without specific assumptions. Similarly, Mitchell argues that if a hypothesis space includes every possible concept, predictions for unseen instances will split 50-50 between true and false, rendering generalization impossible without inductive bias to restrict the search space.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 15,
+      "title": "• Bias can be in the form of preference or selection bias",
+      "summary": "Inductive bias manifests as either selection bias, where the hypothesis space excludes certain models, or preference bias, where specific hypotheses within the space are favored over others. For instance, decision trees exhibit preference bias by prioritizing simple trees over complex ones despite being able to represent all Boolean functions. Generally, a hypothesis space that includes more diverse types of hypotheses without internal preferences results in weaker bias, which is essential for enabling generalization.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 16,
+      "title": "16",
+      "summary": "Slide 16 introduces the concept of measuring the expressiveness, also referred to as \"capacity,\" of a hypothesis space. This metric evaluates how complex or flexible a model's set of possible functions is in representing data patterns.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 17,
+      "title": "• Hypothesis space",
+      "summary": "The hypothesis space comprises all predictive models a learner might return, and its capacity measures expressiveness by determining the largest dataset size that can still be perfectly fitted. While high capacity allows modeling diverse concepts with weak inductive bias, it simultaneously increases the risk of overfitting. Consequently, selecting an appropriate hypothesis space involves balancing sufficient flexibility to capture underlying patterns against the need for strong enough assumptions to ensure learnability without excessive data requirements.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 18,
+      "title": "• Consider univariate regression: we look for functions of the form",
+      "summary": "Univariate regression seeks linear functions of the form $y = ax + b$. For any two given inputs, there always exist parameters $a$ and $b$ such that the line passes perfectly through both points, regardless of how their labels are chosen. However, this guarantee fails for three points; it is generally impossible to find a single straight line connecting three arbitrary points, demonstrating that linear models cannot perfectly fit datasets with more than two observations unless the data happens to be collinear.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 19,
+      "title": "• However, if we consider quadratic functions (of the form",
+      "summary": "Quadratic functions of the form $y = ax^2 + bx + c$ can perfectly fit any three data points regardless of their y-values, whereas linear functions are limited to two. Generalizing this property, a polynomial of degree $n$ can always fit exactly $n+1$ points but no more. Consequently, increasing the polynomial degree expands the hypothesis space's capacity and expressiveness, making higher-degree polynomials strictly more powerful than those of degree $n-1$.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 20,
+      "title": "• We will now apply the same principle to classification",
+      "summary": "The principle of capacity extends from regression to binary classification, where predictions are restricted to labels 0 or 1. A set of points is defined as \"shattered\" by a hypothesis space if, for every possible assignment of these binary labels, there exists a hypothesis within the space that perfectly fits the data. This concept mirrors the regression case; for instance, with two points and straight lines, any combination of labels can be perfectly separated by an appropriate line.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 21,
+      "title": "21",
+      "summary": "A set of points is shattered by a hypothesis space if every possible labeling can be perfectly separated by some hypothesis within that space. For linear separators in 2D, three non-collinear points are shattered because all eight labelings allow a separating line, whereas three collinear points are not shattered since two specific alternating labelings cannot be separated. Crucially, shattering is a property of a specific point set relative to an entire hypothesis space, not a single hypothesis.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 22,
+      "title": "• Definition: The VC-dimension (or Vapnik-Chervonenkis dimension) of a",
+      "summary": "The VC-dimension of a hypothesis space is defined as the size of the largest finite subset that can be shattered, or infinite if subsets of any size can be shattered. Crucially, it suffices for just one specific subset of size $k$ to be shattered to establish a VC-dimension of at least $k$; it is not required that all possible subsets of that size are shattered. This distinction prevents the common error of concluding the dimension is lower simply because some configurations of points cannot be shattered, provided at least one…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 23,
+      "title": "• The VC-dimension of linear separators in 2D is 3 : there does not exist a set of",
+      "summary": "The VC-dimension of linear separators in 2D is 3 because no set of four points can be shattered by straight lines, meaning some labelings remain inseparable. In contrast, hypothesis spaces using ellipses (quadratic separators) can shatter a specific set of four points, as an ellipse can be drawn to match any labeling configuration. This demonstrates that elliptic separators are more expressive than linear ones, establishing that their VC-dimension is at least 4.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 24,
+      "title": "• Note: a set of points can be labeled in",
+      "summary": "For a set of $n$ points to be shattered, the hypothesis space $\\mathcal{H}$ must contain at least $2^n$ distinct hypotheses to cover all possible labelings. This requirement establishes that if the VC dimension is $n$, then $|\\mathcal{H}| \\ge 2^n$, which implies the upper bound $VC(\\mathcal{H}) \\le \\log_2(|\\mathcal{H}|)$. While this derivation specifically applies to finite hypothesis sets, the concept of VC dimension remains useful even when dealing with infinite hypothesis spaces.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 25,
+      "title": "25",
+      "summary": "Slide 25 introduces PAC-learning as a framework for determining the amount of data required for successful learning. It highlights sample complexity, which quantifies this data requirement, and emphasizes its fundamental relationship with model capacity. This section establishes the theoretical link between how much information is needed to learn effectively and the inherent complexity or size of the hypothesis space being used.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 26,
+      "title": "Statistical learning theory provides theoretical results that relate:",
+      "summary": "Statistical learning theory establishes theoretical relationships connecting the probability of successful learning with several critical factors: the number of training examples (sample complexity), the method used to select those examples, the complexity of the hypothesis space, the desired accuracy of the target approximation, and the time required for learning (time complexity). These interdependent variables collectively define the theoretical bounds and requirements for effective machine learning processes.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 27,
+      "title": "We will focus on the following task (binary classification / concept learning) :",
+      "summary": "The lecture defines the binary classification task by specifying four given components: an instance space $\\mathcal{X}$, an unknown target function $c$, a hypothesis space $\\mathcal{H}$, and training examples $D$. The objective is to find a hypothesis function $f \\in \\mathcal{H}$ that correctly classifies all training instances ($f(x) = c(x)$ for $x \\in D$). Crucially, the most significant challenge involves ensuring this function also generalizes accurately to all unseen instances in the entire space $\\mathcal{X}$.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 28,
+      "title": "• PAC stands for “probably approximately correct”",
+      "summary": "PAC learning stands for \"probably approximately correct,\" a framework that relaxes the impossible goal of guaranteeing zero error on an entire population due to the randomness of independently and identically distributed (i.i.d.) data samples. Because unrepresentative samples can occur by chance, the learner instead aims to find a hypothesis with accuracy at least $1-\\epsilon$ with probability at least $1-\\delta$, where $\\epsilon$ and $\\delta$ are small, user-defined parameters representing acceptable error and failure rates respectively. This \"soft guarantee\" acknowledges that while 100% certainty is unattainable, high confidence in an approximately correct…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 29,
+      "title": "• Formal definition of PAC-learnability according to Mitchell (1997):",
+      "summary": "According to Mitchell (1997), a concept class $C$ over instance space $X$ is PAC-learnable by a learner using hypothesis space $\\mathcal{H}$ if, for any target concept and probability distribution, the learner finds a hypothesis with accuracy at least $1-\\epsilon$ with probability $1-\\delta$. This must occur in time polynomial in $1/\\delta$, $1/\\epsilon$, instance size $n$, and concept size. The professor clarifies that smaller $\\delta$ and $\\epsilon$ values provide stronger guarantees of finding a model close to the true classifier, while distinguishing this computational time requirement from sample complexity.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 30,
+      "title": "• Consider binary prediction, learning from an i.i.d. dataset",
+      "summary": "In binary prediction from i.i.d. datasets, we aim to probabilistically bound population error using training error and dataset size. While general results are complex, a simple case illustrates the reasoning: if a hypothesis achieves zero training error on a set of size $n$, how likely is its true error to exceed $\\epsilon$? As the training set grows larger, it becomes increasingly improbable that a model with significant real-world error would coincidentally predict all training samples correctly.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 31,
+      "title": "• When the version space (the set of all hypotheses that perfectly fit the training",
+      "summary": "A version space is defined as $\\epsilon$-exhausted when it contains no hypotheses with a true error of at least $\\epsilon$, even though all members perfectly fit the training data with zero error. This concept ensures that every hypothesis in the set is a good approximation of the target function, allowing any random selection to meet quality standards. The central problem addressed is determining the minimum dataset size required to guarantee, with probability at least $1-\\delta$, that the version space becomes $\\epsilon$-exhausted for given PAC learning parameters.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 32,
+      "title": "• Assume hypothesis has real error . How likely is it that it perfectly fits a data set of randomly",
+      "summary": "Haussler's theorem quantifies the likelihood that a hypothesis with true error exceeding $\\epsilon$ perfectly fits $n$ random instances. While a single such hypothesis succeeds with probability at most $(1-\\epsilon)^n$, the probability that at least one of $k$ hypotheses fits is bounded by $k(1-\\epsilon)^n$. Since $k$ cannot exceed the total hypothesis space size $|\\mathcal{H}|$, and using the inequality $(1-\\epsilon)^n \\leq e^{-n\\epsilon}$, the theorem establishes that if a hypothesis is in the version space, its probability of having error greater than $\\epsilon$ is upper-bounded by $|\\mathcal{H}|e^{-n\\epsilon}$.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 33,
+      "title": "• From the previous slide, it follows that",
+      "summary": "Learning from at least $n \\geq \\frac{\\ln(|\\mathcal{H}|/\\delta)}{\\epsilon}$ instances guarantees with probability at least $1-\\delta$ that the version space contains only $\\epsilon$-correct hypotheses. This result follows from solving the inequality $|\\mathcal{H}|e^{-n\\epsilon} \\leq \\delta$, which bounds the probability of retaining any hypothesis with error greater than $\\epsilon$. Consequently, any learner returning a perfectly fitting classifier is assured to return an $\\epsilon$-correct hypothesis given sufficient data.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 34,
+      "title": "• Consider learning a conjunctive formula over 100 boolean variables. A variable",
+      "summary": "This concrete example calculates the sample complexity for learning a conjunctive formula over 100 Boolean variables, where each variable can appear positively, negatively, or not at all. To achieve 99% confidence that the learned formula differs from the true one on at most 1% of the population, approximately 11,447 examples are required. This demonstrates that sample complexity grows only logarithmically with the hypothesis space size ($3^{100}$), meaning even vast hypothesis spaces do not necessitate prohibitively large datasets because logarithms increase very slowly.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 35,
+      "title": "• In the previous examples,",
+      "summary": "While the size of a hypothesis space $|\\mathcal{H}|$ typically indicates expressiveness, this metric fails for infinite spaces like linear regression or neural networks where simple counting is impossible. Even with infinite hypotheses, spaces differ in capacity; for instance, quadratic functions can approximate parabolas while linear functions cannot, despite both having infinite sizes. Consequently, the Vapnik-Chervonenkis (VC) dimension is introduced as a superior measure of capacity that determines the sample complexity required to learn a good hypothesis, rather than relying on the raw number of hypotheses.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 36,
+      "title": "• Many results exist that link learnability to VC-dimension",
+      "summary": "Numerous theoretical results link learnability to VC-dimension, establishing that a hypothesis class is PAC-learnable if and only if its VC-dimension is finite. This relationship allows for deriving sample complexity bounds, such as determining the number of examples required to achieve specific accuracy and confidence levels under mild conditions. While many advanced results rely on Rademacher complexity, which is not covered here, knowing a model's VC-dimension provides critical mathematical insight into the difficulty of learning problems and the power of hypothesis spaces like linear or quadratic models.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 37,
+      "title": "• Sample complexity relates the chances of successful learning to the size of the",
+      "summary": "Sample complexity quantifies the training set size required to achieve successful learning with high probability and desired accuracy. It depends fundamentally on the expressiveness of the hypothesis space, formally measured by its size (for finite spaces), VC-dimension, or Rademacher complexity. As the professor emphasizes, stricter requirements for higher confidence (smaller delta) and greater accuracy (smaller epsilon) necessitate more data to satisfy these conditions.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 38,
+      "title": "• PAC-learning assumes random sampling. It does not say anything about",
+      "summary": "PAC-learning assumes random sampling and does not address settings where instances are carefully chosen by a teacher or learner to be maximally informative, such as in active learning. While sample complexity measures the required data, computational complexity is another critical metric evaluating the computation needed rather than just data volume. These factors, alongside hypothesis space capacity and desired accuracy, collectively define the probability of successfully learning a good model within computational learning theory.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    }
+  ]
+}

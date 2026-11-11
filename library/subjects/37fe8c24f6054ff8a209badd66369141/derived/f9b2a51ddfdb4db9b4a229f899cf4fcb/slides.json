@@ -1,0 +1,523 @@
+{
+  "metadata": {
+    "source_file": "Lecture_03_Untitled_Slides.pdf",
+    "created_at": "2026-10-09T12:56:09.013419+00:00",
+    "slide_count": 57,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Natural Language Processing:",
+      "content": "Natural Language Processing: Language modelling H02B1A Miryam de Lhoneux Slides adapted from Jurafsky and Martin (2025) Department of Computer Science KU Leuven",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Introduction",
+      "content": "Introduction Outline Introduction N-grams Generation: sampling Evaluation Smoothing Summary 1 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Introduction",
+      "content": "Introduction Language modelling Predict the next word Unicorns bring joy and wonder to everyone they ... meet know see the day 2 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Introduction",
+      "content": "Introduction Language modelling Language models • Can assign a probability to each potential next word • Can assign a probability to a whole sentence 3 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Introduction",
+      "content": "Introduction Language modelling Why is it useful? • Grammar or spell checking: Their There are two birds Everything has improve improved • Speech recognition: I will be bassoon dish →I will be back soonish • It’s how large language models (LLMs) work! (see lecture 4) LLMs are trained to predict words LLMs generate text by predicting words 4 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "N-grams",
+      "content": "N-grams Outline Introduction N-grams Generation: sampling Evaluation Smoothing Summary 5 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "N-grams",
+      "content": "N-grams Language modelling Two LM prediction goals • Probability of a sentence or sequence of words W : P(W ) = P(w1, w2, w3, w4, w5..., wn) • Probability of an upcoming word: P(w5|w1, w2, w3, w4) P(wn|w1, w2, ..., wn−1) 6 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "N-grams",
+      "content": "N-grams How can we estimate these probabilities? Can we just count and divide? P(meet|Unicorns bring joy and wonder to everyone they) = C(Unicorns bring joy and wonder to everyone they meet) C(Unicorns bring joy and wonder to everyone they) No! Estimated on a corpus Too many possible sentences ⇒We will not see enough data for reliable estimates Let’s rely on the chain rule of probability 7 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "N-grams",
+      "content": "N-grams Chain rule The chain rule of probabilities expresses the joint probability of a sequence of events as the product of each event’s conditional probability given the preceding events 8 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "N-grams",
+      "content": "N-grams Chain rule P(B|A) = P(A, B) P(A) conditional probabilities P(A, B) = P(A)P(B|A) rewritten as joint probabilities Generalized to more variables: P(A, B, C, D) = P(A)P(B|A)P(C|A, B)P(D|A, B, C) General chain rule: P(x1, x2, x3, …, xn) = P(x1)P(x2|x1)P(x3|x1, x2)…P(xn|x1, …, xn−1) 9 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "N-grams",
+      "content": "N-grams Chain rule applied to joint probability of words in sentence P(w1:n) = P(w1)P(w2|w1)P(w3|w1:2)...P(wn|w1:n−1) = n Y k=1 P(wk|w1:k−1) P(Unicorns bring joy and wonder) =P(Unicorns) × P(bring|Unicorns) × P(joy|Unicorns bring) × P(and|Unicorns bring joy) × P(wonder|Unicorns bring joy and) 10 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "N-grams",
+      "content": "N-grams Markov assumption Before P(Unicorns bring joy and wonder) = P(Unicorns) · P(bring | Unicorns) · P(joy | Unicorns bring) · P(and | Unicorns bring joy) · P(wonder | Unicorns bring joy and) After (3-gram) \u0000P(Unicorns bring joy and wonder) = P(Unicorns) · P(bring | Unicorns) · P(joy | Unicorns bring) · P(and | Unicorns bring joy) · P(wonder |Unicorns bring joy and) ignore use P(Unicorns) · P(bring | Unicorns) · P(joy | Unicorns bring) · P(and | bring joy) · P(wonder | joy and) Adapted from with the help of Gemini. 11 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "N-grams",
+      "content": "N-grams Markov assumption P(wonder|Unicorns bring joy and ) ≈P(wonder|and) bigram P(wn) ≈P(wn|wn−1) P(w1:n) ≈ n Y k=1 P(wk|wk−1) P(wn|w1:n) ≈P(wn|wn−N+1:n−1) N-gram where N = 2 for bigrams, N = 3 for trigrams, etc. 12 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "N-grams",
+      "content": "N-grams Unigram model P(w1, ..., wn) = Y i P(wi) P(wi|w1:n) = P(wi) Automatically generated sentences from unigram models To him swallowed confess hear both . Which . Of save on trail for are ay device and rote life have Hill he late speaks ; or ! a more to leg less ﬁrst you enter 13 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "N-grams",
+      "content": "N-grams Bigram model P(w1, ..., wn) = n Y k=1 P(wk|wk−1) P(wi|w1:n) = P(wi|wi−1) Automatically generated sentences from bigram models Why dost stand forth thy canopy, forsooth; he is this palpable hit the King Henry. Live king. Follow. What means, sir. I confess she? then all sorts, he is trim, captain. 14 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "N-grams",
+      "content": "N-grams Maximum Likelihood Estimate (MLE) • estimates parameters of a model M from a training set T • maximizes the likelihood of T given M Intuition • Suppose the word bagel occurs 400 times in a corpus of a million words • What is the probability that a random word from some other text will be bagel? • MLE estimate: 400 1,000,000 = 0.0004 • This may be a bad estimate for some other corpus, but it is the estimate that makes it most likely that bagel occurs 400 times in a million word corpus. 15 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "N-grams",
+      "content": "N-grams MLE of bigrams P(wn|w1:n) = P(wn|wn−1) P(wn|wn−1) = C(wn−1, wn) P w C(wn−1, w) = C(wn−1, wn) C(wn−1) 16 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "N-grams",
+      "content": "N-grams Dealing with scale • Multiplying many small numbers may result in underﬂow ⇒Use of log probabilities: log(p1 × p2 × p3 × p4) = log p1 + log p2 + log p3 + log p4 • If we need probabilities, use exp: p1 × p2 × p3 × p4 = exp(log p1 + log p2 + log p3 + log p4) 17 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "N-grams",
+      "content": "N-grams Limitations of N-gram models • Long-distance dependencies: The soups that I made from that new cookbook I bought yesterday were amazingly delicious. • Meaning: the probabilities of the words cat and dog are estimated independently. Solution: (large) language models • Can handle long context • Similar words are represented similarly ⇒some meaning is captured See lecture 4 18 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Generation: sampling",
+      "content": "Generation: sampling Outline Introduction N-grams Generation: sampling Evaluation Smoothing Summary 19 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Generation: sampling",
+      "content": "Generation: sampling Sampling words by Shannon (1948) \"Open a book at random and select a letter at random on the page. This letter is recorded. The book is then opened to another page and one reads until this letter is encountered. The succeeding letter is then recorded. Turning to another page this second letter is searched for and the succeeding letter recorded, etc.\" 20 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Generation: sampling",
+      "content": "Generation: sampling Sampling Visualization of LM sampling according to probabilities (Jurafsky and Martin, 2025). 21 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Generation: sampling",
+      "content": "Generation: sampling Generating text using a bigram model Choose a random bigram (<s>, w) according to its probability p(w|<s>) Repeat: Choose a random bigram (w, x) according to its probability p(x|w) Until a bigram ending with </s> is selected 22 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Generation: sampling",
+      "content": "Generation: sampling Generation Choose a random bigram (<s>, w) according to its P p(w|<s>) Choose a random bigram (w, x) according to its probability p(x|w) <s> Unicorns <s> Unicorns bring <s> Unicorns bring joy <s> Unicorns bring joy and <s> Unicorns bring joy and wonder Until a bigram ending with </s> is selected <s> Unicorns bring joy and wonder </s> 23 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Generation: sampling",
+      "content": "Generation: sampling Other sampling methods Many avoid generating words from the unlikely tail of the distribution. • Temperature sampling (Ficler and Goldberg, 2017) • Top-k sampling (Fan et al., 2018) • Top-p sampling (Holtzman et al., 2020) See lecture 4. 24 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Generation: sampling",
+      "content": "Generation: sampling Sentences generated by N-gram models trained on Shakespeare text (Jurafsky and Martin, 2025). 25 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Generation: sampling",
+      "content": "Generation: sampling Sentences generated by N-gram models trained on the WSJ (Jurafsky and Martin, 2025). 26 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Evaluation",
+      "content": "Evaluation Outline Introduction N-grams Generation: sampling Evaluation Smoothing Summary 27 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation Extrinsic/dowstream evaluation Comparing LM A to LM B: 1. Use them in a task, e.g. machine translation or speech recognition 2. Evaluate performance on the task 3. Compare task accuries for LM A vs LM B Limitations • Expensive and time-consuming • May not generalize to other applications 28 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation Intrinsic evaluation: perplexity • Directly measures language model performance at predicting words. • Doesn’t necessarily correspond with real application performance • Gives us a single general metric for language models (including LLMs) 29 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Evaluation",
+      "content": "Evaluation Train vs test set • Model parameters are trained/estimated on a training set. • Model performance is measured on an unseen test set using an evaluation metric (here perplexity). We want to measure generalization to unseen data Choosing the test set Use cases: • Speciﬁc task: the test set should reﬂect the task language (e.g. legal or medical domain) • General purpose: need for diversity in domains, authors etc. Make sure there are no test sentences in the training set. 30 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation Dev set • If we repeatedly test on the test set, we might tune the model to its characteristics ⇒Keep it for ﬁnal evaluation • Use a development set for intermediate evaluations 31 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation Perplexity Intuition: A good LM prefers \"real\" sentences. • Assigns higher probability to \"real\" or \"frequently observed\" sentences • Assigns lower probability to \"word salad\" or \"rarely observed\" sentences 32 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation Perplexity Intuition: A good LM can predict upcoming words. • Once upon a ___ • I ordered a pizza with cheese and ___ • I saw a ___                        time 0.9 dream 0.03 midnight 0.02 … giraﬀe 0.0001 … and 1e- 100 33 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation The best LM assigns high probability to the entire test set. Comparing LM A to LM B: • Compute and compare PA(test set) and PB(test set) • The better LM has the higher probability →It is less surprised by the test set 34 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation Why not use probability? The probability of a test set depends on its size (longer = less probable) ⇒Need for a per-word metric, normalized by length 35 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation Perplexity Perplexity is the inverse probability of the test set, normalized by the number of words: PP(W ) = P(w1w2...wN)−1 N = N s 1 P(w1w2...wN) • Probability range is [0, 1], perplexity range is [1, ∞] • Minimizing perplexity is the same as maximizing probability 36 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation Perplexity of bi-gram LMs PP(W ) = N s 1 P(w1w2...wN) = N v u u t N Y i=1 1 P(wi|w1...wi−1) Chain rule = N v u u t N Y i=1 1 P(wi|wi−1) Bigrams 37 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Evaluation",
+      "content": "Evaluation Evaluation Example perplexity scores for the WSJ corpus with 38M words in training and 1.5M words in test. N-gram order unigram bigram trigram Perplexity 962 170 109 38 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Smoothing",
+      "content": "Smoothing Outline Introduction N-grams Generation: sampling Evaluation Smoothing Summary 39 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Smoothing",
+      "content": "Smoothing Sparsity Shakespeare as corpus • N = 884K tokens, V = 29K types • V 2 = 844M possible bigrams • Bigrams actually occurring: 300K ⇒99.96% of the possible bigrams were never seen (have zero entries in the table) • That sparsity is even worse for 4-grams 40 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Smoothing",
+      "content": "Smoothing Generalization Training sentences • … ate lunch • … ate dinner • … ate a • … ate the Test sentences • … ate lunch • … ate breakfast p(breakfast|ate) = 0 41 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Smoothing",
+      "content": "Smoothing Zero probabilities • 0 probability bigrams lead to assigning 0 probability to the test set • Which means that we cannot compute perplexity (division by zero)! PP(W ) = N v u u t N Y i=1 1 P(wi|wi−1) 42 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "Smoothing",
+      "content": "Smoothing Smoothing Sparse statistics C(w|denied the): 3 allegations 2 reports 1 claims 1 request 7 total Smoothing illustration adapted from Dan Klein Steal from the rich to give to the poor 43 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "Smoothing",
+      "content": "Smoothing Smoothing Adjusted C(w|denied the) 2.5 allegations 1.5 reports 0.5 claims 0.5 request 2 other 7 total Smoothing illustration adapted from Dan Klein Steal from the rich to give to the poor 43 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Smoothing",
+      "content": "Smoothing Smoothing Add-one/Laplace smoothing MLE : PMLE(wn|wn−1) = C(wn−1, wn) P w C(wn−1, w) Laplace : PLaplace(wn|wn−1) = C(wn−1, wn)+1 P w(C(wn−1, w)+1) = C(wn−1, wn)+1 C(wn−1) + V 44 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "Smoothing",
+      "content": "Smoothing Smoothing Add-one smoothing • Is a blunt instrument: it makes very big changes to the counts ⇒Is typically not used for N-gram LMs • Used in NLP applications where the number of zeros is not huge • Alternative: add-k where 0 < k < 1, still does not work well 45 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Smoothing",
+      "content": "Smoothing Backoﬀand Interpolation Backoﬀ If you have good evidence: use trigrams Otherwise bigram Otherwise unigram Interpolation Mix unigram, bigram, trigram Empirically, interpolation works better. 46 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Smoothing",
+      "content": "Smoothing Backoﬀ (Stupid) backoﬀ • Suppose you want: P(pancakes|delicous souﬄé) • If the trigram probability is 0, use the bigram P(pancakes|souﬄé) • If the bigram probability is 0, use the unigram P(pancakes) Sum of all probabilities of the trigram > 1 ⇒need to discount the higher-order ngram probabilities (e.g., Katz backoﬀ) 47 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Smoothing",
+      "content": "Smoothing Interpolation Simple interpolation ˆP(wn|wn−2wn−1) = λ1P(wn|wn−2wn−1) trigram + λ2P(wn|wn−1) bigram + λ3P(wn) unigram where X i λi = 1 48 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Smoothing",
+      "content": "Smoothing Interpolation Lambdas conditioned on context ˆP(wn|wn−2wn−1) = λ1(wn−1 n−2 )P(wn|wn−2wn−1) + λ2(wn−1 n−2 )P(wn|wn−1) + λ3(wn−1 n−2 )P(wn) 48 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Smoothing",
+      "content": "Smoothing Interpolation Interpolation: choosing λs • Fix the N-gram probabilities (on the training data) • Then search for λ s that give largest probability to held-out set 49 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "Smoothing",
+      "content": "Smoothing Out of vocabulary words • Smoothing does not solve the problem of words unseen in the training data • Out-of-vocabulary (OOV) words (e.g. whale in the exercise) • In practice, low frequency words are replaced by an <UNK> token • Low-frequency words and unseen words are estimated based on <UNK> 50 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Summary",
+      "content": "Summary Outline Introduction N-grams Generation: sampling Evaluation Smoothing Summary 51 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Summary",
+      "content": "Summary Summary and outlook N-gram language models • Estimation with MLE • Generation (sampling) • Evaluation with perplexity • Choice of training/test data for generalization • Limitations of MLE and workarounds 52 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "Summary",
+      "content": "Summary Summary and outlook Outlook: LLMs • Estimation and generation with neural networks • LLMs capture meaning and can handle long-distance dependencies • Evaluated with (modiﬁed) perplexity • Generalization concerns remain See lecture 4! 53 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "Summary",
+      "content": "Summary References Angela Fan, Mike Lewis, and Yann Dauphin. 2018. Hierarchical neural story generation. In Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). Jessica Ficler and Yoav Goldberg. 2017. Controlling linguistic style aspects in neural language generation. In Proceedings of the Workshop on Stylistic Variation. Ari Holtzman, Jan Buys, Li Du, Maxwell Forbes, and Yejin Choi. 2020. The curious case of neural text degeneration. In International Conference on Learning Representations. Daniel Jurafsky and James H. Martin. 2025. Speech and Language Processing: An Introduction to Natural Language Processing, Computational Linguistics, and Speech Recognition, with Language Models, 3rd edition. Online manuscript released August 24, 2025. Claude Elwood Shannon. 1948. A mathematical theory of communication. The Bell system technical journal, 27(3):379–423. 54 NLP: Language modelling",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

@@ -1,0 +1,356 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 02",
+    "section_label": "Slide",
+    "completed": 69,
+    "total": 69,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Bias in algorithms, in data, in use...",
+      "summary": "This slide introduces the concept of bias as a multifaceted issue occurring within algorithms, datasets, and practical applications. It highlights that bias is not limited to a single stage but can manifest across the entire lifecycle of algorithmic systems, from design and data collection to deployment and usage."
+    },
+    {
+      "slide": 2,
+      "title": "What would an ‘unbiased’ algorithm be?",
+      "summary": "Slide 2: What would an ‘unbiased’ algorithm be?"
+    },
+    {
+      "slide": 3,
+      "title": "Maximize Your",
+      "summary": "The core principle presented on this slide is to maximize expected utility. This concept serves as the foundational objective for decision-making within the lecture's framework, emphasizing the optimization of anticipated outcomes based on available information."
+    },
+    {
+      "slide": 4,
+      "title": "Utility?",
+      "summary": "Slide 4 introduces the concept of utility by distinguishing between scenarios with a clear utility function and those where the utility function is not so clear. This contrast highlights the varying degrees of definability in utility functions within decision-making contexts."
+    },
+    {
+      "slide": 5,
+      "title": "Slide 5",
+      "summary": "Slide 5"
+    },
+    {
+      "slide": 6,
+      "title": "What expected utility is right?",
+      "summary": "While this course uses unambiguous toy examples, AI agents maximizing expected utility have real-world implications where defining the correct utility function is difficult. Even with clear developer intent, agents may exhibit strange behaviors to achieve their goals, such as hacking a website to download data when standard methods fail. This highlights that optimizing expected utility requires ongoing conversation and awareness of how systems respond in extreme cases."
+    },
+    {
+      "slide": 7,
+      "title": "Guest lecture: Ethics in AI",
+      "summary": "A guest lecture on Ethics in AI will be held on Thursday, December 17, featuring Professor Nathalie A. Smuha from the University of Toronto Faculty of Law. Her research examines legal, ethical, and philosophical questions regarding AI's impact on human rights, democracy, and the rule of law. She is the author of *Algorithmic Rule By Law* and editor of the *Cambridge Handbook on the Law, Ethics and Policy of Artificial Intelligence*."
+    },
+    {
+      "slide": 8,
+      "title": "What would an ‘unbiased’ algorithm be?",
+      "summary": "Creating a completely unbiased algorithm is impossible because different societies hold conflicting norms regarding moral decisions, as demonstrated by the \"World Machine\" experiment on trolley problems. This lack of global consensus makes AI alignment difficult, particularly in determining which \"expected utility\" to prioritize when human values diverge across cultures. Consequently, defining what constitutes a correct or unbiased answer remains an unresolved challenge rooted in the subjective nature of humanity."
+    },
+    {
+      "slide": 9,
+      "title": "Further reading on implications of AI",
+      "summary": "Slide 9 provides a curated list of further reading on the implications of AI, including Stuart Russell's work on long-term futures and lethal autonomous weapons, alongside books by Russell and Nick Bostrom. The resources also cover Moshe Vardi's analysis of jobs, Asilomar panel discussions, research priorities from futureoflife.org, and reports from Stanford, the EU High Level Expert Group, and the Obama Whitehouse. Additionally, it references the 23 Asilomar AI principles for beneficial AI."
+    },
+    {
+      "slide": 10,
+      "title": "AI",
+      "summary": "This slide outlines key AI subfields, including rational agents, robots, machine learning, NLP, computer vision, and human-AI interaction. It distinguishes topics covered in this mandatory course—specifically reasoning by search and knowledge representation—from other mandatory or elective modules like deep learning, reinforcement learning, and AI ethics. The content serves as a curriculum map, listing specific course codes for related subjects such as robotics, speech recognition, and cognitive science that fall outside the current scope."
+    },
+    {
+      "slide": 11,
+      "title": "Fundamentals of Artificial Intelligence",
+      "summary": "Slide 11 introduces the topic \"Fundamentals of Artificial Intelligence\" for Lecture 02 of the 2026-27 academic year, presented by Prof. Tias Guns. The lecture focuses on Agents and utilizes slides originally developed for CS188 at Berkeley."
+    },
+    {
+      "slide": 12,
+      "title": "RECAP: Designing Rational Agents",
+      "summary": "An agent is an entity that perceives its environment through sensors and acts via actuators, while a rational agent specifically selects actions to maximize expected utility. The characteristics of percepts, the environment, and the action space dictate which techniques are appropriate for selecting these rational actions. This course focuses on general AI search techniques across various problem types, teaching students to recognize when existing methods can solve new problems, illustrated by building agents in environments like Pacman."
+    },
+    {
+      "slide": 13,
+      "title": "Environment types (1/2)",
+      "summary": "Environment types largely determine agent design through three key dimensions: observability, determinism, and dynamics. Environments are fully or partially observable; partial observability requires agents to maintain internal memory of past percepts. They are deterministic if the next state is fixed by current state and action, whereas stochastic environments involve potential action failures requiring contingency planning, with strategic determinism applying when only other agents act nondeterministically. Finally, static environments remain unchanged during deliberation, while dynamic ones change over time."
+    },
+    {
+      "slide": 14,
+      "title": "Environment types",
+      "summary": "Slide 14 introduces environment types using examples such as Pacman, Backgammon, Taxi, and MS CoPilot Chat. These environments are categorized by three fundamental properties: whether they are fully or partially observable, deterministic or stochastic, and static or dynamic."
+    },
+    {
+      "slide": 15,
+      "title": "Slide 15",
+      "summary": "Slide 15"
+    },
+    {
+      "slide": 16,
+      "title": "Environment types (2/2)",
+      "summary": "The environment type largely determines agent design across four key dimensions: discrete versus continuous states (e.g., chess versus robot movement), single versus multi-agent scenarios involving competitive or cooperative dynamics, known versus unknown physics requiring exploration, and known versus unknown performance measures necessitating human interaction. Continuous time environments require continuously operating controllers, while multi-agent settings may demand random behavior to avoid predictability. Unknown evaluation functions compel agents to observe and interact with a human principal to establish goals."
+    },
+    {
+      "slide": 17,
+      "title": "Environment types",
+      "summary": "Slide 17 classifies environments using criteria such as observability, determinism, and known physics across examples like Pacman, Backgammon, Taxi, and MS CoPilot Chat. Pacman is identified as partially observable and stochastic due to unpredictable ghost behavior, while Backgammon is fully observable despite involving dice. The lecture contrasts these with the Taxi environment, which is partially observable, and notes that real-world physics (like tire friction) are often unknown or difficult to model precisely."
+    },
+    {
+      "slide": 18,
+      "title": "Example agent designs",
+      "summary": "Slide 18 presents a conceptual framework for example agent designs, illustrating the core components and their interactions. The diagram identifies the central Agent, which connects to an external Environment through Sensors that provide Percepts and Actuators that execute Actions. This structure defines the fundamental loop where an agent perceives its surroundings and acts upon them."
+    },
+    {
+      "slide": 19,
+      "title": "Simple re'ex agents",
+      "summary": "Simple re'ex agents"
+    },
+    {
+      "slide": 20,
+      "title": "Pacman agent program in Python",
+      "summary": "The `GoWestAgent` class extends the `Agent` base class to define a simple Pacman agent that prioritizes moving west. Its `getAction` method checks if `Directions.WEST` is available in the list of legal actions returned by `percept.getLegalPacmanActions()`. If west is legal, the agent returns `Directions.WEST`; otherwise, it returns `Directions.STOP`."
+    },
+    {
+      "slide": 21,
+      "title": "Simple re'ex agents",
+      "summary": "Simple reflex agents do not maintain a history of past states, making them viable only in fully observable environments. While their design is straightforward, they require rules that explicitly cover every possible perceptual case to function correctly."
+    },
+    {
+      "slide": 22,
+      "title": "Eat adjacent dot, if any",
+      "summary": "The instruction for this step is to consume an adjacent dot if one exists. This action is conditional, meaning it only occurs when a neighboring dot is present in the current configuration."
+    },
+    {
+      "slide": 23,
+      "title": "Eat adjacent dot, if any",
+      "summary": "The instruction for this step is to consume an adjacent dot if one exists. This action is conditional, meaning it only occurs when a dot is immediately next to the current position; otherwise, no eating takes place."
+    },
+    {
+      "slide": 24,
+      "title": "Pacman agent contd.",
+      "summary": "A reflex agent cannot behave well in all standard Pacman environments because the game is not fully observable, specifically regarding power pellet duration. While a lookup table could theoretically work if observability were complete, its size would be prohibitive. Furthermore, not every function can be implemented by an agent program due to computational limits, as illustrated by chess on slow hardware, NP-hard problems, and the halting problem."
+    },
+    {
+      "slide": 25,
+      "title": "Model-based agents",
+      "summary": "Model-based agents maintain an internal state updated by every new percept to track past events. They require a transition model to predict action outcomes and a sensor model to understand world evolution. For example, in Pac-Man, the transition model updates the agent's location and marks eaten dots as removed from the state representation."
+    },
+    {
+      "slide": 26,
+      "title": "Goal-based agents",
+      "summary": "Goal-based agents reason about achieving multi-step goals by utilizing their internal models. This approach distinguishes them from simpler agent types by focusing on future planning rather than immediate reactions. The lecture notes that most agents studied throughout the course fall into this category."
+    },
+    {
+      "slide": 27,
+      "title": "Goal-based Agents",
+      "summary": "Goal-based agents, also known as planning agents, make decisions by evaluating future action sequences to achieve a definite goal or multiple goals. These agents require an internal model of how the world evolves in response to actions. An optimal goal-based agent specifically aims to achieve its goal at the lowest possible cost."
+    },
+    {
+      "slide": 28,
+      "title": "Summary",
+      "summary": "An agent perceives and acts through an architecture and program, with a rational agent maximizing expected utility based on its percept sequence and environmental knowledge. Agent programs map percepts to actions via designs like reflex agents for immediate responses or goal-based agents for working toward objectives. Environments vary in difficulty, with partially observable, nondeterministic, dynamic, and multi-agent settings presenting the most significant challenges for agent design."
+    },
+    {
+      "slide": 29,
+      "title": "Precompute op.mal plan, execute it",
+      "summary": "The core strategy involves precomputing an optimal plan before execution. This approach separates the planning phase from the action phase to ensure the most efficient path is determined in advance."
+    },
+    {
+      "slide": 30,
+      "title": "Fundamentals of Artificial Intelligence",
+      "summary": "This slide introduces Lecture 03 of the \"Fundamentals of Artificial Intelligence\" course by Professor Tias Guns for the 2026-27 academic year. The lecture focuses on search algorithms and utilizes materials based on slides from CS188 at Berkeley."
+    },
+    {
+      "slide": 31,
+      "title": "Content",
+      "summary": "This slide outlines the chapter's content, covering search problems and uninformed search methods including Depth-First Search, Breadth-First Search, and Uniform-Cost Search. Completing this material prepares students to solve questions 1 and 2 of project P1."
+    },
+    {
+      "slide": 32,
+      "title": "Search Problems",
+      "summary": "Search Problems"
+    },
+    {
+      "slide": 33,
+      "title": "Search Problems",
+      "summary": "A search problem comprises a state space, initial state, actions, transition model, goal test, and action cost function. Costs are calculated per step (+1), eating food (-10), winning (-500), dying (+500), or eating a ghost (-200). A solution is defined as an action sequence reaching a goal state, while an optimal solution minimizes the total accumulated cost of that sequence."
+    },
+    {
+      "slide": 34,
+      "title": "Search Problems Are Models",
+      "summary": "Search problems function as models. This concept frames the search problem itself as a modeling construct."
+    },
+    {
+      "slide": 35,
+      "title": "What’s in a State Space?",
+      "summary": "A search state abstracts the world by retaining only details necessary for planning, such as coordinates and dot status. For pathing, states are (x,y) locations with a goal test checking destination arrival; for eating all dots, states include dot Booleans to verify if all are false. Transitions update these values based on actions like NSEW movement, while action costs quantify individual steps."
+    },
+    {
+      "slide": 36,
+      "title": "State Space Sizes",
+      "summary": "The full world state space combines agent positions (120), food configurations ($2^{30}$), ghost positions ($12^2$), and facing directions (4). However, efficient modeling reduces this significantly: pathfinding requires only the 120 agent locations, while the \"eat-all-dots\" problem requires tracking agent location and food status ($120 \\times 2^{30}$). This demonstrates that state space size depends on which variables are relevant to the specific problem being solved."
+    },
+    {
+      "slide": 37,
+      "title": "State Space Graphs and Search Trees",
+      "summary": "State Space Graphs and Search Trees"
+    },
+    {
+      "slide": 38,
+      "title": "State Space Graphs",
+      "summary": "A state space graph is a mathematical representation of a search problem where vertices denote abstracted world configurations and edges represent transitions labeled with actions. In this structure, each unique state occurs exactly once, distinguishing it from paths that may revisit states through different action sequences. While the full graph is often too large to build in memory, it serves as a useful conceptual model for applying goal tests to identify specific goal vertices within the set of possible states."
+    },
+    {
+      "slide": 39,
+      "title": "State Space Graphs",
+      "summary": "A state space graph is a mathematical representation of a search problem where vertices are abstracted world configurations and edges represent action results. The goal test identifies a set of goal nodes, and crucially, each state appears only once in this graph structure. Although the full graph is often too large to build in memory, it remains a useful conceptual model for understanding search problems."
+    },
+    {
+      "slide": 40,
+      "title": "Search Trees",
+      "summary": "A search tree represents a \"what if\" structure of plans and outcomes where the root node is the start state and children correspond to successors. Although nodes display states, they fundamentally represent specific plans, defined as sequences of states leading to those points. Because building the entire tree is often impossible, algorithms maintain a frontier of unexplored nodes, selecting elements to expand and checking if the goal state has been reached."
+    },
+    {
+      "slide": 41,
+      "title": "Search Trees through the State Space Graphs",
+      "summary": "Search trees are constructed on demand to minimize expansion, where each tree node represents an entire path in the state space graph rather than a single state. Consequently, reaching the same goal state via different sequences creates distinct nodes in the search tree, as the algorithm must track and score the full sequence of actions taken. This distinction ensures that unique solutions are preserved based on previous choices, unlike the single representation of states in the underlying graph."
+    },
+    {
+      "slide": 42,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state space by expanding nodes only when selected from the frontier. The algorithm initializes with the start node and iteratively selects a node to check for the goal condition; if not met, it generates child nodes from neighbor states and inserts them into the frontier. This process continues until a solution is found or the frontier becomes empty, returning failure if no path exists."
+    },
+    {
+      "slide": 43,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state graph by expanding nodes only when selected from the frontier. The algorithm initializes with the start node and iteratively selects a node to check for the goal condition; if not met, it generates child nodes from neighbor states and inserts them into the frontier. This process repeats until a solution is found or the frontier becomes empty, returning failure if no path exists."
+    },
+    {
+      "slide": 44,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state graph by maintaining a frontier of nodes, starting with the initial state. The algorithm repeatedly selects and removes a node from the frontier; if it is a goal state, the solution is returned. Otherwise, all neighboring states are generated as child nodes and inserted into the frontier until the frontier is empty or a solution is found."
+    },
+    {
+      "slide": 45,
+      "title": "The expanding frontier",
+      "summary": "A node in a search tree represents a path within the state-space graph, while the frontier (or fringe) is the set of all nodes available for expansion. Node expansion involves generating all successor nodes by considering available actions from the current state. Each newly generated successor becomes a child node added to the frontier, allowing the algorithm to systematically explore reachable states."
+    },
+    {
+      "slide": 46,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state space by maintaining a frontier of nodes, starting with the initial state. The algorithm repeatedly selects and removes a node from the frontier; if it is a goal state, the solution is returned. Otherwise, the algorithm generates child nodes for all neighbor states and inserts them into the frontier, continuing until the frontier is empty or a solution is found."
+    },
+    {
+      "slide": 47,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state space by maintaining a frontier of nodes, starting with the initial state. The algorithm repeatedly selects and removes a node from the frontier; if it is a goal state, the solution is returned. Otherwise, the algorithm generates child nodes for all neighbor states and inserts them into the frontier, continuing until the frontier is empty or a solution is found."
+    },
+    {
+      "slide": 48,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state space by initializing a frontier with the start node and iteratively selecting nodes for expansion. The algorithm checks if the current node's state is a goal; if not, it generates child nodes from neighbor states and inserts them into the frontier. This process repeats until a solution is found or the frontier becomes empty, returning failure if no path exists."
+    },
+    {
+      "slide": 49,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state space by maintaining a frontier of nodes, starting with the initial state. The algorithm repeatedly selects and removes a node from the frontier; if it is a goal state, the solution is returned. Otherwise, the algorithm generates child nodes for each neighbor state and inserts them into the frontier, continuing until the frontier is empty or a solution is found."
+    },
+    {
+      "slide": 50,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state space by maintaining a frontier of nodes, starting with the initial state. The algorithm iteratively selects and removes a node from the frontier; if it is a goal state, the solution is returned. Otherwise, all neighboring states are generated as child nodes and inserted into the frontier until the frontier is empty or a solution is found."
+    },
+    {
+      "slide": 51,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state graph by maintaining a frontier of nodes, starting with the initial state. The algorithm repeatedly selects and removes a node from the frontier; if it is a goal state, the solution is returned. Otherwise, the algorithm generates child nodes for each neighbor state and inserts them into the frontier until the frontier is empty or a solution is found."
+    },
+    {
+      "slide": 52,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state graph by maintaining a frontier of nodes, starting with the initial state. The algorithm repeatedly selects and removes a node from the frontier; if it is a goal state, the solution is returned. Otherwise, it generates child nodes for all neighbor states and inserts them into the frontier, continuing until the frontier is empty or a solution is found."
+    },
+    {
+      "slide": 53,
+      "title": "On-demand tree search",
+      "summary": "The `TREE-SEARCH` function performs an on-demand tree search by initializing a frontier with the start node and iteratively selecting nodes for expansion. It checks if a selected node's state is a goal; if not, it generates child nodes from neighbor states and inserts them into the frontier until a solution is found or the frontier is empty. This process uses a 4-state graph example to illustrate how nodes like `<S>` expand into children such as `<S,b>`."
+    },
+    {
+      "slide": 54,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state space by maintaining a frontier of nodes, starting with the initial state. The algorithm repeatedly selects and removes a node from the frontier; if it is a goal state, the solution is returned. Otherwise, the algorithm generates child nodes for all neighbor states and inserts them into the frontier, continuing until the frontier is empty or a solution is found."
+    },
+    {
+      "slide": 55,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a graph by expanding nodes only when selected from the frontier. The algorithm initializes with the start node and iteratively selects a node to check for the goal state; if not found, it generates child nodes from neighbor states and inserts them into the frontier. This process continues until a solution is returned or the frontier becomes empty, resulting in failure."
+    },
+    {
+      "slide": 56,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a graph by expanding nodes only when selected from the frontier. The algorithm initializes with the start state and iteratively selects a node to check for goal status; if not a goal, it generates child nodes via neighbor states and inserts them into the frontier. This process repeats until a solution is found or the frontier becomes empty, returning failure otherwise."
+    },
+    {
+      "slide": 57,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a graph by maintaining a frontier of nodes, starting with the initial state. The algorithm repeatedly selects and removes a node from the frontier; if it is a goal state, the solution is returned. Otherwise, the algorithm generates child nodes for each neighbor state and inserts them into the frontier, continuing until the frontier is empty or a solution is found."
+    },
+    {
+      "slide": 58,
+      "title": "On-demand tree search",
+      "summary": "On-demand tree search explores a state space by maintaining a frontier of nodes, starting with the initial state. The algorithm iteratively selects and removes a node from the frontier; if it is a goal state, the solution is returned. Otherwise, the algorithm generates child nodes for each neighbor state and inserts them into the frontier, repeating until the frontier is empty or a solution is found."
+    },
+    {
+      "slide": 59,
+      "title": "Quiz: State Space Graphs vs. Search Trees",
+      "summary": "This slide presents a quiz asking for the size of the search tree generated from a specific 4-state graph starting at node S. The professor explains that while the state-space graph contains all states and transitions, the algorithm constructs a search tree where the start state serves as the root. In computer science, this tree is visualized with the root at the top, branching out to represent possible outcomes from the initial state."
+    },
+    {
+      "slide": 60,
+      "title": "Quiz: State Space Graphs vs. Search Trees",
+      "summary": "This slide presents a quiz comparing state space graphs and search trees using a specific 4-state graph containing nodes S, G, a, and b. It asks students to determine the size of the search tree generated from the start node S, highlighting that unlike the finite graph, the search tree can grow infinitely due to repeated states. The slide emphasizes this concept with the quote, \"Those who don't know history are doomed to repeat it,\" illustrating how search trees fail to recognize previously visited nodes without explicit cycle detection."
+    },
+    {
+      "slide": 61,
+      "title": "func%on GENERIC-SEARCH(problem) # return a solu=on or failure",
+      "summary": "The `GENERIC-SEARCH` function implements an on-demand tree search with loop detection by maintaining a frontier of nodes and a closed set of visited states. It iteratively selects a node from the frontier, checks if it satisfies the goal condition, and adds unvisited neighbors to the frontier while tracking explored states to prevent cycles. Although termed \"tree search\" here, this algorithm functions as graph search in contexts like CS188 due to its ability to handle general graphs via the closed set mechanism."
+    },
+    {
+      "slide": 62,
+      "title": "Generic Search",
+      "summary": "Generic Search"
+    },
+    {
+      "slide": 63,
+      "title": "Example: route-?nding in Romania",
+      "summary": "Slide 63 introduces the \"route-finding in Romania\" example, which serves as a standard problem domain for illustrating search algorithms. The slide text explicitly states this title. Consequently, the content is limited to identifying this scenario as the designated example without elaboration on its mechanics or solution."
+    },
+    {
+      "slide": 64,
+      "title": "Example: Traveling in Romania",
+      "summary": "The \"Traveling in Romania\" example defines a search problem where the state space consists of cities, starting from the initial state of Arad. Actions involve moving to an adjacent city, with the transition model ensuring arrival at that city and the goal test checking if the current state is Bucharest. The action cost corresponds to the road distance between cities, and the solution is a sequence of actions reaching the goal."
+    },
+    {
+      "slide": 65,
+      "title": "Crea=ng the search tree",
+      "summary": "Crea=ng the search tree frontier"
+    },
+    {
+      "slide": 66,
+      "title": "Crea=ng the search tree",
+      "summary": "Slide 66 introduces the concept of creating a search tree, specifically highlighting the distinction between the frontier and the explored set. The slide text identifies these two components as central to the process of constructing the search tree structure."
+    },
+    {
+      "slide": 67,
+      "title": "Crea=ng the search tree",
+      "summary": "Slide 67 introduces the concept of creating a search tree, specifically highlighting the distinction between the frontier and the explored set. The slide text identifies these two components as central to the process of constructing the search structure."
+    },
+    {
+      "slide": 68,
+      "title": "Key concepts",
+      "summary": "The frontier or fringe comprises the set of all nodes currently available for expansion. Node expansion involves generating all successor nodes based on available actions, while the search strategy determines which specific node is expanded next. This selection mechanism represents the central question in defining a search algorithm."
+    },
+    {
+      "slide": 69,
+      "title": "RECAP: Pac-Man as an Agent",
+      "summary": "This slide recaps Pac-Man as an agent interacting with its environment through sensors and actuators to generate percepts and actions. While the full world state includes every detail like walls, score, and Pac-Man's orientation, the agent models only a relevant subset of this information. Specifically, details such as Pac-Man's facing orientation are irrelevant to the game's dynamics and are excluded from the agent's reasoning process."
+    }
+  ]
+}

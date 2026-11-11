@@ -1,0 +1,965 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 4: Neural architectures for sentence processing (27 Oct)",
+    "section_label": "Slide",
+    "completed": 106,
+    "total": 106,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "faculty of arts",
+      "summary": "This lecture introduces the fourth session on neural architectures for sentence processing within the Faculty of Arts' Computational Linguistics course. Delivered by Tim Van de Cruys on Tuesday, October 20, 2026, the session focuses on how neural models handle linguistic structures.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "Reminder",
+      "summary": "A neuron functions as a logistic regression unit, processing inputs through weights and a bias to produce an output via an activation function. By feeding an input vector into multiple such units, we generate an output vector that can serve as the input for subsequent layers of logistic regression functions. This stacking mechanism forms the basis of multi-layer neural architectures, allowing complex transformations of data through sequential processing stages.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 3,
+      "title": "Feed-forward",
+      "summary": "This slide defines a feed-forward architecture as a multi-layer perceptron with two hidden layers, where the input $x$ is transformed through weighted sums and activation functions to produce output $y$. The network's parameters ($\\theta$) consist of weights ($W_1, W_2, W_3$) and biases ($b_1, b_2$), which are learned during training. The use of multiple hidden layers in this structure is explicitly identified as the defining characteristic of deep learning.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 4,
+      "title": "Word embeddings",
+      "summary": "Word embeddings represent each word $i$ as a small, dense vector $v_i \\in \\mathbb{R}^d$, where the dimension $d$ typically ranges from 50 to 1000. These vectors form a matrix of size $V \\times d$ (vocabulary by embedding size), effectively mapping words into a real-valued, low-dimensional space. A core property of this representation is that semantically similar words are positioned close together, resulting in similar vector embeddings.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 5,
+      "title": "Feed-forward network",
+      "summary": "A feed-forward network for language modeling predicts the next word in a sequence using one non-linear hidden layer and a softmax classification layer. During training, parameters (weights) are tuned to maximize the probability of the correct next word. By mastering this prediction task on vast data, the model implicitly learns to solve diverse NLP tasks like sentiment analysis, question answering, and summarization without explicit task-specific training.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 6,
+      "title": "Feed-forward network",
+      "summary": "This feed-forward network performs named entity recognition by predicting tags for each token based on a context window including the current, previous, and next words. The architecture utilizes one non-linear hidden layer followed by a softmax classification layer to optimize the probability of correct tags, such as identifying location boundaries. Inputs consist of standard non-contextualized token embeddings combined with position information, and optionally segment embeddings, to encode necessary contextual features for the task.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 7,
+      "title": "Feed-forward network",
+      "summary": "This section introduces the feed-forward network as a method for word segmentation, citing Pei et al. (2014).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 8,
+      "title": "Encoding sentences",
+      "summary": "To encode variable-length sentences for fixed-dimensional feed-forward networks, three architectures address the challenge of representing sequences: Continuous Bag of Words (CBOW) sums embedding vectors but loses ordering information; Recurrent Neural Networks use connections to encode sentence history; and the Transformer architecture employs self-attention, allowing tokens to attend to all other tokens for contextualization. While CBOW is simple, Transformers are now standard in large language models because they effectively capture relationships across the entire sequence without relying on sequential processing.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 9,
+      "title": "CBOW: induction of embeddings",
+      "summary": "In the CBOW model, the current word is predicted from its surrounding context words by summing their corresponding embeddings. This prediction relies on calculating the pairwise sum of values for each feature across the context vectors. The provided transcript discusses sentence-level inference tasks like entailment and semantic similarity using class tokens, which are distinct from the specific word-prediction mechanism described in this slide's CBOW definition.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 10,
+      "title": "CBOW: sentiment classification",
+      "summary": "CBOW extends to sentiment classification by predicting sentiment from the words in a sentence or document. The model generates this prediction by summing the context embeddings, specifically performing a pairwise addition of corresponding embedding features. This summation approach allows the architecture to handle inputs with a variable number of words, such as the example phrase \"i like this movie,\" to output a probability distribution for sentiments like positive.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 11,
+      "title": "Recurrent neural network",
+      "summary": "Unlike CBOW models which lack ordering and structure, Recurrent Neural Networks (RNNs) are designed to represent arbitrarily sized structured inputs as fixed-size vectors. This architecture specifically pays attention to the inherent structural properties of the data, enabling it to handle sequential information that non-structured models cannot process effectively.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 12,
+      "title": "Recurrent neural network",
+      "summary": "A recurrent neural network model processes sequential data by combining the current word input ($x_1$) with the previous hidden state ($a_0$) to generate the current hidden layer ($a_1$) via weight matrices $U$ and $W$, followed by a sigmoid activation function. The final output probability distribution ($y_1$) is derived from this hidden state using weight matrix $V$ and a softmax function. This architecture explicitly captures temporal dependencies through the recurrence of the hidden layer across timesteps.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 13,
+      "title": "Recurrent neural network",
+      "summary": "This slide illustrates a recurrent neural network architecture designed for language modeling, where the current input word is combined with the previous context to generate a prediction. The model utilizes word embeddings and weight matrices (W, U, V) to process the current word at time $t$ alongside the hidden state from time $t-1$, ultimately producing a distribution over possible next words. This structure enables the network to maintain temporal dependencies by feeding prior contextual information forward through the sequence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 14,
+      "title": "Recurrent neural network",
+      "summary": "Slide 14 introduces the recurrent neural network (RNN) architecture specifically applied to language modeling. The visual representation depicts a sequence of inputs (\"I\", \"am\", \"think\", \"would\") processed through hidden states ($a_0$ to $a_m$) using weight matrices $U$, $W$, and $V$ to generate outputs ($y$). This structure illustrates how RNNs maintain temporal dependencies by passing information from previous time steps to subsequent ones within a sequence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 15,
+      "title": "Recurrent neural network",
+      "summary": "Slide 15 introduces the Recurrent Neural Network (RNN) as a language model architecture. The visual representation depicts the network's internal state transitions, showing how inputs like \"starting,\" \"watching,\" and \"not\" are processed through weight matrices ($W$, $U$) to generate outputs such as \"am\" and \"I\". This diagram illustrates the core mechanism where previous activations influence current predictions within a sequence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 16,
+      "title": "Recurrent neural network",
+      "summary": "This slide introduces the Recurrent Neural Network (RNN) as a language model architecture, illustrated by the sequential processing of the sentence \"I am watching a television football\". The diagram depicts how the network maintains internal states across time steps to handle variable-length input sequences, a core capability for modeling linguistic context in computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 17,
+      "title": "Recurrent neural network",
+      "summary": "This slide introduces the Recurrent Neural Network (RNN) as a language model architecture, illustrated by the sequence \"I am watching television\". The diagram depicts the network processing tokens like \"television,\" \"and,\" and \"but\" alongside a special \"<stop>\" token to manage sentence boundaries. This visual representation demonstrates how RNNs handle sequential data in computational linguistics by maintaining context across time steps for tasks such as text generation or prediction.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 18,
+      "title": "Recurrent neural network",
+      "summary": "A recurrent neural network functions as a language model by acting as a sentence encoder. The architecture processes input sequences through hidden states, where the current state $a_1$ is computed from the previous state $a_0$ and the current input $I$ using weight matrices $W$ and $U$. This mechanism allows the network to maintain context across time steps, effectively encoding entire sentences into a representation suitable for language modeling tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 19,
+      "title": "Recurrent neural network",
+      "summary": "A recurrent neural network functions as a language model that acts as a sentence encoder. This architecture processes sequential input, such as the word sequence \"I am I,\" by maintaining internal states across time steps to capture contextual dependencies within the sentence structure.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 20,
+      "title": "Recurrent neural network",
+      "summary": "A recurrent neural network functions as a language model that acts as a sentence encoder. The architecture processes sequential input, such as the phrase \"I am watching,\" by maintaining internal states across time steps to capture contextual dependencies within the sentence structure. This mechanism allows the network to encode entire sentences rather than treating words in isolation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 21,
+      "title": "Recurrent neural network",
+      "summary": "A recurrent neural network functions as a language model that acts as a sentence encoder. The architecture processes sequential input, such as the phrase \"I am watching television,\" by transforming individual words into vector representations through weight matrices (U and W) to capture contextual dependencies across the sequence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 22,
+      "title": "Recurrent neural network",
+      "summary": "A recurrent neural network functions as a language model and sentence encoder that processes sequential input, such as the phrase \"I am watching television\". By applying weight matrices (W and U) across time steps, the architecture aggregates information to capture the entire sentence's meaning within a single large vector representation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 23,
+      "title": "Recurrent neural network",
+      "summary": "Slide 23 illustrates an encoder-decoder recurrent neural network architecture performing sequence-to-sequence translation. The diagram depicts the French input sequence \"je le la television\" being processed through weight matrices (W, U, V) and biases (b0, b1) to generate the English output \"I am watching television,\" demonstrating how RNNs map variable-length source sequences to target sequences in computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 24,
+      "title": "Recurrent neural network",
+      "summary": "Slide 24 introduces the recurrent neural network architecture, specifically highlighting an encoder-decoder configuration. The diagram illustrates the flow of input sequences (represented by French words like \"je,\" \"regarde,\" \"cherche,\" and \"viens\") through weight matrices (U, V) and biases (b1, b2) to generate outputs. This visual representation demonstrates how recurrent networks process sequential data within a computational linguistics context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 25,
+      "title": "Recurrent neural network",
+      "summary": "Slide 25 introduces the Recurrent Neural Network (RNN) within an encoder-decoder architecture, visually depicting the flow of input $x$ and output $y$ through weight matrices ($W$, $U$, $V$) and biases ($b_2$, $b_3$). The slide includes French example tokens (\"je\", \"regarde\", \"le\", \"la\", \"un\") to illustrate sequence processing.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 26,
+      "title": "Recurrent neural network",
+      "summary": "Slide 26 introduces the Recurrent Neural Network (RNN) within an encoder-decoder architecture, illustrating a sequence-to-sequence translation task. The diagram depicts input tokens (\"je regarde la la montre télévision météo\") being processed through weight matrices (U, V, W) and biases (b3, b4) to generate output representations (x, y). This visual example demonstrates how RNNs handle sequential data in computational linguistics by encoding source sentences into a context vector for decoding.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 27,
+      "title": "Recurrent neural network",
+      "summary": "This slide illustrates a recurrent neural network configured as an encoder-decoder architecture, featuring weight matrices (W, V, U) and biases (b4, b5) that process sequential inputs. The example demonstrates the model generating the French sentence \"je regarde la télévision\" (\"I watch television\") followed by conjunctions and a stop token, highlighting how RNNs handle variable-length sequences in computational linguistics tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 28,
+      "title": "Recurrent neural network",
+      "summary": "Recurrent neural networks are trained as very deep networks with shared parameters using backpropagation through time. Supervision varies by architecture: acceptors rely on the final state, transducers generate an output for each input (e.g., language modeling), and encoder-decoder systems use one RNN to encode a sequence into a vector and another to decode it (e.g., machine translation).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 29,
+      "title": "Recurrent neural network",
+      "summary": "A bi-directional recurrent neural network processes an input sequence in both forward and backward directions using separate RNNs. The final representation is formed by concatenating the forward and backward states, enabling the model to capture information from both past history and future context simultaneously.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 30,
+      "title": "Concrete RNN architectures",
+      "summary": "This slide introduces concrete Recurrent Neural Network (RNN) architectures, specifically highlighting the Simple RNN as a foundational model. The visual content is sourced from colah.github.io, providing a standard reference for understanding basic RNN structures within computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 31,
+      "title": "Concrete RNN architectures",
+      "summary": "Simple Recurrent Neural Networks (RNNs) are limited in practice because they can only remember a narrow context due to the vanishing gradient problem. To address this, Long Short-Term Memory (LSTM) networks utilize a complex architecture specifically designed to capture long-term dependencies that standard RNNs cannot retain.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 32,
+      "title": "Recurrence: difficulties",
+      "summary": "Recurrent Neural Networks (RNNs) process sentences sequentially, word by word, which creates significant challenges. Because information from the start of a sequence must persist through many processing steps, capturing long-distance dependencies becomes difficult in practice. Furthermore, this sequential nature prevents parallel computation, as each step must wait for the previous one to complete before proceeding.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 33,
+      "title": "Bottleneck",
+      "summary": "In standard encoder-decoder architectures, the \"bottleneck\" problem arises because the entire meaning of a sentence is compressed into a single fixed-length vector, regardless of input length. This raises questions about whether a uniform vector size can adequately represent sentences of vastly different lengths, such as two-word versus thirty-word inputs. The proposed solution is to replace this single vector with an attention mechanism that allows each decoder prediction to dynamically attend to the full range of intermediate encoder states.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 34,
+      "title": "Recurrent neural network",
+      "summary": "This slide introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence modeling for tasks like attention mechanisms and machine translation. The visual example demonstrates how the network processes sequential English inputs (\"I am watching television\") to generate corresponding French outputs (\"je regarde\"), highlighting the flow of information through weight matrices (W, U, V) and biases (b1, b2) across time steps.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 35,
+      "title": "Recurrent neural network",
+      "summary": "This slide introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence modeling for tasks like attention mechanisms and machine translation. The visual example demonstrates how the network processes sequential inputs such as \"I am watching television\" or French phrases like \"je regarde,\" mapping them through weight matrices (W, U, V) and biases (b1, b2) to generate outputs (y). This structure highlights the RNN's capacity to handle temporal dependencies in computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 36,
+      "title": "Recurrent neural network",
+      "summary": "Slide 36 introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence processing through English and French examples like \"I am watching television\" and \"je regarde\". The diagram depicts the network's internal structure with weight matrices (W, U, V) and biases (b1, b2) that process input sequences to generate outputs, highlighting the mechanism for handling temporal dependencies in computational linguistics tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 37,
+      "title": "Recurrent neural network",
+      "summary": "Slide 37 introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence modeling for tasks like machine translation. The example demonstrates how an English input sequence (\"I am watching television\") is processed to generate a corresponding French output sequence (\"je regarde\"), highlighting the network's ability to handle variable-length inputs and outputs through recurrent connections.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 38,
+      "title": "Recurrent neural network",
+      "summary": "Slide 38 introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence modeling for tasks like machine translation. The visual example demonstrates how an RNN processes a temporal input sequence (\"I am watching television\") to generate a corresponding output sequence (\"je regarde la télévision\"), highlighting the network's ability to handle variable-length data through recurrent connections.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 39,
+      "title": "Recurrent neural network",
+      "summary": "This slide introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence modeling for tasks like machine translation and attention mechanisms. The visual example demonstrates how the network processes sequential inputs such as \"I am watching television\" to generate corresponding outputs like \"je regarde,\" highlighting the flow of information through time steps with associated weights and biases.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 40,
+      "title": "Recurrent neural network",
+      "summary": "This slide introduces the Recurrent Neural Network (RNN) architecture, illustrating its application in sequence modeling and attention mechanisms for tasks like machine translation. The visual example demonstrates how an RNN processes sequential input tokens such as \"I am watching television\" to generate corresponding output tokens like \"je regarde,\" highlighting the network's ability to maintain context across time steps through internal state connections.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 41,
+      "title": "Attention in machine translation",
+      "summary": "Attention in machine translation",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 42,
+      "title": "Attention",
+      "summary": "Attention computes a weighted average of representations based on their relevance to the current prediction, often repeated across multiple heads to capture distinct aspects of meaning like world knowledge. While initially introduced within RNN encoder-decoder frameworks to resolve the bottleneck problem, attention is fundamentally a general mechanism capable of replacing recurrence altogether.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 43,
+      "title": "Contextualized word embeddings",
+      "summary": "Contextualized word embeddings address the limitations of static standard embeddings by generating unique representations for each word occurrence based on its specific context, thereby capturing polysemy. Models like ELMo and BERT achieve this through successive layers where tokens are progressively adapted using information from all other tokens in the sentence. This iterative process allows even special tokens to leverage the full sentence meaning, constructing increasingly refined contextualized representations for downstream tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 44,
+      "title": "ELMo",
+      "summary": "ELMo leverages language models to generate contextualized word embeddings by utilizing intermediate hidden states from RNNs, replacing static representations with dynamic ones that adapt meaning based on sentence context. Although quickly superseded by transformer models, this core concept of contextualization remains central to modern architectures. The process transforms non-contextualized inputs into representations where words like \"watching\" acquire specific meanings derived from their surrounding tokens, enabling more accurate predictions in task-specific neural networks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 45,
+      "title": "ELMo",
+      "summary": "ELMo (Embeddings from Language Models) utilizes a bidirectional architecture composed of stacked Long Short-Term Memory (LSTM) networks to process text. As illustrated by the example sentence \"I am watching television,\" the model generates context-dependent word representations by running LSTMs in both forward and backward directions, capturing information from preceding and succeeding words simultaneously.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 46,
+      "title": "ELMo",
+      "summary": "ELMo (Embeddings from Language Models) utilizes a bidirectional architecture composed of stacked Long Short-Term Memory (LSTM) networks to process text. As illustrated by the example sentence \"I am watching television,\" the model generates context-dependent word representations by running LSTMs in both forward and backward directions, capturing information from preceding and succeeding words simultaneously.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 47,
+      "title": "ELMo",
+      "summary": "ELMo (Embeddings from Language Models) utilizes bidirectional LSTMs to generate context-sensitive word representations, as illustrated by the sentence \"I am watching television\". The model processes input through multiple LSTM layers, producing distinct vector outputs for each word that capture its specific meaning within the surrounding context. This architecture contrasts with static embeddings by dynamically adjusting word vectors based on their position and usage in a sequence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 48,
+      "title": "ELMo",
+      "summary": "ELMo (Embeddings from Language Models) utilizes a bidirectional architecture composed of stacked Long Short-Term Memory (LSTM) networks to process text. As illustrated by the example sentence \"I am watching television,\" the model generates contextualized word representations by running LSTMs in both forward and backward directions, capturing dependencies from preceding and succeeding words simultaneously.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 49,
+      "title": "Attention is all you need",
+      "summary": "The \"Attention is all you need\" paper introduces the Transformer architecture by radically eliminating recurrence, which in models like ELMo causes slow, sequential processing and limited context. Originally developed for machine translation, this attention-only approach has become the fundamental building block of modern Large Language Models (LLMs).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 50,
+      "title": "Transformer",
+      "summary": "The Transformer serves as the fundamental building block of Large Language Models (LLMs), functioning like an advanced feedforward network centered on a self-attention mechanism. This core architecture computes contextualized embeddings by allowing each token to attend to all other tokens in a sentence, thereby resolving word ambiguity based on surrounding context. While Transformers support bi-directional modeling, they are primarily utilized here for left-to-right language modeling, where the model predicts the next word from a probability distribution over the vocabulary using learned query, key, and value matrices.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 51,
+      "title": "Transformer",
+      "summary": "The Transformer serves as the fundamental building block of Large Language Models, functioning as an advanced feedforward network driven by attention mechanisms. It generates contextualized word embeddings by analyzing surrounding words, effectively distinguishing meanings in sentences like \"The astronomer watched the star\" versus \"The audience watched the star\". While primarily utilized for left-to-right language modeling, this section first introduces bi-directional language modeling to explain its core mechanics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 52,
+      "title": "Transformer",
+      "summary": "The Transformer serves as the fundamental building block of Large Language Models, functioning as an advanced feedforward network driven by attention mechanisms. It generates contextualized word embeddings by analyzing surrounding words, allowing it to distinguish meanings in sentences like \"the astronomer watched the star\" versus \"the audience watched the star\". While Transformers are primarily used for left-to-right language modeling, this section first examines bi-directional language modeling to establish foundational concepts.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 53,
+      "title": "BERT",
+      "summary": "BERT is a Transformer-based NLP model introduced in 2018 that achieved state-of-the-art results by utilizing bi-directional context representations. It employs a two-stage approach: general pre-training on language modeling tasks followed by fine-tuning for specific applications, significantly outperforming previous architectures like BiLSTM and ELMo on benchmarks such as sentiment analysis and natural language inference. The model's performance scales positively with increased pre-training data and larger model sizes, though the professor notes that encoder-like models are now less dominant compared to newer large language models.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 54,
+      "title": "Bi-directional encoding",
+      "summary": "Bi-directional encoding utilizes multiple Long Short-Term Memory (LSTM) units to process sequences by capturing context from both past and future directions simultaneously. As illustrated with the sentence \"I am watching television,\" this approach allows the model to encode the current word using information from preceding tokens as well as subsequent ones, enhancing the representation of the input sequence before generating the output.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 55,
+      "title": "Bi-directional encoding",
+      "summary": "Bi-directional encoding utilizes Long Short-Term Memory (LSTM) networks to process sequences by capturing context from both past and future directions simultaneously. As illustrated by the example sentence \"I am watching television,\" this approach allows the model to encode each word using information from preceding tokens as well as subsequent ones, enhancing the representation of the input sequence for downstream tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 56,
+      "title": "Bi-directional encoding",
+      "summary": "Slide 56 introduces the concept of bi-directional encoding within the Transformer architecture, illustrated by the example sentence \"I am watching television\". The slide visually represents this mechanism through repeated references to the transformer model, indicating its capacity to process context from both directions simultaneously.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 57,
+      "title": "Bi-directional encoding",
+      "summary": "Bi-directional encoding in transformers allows the model to utilize context from both preceding and succeeding tokens when predicting a masked word. As illustrated by the example \"I am [MASK] watching television,\" the architecture processes the entire sentence simultaneously, enabling the transformer to infer the missing term based on the full surrounding linguistic environment rather than just one direction.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 58,
+      "title": "Bi-directional encoding",
+      "summary": "Bi-directional encoding in transformers involves masking approximately 15% of input words to train the model to predict them using context from both directions. For instance, in the sentence \"I am [MASK] watching television,\" the model learns to infer the missing word by analyzing surrounding tokens simultaneously. This approach enables the architecture to capture full contextual dependencies rather than relying on unidirectional information flow.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 59,
+      "title": "Transformer",
+      "summary": "Transformers generate contextualized representations by applying multiple layers of self-attention and feed-forward computations to non-contextualized inputs, enabling efficient parallel processing instead of sequential methods. The core self-attention mechanism utilizes query and key vectors to allow tokens to adapt their meanings based on the entire input context. Successive layers progressively refine these representations, which can then be used for various NLP tasks like sentiment analysis or semantic similarity classification.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 60,
+      "title": "Transformer: self-attention",
+      "summary": "Slide 60 introduces the concept of self-attention within the Transformer architecture as part of a Computational Linguistics lecture. The slide text includes the example phrase \"I am television watching,\" which likely illustrates a sequence or token arrangement relevant to attention mechanisms. Consequently, the material serves primarily as a section header.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 61,
+      "title": "Transformer: self-attention",
+      "summary": "In Transformer translation tasks like \"Je regarde la télévision,\" self-attention allows the model to attend to previously predicted tokens, such as the start symbol, using query and key vectors to track what has already been translated. Simultaneously, cross-attention enables the current token to look back at all encoder representations from the source sentence. This mechanism connects the decoder's query vector to the key vectors of contextualized source words like \"Je,\" \"regarde,\" and \"télévision\" to inform the next prediction.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 62,
+      "title": "Transformer: self-attention",
+      "summary": "Slide 62 introduces the concept of self-attention within the Transformer architecture, featuring the example phrase \"I am television watching\" to illustrate token relationships.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 63,
+      "title": "Transformer: self-attention",
+      "summary": "Slide 63 introduces the concept of self-attention within Transformer architectures, illustrated by the example sentence \"I am television watching\". The slide displays associated numerical values (15, 96, 11, 33/51) alongside this text.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 64,
+      "title": "Transformer: self-attention",
+      "summary": "This slide introduces the concept of self-attention within Transformer architectures, illustrated by the example sentence \"I am television watching\". The text highlights that this mechanism is a core component of modern computational linguistics models.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 65,
+      "title": "Transformer: self-attention",
+      "summary": "Slide 65 introduces the concept of self-attention within Transformers, illustrated by a specific example sentence: \"I am television watching\". The slide displays a sequence of numerical values (.08, .52, .34, .06) associated with this text, likely representing attention weights or probabilities for the tokens.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 66,
+      "title": "Transformer: self-attention",
+      "summary": "No explanatory text, definitions, examples, or professor transcript are available in the supplied sources to describe the mechanism of self-attention within Transformers.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 67,
+      "title": "Transformer: self-attention",
+      "summary": "Slide 67 introduces the concept of self-attention within the Transformer architecture as part of a Computational Linguistics lecture. The slide text includes the example phrase \"I am television watching,\" which likely illustrates a sequence or token arrangement relevant to attention mechanisms.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 68,
+      "title": "BERT",
+      "summary": "BERT",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 69,
+      "title": "BERT",
+      "summary": "BERT",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 70,
+      "title": "BERT",
+      "summary": "Slide 70 introduces the BERT model using the example sentence \"I am television watching,\" which is formatted with special tokens [CLS] and [SEP]. This slide serves as a visual representation of how input text is structured for BERT processing within the Computational Linguistics course.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 71,
+      "title": "Transformer",
+      "summary": "BERT employs the WordPiece algorithm to generate a vocabulary of subword units, balancing computational efficiency with the ability to handle rare words and neologisms by combining smaller parts. The process initializes with all characters and iteratively merges the most frequent substrings until a predefined limit is reached, ensuring that common full words retain their specific embeddings rather than being inefficiently reconstructed from individual letters. This frequency-based approach guarantees no out-of-vocabulary errors while maintaining a manageable vocabulary size for faster processing.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 72,
+      "title": "Transformer",
+      "summary": "Because Transformers process words in parallel via self-attention rather than sequentially like recurrent networks, they inherently lose information about word order. To solve this, models incorporate positional encodings: additional vectors representing a token's specific position (e.g., zero, one, two) that are summed with the initial token embeddings. This addition ensures the model retains awareness of the sequence structure despite the parallel computation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 73,
+      "title": "BERT",
+      "summary": "BERT utilizes a pre-training and fine-tuning paradigm where the model first learns general language patterns via masked language modeling on large corpora. A special `<CLS>` token is prepended to inputs, with its final embedding serving as a representation of the entire sentence for downstream tasks. While this representation can be used directly, standard practice involves adding a softmax classification layer and fine-tuning all model parameters on small, labeled datasets to adapt the pre-trained knowledge to specific objectives like sentiment analysis.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 74,
+      "title": "BERT",
+      "summary": "Slide 74 introduces BERT as a model specifically designed for Natural Language Processing (NLP) tasks within the context of the Computational Linguistics course. The slide serves as a section header indicating the transition to this topic, noting the current lecture progress at 38 out of 51 slides and providing the instructor's contact information.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 75,
+      "title": "BERT",
+      "summary": "Slide 75 introduces the BERT model by referencing its performance results on the GLUE Multi-Task Benchmark, as established by Wang et al. in 2018. This benchmark serves as a standard evaluation framework within computational linguistics for assessing natural language understanding capabilities across diverse tasks. The slide highlights these specific results to contextualize BERT's effectiveness relative to prior models.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 76,
+      "title": "Transformer for Language Generation",
+      "summary": "While transformer encoders like BERT excel at inducing language representations through bidirectional encoding, this capability is unsuitable for generation tasks. To enable next-word prediction, transformers must be modified to attend exclusively to previous positions rather than future ones. Consequently, these models generate the most probable next token based solely on previously predicted tokens, a mechanism fundamental to all large language models.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 77,
+      "title": "Causal attention",
+      "summary": "Causal attention governs the mechanism in left-to-right causal language modeling, ensuring that when processing a specific token $x_i$, the model attends only to all inputs up to and including $x_i$. This constraint prevents the model from accessing future tokens, maintaining the directional flow required for autoregressive generation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 78,
+      "title": "Transformer for Language Generation",
+      "summary": "Slide 78 illustrates a Transformer model performing language generation, displaying the input sequence \"I am television watching\" alongside special tokens like `<start>` and `[SEP]`. The output demonstrates the model's prediction of the next token in the sequence, specifically generating \"am television watching . I\". This example highlights how the architecture processes sequential text data to predict subsequent words within a computational linguistics context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 79,
+      "title": "Transformer for Language Generation",
+      "summary": "Slide 79 illustrates the input sequence structure for a Transformer model performing language generation, specifically showing the tokenization of the phrase \"I am television watching\". The example demonstrates the inclusion of special tokens, such as `<start>` and `[SEP]`, alongside the word tokens to format the input for the model. This visual representation highlights how raw text is converted into a structured sequence of tokens required for computational processing in language generation tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 80,
+      "title": "Transformer for Language Generation",
+      "summary": "This slide illustrates the input sequence structure for a Transformer model performing language generation, specifically showing how tokens like \"I\", \"am\", \"television\", and \"watching\" are combined with special markers such as `<start>` and `[SEP]`. The example demonstrates the arrangement of these elements to form a coherent input string that the model processes to predict subsequent words in the sequence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 81,
+      "title": "Transformer for Language Generation",
+      "summary": "Slide 81 illustrates the application of a Transformer model for language generation using the specific input sequence \"I am television watching\" followed by start and separator tokens. The example demonstrates how the model processes this text to generate subsequent tokens, such as the period and the pronoun \"I,\" within the context of a computational linguistics lecture.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 82,
+      "title": "Transformer for Language Generation",
+      "summary": "Slide 82 illustrates the application of a Transformer model for language generation using the specific input sequence \"I am television watching\" combined with special tokens `<start>` and `[SEP]`. The example demonstrates how the model processes this structured text to generate subsequent tokens, such as the period and the pronoun \"I\", within the context of computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 83,
+      "title": "GPT",
+      "summary": "GPT (Generative Pre-trained Transformer) models are trained on large corpora via next-word prediction, leveraging unlabelled data to acquire general language knowledge efficiently. While the fundamental architecture has remained consistent across iterations, successive versions like GPT-2 and GPT-3 have significantly increased in scale, growing from 117 million to 175 billion parameters respectively. This expansion in parameter count and training data volume represents the primary evolution of these models over recent years.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 84,
+      "title": "Conditional generation",
+      "summary": "This section introduces the concept of conditional generation, referencing the framework established by Jurafsky and Martin (2024).",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 85,
+      "title": "The power of scale",
+      "summary": "The power of scale in Large Language Models (LLMs) arises from applying the transformer architecture with vast numbers of parameters and extensive data. By focusing solely on the task of predicting words, these models inherently acquire the ability to solve diverse downstream tasks such as sentiment analysis, question answering, and summarization without explicit training for each specific function.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 86,
+      "title": "Examples",
+      "summary": "This slide illustrates how next-token prediction enables diverse tasks like sentiment analysis and factual retrieval. For the prompt \"The sentiment of the sentence 'The new Bond movie is fantastic' is:\", the model predicts the optimal label (negative, positive, or neutral) as the next token. Similarly, given \"The capital of France is,\" the model leverages its vast training data to generate the correct answer. This mechanism also extends to summarization, where the model attends to a long input document within the initial context to produce a concise summary.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 87,
+      "title": "Summarization",
+      "summary": "This slide illustrates summarization by contrasting a detailed news story about an entrepreneur selling Boston snow with its condensed version. The original text provides extensive context regarding the $89 price, shipping restrictions to New England, and the origin of the idea during record-breaking snowfall. In contrast, the summary extracts only the core facts: the product details, quantity, and specific geographic limitations, demonstrating how summarization reduces length while preserving essential information.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 88,
+      "title": "Three architectures for LLMs",
+      "summary": "Large language models utilize three primary architectures: the Encoder (e.g., BERT), which predicts masked words using bidirectional context and is typically fine-tuned with supervised data; the Decoder (e.g., GPT), which performs word prediction for tasks framed as sequential generation; and the Encoder-Decoder (e.g., T5), designed to map one sequence to another for applications like machine translation and speech recognition.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 89,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is the original Transformer design developed for machine translation and other sequence-to-sequence tasks. The encoder constructs bi-directional contextualized representations of the source input, while the decoder generates the target sequence left-to-right using self-attention on previous outputs and cross-attention to attend to the encoded source. This framework allows diverse NLP problems, such as speech recognition or text reconstruction in models like T5, to be reframed as mapping one sequence to another.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 90,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example where the input \"je regarde la télévision\" is processed to generate the output sequence \"<start> I am television watching\". This slide demonstrates how the model maps source language tokens to target language tokens, including the use of a special start token to initiate the generation process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 91,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example where the input \"je regarde la télévision\" is processed to generate the output sequence \"<start> I am television watching\". This slide demonstrates how the model maps source language tokens to target language tokens, including the use of a special start token to initiate generation. The example highlights the sequential nature of translating entire sentences within computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 92,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture processes input sequences, such as the French phrase \"je regarde la télévision,\" to generate corresponding output sequences in a target language, like \"I am watching television\". This example illustrates how the model maps source tokens to target tokens while utilizing special markers, such as `<start>`, to initiate the generation process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 93,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example where the input sequence \"je regarde la télévision\" is processed to generate the output \"I am watching television\". The model incorporates a special `<start>` token at the beginning of the generation process to initiate the decoding sequence. This slide demonstrates how the system transforms an encoded source representation into a target language sentence, highlighting the sequential nature of the output generation in computational linguistics tasks.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 94,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example where the input \"je regarde la télévision\" is processed to generate the output sequence \"<start> I am television watching\". This demonstration highlights how the model maps source language tokens to target language tokens, including the use of a special start token to initiate the generation process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 95,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example where the input sequence \"je regarde télévision la\" is processed to generate the output \"I am television watching\". The model incorporates a special `<start>` token to initiate the decoding process, demonstrating how sequential data is transformed from one language representation to another within computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 96,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example, where the input sequence \"je regarde la télévision\" is processed to generate the output \"I am watching television\". The model incorporates a special `<start>` token at the beginning of the generation process to initiate the decoding sequence. This slide demonstrates how the system maps an entire source sentence into a target sentence through this sequential mechanism.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 97,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example where the input sequence \"je regarde télévision la\" is processed to generate the output \"I am television watching,\" preceded by a special start token. This slide demonstrates how the model maps source language tokens to target language tokens sequentially, highlighting the fundamental mechanism of translating entire sentences rather than individual words in isolation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 98,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example where the input sequence \"je regarde télévision la\" is processed to generate the output \"I am television watching,\" preceded by a special start token. This demonstration highlights how the model maps source language tokens to target language tokens sequentially, forming the basis for sequence-to-sequence tasks in computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 99,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated by translating the French phrase \"je regarde la télévision\" into the English sentence \"I am watching television\". This example demonstrates how the model processes input tokens and generates output sequences, utilizing a special `<start>` token to initiate the decoding process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 100,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture is illustrated using a French-to-English translation example where the input \"je regarde la télévision\" is processed to generate the output sequence \"<start> I am television watching\". This demonstration highlights how the model maps source language tokens to target language tokens, including the use of a special start token to initiate generation. The slide serves as a concrete visualization of the sequential mapping process fundamental to encoder-decoder systems in computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 101,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture processes input sequences, such as the French phrase \"je regarde la télévision,\" to generate corresponding output sequences like the English translation \"I am watching television\". This model incorporates a special start token, denoted as `<start>`, to initialize the decoding process. The example illustrates how the system transforms source language tokens into target language tokens within computational linguistics applications.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 102,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture processes input sequences, such as the French phrase \"je regarde la télévision,\" to generate corresponding output sequences like the English translation \"I am watching television\". The model incorporates a special `<start>` token to initiate the decoding process and manages word order rearrangements, transforming the literal sequence into a grammatically correct target sentence.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 103,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture processes input sequences, such as the French phrase \"je regarde la télévision,\" to generate corresponding output sequences like \"I am watching television\". This example illustrates how the model handles tokenization and sequence alignment, including the use of special tokens like `<start>` and punctuation to structure the translation task within computational linguistics.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 104,
+      "title": "Encoder-decoder",
+      "summary": "The encoder-decoder architecture translates the French input \"je regarde la télévision\" into English by first generating a literal word-for-word sequence (\"I am television watching\") and then reordering it to produce the grammatically correct output \"am watching television\". This process is bounded by special start and stop tokens, illustrating how the model handles both translation and syntactic restructuring within a single generation framework.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 105,
+      "title": "T5",
+      "summary": "Slide 105 introduces T5, referencing the seminal 2020 paper by Raffel et al. titled \"Exploring the limits of transfer learning with a unified text-to-text transformer\". This model represents a key development in computational linguistics where diverse natural language processing tasks are framed as a single text-to-text problem to maximize transfer learning capabilities.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 106,
+      "title": "T5",
+      "summary": "Slide 106 introduces T5, referencing the seminal 2020 paper by Raffel et al. titled \"Exploring the limits of transfer learning with a unified text-to-text transformer\". This model represents a key development in computational linguistics where diverse natural language processing tasks are framed as a single text-to-text problem to maximize transfer learning capabilities. The slide serves as a citation marker for this foundational work within the course context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    }
+  ]
+}

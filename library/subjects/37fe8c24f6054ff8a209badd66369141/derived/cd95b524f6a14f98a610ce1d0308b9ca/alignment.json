@@ -1,0 +1,2881 @@
+{
+  "metadata": {
+    "paragraph_count": 44,
+    "method_counts": {
+      "semantic": 44
+    },
+    "semantic_threshold": 0.2
+  },
+  "paragraph_alignment": [
+    {
+      "paragraph_id": 1,
+      "slide": 8,
+      "start": 0.02,
+      "end": 76.02,
+      "start_time": "00:00:00",
+      "end_time": "00:01:16",
+      "confidence": 0.8521,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 3,
+      "slide": 10,
+      "start": 132.02,
+      "end": 209.58,
+      "start_time": "00:02:12",
+      "end_time": "00:03:30",
+      "confidence": 0.823,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 4,
+      "slide": 11,
+      "start": 209.58,
+      "end": 296.83,
+      "start_time": "00:03:30",
+      "end_time": "00:04:57",
+      "confidence": 0.8226,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 5,
+      "slide": 14,
+      "start": 296.83,
+      "end": 378.21,
+      "start_time": "00:04:57",
+      "end_time": "00:06:18",
+      "confidence": 0.8397,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 6,
+      "slide": 15,
+      "start": 378.21,
+      "end": 466.21,
+      "start_time": "00:06:18",
+      "end_time": "00:07:46",
+      "confidence": 0.6961,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 7,
+      "slide": 15,
+      "start": 466.21,
+      "end": 544.21,
+      "start_time": "00:07:46",
+      "end_time": "00:09:04",
+      "confidence": 0.918,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 8,
+      "slide": 15,
+      "start": 544.21,
+      "end": 623.9,
+      "start_time": "00:09:04",
+      "end_time": "00:10:24",
+      "confidence": 0.8401,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 9,
+      "slide": 19,
+      "start": 623.9,
+      "end": 702.88,
+      "start_time": "00:10:24",
+      "end_time": "00:11:43",
+      "confidence": 0.9013,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 10,
+      "slide": 21,
+      "start": 702.88,
+      "end": 802.86,
+      "start_time": "00:11:43",
+      "end_time": "00:13:23",
+      "confidence": 0.8387,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 11,
+      "slide": 22,
+      "start": 802.86,
+      "end": 892.8,
+      "start_time": "00:13:23",
+      "end_time": "00:14:53",
+      "confidence": 0.7589,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 12,
+      "slide": 24,
+      "start": 892.8,
+      "end": 971.39,
+      "start_time": "00:14:53",
+      "end_time": "00:16:11",
+      "confidence": 0.8032,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 13,
+      "slide": 26,
+      "start": 971.39,
+      "end": 1065.46,
+      "start_time": "00:16:11",
+      "end_time": "00:17:45",
+      "confidence": 0.7429,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 14,
+      "slide": 29,
+      "start": 1065.46,
+      "end": 1144.83,
+      "start_time": "00:17:45",
+      "end_time": "00:19:05",
+      "confidence": 0.776,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 15,
+      "slide": 30,
+      "start": 1144.83,
+      "end": 1279.71,
+      "start_time": "00:19:05",
+      "end_time": "00:21:20",
+      "confidence": 0.7694,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 16,
+      "slide": 31,
+      "start": 1279.71,
+      "end": 1356.06,
+      "start_time": "00:21:20",
+      "end_time": "00:22:36",
+      "confidence": 0.7587,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 17,
+      "slide": 12,
+      "start": 1356.06,
+      "end": 1420.06,
+      "start_time": "00:22:36",
+      "end_time": "00:23:40",
+      "confidence": 0.6661,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 19,
+      "slide": 59,
+      "start": 1472.0,
+      "end": 1531.02,
+      "start_time": "00:24:32",
+      "end_time": "00:25:31",
+      "confidence": 0.584,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 22,
+      "slide": 29,
+      "start": 1556.88,
+      "end": 1620.84,
+      "start_time": "00:25:57",
+      "end_time": "00:27:01",
+      "confidence": 0.7876,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 23,
+      "slide": 10,
+      "start": 1620.84,
+      "end": 1625.84,
+      "start_time": "00:27:01",
+      "end_time": "00:27:06",
+      "confidence": 0.4544,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 24,
+      "slide": 7,
+      "start": 1628.74,
+      "end": 1637.96,
+      "start_time": "00:27:09",
+      "end_time": "00:27:18",
+      "confidence": 0.5714,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 25,
+      "slide": 7,
+      "start": 1642.37,
+      "end": 1711.32,
+      "start_time": "00:27:22",
+      "end_time": "00:28:31",
+      "confidence": 0.7072,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 26,
+      "slide": 34,
+      "start": 1712.2,
+      "end": 1799.18,
+      "start_time": "00:28:32",
+      "end_time": "00:29:59",
+      "confidence": 0.8439,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 27,
+      "slide": 39,
+      "start": 1800.75,
+      "end": 1885.75,
+      "start_time": "00:30:01",
+      "end_time": "00:31:26",
+      "confidence": 0.821,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 28,
+      "slide": 56,
+      "start": 1885.75,
+      "end": 1955.75,
+      "start_time": "00:31:26",
+      "end_time": "00:32:36",
+      "confidence": 0.685,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 29,
+      "slide": 38,
+      "start": 1955.75,
+      "end": 2030.75,
+      "start_time": "00:32:36",
+      "end_time": "00:33:51",
+      "confidence": 0.7734,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 30,
+      "slide": 39,
+      "start": 2030.75,
+      "end": 2117.02,
+      "start_time": "00:33:51",
+      "end_time": "00:35:17",
+      "confidence": 0.8388,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 31,
+      "slide": 39,
+      "start": 2117.02,
+      "end": 2254.4,
+      "start_time": "00:35:17",
+      "end_time": "00:37:34",
+      "confidence": 0.6858,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 32,
+      "slide": 39,
+      "start": 2254.4,
+      "end": 2325.4,
+      "start_time": "00:37:34",
+      "end_time": "00:38:45",
+      "confidence": 0.6849,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 33,
+      "slide": 42,
+      "start": 2325.4,
+      "end": 2403.16,
+      "start_time": "00:38:45",
+      "end_time": "00:40:03",
+      "confidence": 0.801,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 34,
+      "slide": 42,
+      "start": 2403.16,
+      "end": 2491.94,
+      "start_time": "00:40:03",
+      "end_time": "00:41:32",
+      "confidence": 0.8672,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 35,
+      "slide": 39,
+      "start": 2491.94,
+      "end": 2571.72,
+      "start_time": "00:41:32",
+      "end_time": "00:42:52",
+      "confidence": 0.7677,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 36,
+      "slide": 29,
+      "start": 2571.72,
+      "end": 2723.62,
+      "start_time": "00:42:52",
+      "end_time": "00:45:24",
+      "confidence": 0.7557,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 37,
+      "slide": 48,
+      "start": 2723.94,
+      "end": 2792.0,
+      "start_time": "00:45:24",
+      "end_time": "00:46:32",
+      "confidence": 0.7928,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 38,
+      "slide": 49,
+      "start": 2792.48,
+      "end": 2866.82,
+      "start_time": "00:46:32",
+      "end_time": "00:47:47",
+      "confidence": 0.8317,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 39,
+      "slide": 54,
+      "start": 2866.82,
+      "end": 2922.8,
+      "start_time": "00:47:47",
+      "end_time": "00:48:43",
+      "confidence": 0.6741,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 40,
+      "slide": 52,
+      "start": 2922.8,
+      "end": 3002.64,
+      "start_time": "00:48:43",
+      "end_time": "00:50:03",
+      "confidence": 0.7707,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 41,
+      "slide": 54,
+      "start": 3002.66,
+      "end": 3063.46,
+      "start_time": "00:50:03",
+      "end_time": "00:51:03",
+      "confidence": 0.7992,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 42,
+      "slide": 53,
+      "start": 3063.46,
+      "end": 3130.77,
+      "start_time": "00:51:03",
+      "end_time": "00:52:11",
+      "confidence": 0.8029,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 43,
+      "slide": 54,
+      "start": 3130.77,
+      "end": 3278.46,
+      "start_time": "00:52:11",
+      "end_time": "00:54:38",
+      "confidence": 0.7719,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 44,
+      "slide": 54,
+      "start": 3278.46,
+      "end": 3382.63,
+      "start_time": "00:54:38",
+      "end_time": "00:56:23",
+      "confidence": 0.812,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 45,
+      "slide": 47,
+      "start": 3382.63,
+      "end": 3460.74,
+      "start_time": "00:56:23",
+      "end_time": "00:57:41",
+      "confidence": 0.8511,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 46,
+      "slide": 59,
+      "start": 3460.74,
+      "end": 3526.74,
+      "start_time": "00:57:41",
+      "end_time": "00:58:47",
+      "confidence": 0.8732,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 47,
+      "slide": 51,
+      "start": 3526.74,
+      "end": 3600.94,
+      "start_time": "00:58:47",
+      "end_time": "01:00:01",
+      "confidence": 0.8611,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 48,
+      "slide": 8,
+      "start": 3604.0,
+      "end": 3659.79,
+      "start_time": "01:00:04",
+      "end_time": "01:01:00",
+      "confidence": 0.7952,
+      "method": "semantic"
+    }
+  ],
+  "slides": [
+    {
+      "slide": 1,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 2,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 3,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 4,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 5,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 6,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 7,
+      "slide_time": "00:27:09",
+      "paragraph_ids": [
+        24,
+        25
+      ],
+      "paragraphs": [
+        {
+          "id": 24,
+          "start": 1628.74,
+          "end": 1637.96,
+          "start_time": "00:27:09",
+          "end_time": "00:27:18",
+          "text": "to 'helpfulization' here because there's no path from 'helpful' to anything other than 'helpfulness'.",
+          "segment_ids": [
+            611,
+            612
+          ],
+          "alignment": {
+            "paragraph_id": 24,
+            "slide": 7,
+            "start": 1628.74,
+            "end": 1637.96,
+            "start_time": "00:27:09",
+            "end_time": "00:27:18",
+            "confidence": 0.5714,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 25,
+          "start": 1642.37,
+          "end": 1711.32,
+          "start_time": "00:27:22",
+          "end_time": "00:28:31",
+          "text": "So this can be useful for, yeah, to recognize, for example, that words need to be corrected. But if you want to make it actually useful, you need to generalize this to finite-state transducers (FSTs), because it doesn't just tell you if it's a word in your language or if it's recognized by the machine; it can actually give you the analysis, the segmentation, and this tagging that gives you more useful information. So I think it's a great tool for generation, for generating the correct inflection of a lemma, for example. Yeah, so as I said, a limitation of these kinds of machines is that it requires linguists to tell you what are all the possibilities of your language. And if you have a new word that appears in the vocabulary, then you need to update your machine.",
+          "segment_ids": [
+            613,
+            614,
+            615,
+            616,
+            617,
+            618,
+            619,
+            620,
+            621,
+            622,
+            623,
+            624,
+            625,
+            626,
+            627,
+            628,
+            629,
+            630,
+            631,
+            632,
+            633
+          ],
+          "alignment": {
+            "paragraph_id": 25,
+            "slide": 7,
+            "start": 1642.37,
+            "end": 1711.32,
+            "start_time": "00:27:22",
+            "end_time": "00:28:31",
+            "confidence": 0.7072,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 8,
+      "slide_time": "00:00:00",
+      "paragraph_ids": [
+        1,
+        48
+      ],
+      "paragraphs": [
+        {
+          "id": 1,
+          "start": 0.02,
+          "end": 76.02,
+          "start_time": "00:00:00",
+          "end_time": "00:01:16",
+          "text": "Documents are clearly topically relevant, right? So if you instead lemmatize these documents, then you will identify that the three documents match this query. So lemmatization can be useful to improve, for example, search engines. And another indirect use of morphology is to inform subword tokenization. Remember in lecture 2, we saw that tokenization isn't how GPT-4o calls tokenized text. In some places it makes sense, but in others it's quite nonsensical. Why do we have a nonsensical tokenization? Nonsensical because, if you remember, GPT-4o is really the decisions of which strings of the word belong together, and this word is determined purely by frequency aspects, right? Frequency of co-occurring characters. So that turns into nonsensical tokenization, and we can instead try to improve subword tokenization so that it's morphologically informed.",
+          "segment_ids": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "alignment": {
+            "paragraph_id": 1,
+            "slide": 8,
+            "start": 0.02,
+            "end": 76.02,
+            "start_time": "00:00:00",
+            "end_time": "00:01:16",
+            "confidence": 0.8521,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 48,
+          "start": 3604.0,
+          "end": 3659.79,
+          "start_time": "01:00:04",
+          "end_time": "01:01:00",
+          "text": "versus non-morphologically-informed tokenizer, train individual language models for both of those tokenizers and then compare their downstream performance. Which is one of the reasons why this topic is under-researched, because every time you make a change to tokenization, then you need to really show that it works; you need to train a new language model. So generally that's also why tokenization has been given not that much attention until now. In recent years this has changed, but this is a general issue of working with tokenization, especially since it's really more academics who care about this, whereas in the big labs they just don't care. They are like, 'yeah, we'll just throw more data at the problem and the problem will solve itself', but who can train many language models? Well, big labs. So academics find other ways; there are also intrinsic metrics,",
+          "segment_ids": [
+            1097,
+            1098,
+            1099,
+            1100,
+            1101,
+            1102,
+            1103,
+            1104,
+            1105,
+            1106
+          ],
+          "alignment": {
+            "paragraph_id": 48,
+            "slide": 8,
+            "start": 3604.0,
+            "end": 3659.79,
+            "start_time": "01:00:04",
+            "end_time": "01:01:00",
+            "confidence": 0.7952,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 9,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 10,
+      "slide_time": "00:02:12",
+      "paragraph_ids": [
+        3,
+        23
+      ],
+      "paragraphs": [
+        {
+          "id": 3,
+          "start": 132.02,
+          "end": 209.58,
+          "start_time": "00:02:12",
+          "end_time": "00:03:30",
+          "text": "So that's why there should be time for an example theoretical exam question, which I've prepared, and which I would want to give you time to think about, and brainstorm together, if you have any questions. Questions so far? Alright, let's talk about morphology. So we've seen that morphemes are the smallest unit of meaning, and morphemes can be differentiated into these stems and affixes; we've already seen that. Stems can also be called lemma, base form, root; we can consider them as identical. The linguists among you will scream internally, no they are not, but for the purposes of the course, we can consider them the same. And morphemes can also be differentiated in another way: some morphemes are bound, that means they cannot appear as a word by themselves, they attach to words, like this plural inflection.",
+          "segment_ids": [
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60
+          ],
+          "alignment": {
+            "paragraph_id": 3,
+            "slide": 10,
+            "start": 132.02,
+            "end": 209.58,
+            "start_time": "00:02:12",
+            "end_time": "00:03:30",
+            "confidence": 0.823,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 23,
+          "start": 1620.84,
+          "end": 1625.84,
+          "start_time": "00:27:01",
+          "end_time": "00:27:06",
+          "text": "So here, we had 'helpful', but there is no path",
+          "segment_ids": [
+            610
+          ],
+          "alignment": {
+            "paragraph_id": 23,
+            "slide": 10,
+            "start": 1620.84,
+            "end": 1625.84,
+            "start_time": "00:27:01",
+            "end_time": "00:27:06",
+            "confidence": 0.4544,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 11,
+      "slide_time": "00:03:30",
+      "paragraph_ids": [
+        4
+      ],
+      "paragraphs": [
+        {
+          "id": 4,
+          "start": 209.58,
+          "end": 296.83,
+          "start_time": "00:03:30",
+          "end_time": "00:04:57",
+          "text": "So we have s and ed; they are not words, they attach to other words. And free morphemes can, by contrast, both appear as a word by itself, but also some of them may combine with other morphemes, like dog, can get another morpheme attached to it. And then bound morphemes can be split into inflectional ones, where we had this plural example, but also the third person singular and the gerund. So the inflectional morphemes are used to make some grammatical distinctions; so they don't change the meaning of the word, they don't change the POS tag, and on the last week, this grammatical category of a word. If you add s to the noun dog, the result is dogs, which is still a noun. Similar for eat, the verb; you add s, it's still a verb. By contrast, derivational morphemes are still bound morphemes, but they're used to creating new words, and they change the form, the POS tag.",
+          "segment_ids": [
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103
+          ],
+          "alignment": {
+            "paragraph_id": 4,
+            "slide": 11,
+            "start": 209.58,
+            "end": 296.83,
+            "start_time": "00:03:30",
+            "end_time": "00:04:57",
+            "confidence": 0.8226,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 12,
+      "slide_time": "00:22:36",
+      "paragraph_ids": [
+        17
+      ],
+      "paragraphs": [
+        {
+          "id": 17,
+          "start": 1356.06,
+          "end": 1420.06,
+          "start_time": "00:22:36",
+          "end_time": "00:23:40",
+          "text": "And more end states. So examples are, for example, the adjective 'global', which then you add '-ize' to get the verb 'globalize', and then you can further add '-ation' to it to get 'globalization'. And then here there's another path for the word, so through the verb: 'helpful', 'helpfully', 'helpfulness'. So on, there's a lot of different things that you can do here. Alright, I've been talking too much, so now is your time to work a little bit. Again, this is not a very serious exercise, but just to make sure you can get the idea. And this is another FSA for derivational adjectives, and your task is to tell me which words are generated by this FSA. And that's it. I guess we can give you one minute for this, not much more.",
+          "segment_ids": [
+            548,
+            549,
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568,
+            569,
+            570,
+            571
+          ],
+          "alignment": {
+            "paragraph_id": 17,
+            "slide": 12,
+            "start": 1356.06,
+            "end": 1420.06,
+            "start_time": "00:22:36",
+            "end_time": "00:23:40",
+            "confidence": 0.6661,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 13,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 14,
+      "slide_time": "00:04:57",
+      "paragraph_ids": [
+        5
+      ],
+      "paragraphs": [
+        {
+          "id": 5,
+          "start": 296.83,
+          "end": 378.21,
+          "start_time": "00:04:57",
+          "end_time": "00:06:18",
+          "text": "And the meaning of the word. So for example, the result is appointee, which is a noun. Help is a verb; you add less to it, and it becomes an adjective, and you get the idea. So again, inflectional morphemes just add grammatical information, whereas derivational morphemes add, change the meaning, add semantic meaning, and typically, but not always, change the POS tag and the meaning of the word. Now what we've seen so far are examples of what's called concatenative morphology. So we have two types: prefixes, like this in disestablish, or suffixes, like ment is in establishment, and again combined. But this is all concatenated; we take just a string and we concatenate, we add the prefix before it. And it will also be non-concatenative, and English doesn't really do this, with a famous exception. So in Tagalog you have infixes, like for example you have this word which also...",
+          "segment_ids": [
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143
+          ],
+          "alignment": {
+            "paragraph_id": 5,
+            "slide": 14,
+            "start": 296.83,
+            "end": 378.21,
+            "start_time": "00:04:57",
+            "end_time": "00:06:18",
+            "confidence": 0.8397,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 15,
+      "slide_time": "00:06:18",
+      "paragraph_ids": [
+        6,
+        7,
+        8
+      ],
+      "paragraphs": [
+        {
+          "id": 6,
+          "start": 378.21,
+          "end": 466.21,
+          "start_time": "00:06:18",
+          "end_time": "00:07:46",
+          "text": "...is used to pronounce; you have this infix inside the word that is added. And an equivalent in English is an F-word; it's an F, I will not say it, unforgivable, that's the kind of one exception for English, but typically English doesn't really do that. Circumfixes are when you add prefixes and suffix together, so for example, I don't know how many of you speak German, but the past form of the word where you have to add both; it's not a prefix and a suffix, they work together, a part at the beginning and a part at the end of the word to get your inflected form. And then another phenomenon that doesn't really exist in English, at least not that's not how you form words, which is called reduplication. So for example, in this language that I don't know, you have the word for to sleep, and to say to sleep constantly you basically attach the word to itself. And so generally...",
+          "segment_ids": [
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            176,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185
+          ],
+          "alignment": {
+            "paragraph_id": 6,
+            "slide": 15,
+            "start": 378.21,
+            "end": 466.21,
+            "start_time": "00:06:18",
+            "end_time": "00:07:46",
+            "confidence": 0.6961,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 7,
+          "start": 466.21,
+          "end": 544.21,
+          "start_time": "00:07:46",
+          "end_time": "00:09:04",
+          "text": "...you might have already seen this so far, since I'm using different languages to explain different phenomena, languages vary in how they use morphology. We already saw in the Russian translation lecture that languages vary in how they order words; they also vary in how much they use morphology to encode this grammatical and semantic information. And so this can be illustrated by these parallel examples: in English we learned these new words, and then the Chinese and the Russian word. And we can see that in Russian there can be many morphemes within one word; for example this is the past of the word learn. By contrast in Chinese you have a specific morpheme that is its own word, right? You have a specific word to encode this past, and a specific word to encode this plural. So generally Russian is called a synthetic language; it has more morphemes per word than Chinese, which is said to be...",
+          "segment_ids": [
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211,
+            212,
+            213,
+            214,
+            215,
+            216,
+            217,
+            218,
+            219,
+            220,
+            221,
+            222,
+            223,
+            224
+          ],
+          "alignment": {
+            "paragraph_id": 7,
+            "slide": 15,
+            "start": 466.21,
+            "end": 544.21,
+            "start_time": "00:07:46",
+            "end_time": "00:09:04",
+            "confidence": 0.918,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 8,
+          "start": 544.21,
+          "end": 623.9,
+          "start_time": "00:09:04",
+          "end_time": "00:10:24",
+          "text": "...isolating. Chinese has many, has very few morphemes for words. And English is said to be typically in between. Overall it's a continuum where you have the most extreme case as estimated by adult linguists where Vietnamese is the most extreme case of using really one so every word is one morpheme. English is rather on the what is called analytic side, right? You have synthetic languages like Russian in the middle, and then more on the other extreme polysynthetic languages are languages that have many words sorry, many morphemes for words. And the most extreme example is West Greenlandic, which has for example a word, and just one word to say it is really good for catching polar bears. So this is one way, one aspect in which the languages vary along the morphological dimension. Another is a distinction between agglutinative languages, where morphemes tend to have one meaning...",
+          "segment_ids": [
+            225,
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244,
+            245,
+            246,
+            247,
+            248,
+            249,
+            250,
+            251,
+            252,
+            253,
+            254,
+            255,
+            256,
+            257,
+            258,
+            259,
+            260,
+            261,
+            262,
+            263
+          ],
+          "alignment": {
+            "paragraph_id": 8,
+            "slide": 15,
+            "start": 544.21,
+            "end": 623.9,
+            "start_time": "00:09:04",
+            "end_time": "00:10:24",
+            "confidence": 0.8401,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 16,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 17,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 18,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 19,
+      "slide_time": "00:10:24",
+      "paragraph_ids": [
+        9
+      ],
+      "paragraphs": [
+        {
+          "id": 9,
+          "start": 623.9,
+          "end": 702.88,
+          "start_time": "00:10:24",
+          "end_time": "00:11:43",
+          "text": "...and I don't know of an agglutinative language by contrast in Russian for example the same morphemes can have two meanings. And so this is also a so there are these two things that kind of work together. But generally agglutinative and fusional languages are more morphologically complex than isolating languages, and generally there's quite a large consensus in NLP that morphological complexity makes it harder to build accurate morphology models. And since a lot of the work is based on English, which is rather on the isolating part of the spectrum this partially can explain why this is difficult because not enough people are thinking about morphology. And it's a really ongoing research line that has been going on for decades trying to quantify and explain the difficulty of dealing with languages with complex morphology and how to then address this inequality.",
+          "segment_ids": [
+            264,
+            265,
+            266,
+            267,
+            268,
+            269,
+            270,
+            271,
+            272,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278,
+            279,
+            280,
+            281,
+            282,
+            283,
+            284,
+            285,
+            286,
+            287,
+            288,
+            289,
+            290,
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298,
+            299,
+            300,
+            301
+          ],
+          "alignment": {
+            "paragraph_id": 9,
+            "slide": 19,
+            "start": 623.9,
+            "end": 702.88,
+            "start_time": "00:10:24",
+            "end_time": "00:11:43",
+            "confidence": 0.9013,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 20,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 21,
+      "slide_time": "00:11:43",
+      "paragraph_ids": [
+        10
+      ],
+      "paragraphs": [
+        {
+          "id": 10,
+          "start": 702.88,
+          "end": 802.86,
+          "start_time": "00:11:43",
+          "end_time": "00:13:23",
+          "text": "Alright, this was just a linguistics 101 on morphology; are there questions in this part? Tasks that we can do to process morphology. Remember we had this morphological analysis which was useful for natural language understanding. There are multiple tasks that we can do for this analysis. One is so say your input is the word puppies; one task is just lemmatization, the input is this word and we just want to get the lemma of that word. Another is segmentation, so you analyze puppies as a combination of the lemma puppy and the plural form. And then tagging refers to the task of giving a detailed morphological summary of this input word. So here says that the lemma of this puppies input is puppy, its POS tag is noun and its number is plural. Now analysis can be done in isolation; and if it's done in isolation what does that mean in isolation? Just looking at one exact word then you have...",
+          "segment_ids": [
+            302,
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309,
+            310,
+            311,
+            312,
+            313,
+            314,
+            315,
+            316,
+            317,
+            318,
+            319,
+            320,
+            321,
+            322,
+            323,
+            324,
+            325,
+            326,
+            327,
+            328,
+            329,
+            330,
+            331,
+            332,
+            333,
+            334,
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
+            341,
+            342
+          ],
+          "alignment": {
+            "paragraph_id": 10,
+            "slide": 21,
+            "start": 702.88,
+            "end": 802.86,
+            "start_time": "00:11:43",
+            "end_time": "00:13:23",
+            "confidence": 0.8387,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 22,
+      "slide_time": "00:13:23",
+      "paragraph_ids": [
+        11
+      ],
+      "paragraphs": [
+        {
+          "id": 11,
+          "start": 802.86,
+          "end": 892.8,
+          "start_time": "00:13:23",
+          "end_time": "00:14:53",
+          "text": "...you might have multiple analysis, right? What are multiple analysis of this word? Can it have multiple POS tags? What are POS tags? Noun and verb. And it's also even as a verb it can also have different lemma and so some morphological information; it can be the past version of the verb to see but it can also be the present, the present form of the verb to saw, and yeah the noun version of this word is the third option. If you analyze a word in isolation without any context then you need to provide these different options, right? If you analyze a word in context for example you want to analyze a word if the cooler was full of orange juice then you have to disambiguate which of the possible analysis it should be and here the cooler is a noun. By contrast in the context the daisy prefers cooler weather the lemma is different, it's cool, and here it's an adjective.",
+          "segment_ids": [
+            343,
+            344,
+            345,
+            346,
+            347,
+            348,
+            349,
+            350,
+            351,
+            352,
+            353,
+            354,
+            355,
+            356,
+            357,
+            358,
+            359,
+            360,
+            361,
+            362,
+            363,
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375,
+            376,
+            377,
+            378,
+            379,
+            380,
+            381,
+            382,
+            383
+          ],
+          "alignment": {
+            "paragraph_id": 11,
+            "slide": 22,
+            "start": 802.86,
+            "end": 892.8,
+            "start_time": "00:13:23",
+            "end_time": "00:14:53",
+            "confidence": 0.7589,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 23,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 24,
+      "slide_time": "00:14:53",
+      "paragraph_ids": [
+        12
+      ],
+      "paragraphs": [
+        {
+          "id": 12,
+          "start": 892.8,
+          "end": 971.39,
+          "start_time": "00:14:53",
+          "end_time": "00:16:11",
+          "text": "comparative adjective. So these are the analysis tasks: we want to analyze the structure of words to help understanding. But there are also generation tasks which can be useful, for example in machine translation. One such task is: given that you have a lemma and a morphological specification, you want to generate the appropriate inflected form. For example, if you want to generate the past participle version of the English lemma 'permaban', the result would be 'permabanned'. Similarly, you might want to generate the plural accusative version of the German noun 'Stiefvater', which results in 'Stiefväter'. And I'm going to attempt to pronounce this Hungarian noun, which is here inflected for dative plural; that's one possible generation task. Another is: given that you have a lemma, you want to generate",
+          "segment_ids": [
+            384,
+            385,
+            386,
+            387,
+            388,
+            389,
+            390,
+            391,
+            392,
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            403,
+            404,
+            405,
+            406,
+            407,
+            408,
+            409,
+            410,
+            411,
+            412,
+            413,
+            414,
+            415,
+            416,
+            417,
+            418,
+            419,
+            420,
+            421
+          ],
+          "alignment": {
+            "paragraph_id": 12,
+            "slide": 24,
+            "start": 892.8,
+            "end": 971.39,
+            "start_time": "00:14:53",
+            "end_time": "00:16:11",
+            "confidence": 0.8032,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 25,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 26,
+      "slide_time": "00:16:11",
+      "paragraph_ids": [
+        13
+      ],
+      "paragraphs": [
+        {
+          "id": 13,
+          "start": 971.39,
+          "end": 1065.46,
+          "start_time": "00:16:11",
+          "end_time": "00:17:45",
+          "text": "the full inflectional paradigm, so all the possible word forms that the lemma can take. This can be useful if you are doing, for example, keyword matching, where you want to include in your keyword list all the versions that the word can take. Finally, you might have a given lemma in context and you want to generate the correct inflection form given the context. So you're not told what should be the correct; you're not told 'inflect this in the past participle', but rather 'give the correct inflection given this context'. Here: 'The dog are barking'—you know that you should inflect this to 'dogs'. Alright, so these are the tasks. How do we carry out this task? Early models used rule-based systems that exploit the regularity of inflectional and derivational systems. So English noun inflection can be summarized quite fast into these cases of singular and plural.",
+          "segment_ids": [
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            429,
+            430,
+            431,
+            432,
+            433,
+            434,
+            435,
+            436,
+            437,
+            438,
+            439,
+            440,
+            441,
+            442,
+            443,
+            444,
+            445,
+            446,
+            447,
+            448,
+            449,
+            450,
+            451,
+            452,
+            453,
+            454,
+            455,
+            456,
+            457,
+            458,
+            459,
+            460
+          ],
+          "alignment": {
+            "paragraph_id": 13,
+            "slide": 26,
+            "start": 971.39,
+            "end": 1065.46,
+            "start_time": "00:16:11",
+            "end_time": "00:17:45",
+            "confidence": 0.7429,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 27,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 28,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 29,
+      "slide_time": "00:17:45",
+      "paragraph_ids": [
+        14,
+        22,
+        36
+      ],
+      "paragraphs": [
+        {
+          "id": 14,
+          "start": 1065.46,
+          "end": 1144.83,
+          "start_time": "00:17:45",
+          "end_time": "00:19:05",
+          "text": "And then, of course, there are exceptions because 'mouses' does not exist; instead the plural is 'mice'. And so this can be represented using a finite-state automaton (FSA), which is an abstract machine that is used to recognize patterns in input sequences. This is also what is used to implement regular expressions, as we saw in lecture 2. You don't need to really worry about the details; we'll see this just at the high level because nowadays it's not all that relevant anymore. But it's still informative to have some understanding of how this works because it can still be useful in more hybrid models, as you'll see in the textbook in the required reading for today's lecture. So for the regularity that we saw in this table here, it can be summarized in this finite-state machine. We have initial states and then we transition through states, and these are final states—the ones with two circles.",
+          "segment_ids": [
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467,
+            468,
+            469,
+            470,
+            471,
+            472,
+            473,
+            474,
+            475,
+            476,
+            477,
+            478,
+            479,
+            480,
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488,
+            489,
+            490,
+            491,
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498,
+            499
+          ],
+          "alignment": {
+            "paragraph_id": 14,
+            "slide": 29,
+            "start": 1065.46,
+            "end": 1144.83,
+            "start_time": "00:17:45",
+            "end_time": "00:19:05",
+            "confidence": 0.776,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 22,
+          "start": 1556.88,
+          "end": 1620.84,
+          "start_time": "00:25:57",
+          "end_time": "00:27:01",
+          "text": "Any other questions about this? So again, this is really the idea that you get just a high-level idea. Like, I'm not going to make you do something like that at the exam; just you should know that it's possible to write, to summarize the morphology of, at least, English in these finite-state automata, and it can be quite efficient. But it takes effort to actually do this because you have to manually define all the words. So how are these FSAs actually used? It's used for word recognition. For example, you can determine that 'helpfulness' is a word, 'helpfully' is a word, 'helpfulization' is not, right? So the idea is that if you have an input word and you can find a path through your machine that accepts this word, then you recognize it as correct.",
+          "segment_ids": [
+            592,
+            593,
+            594,
+            595,
+            596,
+            597,
+            598,
+            599,
+            600,
+            601,
+            602,
+            603,
+            604,
+            605,
+            606,
+            607,
+            608,
+            609
+          ],
+          "alignment": {
+            "paragraph_id": 22,
+            "slide": 29,
+            "start": 1556.88,
+            "end": 1620.84,
+            "start_time": "00:25:57",
+            "end_time": "00:27:01",
+            "confidence": 0.7876,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 36,
+          "start": 2571.72,
+          "end": 2723.62,
+          "start_time": "00:42:52",
+          "end_time": "00:45:24",
+          "text": "If you're interested, there's a link here to the SIGMORPHON interest group in morphology if you want to dig deeper. Questions about this part? Yes. I think this is an ongoing research area that probably hasn't been given much attention. You'll see in the textbook a mention of hybrid models. You can absolutely use an FSA to tell your neural network what are the possible next states you can generate. Indeed, you can gain efficiency and get the best of both worlds in efficiency and accuracy when doing that. That would be an example of neural-symbolic systems, which I think have potential for the future.",
+          "segment_ids": [
+            867,
+            868,
+            869,
+            870,
+            871,
+            872,
+            873,
+            874,
+            875,
+            876,
+            877,
+            878,
+            879,
+            880,
+            881,
+            882,
+            883,
+            884,
+            885,
+            886,
+            887,
+            888,
+            889,
+            890,
+            891,
+            892,
+            893,
+            894,
+            895,
+            896,
+            897,
+            898,
+            899,
+            900,
+            901,
+            902,
+            903,
+            904,
+            905,
+            906,
+            907,
+            908,
+            909,
+            910,
+            911,
+            912,
+            913,
+            914,
+            915,
+            916,
+            917,
+            918
+          ],
+          "alignment": {
+            "paragraph_id": 36,
+            "slide": 29,
+            "start": 2571.72,
+            "end": 2723.62,
+            "start_time": "00:42:52",
+            "end_time": "00:45:24",
+            "confidence": 0.7557,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 30,
+      "slide_time": "00:19:05",
+      "paragraph_ids": [
+        15
+      ],
+      "paragraphs": [
+        {
+          "id": 15,
+          "start": 1144.83,
+          "end": 1279.71,
+          "start_time": "00:19:05",
+          "end_time": "00:21:20",
+          "text": "So if you have a regular noun, you can just have the singular form; that's it, right? Yes? ... of English nominal inflections. But of course, it relies on a list of what these regular and irregular versions are, right? So a list of stems—the regular nouns—and a list of... You need to keep a list of all the irregular plural versions of nouns because they don't work; they don't follow the regular rules. So you need a lexicon for this. And a slightly more complex part of English morphology is English verbal inflection. We still have the initial state, and then we have three possible end states. So, for example, we can have regular verbs that are inflected for past, past participle, or present participle. So again, we need a list for all of these—sorry, for this, this, and this. For example,",
+          "segment_ids": [
+            500,
+            501,
+            502,
+            503,
+            504,
+            505,
+            506,
+            507,
+            508,
+            509,
+            510,
+            511,
+            512,
+            513,
+            514,
+            515,
+            516,
+            517,
+            518,
+            519,
+            520,
+            521,
+            522,
+            523,
+            524,
+            525,
+            526,
+            527,
+            528,
+            529,
+            530,
+            531
+          ],
+          "alignment": {
+            "paragraph_id": 15,
+            "slide": 30,
+            "start": 1144.83,
+            "end": 1279.71,
+            "start_time": "00:19:05",
+            "end_time": "00:21:20",
+            "confidence": 0.7694,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 31,
+      "slide_time": "00:21:20",
+      "paragraph_ids": [
+        16
+      ],
+      "paragraphs": [
+        {
+          "id": 16,
+          "start": 1279.71,
+          "end": 1356.06,
+          "start_time": "00:21:20",
+          "end_time": "00:22:36",
+          "text": "regular verbs like 'walk', 'fry', or 'talk'. And then we have irregulars here. And then we have, for example, here the irregular past verb form: 'caught' for 'catch', 'spoke' for 'speak', etc. So the idea is that if we want to use it for generation, we need a finite-state transducer (FST). It doesn't really matter, but just to give you an idea: to generate then the past version of the word 'walk', we go through state 0 to state 1, get the word 'walk', and then go through this other state and end up here. So 'walk' plus past equals 'walked'. 'Walk' plus present participle equals 'walking'. And then 'walk' plus third singular equals 'walks'. So inflectional morphology in English is really very straightforward; it can be implemented in a very simple finite-state automaton. For nominal derivation, it's a little bit more complex, and this is a partial FSA for this. We can see that there are more states, right?",
+          "segment_ids": [
+            532,
+            533,
+            534,
+            535,
+            536,
+            537,
+            538,
+            539,
+            540,
+            541,
+            542,
+            543,
+            544,
+            545,
+            546,
+            547
+          ],
+          "alignment": {
+            "paragraph_id": 16,
+            "slide": 31,
+            "start": 1279.71,
+            "end": 1356.06,
+            "start_time": "00:21:20",
+            "end_time": "00:22:36",
+            "confidence": 0.7587,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 32,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 33,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 34,
+      "slide_time": "00:28:32",
+      "paragraph_ids": [
+        26
+      ],
+      "paragraphs": [
+        {
+          "id": 26,
+          "start": 1712.2,
+          "end": 1799.18,
+          "start_time": "00:28:32",
+          "end_time": "00:29:59",
+          "text": "So another limitation is that it cannot handle reduplication where you're copying a sequence whose length cannot be determined in advance. Again, this is just a high-level idea. If you're interested, you can see Chapter 3 of the previous version of the book—the book that was actually made into a printed book a long time ago now—but yeah, it's disappeared from the third version of the textbook because maybe they wanted to make models more efficient, but right now they're not all that useful. Alright, questions about rule-based morphological processing? So now let's see how we can get data-driven, so neural network-based morphological processing. We've seen that parts of the morphological analysis tasks are the output; what you want is a tag. So you can frame then this task",
+          "segment_ids": [
+            634,
+            635,
+            636,
+            637,
+            638,
+            639,
+            640,
+            641,
+            642,
+            643,
+            644,
+            645,
+            646,
+            647,
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            654
+          ],
+          "alignment": {
+            "paragraph_id": 26,
+            "slide": 34,
+            "start": 1712.2,
+            "end": 1799.18,
+            "start_time": "00:28:32",
+            "end_time": "00:29:59",
+            "confidence": 0.8439,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 35,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 36,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 37,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 38,
+      "slide_time": "00:32:36",
+      "paragraph_ids": [
+        29
+      ],
+      "paragraphs": [
+        {
+          "id": 29,
+          "start": 1955.75,
+          "end": 2030.75,
+          "start_time": "00:32:36",
+          "end_time": "00:33:51",
+          "text": "So in practice, it seems to work quite well to represent the word 'optimizer' by this representation. You take the output of the different layers and pass this to a feedforward network, which predicts the POS tags. Exactly the same can be used to predict morphological tags, the lemma, and even dependency parsing, which we'll talk about next week. Again, this is the same as last week: we pass this output representation to a softmax, which outputs a probability distribution over your tags, and then you select the argmax as the tag. There are different ways of doing this. If you're doing multiple tasks—lemmatization, POS tagging, and morphology—you can do them in a sequence: first lemmatize, then POS tag.",
+          "segment_ids": [
+            681,
+            682,
+            683,
+            684,
+            685,
+            686,
+            687,
+            688,
+            689,
+            690,
+            691,
+            692,
+            693,
+            694,
+            695,
+            696,
+            697,
+            698,
+            699
+          ],
+          "alignment": {
+            "paragraph_id": 29,
+            "slide": 38,
+            "start": 1955.75,
+            "end": 2030.75,
+            "start_time": "00:32:36",
+            "end_time": "00:33:51",
+            "confidence": 0.7734,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 39,
+      "slide_time": "00:30:01",
+      "paragraph_ids": [
+        27,
+        30,
+        31,
+        32,
+        35
+      ],
+      "paragraphs": [
+        {
+          "id": 27,
+          "start": 1800.75,
+          "end": 1885.75,
+          "start_time": "00:30:01",
+          "end_time": "00:31:26",
+          "text": "and we saw models of word-level sequence tagging last week, right? So you can just apply these models directly. For example, lemmatization can just be framed as a word-level tagging task where each word in your input sequence is mapped to one lemma. The morphological analysis can also be encoded as a word-level tag. For example, this word form is the definite masculine singular version of the lemma. And so, yeah, as I said, if we have the words of our sentence as input, the output is going to be this lemma or this morphological tag. So you can use the exact same type of model that we saw last week. You remember, we had an encoder model, BERT for example, where the inputs are subwords, and then we add a multilayer perceptron.",
+          "segment_ids": [
+            655,
+            656,
+            657,
+            658,
+            659,
+            660,
+            661,
+            662,
+            663,
+            664,
+            665,
+            666,
+            667,
+            668
+          ],
+          "alignment": {
+            "paragraph_id": 27,
+            "slide": 39,
+            "start": 1800.75,
+            "end": 1885.75,
+            "start_time": "00:30:01",
+            "end_time": "00:31:26",
+            "confidence": 0.821,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 30,
+          "start": 2030.75,
+          "end": 2117.02,
+          "start_time": "00:33:51",
+          "end_time": "00:35:17",
+          "text": "Then add these morphological tasks, or you can do that jointly in this multitask learning setup. This is what is going on in this architecture: a feedforward network for each tagging task trained jointly within a single network. When it comes to morphological tasks, there are two main ways to work. You can represent the tag as only one, where the morphological tag is a concatenation of all these features. The other version is to split it into the different features. Can someone think of an advantage or disadvantage of using the split version? We have as input a word and we're trying to predict different features about the word: is it singular? Is it person three? One way is to output one single tag.",
+          "segment_ids": [
+            700,
+            701,
+            702,
+            703,
+            704,
+            705,
+            706,
+            707,
+            708,
+            709,
+            710,
+            711,
+            712,
+            713,
+            714,
+            715,
+            716,
+            717,
+            718,
+            719,
+            720,
+            721,
+            722,
+            723,
+            724,
+            725,
+            726,
+            727
+          ],
+          "alignment": {
+            "paragraph_id": 30,
+            "slide": 39,
+            "start": 2030.75,
+            "end": 2117.02,
+            "start_time": "00:33:51",
+            "end_time": "00:35:17",
+            "confidence": 0.8388,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 31,
+          "start": 2117.02,
+          "end": 2254.4,
+          "start_time": "00:35:17",
+          "end_time": "00:37:34",
+          "text": "That has all of these different features, or to output one tag per feature. Yes, you have fewer tags here than there; that's correct? So it's more efficient computationally? Exactly. Split looks more elegant and makes sense because it is less sparse. There are many possible combinations, some of which you might not see. Can someone think of an advantage of using the all-in-one model over the split model? You want to avoid combinations that don't make any sense. Also, mood is only relevant for verbs; some words just don't have a mood feature or number feature.",
+          "segment_ids": [
+            728,
+            729,
+            730,
+            731,
+            732,
+            733,
+            734,
+            735,
+            736,
+            737,
+            738,
+            739,
+            740,
+            741,
+            742,
+            743,
+            744,
+            745,
+            746,
+            747,
+            748,
+            749,
+            750,
+            751,
+            752,
+            753,
+            754,
+            755,
+            756,
+            757,
+            758
+          ],
+          "alignment": {
+            "paragraph_id": 31,
+            "slide": 39,
+            "start": 2117.02,
+            "end": 2254.4,
+            "start_time": "00:35:17",
+            "end_time": "00:37:34",
+            "confidence": 0.6858,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 32,
+          "start": 2254.4,
+          "end": 2325.4,
+          "start_time": "00:37:34",
+          "end_time": "00:38:45",
+          "text": "So then you have to give some value to features that are not present in the words, and many of your features will be that. This becomes a little bit difficult because your data is completely skewed; you have many features for which the value is not applicable, making the task harder to learn. In practice, research has found that jointly learning these all-in-one tags empirically works best, which is a bit dissatisfying. I have a personal feeling this could be done better, but it's not something people are currently interested in improving. Now, this is again using an encoder architecture.",
+          "segment_ids": [
+            759,
+            760,
+            761,
+            762,
+            763,
+            764,
+            765,
+            766,
+            767,
+            768,
+            769,
+            770,
+            771,
+            772,
+            773,
+            774,
+            775,
+            776,
+            777,
+            778
+          ],
+          "alignment": {
+            "paragraph_id": 32,
+            "slide": 39,
+            "start": 2254.4,
+            "end": 2325.4,
+            "start_time": "00:37:34",
+            "end_time": "00:38:45",
+            "confidence": 0.6849,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 35,
+          "start": 2491.94,
+          "end": 2571.72,
+          "start_time": "00:41:32",
+          "end_time": "00:42:52",
+          "text": "This is an example where the task is to generate the past participle version of the verb 'done'. The decoder is fed the representation of the encoder and then auto-regressively generates the output. How do we evaluate these different tasks? For lemmatization and morphological tagging, we typically use word-based accuracy, like for POS tagging. The state-of-the-art in general is that lemmatization is more difficult than POS tagging because there are more possible tags, more variation, and it is more dependent on the structure of the language: what kind of tags it uses and how sparse they are. There is more variation in the state-of-the-art for different languages and domains.",
+          "segment_ids": [
+            836,
+            837,
+            838,
+            839,
+            840,
+            841,
+            842,
+            843,
+            844,
+            845,
+            846,
+            847,
+            848,
+            849,
+            850,
+            851,
+            852,
+            853,
+            854,
+            855,
+            856,
+            857,
+            858,
+            859,
+            860,
+            861,
+            862,
+            863,
+            864,
+            865,
+            866
+          ],
+          "alignment": {
+            "paragraph_id": 35,
+            "slide": 39,
+            "start": 2491.94,
+            "end": 2571.72,
+            "start_time": "00:41:32",
+            "end_time": "00:42:52",
+            "confidence": 0.7677,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 40,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 41,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 42,
+      "slide_time": "00:38:45",
+      "paragraph_ids": [
+        33,
+        34
+      ],
+      "paragraphs": [
+        {
+          "id": 33,
+          "start": 2325.4,
+          "end": 2403.16,
+          "start_time": "00:38:45",
+          "end_time": "00:40:03",
+          "text": "But some of these tasks can be modeled with an encoder-decoder. Remember the three-part distinction: in the decoder, we auto-regressively generate the next word based on left context. In encoder-based models, we have a powerful representation of each word based on bidirectional context. In encoder-decoder models, we take the output of an encoder and use it to generate a sequence auto-regressively again. Where do we see this architecture most commonly? Exactly, machine translation: the encoder is used for a source sentence, and the decoder decodes into the target sentence. This architecture can be relevant for morphological tasks at the character level, because there is quite a strong overlap in characters of lemmas and base forms.",
+          "segment_ids": [
+            779,
+            780,
+            781,
+            782,
+            783,
+            784,
+            785,
+            786,
+            787,
+            788,
+            789,
+            790,
+            791,
+            792,
+            793,
+            794,
+            795,
+            796,
+            797,
+            798,
+            799,
+            800,
+            801,
+            802,
+            803,
+            804
+          ],
+          "alignment": {
+            "paragraph_id": 33,
+            "slide": 42,
+            "start": 2325.4,
+            "end": 2403.16,
+            "start_time": "00:38:45",
+            "end_time": "00:40:03",
+            "confidence": 0.801,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 34,
+          "start": 2403.16,
+          "end": 2491.94,
+          "start_time": "00:40:03",
+          "end_time": "00:41:32",
+          "text": "This paper proposes lemmatization using an encoder-decoder. The input is the characters of the word to be lemmatized with its POS tag and morphological features. Then the characters are generated auto-regressively based on the output of the encoder and the current state. This model is relevant because it exploits character-level information and reduces sparsity, instead of treating lemmatization as tagging where you always output one form without exploiting surface similarity between the lemma and its inflected forms. Also, if you want to do morphological generation tasks—like generating the inflected form of a verb or all forms of a paradigm—we can use an encoder-decoder.",
+          "segment_ids": [
+            805,
+            806,
+            807,
+            808,
+            809,
+            810,
+            811,
+            812,
+            813,
+            814,
+            815,
+            816,
+            817,
+            818,
+            819,
+            820,
+            821,
+            822,
+            823,
+            824,
+            825,
+            826,
+            827,
+            828,
+            829,
+            830,
+            831,
+            832,
+            833,
+            834,
+            835
+          ],
+          "alignment": {
+            "paragraph_id": 34,
+            "slide": 42,
+            "start": 2403.16,
+            "end": 2491.94,
+            "start_time": "00:40:03",
+            "end_time": "00:41:32",
+            "confidence": 0.8672,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 43,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 44,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 45,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 46,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 47,
+      "slide_time": "00:56:23",
+      "paragraph_ids": [
+        45
+      ],
+      "paragraphs": [
+        {
+          "id": 45,
+          "start": 3382.63,
+          "end": 3460.74,
+          "start_time": "00:56:23",
+          "end_time": "00:57:41",
+          "text": "So that means that clearly using morphologically informed tokenization has value, but it's still very much an open question how to better do that and to avoid this strong effort of handcrafting lexicons. Questions about this part? I know that we went over the hour, but as you can see, there's only the summary, and then this final exercise too, so I thought it doesn't really make sense to do a break. I hope that's okay. So questions about morphologically informed subword tokenization? Then I'll summarize the lecture, and then we'll go through this last exercise. So what we've talked about today is morphology, the study of the internal structure of words. We've seen the different morphological processing tasks, both the task where we analyze this internal structure, and the generation task, where we're trying to generate the correct forms. And then we saw finite-state automata,",
+          "segment_ids": [
+            1024,
+            1025,
+            1026,
+            1027,
+            1028,
+            1029,
+            1030,
+            1031,
+            1032,
+            1033,
+            1034,
+            1035,
+            1036,
+            1037,
+            1038,
+            1039,
+            1040,
+            1041,
+            1042,
+            1043,
+            1044,
+            1045,
+            1046,
+            1047
+          ],
+          "alignment": {
+            "paragraph_id": 45,
+            "slide": 47,
+            "start": 3382.63,
+            "end": 3460.74,
+            "start_time": "00:56:23",
+            "end_time": "00:57:41",
+            "confidence": 0.8511,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 48,
+      "slide_time": "00:45:24",
+      "paragraph_ids": [
+        37
+      ],
+      "paragraphs": [
+        {
+          "id": 37,
+          "start": 2723.94,
+          "end": 2792.0,
+          "start_time": "00:45:24",
+          "end_time": "00:46:32",
+          "text": "All right, if I've warned you so far, I hope that you stay awake. Thank you. The last part is definitely relevant to current large language models. Remember BPE? Do you remember BPE from lecture two? Yes, where we were determining the vocabulary to be used for tokenizing our text by identifying sequences of frequently co-occurring characters and doing these merges. It turns out that we can represent this BPE algorithm as a tree. When we do this first merge, we have a node that represents the merge; the characters are the leaves of this tree. Then we have a first merge, and the result is the subtree of the next merge. We continue like this until we're done.",
+          "segment_ids": [
+            919,
+            920,
+            921,
+            922,
+            923
+          ],
+          "alignment": {
+            "paragraph_id": 37,
+            "slide": 48,
+            "start": 2723.94,
+            "end": 2792.0,
+            "start_time": "00:45:24",
+            "end_time": "00:46:32",
+            "confidence": 0.7928,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 49,
+      "slide_time": "00:46:32",
+      "paragraph_ids": [
+        38
+      ],
+      "paragraphs": [
+        {
+          "id": 38,
+          "start": 2792.48,
+          "end": 2866.82,
+          "start_time": "00:46:32",
+          "end_time": "00:47:47",
+          "text": "If we want our BPE to be morphologically informed, then for a word like 'independently', the BPE tree should roughly look like this. This tree comes from my imagination; it's not real. But the idea is that this is a tree where we are not violating morphological boundaries: each subword belongs to exactly one morpheme. In practice, this is not what the BPE tree looks like for 'independently'. We can see here that, because these merges are based on frequencies and not linguistically informed, we have merges like here merging 'in' with 'd', which violates morphological boundaries. This 'G' is just a beginning-of-sequence token, so you can ignore that.",
+          "segment_ids": [
+            924,
+            925,
+            926,
+            927,
+            928,
+            929
+          ],
+          "alignment": {
+            "paragraph_id": 38,
+            "slide": 49,
+            "start": 2792.48,
+            "end": 2866.82,
+            "start_time": "00:46:32",
+            "end_time": "00:47:47",
+            "confidence": 0.8317,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 50,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 51,
+      "slide_time": "00:58:47",
+      "paragraph_ids": [
+        47
+      ],
+      "paragraphs": [
+        {
+          "id": 47,
+          "start": 3526.74,
+          "end": 3600.94,
+          "start_time": "00:58:47",
+          "end_time": "01:00:01",
+          "text": "the last thing we saw is that even the indirect use of morphology through informing subword tokenization will promise even for English, which is not a morphologically rich language. So this is, I think, an exciting direction for future work. Any remaining questions? Yes. Yeah, this is, again, you need access to resources, right? So there are different ways to evaluate this. Typically, you evaluate how well your tokenization aligns with morphological segmentation. So how many... so given a word you have, for example, four boundaries that you need to find, and then you can calculate precision and recall and an F1 score of identifying the correct boundaries. Right. Then you need, yeah, to verify that it helps downstream, then you need to evaluate",
+          "segment_ids": [
+            1072,
+            1073,
+            1074,
+            1075,
+            1076,
+            1077,
+            1078,
+            1079,
+            1080,
+            1081,
+            1082,
+            1083,
+            1084,
+            1085,
+            1086,
+            1087,
+            1088,
+            1089,
+            1090,
+            1091,
+            1092,
+            1093,
+            1094,
+            1095,
+            1096
+          ],
+          "alignment": {
+            "paragraph_id": 47,
+            "slide": 51,
+            "start": 3526.74,
+            "end": 3600.94,
+            "start_time": "00:58:47",
+            "end_time": "01:00:01",
+            "confidence": 0.8611,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 52,
+      "slide_time": "00:48:43",
+      "paragraph_ids": [
+        40
+      ],
+      "paragraphs": [
+        {
+          "id": 40,
+          "start": 2922.8,
+          "end": 3002.64,
+          "start_time": "00:48:43",
+          "end_time": "00:50:03",
+          "text": "merged the ES, then you're going to get the merge courses with co is low, and so what happens then is that the word is tokenized as 'courses' and 'co', which doesn't make any sense, right? And another issue is that BPE segments text deterministically; it's always going to tokenize the same tokens in the same way. The result is that sometimes you might have morphemes like 'ly', which are in the vocabulary, but are not really used during segmentation. Because many of the adverbs that end in 'ly' end up in your vocabulary, every time you see one of these adverbs that end in 'ly', you just tokenize them as one token. Then you never really see, at training time, you never really see the token 'ly'. So you might have a vector representation of the word 'ly', but you have not seen enough examples to have a useful vector representation, and so this limits composition.",
+          "segment_ids": [
+            939,
+            940,
+            941,
+            942,
+            943,
+            944,
+            945,
+            946,
+            947,
+            948,
+            949
+          ],
+          "alignment": {
+            "paragraph_id": 40,
+            "slide": 52,
+            "start": 2922.8,
+            "end": 3002.64,
+            "start_time": "00:48:43",
+            "end_time": "00:50:03",
+            "confidence": 0.7707,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 53,
+      "slide_time": "00:51:03",
+      "paragraph_ids": [
+        42
+      ],
+      "paragraphs": [
+        {
+          "id": 42,
+          "start": 3063.46,
+          "end": 3130.77,
+          "start_time": "00:51:03",
+          "end_time": "00:52:11",
+          "text": "have all the event and at least, so you will tokenize the word as 'in', and then you will tokenize your words differently. Of course, you don't always disable bad merges, since it's random; you might disable very desirable merges like for example this 'e' here. But the good thing is that what's positive about this method is that for the same input, you can produce multiple segmentations. So you will avoid this problem of under-training vectors because sometimes you will tokenize 'independently' as its own token. And BPE dropout has been found to empirically improve downstream performance. So this is clearly an effective way of addressing this determinism issue. Now, this BPE dropout is still not linguistically informed, right? It's just random. Another method that is kind of inspired by it,",
+          "segment_ids": [
+            960,
+            961,
+            962,
+            963,
+            964,
+            965,
+            966,
+            967,
+            968,
+            969,
+            970,
+            971
+          ],
+          "alignment": {
+            "paragraph_id": 42,
+            "slide": 53,
+            "start": 3063.46,
+            "end": 3130.77,
+            "start_time": "00:51:03",
+            "end_time": "00:52:11",
+            "confidence": 0.8029,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 54,
+      "slide_time": "00:47:47",
+      "paragraph_ids": [
+        39,
+        41,
+        43,
+        44
+      ],
+      "paragraphs": [
+        {
+          "id": 39,
+          "start": 2866.82,
+          "end": 2922.8,
+          "start_time": "00:47:47",
+          "end_time": "00:48:43",
+          "text": "Now you might say, why does it matter? Because in the end, if you continue merging, you're going to be able to represent 'independently' as one token, so we don't really care that the fundamental merges are off. But the result can actually matter in other cases. For example, this is a nice, famous example of how RoBERTa tokenizes the word 'cross-shoe'. We can see that it does a very bad merge. 'PS' is obviously a very frequent character bigram, so it's merged; it's one of the first merges.",
+          "segment_ids": [
+            930,
+            931,
+            932,
+            933,
+            934,
+            935,
+            936,
+            937,
+            938
+          ],
+          "alignment": {
+            "paragraph_id": 39,
+            "slide": 54,
+            "start": 2866.82,
+            "end": 2922.8,
+            "start_time": "00:47:47",
+            "end_time": "00:48:43",
+            "confidence": 0.6741,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 41,
+          "start": 3002.66,
+          "end": 3063.46,
+          "start_time": "00:50:03",
+          "end_time": "00:51:03",
+          "text": "So if you have a conditional visualization, if you see in your inference time a word like 'inherently', which is not in your vocabulary, then you cannot rely on your knowledge of the morpheme 'ly', because you don't really know much about it. So what can we do about that? That's really a known issue of BPE tokenizers. What can we do about that? One approach is what's called BPE dropout. I don't know if you've heard of it, but the idea is that when you have a token, when we're tokenizing our training set for training a language model, we randomly disable some merges. So for example, you might disable this very bad merge, which is great. Then the result is that you will have tokenized the word as 'in', and then you will have all the event and at least, so you will tokenize the word as 'in', and then you will",
+          "segment_ids": [
+            950,
+            951,
+            952,
+            953,
+            954,
+            955,
+            956,
+            957,
+            958,
+            959
+          ],
+          "alignment": {
+            "paragraph_id": 41,
+            "slide": 54,
+            "start": 3002.66,
+            "end": 3063.46,
+            "start_time": "00:50:03",
+            "end_time": "00:51:03",
+            "confidence": 0.7992,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 43,
+          "start": 3130.77,
+          "end": 3278.46,
+          "start_time": "00:52:11",
+          "end_time": "00:54:38",
+          "text": "by my previous student, Roland Bowens, as part of his master thesis three years ago. The idea was that we want to disable the bad merges. And how do we define what is a bad merge? We determine this based on this morphological lexicon. So again, these FSAs can have relevant... And they found that this algorithm performs less... And trying to identify the bad merges, the morphologically bad merges of this BPE tree based on, so this is the world standard segmentation of how the word can be segmented morphologically. And this should be quite quick again. A moment before we share the answers. Right. I think we have the correct answers. Or not exactly. So this is correct. There are two bad merges. And one has been identified, but not the other one yet. One of the bad merges is this one here, as correctly identified. Why? Because when we merge 'i' and 'd',",
+          "segment_ids": [
+            972,
+            973,
+            974,
+            975,
+            976,
+            977,
+            978,
+            979,
+            980,
+            981,
+            982,
+            983,
+            984,
+            985,
+            986,
+            987,
+            988,
+            989,
+            990,
+            991,
+            992,
+            993,
+            994,
+            995
+          ],
+          "alignment": {
+            "paragraph_id": 43,
+            "slide": 54,
+            "start": 3130.77,
+            "end": 3278.46,
+            "start_time": "00:52:11",
+            "end_time": "00:54:38",
+            "confidence": 0.7719,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 44,
+          "start": 3278.46,
+          "end": 3382.63,
+          "start_time": "00:54:38",
+          "end_time": "00:56:23",
+          "text": "we make it impossible to have 'anti' and to have 'i' and 'd' that belong to two different morphemes. So that's one. What is the other one? Yes. Someone got it. This guy here. Why? Because this merge here makes it impossible to have the morpheme 'established'. Right? Does that make sense? So, 'establishment'. Put it another way: here we're crossing morpheme boundaries. And then, and so, completely, this is the... this is what... this is how BPE, thanks to, yeah, with BPE dropout, this is the result for 'indefinitely' looks like this. So it does. It does avoid this bad 'int' merge, and gives you a morphologically informed subword tokenization. So what they found in that paper is that generally morphological information can be used to inform subword tokenization, and they found that it improves downstream performance. Its disadvantage is that it relies on this handcrafted lexicon, which is expensive to make.",
+          "segment_ids": [
+            996,
+            997,
+            998,
+            999,
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020,
+            1021,
+            1022,
+            1023
+          ],
+          "alignment": {
+            "paragraph_id": 44,
+            "slide": 54,
+            "start": 3278.46,
+            "end": 3382.63,
+            "start_time": "00:54:38",
+            "end_time": "00:56:23",
+            "confidence": 0.812,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 55,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 56,
+      "slide_time": "00:31:26",
+      "paragraph_ids": [
+        28
+      ],
+      "paragraphs": [
+        {
+          "id": 28,
+          "start": 1885.75,
+          "end": 1955.75,
+          "start_time": "00:31:26",
+          "end_time": "00:32:36",
+          "text": "Taking the output representation of each word: in practice, there is a question of when your word, like 'optimizer', is split into three subwords, which one should you take as the representation of the word 'optimizer'? You get one vector per subword. Research has looked into doing mean pooling of these vectors, but typically it works surprisingly well to just take the output representation of the first subword to represent the entire word. Why does it work? Because essentially, as we saw last week and the week before, each subword contains information about the entire context.",
+          "segment_ids": [
+            669,
+            670,
+            671,
+            672,
+            673,
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            680
+          ],
+          "alignment": {
+            "paragraph_id": 28,
+            "slide": 56,
+            "start": 1885.75,
+            "end": 1955.75,
+            "start_time": "00:31:26",
+            "end_time": "00:32:36",
+            "confidence": 0.685,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 57,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 58,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 59,
+      "slide_time": "00:24:32",
+      "paragraph_ids": [
+        19,
+        46
+      ],
+      "paragraphs": [
+        {
+          "id": 19,
+          "start": 1472.0,
+          "end": 1531.02,
+          "start_time": "00:24:32",
+          "end_time": "00:25:31",
+          "text": "Adverbs? That didn't work, right? Or, ah, unless you have an adjective 'woot', that is adverbs, but I don't think that makes sense. Ah, or maybe this person just said 'any adverbs', which is cool; maybe that's probably what's meant. So 'untruthfully', that's correct. 'Quickly', also correct. 'Unfriendly', 'unfairly', 'unearnest', 'beautifully'. Yes, this is all correct. 'Unpicky'—ah, there we go. So that was also part of the exercise to make notice that this is not perfect. It's also able to process words that should be recognized as non-English, and it's not the case.",
+          "segment_ids": [
+            574,
+            575,
+            576,
+            577,
+            578,
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585,
+            586,
+            587,
+            588
+          ],
+          "alignment": {
+            "paragraph_id": 19,
+            "slide": 59,
+            "start": 1472.0,
+            "end": 1531.02,
+            "start_time": "00:24:32",
+            "end_time": "00:25:31",
+            "confidence": 0.584,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 46,
+          "start": 3460.74,
+          "end": 3526.74,
+          "start_time": "00:57:41",
+          "end_time": "00:58:47",
+          "text": "rule-based methods, and how they can be applied to these tasks. We saw how we can use neural network-based methods with these encoder models, primarily, but also these encoder-decoders. And then we finally saw how we can inform subword tokenization using morphology. And so more generally, the direct use of morphology is clearly... it's hard to say it's not really relevant for English, because of this poor morphology, and because English has so much data that you don't really need morphologically-informed tokenization, because your model is going to learn morphology regardless. But it might still be relevant for languages with complex morphology, and we saw that, yeah, that there's still room for improvement for these morphological processing tasks for some languages where the accuracy of state-of-the-art systems is not that high. But finally, if you take just one take-home message today,",
+          "segment_ids": [
+            1048,
+            1049,
+            1050,
+            1051,
+            1052,
+            1053,
+            1054,
+            1055,
+            1056,
+            1057,
+            1058,
+            1059,
+            1060,
+            1061,
+            1062,
+            1063,
+            1064,
+            1065,
+            1066,
+            1067,
+            1068,
+            1069,
+            1070,
+            1071
+          ],
+          "alignment": {
+            "paragraph_id": 46,
+            "slide": 59,
+            "start": 3460.74,
+            "end": 3526.74,
+            "start_time": "00:57:41",
+            "end_time": "00:58:47",
+            "confidence": 0.8732,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 60,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 61,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    }
+  ]
+}

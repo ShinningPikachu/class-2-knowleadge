@@ -1,0 +1,326 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 01",
+    "section_label": "Slide",
+    "completed": 63,
+    "total": 63,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Natural Language Processing:",
+      "summary": "This lecture introduces the topic of Natural Language Processing (NLP) as part of course H02B1A. The session is presented by Miryam de Lhoneux from the Department of Computer Science at KU Leuven."
+    },
+    {
+      "slide": 2,
+      "title": "Introduction",
+      "summary": "This introductory slide outlines the course structure, covering the current state of Natural Language Processing (NLP), general challenges, and methods for representing words and sentences. It also previews the course overview and practical information necessary for students. This section serves as a roadmap for the upcoming lectures on NLP fundamentals."
+    },
+    {
+      "slide": 3,
+      "title": "Introduction",
+      "summary": "This slide introduces the topic of Natural Language Processing (NLP), serving as the opening section for the course module. It establishes the foundational context for studying how computers interact with human language, marking the beginning of the detailed exploration into NLP concepts and applications."
+    },
+    {
+      "slide": 4,
+      "title": "Introduction",
+      "summary": "Natural language processing (NLP) is a field of science and engineering focused on developing automatic systems that understand and generate natural, or human, languages. NLP comprises two main parts: understanding and generating language, with applications including search engines, spell checkers, and machine translation. The professor emphasizes that \"natural\" specifically distinguishes human languages from synthetic or artificial ones."
+    },
+    {
+      "slide": 5,
+      "title": "Introduction",
+      "summary": "Slide 5 introduces the topic of Natural Language Processing (NLP) with the title \"Introduction\" and the subtitle \"Natural language processing: all-in-one\". The slide includes a retrieval date of 19/08/2024 and is labeled as section 4."
+    },
+    {
+      "slide": 6,
+      "title": "Introduction",
+      "summary": "Slide 6 introduces the topic of Natural Language Processing (NLP) with the title \"Introduction\" and the subtitle \"Natural language processing: all-in-one\". The slide includes a retrieval date of 19/08/2024 and is labeled as section 5, titled \"NLP: Introduction\"."
+    },
+    {
+      "slide": 7,
+      "title": "Introduction",
+      "summary": "This course examines the building blocks of state-of-the-art NLP systems to identify both overcome and open challenges in understanding and generating natural language. It covers tasks across all linguistic levels: morphology (internal word structure), syntax (sentence structure), and semantics (meaning). Key applications include machine translation and conversational agents, which have evolved significantly yet still face unresolved issues like hallucinations."
+    },
+    {
+      "slide": 8,
+      "title": "Introduction",
+      "summary": "By the end of this course, students will be able to describe fundamental concepts and algorithms presented in class. They will also learn to implement and apply these algorithms effectively. Finally, learners will gain the ability to describe and utilize state-of-the-art Natural Language Processing (NLP) models."
+    },
+    {
+      "slide": 9,
+      "title": "Introduction",
+      "summary": "This lecture introduces Natural Language Processing (NLP) by covering its current state, general challenges, and methods for representing words and sentences. It also outlines the practical aspects of the course to guide student expectations and learning objectives."
+    },
+    {
+      "slide": 10,
+      "title": "State of NLP",
+      "summary": "Slide 10 presents the course outline for \"State of NLP,\" which covers an introduction, general challenges, representing words and sentences, a course overview, and practical information. This slide serves as a structural roadmap for the lecture series, listing these key topics."
+    },
+    {
+      "slide": 11,
+      "title": "State of NLP",
+      "summary": "Slide 11, titled \"State of NLP,\" presents an overview of NLP progress as of 2012, attributed to Dan Jurafsky. As part of the \"NLP: Introduction\" series, this slide serves as a historical reference point for the field's development at that time."
+    },
+    {
+      "slide": 12,
+      "title": "State of NLP",
+      "summary": "Slide 12 presents the \"State of NLP,\" specifically highlighting NLP progress in 2025. This content is adapted from Dan Jurafsky's work on NLP introductions."
+    },
+    {
+      "slide": 13,
+      "title": "State of NLP",
+      "summary": "Slide 13 presents a benchmark comparison of progress in Natural Language Processing (NLP) and Computer Vision (CV) from 2015, citing Kiela et al. (2021). The figure plots performance where -1 represents initial levels and 0 indicates human performance, highlighting benchmarks like MNIST and ImageNet for CV versus BlueSquad and SQuAD 2 for NLP. While some tasks are considered mostly solved, others such as dialogue, summarization, and question answering continue to show significant progress toward human-level capabilities."
+    },
+    {
+      "slide": 14,
+      "title": "State of NLP",
+      "summary": "While computer vision progressed slowly until neural networks became standard between 2010 and 2015, NLP progress surged immediately after benchmarks were developed in 2016, rapidly reaching human performance. However, despite this rapid advancement, current NLP systems still face significant open challenges, particularly in open-domain question answering as summarized by Liu et al. (2022). These remaining difficulties indicate that while benchmarks are quickly solved, fundamental tasks like answering questions remain unresolved."
+    },
+    {
+      "slide": 15,
+      "title": "State of NLP",
+      "summary": "NLP systems exhibit significant performance disparities across languages, with high accuracy for English and Spanish but poor or nonexistent tools for half the world's population, as shown in Named Entity Recognition benchmarks. Although trends favor larger multilingual models trained on web-scraped data, these datasets remain English-dominated, often resulting in \"multilingual by accident\" rather than intentional design. Consequently, the view that more data alone solves this issue is flawed because non-English languages will never achieve the data volume of English, leaving NLP fundamentally English-centric."
+    },
+    {
+      "slide": 16,
+      "title": "State of NLP",
+      "summary": "NLP systems exhibit significant performance disparities based on language resources, with substantial progress for English and high-resource languages like French and German, but poor results for low-resource languages such as Tamil despite their speaker numbers. Although multilingual models exist, English data still comprises 60% of training sets, causing the performance gap to widen rather than close. Furthermore, relying on translation through English is discouraged because it propagates English-specific biases into other languages."
+    },
+    {
+      "slide": 17,
+      "title": "General challenges",
+      "summary": "Slide 17 presents the course outline, listing \"General challenges\" as a key topic alongside Introduction, State of NLP, Representing words and sentences, Course overview, and Practical information."
+    },
+    {
+      "slide": 18,
+      "title": "General challenges",
+      "summary": "General NLP challenges include ambiguity, non-standard language, neologisms, the need for external knowledge, and the long tail of rare words or phenomena. While models often perform well on frequent language aspects, capturing this long tail of infrequent items significantly increases difficulty. This specific challenge regarding frequency distribution is a recurring theme throughout the course."
+    },
+    {
+      "slide": 19,
+      "title": "General challenges",
+      "summary": "Ambiguity is a prevalent challenge in natural language where sentence analysis alone is insufficient to determine meaning without additional context. While humorous examples like \"I love ambiguity more than most people love ambiguity\" illustrate structural confusion, common phrases such as \"I made her duck\" demonstrate how words can have multiple interpretations ranging from cooking to physical actions. Resolving these ambiguities requires external context rather than relying solely on the sentence structure itself."
+    },
+    {
+      "slide": 20,
+      "title": "General challenges",
+      "summary": "The sentence \"I made her duck\" illustrates lexical and syntactic ambiguity in natural language, as it can mean cooking food for someone, creating an object, causing a physical action, or transforming a person into an animal. Because the words \"made,\" \"her,\" and \"duck\" have multiple interpretations, the correct meaning cannot be determined without additional context to disambiguate the statement."
+    },
+    {
+      "slide": 21,
+      "title": "General challenges",
+      "summary": "General challenges in NLP include four types of ambiguity: lexical (e.g., \"saw\" as past tense or tool), structural (e.g., who possesses the telescope), semantic (e.g., \"married\" to each other or others), and anaphoric (e.g., pronoun reference). The professor illustrates these with examples like \"I saw a bat\" and \"John and Mary are married,\" while also noting additional issues in web data such as slang, abbreviations, and neologisms."
+    },
+    {
+      "slide": 22,
+      "title": "General challenges",
+      "summary": "General challenges in Natural Language Processing include handling non-standard language found in informal contexts like tweets. This involves processing elements such as emojis, hashtags, slang terms like \"wanna,\" and abbreviations including \"MT\" and \"HMU\". These features deviate from standard grammatical structures, complicating automated text analysis."
+    },
+    {
+      "slide": 23,
+      "title": "General challenges",
+      "summary": "Slide 23 identifies the emergence of recent neologisms as a general challenge in Natural Language Processing. The slide specifically lists four examples of these new terms: \"Deepfake,\" \"Prompt engineer,\" \"Situationship,\" and \"Enshittification\". These entries highlight the difficulty NLP systems face in adapting to rapidly evolving vocabulary within the field."
+    },
+    {
+      "slide": 24,
+      "title": "General challenges",
+      "summary": "General challenges in Natural Language Processing include handling neologisms, which are newly coined words or expressions. A specific example cited is the New York Times initially referring to \"bluesky\" as a bot, illustrating the difficulty of interpreting emerging terminology. This highlights the ongoing struggle for NLP systems to adapt to rapidly evolving language usage."
+    },
+    {
+      "slide": 25,
+      "title": "General challenges",
+      "summary": "A major challenge in NLP is the need for external knowledge to interpret sentences like Jack shaking his silent piggy bank. Understanding this scenario requires domain knowledge of what a piggy bank is, commonsense knowledge that coins should make sound when shaken, and broader context regarding disappointment over lacking money. Without these three types of external information, machines cannot infer why the character's expectation was unmet."
+    },
+    {
+      "slide": 26,
+      "title": "General challenges",
+      "summary": "Slide 26 introduces general challenges in Natural Language Processing, specifically highlighting the Law of Zipf. This principle describes the relationship between word frequency and rank, illustrated here using data from Shakespeare's *Rome and Juliet*. The slide presents this concept as a foundational issue within the NLP introduction context."
+    },
+    {
+      "slide": 27,
+      "title": "Representing words and sentences",
+      "summary": "Slide 27 introduces the topic of representing words and sentences within the course outline. This section follows the introduction, state of NLP, and general challenges, preceding the course overview and practical information. As part of the \"NLP: Introduction\" module, it establishes word and sentence representation as a core component of the curriculum."
+    },
+    {
+      "slide": 28,
+      "title": "Representing words and sentences",
+      "summary": "Slide 28 introduces a \"Toy corpus\" for representing words and sentences using a specific vocabulary: {sky, wings, engine, helicopter, drone, rocket, goose, eagle, bee}. The slide lists various example sentences combining these terms to describe entities in the sky, their attributes like having wings, and classifications such as engines that take pictures or are useful. This collection serves as a foundational dataset for demonstrating natural language processing concepts within the course introduction."
+    },
+    {
+      "slide": 29,
+      "title": "Representing words and sentences",
+      "summary": "Words are represented as vectors in a space where dimensions correspond to vocabulary terms, with values indicating co-occurrence counts; for instance, \"helicopter\" is (4, 2, 0) based on its frequency with \"sky,\" \"engine,\" and \"wings\". This method places semantically similar words closer together in the vector space. To represent full sentences, individual word vectors are summed or multiplied to create a single \"bag of words\" vector, which fails to capture word order or sequence information."
+    },
+    {
+      "slide": 30,
+      "title": "Representing words and sentences",
+      "summary": "Slide 30 introduces the \"Bag of words\" method for representing phrases and sentences in Natural Language Processing. This approach treats text as an unordered collection of individual words, disregarding grammar and word order. The slide illustrates this concept using the example sentence \"Mary ate a pizza,\" which is decomposed into its constituent words: Mary, ate, a, and pizza."
+    },
+    {
+      "slide": 31,
+      "title": "Representing words and sentences",
+      "summary": "While bag-of-words representations fail to distinguish sentence order, Recurrent Neural Networks (RNNs) effectively model sequences by processing words step-by-step. An RNN passes a word vector into a recurrent cell that combines it with the previous output to compose new representations. This sequential mechanism allows the network to capture the specific order of words in phrases and sentences."
+    },
+    {
+      "slide": 32,
+      "title": "Representing words and sentences",
+      "summary": "Slide 32 illustrates the representation of words and sentences using a Transformer model, denoted as f(). The visual content contrasts individual word tokens with phrase-level representations, incorporating specific examples such as \"Mary,\" \"ate,\" \"a,\" and \"pizza\". Additionally, the slide highlights the use of special tokens like CLS to aggregate information for sentence-level tasks within the NLP introduction context."
+    },
+    {
+      "slide": 33,
+      "title": "Representing words and sentences",
+      "summary": "Representing words and sentences involves neural networks learning word vectors rather than using static co-occurrence counts. The transformation function $f()$ is complex, particularly for deep multi-layered RNNs and even more so for transformers. Furthermore, modern transformer architectures utilize subwords as input units instead of whole words to manage vocabulary size effectively."
+    },
+    {
+      "slide": 34,
+      "title": "Course overview",
+      "summary": "Slide 34 presents the course outline, which covers an introduction to NLP, the current state of the field, general challenges, and methods for representing words and sentences. The overview also includes practical information regarding the course structure. This slide serves as a roadmap for the introductory module on Natural Language Processing."
+    },
+    {
+      "slide": 35,
+      "title": "Course overview",
+      "summary": "Slide 35 outlines the course structure, beginning with four fundamental topics: introduction, segmentation and tokenization, language modelling, and neural language modelling. The overview concludes by identifying neural machine translation as a foundational application of these concepts. This slide serves as a high-level roadmap for the NLP curriculum presented in the lecture."
+    },
+    {
+      "slide": 36,
+      "title": "Course overview",
+      "summary": "The course overview outlines levels of linguistic processing, including POS tagging, morphological analysis, syntactic parsing, semantics, and discourse, followed by applications like question answering and conversational agents. While traditional models utilize this full pipeline for tasks such as question answering, newer models often skip intermediate linguistic analysis to learn end-to-end. Lecture 12 is designated as a non-lecture Q&A session where the format is currently being experimented with."
+    },
+    {
+      "slide": 37,
+      "title": "Course overview",
+      "summary": "The course overview outlines the upcoming schedule, starting with fundamentals next week before covering linguistic processing levels and applications like question answering. The immediate focus is tokenization, which addresses how to split text into units such as characters or words. While character segmentation results in long sequences, word-based approaches can introduce very rare words into the vocabulary."
+    },
+    {
+      "slide": 38,
+      "title": "Course overview",
+      "summary": "Slide 38 outlines the course overview, specifically introducing Section 3 on Language Modelling and its probabilistic foundations. This content is part of the broader \"NLP: Introduction\" module, which appears as item 29 in the sequence. The slide serves as a structural header to define these key topics."
+    },
+    {
+      "slide": 39,
+      "title": "Course overview",
+      "summary": "Slide 39 outlines the fourth course topic, Neural Language Modelling, which covers language modelling using both Recurrent Neural Networks (RNNs) and Transformers. This section is part of the \"NLP: Introduction\" lecture series presented by Tim Van de Cruys."
+    },
+    {
+      "slide": 40,
+      "title": "Course overview",
+      "summary": "This course overview introduces the fifth topic, Neural Machine Translation, which focuses on the encoder-decoder transformer architecture. The material references Jurafsky and Martin (2024) as the primary source for understanding this machine translation framework within the broader context of Natural Language Processing."
+    },
+    {
+      "slide": 41,
+      "title": "Course overview",
+      "summary": "POS tagging is defined as the mapping from a sequence of input words ($x_1, x_2, \\dots, x_n$) to a corresponding sequence of output part-of-speech tags ($y_1, y_2, \\dots, y_n$). This concept is presented in the course overview as a core component of Natural Language Processing, citing Jurafsky and Martin (2024)."
+    },
+    {
+      "slide": 42,
+      "title": "Course overview",
+      "summary": "Slide 42 introduces morphological analysis as the seventh topic in the course overview, defining it as the process of analyzing the internal structure of words. The slide illustrates this concept using the specific example of the word \"independently\". This content is part of the broader NLP: Introduction module."
+    },
+    {
+      "slide": 43,
+      "title": "Course overview",
+      "summary": "Slide 43 introduces \"Syntactic parsing\" as the eighth topic in the course overview, defined as the analysis of sentence structure. The slide illustrates this concept using the example sentence \"Who developed the algorithm for the black hole image,\" annotated with dependency labels such as nsubj, root, det, obj, case, compound, and obl. This content appears within the broader context of an NLP introduction."
+    },
+    {
+      "slide": 44,
+      "title": "Course overview",
+      "summary": "Slide 44 presents the course overview, specifically highlighting Section 9 on Semantics and the topic of Word Sense Disambiguation. This slide also references page 35 as the starting point for the \"NLP: Introduction\" material."
+    },
+    {
+      "slide": 45,
+      "title": "Course overview",
+      "summary": "This course overview introduces semantics, covering word sense disambiguation (e.g., distinguishing \"sink\" as a noun or verb) and semantic role labeling to identify who performs an action, the action itself, and its targets or timing. The curriculum then extends beyond single sentences to analyze relationships between them through coreference resolution, such as linking pronouns like \"she\" to specific entities like \"Anna\". Finally, it addresses NLP applications, specifically question answering systems where users pose queries and receive automated responses."
+    },
+    {
+      "slide": 46,
+      "title": "Course overview",
+      "summary": "Slide 46 presents a course overview that lists \"Discourse Coreference resolution\" as item 10 and identifies the total count of topics as 36 under the heading \"NLP: Introduction\"."
+    },
+    {
+      "slide": 47,
+      "title": "Course overview",
+      "summary": "Slide 47 presents a course overview highlighting two specific topics: Question Answering, listed as item 11, and the Introduction to Natural Language Processing (NLP), listed as item 37."
+    },
+    {
+      "slide": 48,
+      "title": "Course overview",
+      "summary": "The course concludes with a Q&A session offering students the opportunity to ask questions regarding any lecture or reading material. Additionally, this session may include a mock exam, though this component is subject to confirmation. This overview marks the final segment of the NLP: Introduction course structure."
+    },
+    {
+      "slide": 49,
+      "title": "Course overview",
+      "summary": "Slide 49 introduces a guest lecture on \"Conversational Agents\" by Thomas Winters, a Post-doc at DTAI, KU Leuven. This session covers text generation and LLM-based conversational agents but is explicitly noted as fun and informative material that is not part of the official course content."
+    },
+    {
+      "slide": 50,
+      "title": "Course overview",
+      "summary": "Although linguistic structures like POS tagging are rarely used in production, they remain vital because LLMs are opaque black boxes requiring interpretability to analyze errors and identify weaknesses. These traditional tasks are particularly relevant for low-resource languages where LLMs underperform and offer a path toward more sustainable models by reducing search spaces through constraints. Ultimately, integrating linguistic knowledge may enable future neuro-symbolic approaches that improve model efficiency and decision-making transparency."
+    },
+    {
+      "slide": 51,
+      "title": "Practical information",
+      "summary": "Slide 51 presents the \"Practical information\" section within the course outline for an NLP introduction. The slide lists the full course structure, which includes topics on the state of NLP, general challenges, representing words and sentences, and a course overview."
+    },
+    {
+      "slide": 52,
+      "title": "Practical information",
+      "summary": "The professor advocates for active learning over passive traditional lectures, emphasizing that interaction with peers and instructors boosts understanding. While students are encouraged to attend class for added value like polls and clarifications, attendance is not mandatory, especially if sick. The course rejects the \"blok\" system of cramming, as learning requires time; therefore, all content is available online to allow in-class focus on exercises and questions."
+    },
+    {
+      "slide": 53,
+      "title": "Practical information",
+      "summary": "All course materials, including pre-recorded lectures, slides, required readings, exercises, and labs with solutions, are available online via the Toledo platform. While lecture slides and videos provide high-level intuitive explanations, students must consult the required readings to fully understand the models and algorithms in detail."
+    },
+    {
+      "slide": 54,
+      "title": "Practical information",
+      "summary": "In-person lectures occur on Thursdays from 11:00 to 13:00, except Lecture 6 on October 30th (09:30–11:30 in QDV-01.100). These sessions are not recorded to encourage questions and feature interactive exercises with solutions posted online. While prerecorded videos cover the same content as slides, students must complete exercises and required readings from the Jurafsky and Martin textbook to master the algorithmic details necessary for the exam."
+    },
+    {
+      "slide": 55,
+      "title": "Practical information",
+      "summary": "The course includes seven two-hour lab sessions organized into two groups by teaching assistants. These sessions feature a mix of implementation and paper exercises focused on applying algorithms, serving as direct preparation for the exam without requiring additional material."
+    },
+    {
+      "slide": 56,
+      "title": "Practical information",
+      "summary": "This NLP course is complementary to, but not a requirement for, Tim Van de Cruys's Computational Linguistics course. While Computational Linguistics emphasizes linguistic formalisms and high-level model intuitions, this course delves deeper into mathematical modelling and detailed algorithm analysis. Although instructors collaborate to ensure compatibility, some redundancy may occur, and student feedback is welcomed to address these overlaps."
+    },
+    {
+      "slide": 57,
+      "title": "Practical information",
+      "summary": "This course has significant content overlap with \"Advanced NLP,\" taught by Pieter Delobelle, which is specifically designed for MirAI students. Both the lectures and the project components share large similarities between the two courses. Additionally, the Advanced NLP course is conducted entirely in Dutch."
+    },
+    {
+      "slide": 58,
+      "title": "Practical information",
+      "summary": "The course evaluation consists of an open-book written exam emphasizing understanding over memorization, split equally between theoretical and exercise components. The theoretical section covers broad overviews, technology comparisons, and algorithm explanations, while the exercise section requires applying algorithms or metrics and analyzing lab program outputs. An information sheet with example questions will be available on Toledo in mid-October."
+    },
+    {
+      "slide": 59,
+      "title": "Practical information",
+      "summary": "The course is coordinated by Miryam de Lhoneux, located at Celestijnlaan 200A, room 4.50, in the Department of Computer Science. She can be contacted via email at miryam.delhoneux@kuleuven.be. The teaching assistants for this course are Coleman Haley, Wessel Poelman, and Benjamin Suter, with their respective contact emails provided on the slide."
+    },
+    {
+      "slide": 60,
+      "title": "Practical information",
+      "summary": "With approximately 200 registered students, punctuality is essential to respect everyone's time. Attendance is optional and does not require notification, but all assigned readings are mandatory. Additionally, laptops and tablets are strictly prohibited during the exam."
+    },
+    {
+      "slide": 61,
+      "title": "Practical information",
+      "summary": "For content-based questions, students should first consult the Toledo forum or attend lectures and labs. Practical inquiries require checking Toledo resources before posting to the forum; urgent or unanswered issues may be emailed with \"[H02B1A]\" in the subject line. The course team guarantees responses only throughout the semester, with no assurance of answers afterward."
+    },
+    {
+      "slide": 62,
+      "title": "Practical information",
+      "summary": "To conclude the introduction to Natural Language Processing, the lecture emphasizes two key practical goals: decreasing redundant communication and increasing meaningful interaction. These objectives summarize the desired outcomes for effective language use in NLP contexts."
+    },
+    {
+      "slide": 63,
+      "title": "Practical information",
+      "summary": "Slide 63 lists key references for further study, including Jurafsky and Martin's 2024 textbook on speech and language processing, StanfordNLP's CS224n course materials, and Marvin Minsky's work on commonsense interfaces. It also cites recent research on semantic role labeling, benchmarking challenges like Dynabench and GlobalBench, and generalization issues in open-domain question answering. These sources provide foundational and contemporary perspectives on natural language processing."
+    }
+  ]
+}

@@ -1,0 +1,497 @@
+{
+  "metadata": {
+    "lecture_title": "Lectures 5–6: Speech Science (30 Oct, combined recording)",
+    "section_label": "Slide",
+    "completed": 54,
+    "total": 54,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Speech Science 5 2026-2027",
+      "summary": "This lecture introduces the course \"Speech Science 5\" for the 2026–2027 academic year. The session is led by Professor Astrid van Wieringen from the Department of Neurosciences at KU Leuven, specifically within the Experimental ORL division. As an introductory slide, it establishes the course identity and instructor credentials.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "Aim: to examine the perception of consonants under noisy conditions, determine which physical properties of the speech sound affect intelligibility",
+      "summary": "The primary aim is to examine consonant perception under noisy conditions to identify which physical speech properties most affect intelligibility, noting that listener mistakes are not random. This research is essential for improving speech recognition systems by distinguishing robust cues from fragile ones, as well as for diagnostic purposes and monitoring rehabilitation progress. Methodologically, studies must isolate auditory information without meaningful context, utilizing either open-set tests, which are difficult to score, or closed-set tests, which allow controlled sensitivity but introduce guessing; notably, very young children cannot perform these specific tasks…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 3,
+      "title": "• Basic test requirements:",
+      "summary": "Basic test requirements include sensitivity, validity, and reliability. Sensitivity is the ability to detect performance differences, such as varying degrees of hearing loss or psychophysical capabilities, while validity ensures a test measures its intended target and serves as a prerequisite for sensitivity. Reliability refers to measurement repeatability, where random errors inherent in any measurement can be minimized by repeating stimuli within the same test.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 4,
+      "title": "16 consonants /p, t, k, b, d, g, f, ………………n /",
+      "summary": "This slide outlines the analytical tests by Miller and Nicely (1955), which utilized 16 consonants spoken in the /ɑ/ context by five female talkers, with each syllable judged approximately 250 times. The study manipulated speech-to-noise ratios ranging from -18 dB to +12 dB, where positive values indicate a stronger signal than noise and negative values indicate the reverse. Additionally, specific frequency response conditions were tested at a constant +12 dB ratio across various bandwidths to analyze consonant recognition under different acoustic constraints.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 5,
+      "title": "Possible setup for closed-set testing",
+      "summary": "Closed-set testing setups involve presenting stimuli acoustically via loudspeaker or electrically through cochlear implant coils, directly to electrodes, or with a speech processor. In manual protocols where a speaker talks into a microphone and listeners wear headphones, the total number of trials must always equal 250. Unlike these manual methods where data from M & N (1955) may be lost, computerized self-paced testing ensures complete data retention.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 6,
+      "title": "• Closed set, 12 repetitions of each stimulus",
+      "summary": "Slide 6 illustrates a closed-set identification experiment where each of the 16 stimuli is presented 12 times, resulting in a diagonal score of 37% correct identifications against a 6.3% chance level. While the matrix reveals specific error patterns, the slide emphasizes that the distribution of these errors is more informative than the overall accuracy rate alone. The transcript clarifies this methodology by referencing Patricia Kuhl's work on mixed stimuli, where participants identify sounds like /ra/ or /la/, noting that such experiments often display categorical switches in perception rather than gradual…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 7,
+      "title": "Results Miller and Nicely (1955)",
+      "summary": "Results Miller and Nicely (1955)",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 8,
+      "title": "Results Miller and Nicely (1955)",
+      "summary": "Results Miller and Nicely (1955)",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 9,
+      "title": "• Voicing and nasality is least affected by noise (-12 dB)",
+      "summary": "Miller and Nicely (1955) demonstrated that listeners detect phonemes using specific cues rather than the whole sound, with voicing and nasality being the most persistent features even in noise (-12 dB). While manner of articulation is generally identified better than place, filtering disrupts these channels differently: high-pass filtering eliminates voicing and nasality causing random confusions, whereas low-pass filtering removes high-frequency frication cues but leaves phonemes audible yet confused. Consequently, disturbing the place of articulation channel prevents distinguishing sounds like /p/, /t/, and /k/.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 10,
+      "title": "10",
+      "summary": "Multidimensional scaling (MDS) analyzes complex speech sounds within a perceptual space without prior assumptions about category numbers, revealing that frequently confused sounds cluster closely while rarely confused ones are spaced apart. To ensure sufficient data, MDS is typically performed on summed confusion matrices from multiple subject groups rather than individual matrices with sparse off-diagonal scores. The resulting stimulus space is interpreted through visual inspection and by correlating acoustic properties with the stimuli's coordinates along different dimensions.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 11,
+      "title": "11",
+      "summary": "Research on speech perception focuses on whether neural mechanisms are species-specific and how the system flexibly handles inherent acoustic variability from factors like coarticulation and speaker differences. Because no one-to-one relationship exists between the acoustic signal and perception, researchers face challenges including the linearity problem, lack of acoustic-phonetic invariance, and segmentation. This flexibility is critical during early development, as delayed auditory exposure beyond age four makes acquiring spoken language significantly more difficult despite potential alternative learning methods like signing.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 12,
+      "title": "12",
+      "summary": "Linearity requires each phoneme to map to a specific sound stretch with consistent acoustic properties, but coarticulation violates this by embedding adjacent phoneme information within single waveform segments. Consequently, acoustic-phonetic invariance is absent because identical phonemes vary acoustically depending on context, such as /b/ sounding more rounded before /u/ than /a/, while identical cues can yield different percepts. This variability and lack of invariant mapping make segmenting waveforms into discrete linguistic units extremely difficult.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 13,
+      "title": "13",
+      "summary": "Listeners perceive constant vowel identity despite acoustic variability across speakers and coarticulation because perception relies on formant relationships rather than absolute frequencies. While the Formant Ratio Theory suggests intervals between F1 and F2 are crucial, it is insufficient alone since some vowels share ratios; thus, Intrinsic models utilize internal spectral patterns, whereas Extrinsic models apply a contextual frame of reference based on speaker characteristics. Additionally, the dynamic movements into a vowel from preceding consonants are equally critical for defining its identity.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 14,
+      "title": "14",
+      "summary": "Slide 14 presents research by Strange et al. (1983, 1989) regarding the identification of specific conditions compared to unmodified CVC structures, focusing on how different acoustic cues contribute to vowel identity. The slide includes an illustration of the stimuli used in these studies.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 15,
+      "title": "15",
+      "summary": "Plosives are distinguished by second formant transition loci, ranging from 650–950 Hz for /b/-like sounds and 1500–1800 Hz for /d/-like ones. In an identification experiment, seven synthetic stimuli with equal physical steps are presented in random order, requiring subjects to categorize each as /ba/ or /da/. Results show a sharp shift where the first stimulus is identified as 100% /ba/ and the seventh as 100% /da/, illustrating categorical perception despite the continuous acoustic variation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 16,
+      "title": "16",
+      "summary": "Categorical perception occurs when listeners perceive a continuous acoustic range as discrete categories, showing high discrimination across category boundaries (e.g., /b/ vs. /d/) but chance-level performance within them. The category boundary represents the point of maximum slope where adjacent categories are equiprobable, meaning equal physical differences are not perceived equally. This phenomenon is language-dependent; for instance, Japanese speakers often fail to distinguish /r/ and /l/ because their phonology lacks separate categories for these sounds, whereas American English speakers perceive them distinctly.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 17,
+      "title": "17",
+      "summary": "In natural speech, consonantal contrasts rely on multiple acoustic features whose salience varies by context, dialect, rate, and style. Listeners integrate these cues into a unitary percept through phonetic trading relations, where one cue compensates for another; for instance, lower F1 onset frequencies require longer VOT values to identify voiceless stops, while /r/ versus /l/ distinctions depend on the interaction between F3 onset and F1 steady-state duration. This integration allows listeners to categorize sounds despite variability, though perception remains constrained by native phonological categories.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 18,
+      "title": "18",
+      "summary": "The McGurk effect demonstrates cross-modal cue integration where conflicting visual and auditory speech stimuli create a perceptual illusion, such as hearing /na/ when seeing /ta/ while hearing /ma/. This phenomenon suggests either a specialized speech system referencing articulatory gestures or general cognitive mechanisms resolving ambiguous multimodal input. As illustrated by the \"baba\" versus \"dada\" demonstration, perception shifts based on visual cues, confirming that speech processing is a multimedia event dependent on integrating both modalities rather than auditory information alone.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 19,
+      "title": "19",
+      "summary": "Phoneme category boundaries shift based on phonetic context and speaking rate as listeners integrate acoustic information over time. In Mann & Repp's (1980) study, intermediate [s]-[ʃ] stimuli were more likely identified as [ʃ] when followed by [i] than by [u], because listeners compensate for the frequency-lowering effect of [u]'s lip rounding. Similarly, preceding context influences perception; a [da]-[ga] continuum was more often heard as [g] after [əl] than [ər], demonstrating that perceptual boundaries adjust to account for articulatory and acoustic variations in different environments.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 20,
+      "title": "20",
+      "summary": "Listeners employ compensatory perceptual processes to decode phonetic messages despite acoustic variations caused by speaking rate changes. In Miller and Liberman's (1979) study, as vowel duration increased to simulate slower speech, the phoneme boundary for a [b-w] continuum shifted toward longer, more gradual transitions. This demonstrates that the brain normalizes perception based on context; faster rates lead listeners to categorize shorter transitions as stops, while slower rates allow longer transitions to be perceived as the same category.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 21,
+      "title": "21",
+      "summary": "Listeners interpret phonetic contrasts by analyzing multiple cues within a broader speech context spanning several syllables, rather than relying on isolated acoustic patterns. This process involves sensitivity to coarticulatory and timing influences, suggesting humans possess specialized perceptual mechanisms that recover linguistic messages from underlying articulatory gestures. Furthermore, the brain adapts to a speaker's specific style and rate, demonstrating that perception depends on contextual integration beyond individual sound segments.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 22,
+      "title": "22",
+      "summary": "Categorical perception and context effects occur in both speech and nonspeech analogues, as well as in animals, indicating that no distinct neural mechanisms exist specifically for phonetic sounds. Instead, general auditory processing principles handle these signals, while higher-order cognitive factors like expectations and social interaction determine the mode of perception. Although the underlying mechanisms are shared across species, the specific cognitive processing required to categorize sounds remains species-specific, relying on advanced skills found in humans and some animals.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 23,
+      "title": "23",
+      "summary": "Linguistic-phonetic categories are likely identified by matching signals against statistical prototypes stored in long-term memory, which are language-specific and adaptable through continuous exposure. While speech perception shares biological roots with general perception, it is a unique, self-contained system that integrates acoustic cues with non-acoustic information like visual mouth movements and prior knowledge. Acoustic input remains primary when clear, but the brain prioritizes the clearest available modality during ambiguity, as demonstrated by the McGurk effect and phonetic restoration where missing sounds are filled in.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 24,
+      "title": "Speech Science 6 2026-2027",
+      "summary": "This lecture session covers Speech Science 6 for the 2026–2027 academic year. It is presented by Professor Astrid van Wieringen from the Department of Neurosciences at KU Leuven, specifically within the Experimental ORL division.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 25,
+      "title": "Faculteit, departement, dienst …",
+      "summary": "Creating a talking robot requires combining hardware and software while explicitly defining its purpose and scope, unlike human development which evolves naturally. Developers must determine the required level of interactivity, ranging from simple informational responses to full conversations that demand higher processing capabilities. Finally, the system needs speech recognition (Speech-to-Text) with Natural Language Understanding to process input, and Speech Synthesis (Text-to-Speech), potentially using emotional models, to generate expressive, human-like output.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 26,
+      "title": "Faculteit, departement, dienst …",
+      "summary": "Creating a talking person requires a dialogue management system that handles intent recognition, response generation, and conversation flow through either predefined libraries or flexible AI models. To ensure consistent and engaging interactions, the robot must possess a defined personality, utilize machine learning for adaptive context retention, and maintain memory across multiple exchanges. This process also demands audiovisual integration, with this course specifically focusing on speech acoustics and science to explore the various types of speech generation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 27,
+      "title": "Developments of the past to give context",
+      "summary": "Building on known human speech production mechanisms, this section explores the historical development of artificial speech synthesis, which expanded significantly after World War II. Early approaches attempted to replicate speech either by modeling articulators or by implementing specific speech cues like prosody and pitch contours. While generating sound became feasible in the 1950s through formal and concatenative methods based on source-filter theory, true discourse generation remains a challenge requiring brain-like capabilities beyond simple signal synthesis.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 28,
+      "title": "Developments of the past to give context",
+      "summary": "Artificial speech has been a centuries-old dream, with early mechanical efforts dating to 1779 when Christian Kratzenstein in St. Petersburg created acoustic resonators mimicking the human vocal tract. Using vibrating reeds similar to musical instruments and bellows acting as lungs, he successfully generated five long vowels by manipulating physiological differences. While these basic mechanical steps established the scientific foundation for speech production and perception, they predated modern electrical circuits and the computational power required for today's data-intensive synthesis methods.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 29,
+      "title": "Vienna 1791, Wolfgang von Kempelen introduced his \"Acoustic-Mechanical Speech Machine\", which was able to produce single",
+      "summary": "In 1791 Vienna, Wolfgang von Kempelen introduced an \"Acoustic-Mechanical Speech Machine\" capable of producing single sounds and combinations using a pressure chamber, vibrating reed, and deformable leather tube to simulate the vocal tract. By manipulating the tube's shape for vowels and employing constricted passages with a hinged tongue and movable lips for consonants, Kempelen established the theory that the vocal tract is the primary site of acoustic articulation. Later, in the mid-1800s, Charles Wheatstone constructed a more complex version capable of generating full words by utilizing turbulent flow for consonants…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 30,
+      "title": "History",
+      "summary": "Speech synthesis history began with Willis (1838), who used tube resonators to prove vowel quality depends on vocal tract length, not diameter. Stewart's 1922 electrical device introduced the source-filter model using a buzzer and resonant circuits to generate static vowels, though it produced metallic-like sounds lacking intelligibility. Homer Dudley's 1939 VODER advanced this by allowing manual control of voicing and formants via filters, demonstrating artificial speech potential despite requiring significant skill and yielding poor quality. The professor notes that early formant synthesis created the distinct \"metallic\" voice later used by…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 31,
+      "title": "History",
+      "summary": "The history of speech synthesis traces back to the VODER and early formant synthesizers like Lawrence's parallel PAT (1953) and Fant's cascade OVE series, which established the source-filter model using vibrating or noise sources. While researchers debated whether to model the vocal tract transfer function in parallel or cascade configurations, John Holmes eventually achieved high naturalness by manually tuning a parallel synthesizer. The professor emphasizes that students need not memorize specific dates but must understand how these systems utilized spectrogram cues and physics to reconstruct speech from individual time-based parameters.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 32,
+      "title": "History",
+      "summary": "The history of speech synthesis began with George Rosen's 1958 articulatory synthesizer and evolved through mid-1960s Linear Predictive Coding (LPC) experiments, which enabled low-cost but poor-quality systems like the TI Speak'n'Spell. While Noriko Umeda developed the first full English text-to-speech system in 1968, Dennis Klatt's 1987 formant synthesis work established the rule-based foundation for modern systems by defining specific language and phoneme rules. Although early optical reading aids like Kurzweil's were effective, they remained commercially inaccessible due to high costs until increased computational power allowed for more sophisticated signal generation.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 33,
+      "title": "Low level synthesis: Formant synthesis – Klatt synthesis –Parametric synthesis",
+      "summary": "Formant synthesis, exemplified by Klatt synthesis, generates speech using a source-filter model that simulates sound sources and formant frequencies without modeling physical vocal tract characteristics. Excitation signals, ranging from voiced tones to unvoiced noise or mixed combinations, are filtered through resonators arranged in either cascade or parallel structures. While the simpler cascade structure suits non-nasal voiced sounds, it struggles with fricatives and plosives; conversely, the parallel structure handles these better but requires summing adjacent outputs in opposite phases to prevent unwanted antiresonances.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 34,
+      "title": "• The advantage of formant based synthesis is that it does not require a large storage capacity nor high computational demands.",
+      "summary": "Formant-based synthesis offers the distinct advantage of requiring neither large storage capacity nor high computational demands, making it efficient for research into acoustic properties that determine speech identity. This method relies on a source-filter model where parameters must be updated dynamically, typically every 5 milliseconds, to capture the rapid changes in speech sounds. While historically significant and capable of producing intelligible speech, as demonstrated by Stephen Hawking's synthesizer, modern implementations have evolved to handle complex filter configurations like cascading for improved quality.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 35,
+      "title": "AV= voicing, AF= frication, FL = for flutter (jitter). Set to 20% during the vowel; A2F - A6F are the amplitudes of the parallel",
+      "summary": "In this model, AV represents voicing, AF denotes frication, and FL stands for flutter (jitter), which is set to 20% during vowel production. The parameters A2F through A6F define the amplitudes of the parallel resonators. Crucially, these specific amplitude values are utilized exclusively when the sound source is identified as frication.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 36,
+      "title": "Formant Synthesis",
+      "summary": "Formant synthesis applies the source-filter theory by generating sound through voiced pulses or noise, which filters then modify to create vowel resonances and consonant characteristics. Systems like DecTalk adjust parameters such as fundamental frequency, formant bandwidths, and breathiness to convey gender and age. This method models only filtering effects, typically requiring five resonant circuits to accurately reproduce male voice formants up to 5000 Hz based on acoustic energy distribution.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 37,
+      "title": "How good can formant synthesis be?",
+      "summary": "Formant synthesis quality depends on patience, as demonstrated by Holmes's natural-sounding results, making it invaluable for research requiring precise parameter control that natural voices cannot provide, such as specific fundamental frequency shifts or allophone transitions. However, its commercial viability is limited by unnaturalness stemming from a lack of subtle variations in parameters and the difficulty of mimicking laryngeal voice sources during rapid F0 changes. This trade-off offers exact experimental values at the cost of requiring extensive manual updates every five milliseconds to identify every allophone.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 38,
+      "title": "Tekst-to-speech (TTS) synthesis: two main phases: high- and low-level synthesis",
+      "summary": "Text-to-speech (TTS) synthesis comprises two main phases: high-level text analysis, which converts input text into phonetic representations with prosodic details like intonation and stress, and low-level synthesis, which generates the final speech waveforms from this acoustic information. While the course focuses on the low-level generation due to the linguistic complexity of the high-level phase, understanding the full pipeline is essential for recognizing the intermediate steps required to transform typed text into spoken words.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 39,
+      "title": "Different types of synthesis",
+      "summary": "Pre-recorded speech offers high-quality, non-metallic audio ideal for fixed-vocabulary applications like car systems, weather updates, and assistive devices for individuals with limited communication abilities. However, this method requires significant memory storage and involves a trade-off between quality, capacity, and computation time, leading some to argue it is merely reproduction rather than true synthesis. While unrestricted text-to-speech necessitates shorter units like phonemes or diphones, articulatory synthesis remains impractical due to the extreme complexity of modeling over 200 intricately coordinated muscles.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 40,
+      "title": "Low-level synthesis: Articulatory synthesis",
+      "summary": "Articulatory synthesis theoretically offers the most accurate artificial speech by directly modeling human articulators and vocal cords as tube sections, often using 2-D X-ray data despite the vocal tract's 3-D nature. While this method accurately captures transients from abrupt area changes better than formant synthesis, its extreme complexity regarding tongue movement rules prevents commercial realization, though tools like Praat demonstrate its feasibility for understanding speech anatomy.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 41,
+      "title": "Problems in Low Level Synthesis",
+      "summary": "Low-level synthesis methods face distinct challenges: articulatory synthesis demands high computational power to imperfectly model vocal mechanics; formant synthesis struggles with complex rule sets and unnatural nasalized sounds; and concatenative synthesis requires time-consuming data collection while risking distortion at sample boundaries. Additionally, synthesis difficulty varies by language, ranging from the regular pronunciation of Finnish to the irregularities of French, while modern systems also contend with high training energy costs and limitations in adapting recorded voices to different demographics like children.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 42,
+      "title": "Concatenative synthesis",
+      "summary": "Concatenative synthesis creates natural speech by connecting prerecorded utterances, though it typically requires significant memory and is limited to a single voice. The core challenge involves selecting unit lengths: longer units like demisyllables or diphones preserve coarticulation and naturalness, whereas shorter units save space but risk distortion if transitions are ignored. Since no full TTS system currently relies solely on words or syllables due to complex cutting exceptions like \"upkeep,\" modern systems primarily utilize phonemes, diphones, or demisyllables to balance versatility with acoustic quality.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 43,
+      "title": "Concatenative synthesis",
+      "summary": "Concatenative synthesis constructs speech by joining recorded units, with diphones often preferred over phonemes because they capture transitions between adjacent sounds. Defined as extending from the steady-state center of one phone to the next, diphones allow concatenation in stable signal regions, reducing distortion and eliminating the need for explicit coarticulation rules. While this approach yields natural consonant clusters and segment durations, it can still struggle with certain syllable boundaries, such as the /pk/ transition in \"upkeep,\" though it generally outperforms demisyllables in these cases.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 44,
+      "title": "Statistical parametric speech synthesis",
+      "summary": "Statistical parametric speech synthesis (SPSS) generates speech from scratch by statistically modeling waveform parameters rather than storing actual audio or simulating physical articulators like the tongue. Unlike unit selection methods, which require significant effort and offer limited voices, SPSS treats speech as a factorial signal where only the statistical model is stored. This approach enables personalized voice synthesis at a modest cost using just a few sentences of data to create a custom model.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 45,
+      "title": "Faculteit, departement, dienst …",
+      "summary": "Slide 45 introduces the organizational hierarchy terms \"Faculteit\" (Faculty), \"departement\" (Department), and \"dienst\" (Service/Division) within the university structure. The slide displays these concepts alongside the number 22.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 46,
+      "title": "Faculteit, departement, dienst …",
+      "summary": "Statistical Parametric Speech Synthesis (SPSS) systems comprise three modules: text analysis, which normalizes input and converts it to linguistic features requiring accurate labels; parameter prediction, which estimates acoustic features like F0 and duration using either HMMs with decision trees or more efficient DNNs that leverage long-term context; and speech synthesis, which generates the final waveform. While HMMs map features to probability densities, DNN-based methods directly map linguistic inputs to acoustic outputs, improving quality by modeling frame correlations, though sequence-to-sequence networks like Wave-Tacotron can bypass intermediate steps to generate waveforms directly…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 47,
+      "title": "Faculteit, departement, dienst …",
+      "summary": "Statistical Parametric Speech Synthesis (SPSS) operates through training and synthesis phases where a statistical model, rather than stored audio, predicts acoustic features like F0 to generate speech via a vocoder. While Deep Learning-based SPSS offers superior naturalness by utilizing complete context information and distributed representations, it demands extensive corpora and computing resources, risks overfitting with insufficient data, and remains highly dependent on accurate phoneme labeling. As the professor emphasizes, this approach represents a shift toward understanding complex models like Hidden Markov Models to achieve high-quality synthesis, though challenges persist particularly…",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 48,
+      "title": "Faculteit, departement, dienst …",
+      "summary": "Deep learning TTS systems rely on statistical prediction models that are computationally intensive and require extensive, high-quality tagged datasets, making them impractical for smaller developers. While these models offer superior commercial quality compared to traditional methods, they still struggle with out-of-vocabulary words, unnatural prosody, and capturing nuanced emotions without significant fine-tuning. Furthermore, the ability to generate highly realistic speech raises critical ethical and security concerns regarding misuse for deepfakes and impersonation, highlighting that this powerful technology remains imperfect and resource-heavy.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 49,
+      "title": "The first task faced by any TTS system is the conversion of input text into linguistic representation, usually called text-to-phonetic",
+      "summary": "The initial task for any Text-to-Speech (TTS) system is converting input text into a linguistic representation, known as text-to-phonetic or grapheme-to-phoneme conversion. This process involves identifying the language and parsing the text before addressing pronunciation irregularities caused by historical evolution or borrowed words, such as the variable voicing of \"th\" in English. To handle these complexities, systems utilize a combination of letter-to-sound rules and lexicons containing morphs for exceptional cases, ultimately generating linguistic data that guides prosodic features like intonation, stress, and duration.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 50,
+      "title": "The parser (syntactic analysis) must",
+      "summary": "The parser performs syntactic analysis by dividing text into pause-free phrases and determining word emphasis, relying on a grammar and structural mechanism to assign a single, unambiguous interpretation even when input is ambiguous. While full clause-level parsing of unrestricted text remains unsolved, phrase-level parsing is fast and reliable, resolving ambiguities that otherwise hinder the assignment of fundamental frequency and duration in systems lacking semantic context.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 51,
+      "title": "Flowchart of operation of DECtalk, based on rules by Dennis Klatt (formant",
+      "summary": "DECtalk operates using Dennis Klatt's formant synthesis rules and features seven built-in voices: three male, three female, and one child. The system prioritizes searching its internal dictionary for words before applying letter-to-sound rules to any unrecognized entries. If the resulting pronunciation is unsatisfactory, users can manually input phonemic symbols instead of standard spelling, ensuring the system remains highly intelligible.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 52,
+      "title": "Performance evaluation",
+      "summary": "Performance evaluation assesses speech intelligibility, defined as the listener's ability to distinguish individual sounds, which is critical for applications aiding visually impaired individuals or those unable to speak, such as Stephen Hawking. Measurement involves comparing dictation results against predetermined texts, though listeners often use linguistic knowledge to fill gaps in grammatical sentences. To isolate true recognition capabilities, studies contrast meaningful sentences with syntactically correct but semantically unpredictable ones, noting that listeners increasingly rely on semantic constraints as speech intelligibility decreases.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 53,
+      "title": "Performance evaluation",
+      "summary": "Performance evaluation distinguishes intelligibility (decoding individual sounds) from comprehensibility (understanding overall content), which is tested via accuracy, response time, and certainty ratings on unfamiliar topics to prevent knowledge bias. While intelligibility focuses on understanding despite poor quality, comprehensibility requires sustained attention that pleasantness or naturalness supports; these subjective criteria are rated on a nine-point scale but remain challenging due to factors like dialects and articulation effects. Ultimately, speech can be understood yet unpleasant, or pleasant yet machine-like, highlighting the complexity of achieving both clarity and natural sound.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 54,
+      "title": "• Speech synthesizers should have the following features:",
+      "summary": "Ideal speech synthesizers must deliver highly intelligible, natural-sounding voices that adapt to noisy conditions and support multilingual, multidialectal communication. Crucially, they require advanced prosody control and emotional expression to reflect meaning, as emotions drive human decision-making and motivation. While current systems achieve basic understanding, significant challenges remain in achieving true flexibility, naturalness, and audio-visual coherence, particularly regarding complex dialects and context-aware personality traits.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,964 @@
+{
+  "metadata": {
+    "source_file": "Lecture_04_Neural_architectures_for_sentence_processing_27_Oct_Slides.pdf",
+    "created_at": "2026-11-04T23:21:35.564673+00:00",
+    "slide_count": 106,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "faculty of arts",
+      "content": "faculty of arts Computational Linguistics Lecture 4: Neural architectures for sentence processing Tim Van de Cruys Tuesday 20 October 2026",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Reminder",
+      "content": "Reminder • Neuron = logistic regression 1 x1 x2 x3 Σ b w1 w2 w3 bias weights inputs activation function • We can feed an input vector to a bunch of logistic regression functions and get an output vector • which can be fed to another layer of logistic regression functions 2/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Feed-forward",
+      "content": "Feed-forward Architecture Multi-layer perceptron with 2 hidden layers NNMLP2(x) = y (1) h1 = g(xW1 + b1) (2) h2 = g(h1W2 + b2) (3) y = h2W3 (4) W1, W2, W3, b1, b2 = parameters of the network (θ) Use of multiple hidden layers: deep learning 3/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Word embeddings",
+      "content": "Word embeddings • Each word i is represented by a small, dense vector vi ∈Rd • d is typically in the range 50–1000 • Matrix of size V (vocabulary size) × d (embedding size) • words are ‘embedded’ in a real-valued, low-dimensional space • Similar words have similar embeddings 4/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Feed-forward network",
+      "content": "Feed-forward network Language modeling • Predict the next word in a sequence, based on the previous word • One non-linear hidden layer, one softmax layer for classification • Choose parameters that optimize probability of correct word 5/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Feed-forward network",
+      "content": "Feed-forward network Named entity recognition • Predict named entity tag for current word, based on current word and previous + next word • One non-linear hidden layer, one softmax layer for classification • Choose parameters that optimize probability of correct word hidden wt-1 p(tag|context) V j d wt0 wt+1 input to london by B_LOC 6/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Feed-forward network",
+      "content": "Feed-forward network Word segmentation 7/51 — Computational Linguistics — tim.vandecruys@kuleuven.be Pei et al. (2014)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Encoding sentences",
+      "content": "Encoding sentences • Feed-forward network assumes fixed dimensional input • How to represent variable number of features, e.g. words in a sentence, document? • Continuous Bag of Words (CBOW): sum embedding vectors of corresponding features • no ordering info (“not good quite bad” = “not bad quite good”) • Recurrent architecture • Recurrent connection to encode sentence history • Transformer architecture • Self-attention 8/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "CBOW: induction of embeddings",
+      "content": "CBOW: induction of embeddings • Current word wt is predicted from context words • Prediction is made from the sum of context embeddings • Pairwise sum of values of corresponding embedding features 9/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "CBOW: sentiment classification",
+      "content": "CBOW: sentiment classification • Sentiment prediction based on sentence/document words • Prediction is made from the sum of context embeddings • Pairwise sum of values of corresponding embedding features • Works for variable number of words ... w0 w1 w2 w3 wn i like this movie ... hidden p(sentiment |w1,...,wn) positive 10/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Introduction • CBOW: no ordering, no structure • RNN: represent arbitrarily sized structured input as fixed-size vectors, paying attention to structured properties 11/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Model • x1: input layer (current word) • a1: hidden layer of current timestep • a0: hidden layer of previous timestep • U, W and V: weights matrices • f(·): element-wise activation function (sigmoid) • g(·): softmax function to ensure probability distribution a1 = f(Ux1 + Wa0) (5) y1 = g(Va1) (6) 12/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Language model i W a1 x V U a0 y word embeddings current word context (t) context (t-1) word distribution 13/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Language model I W a1 x V U a0 y am think would I 13/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Language model am W a2 x V U a1 y starting watching not I am I 13/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Language model watching W a3 x V U a2 y a television football I am watching I am 13/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Language model television W a4 x V U a3 y and but <stop> I am watching television I am watching 13/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Language model = sentence encoder W a1 x U a0 I I 14/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Language model = sentence encoder W a2 x U a1 am I am I 14/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Language model = sentence encoder W a3 x U a2 watching I am watching I am 14/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Language model = sentence encoder W a4 x U a3 television I am watching television I am watching 14/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Language model = sentence encoder W a4 x U a3 -0.3 0.2 0.4 0.2 -0.7 1.2 -0.5 the entire sentence meaning is captured by one large vector representation television I am watching television I am watching 14/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Encoder-decoder <start> W b1 x V U b0 y je le la television W a4 x U a3 I am watching television 15/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Encoder-decoder W b2 x V U b1 y je je regarde cherche viens 15/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Encoder-decoder W b3 x V U b2 y je regarde regarde le la un 15/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Encoder-decoder W b4 x V U b3 y je regarde la la montre télévision météo 15/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Encoder-decoder W b5 x V U b4 y je regarde la télévision télévision et mais <stop> 15/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Training • Consider recurrent neural network as very deep neural network with shared parameters across computation • Backpropagation through time • What kind of supervision? • Acceptor: based on final state • Transducer: an output for each input (e.g. language modeling) • Encoder-decoder: one RNN to encode sequence into vector representation, another RNN to decode into sequence (e.g. machine translation) 16/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Bi-directional RNN • Input sequence both forward and backward to different RNNs • Representation is concatenation of forward and backward state (A & A’) • Represent both history and future 17/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Concrete RNN architectures",
+      "content": "Concrete RNN architectures Simple RNN 18/51 — Computational Linguistics — tim.vandecruys@kuleuven.be source images: colah.github.io",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Concrete RNN architectures",
+      "content": "Concrete RNN architectures LSTM • Long short term memory networks • In practice, simple RNNs only able to remember narrow context (vanishing gradient) • LSTM: complex architecture able to capture long-term dependencies 19/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Recurrence: difficulties",
+      "content": "Recurrence: difficulties • RNNs process a sentence word by word • information from the beginning of the sequence needs to survive many processing steps • long-distance dependencies are hard to capture in practice • no parallel computation: each step waits for the previous one 20/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Bottleneck",
+      "content": "Bottleneck • In standard encoder-decoder approach, the entire meaning of a sentence is encoded into a single vector • Vector is always the same length, no matter how long the sentence • Can the meaning of a sentence be represented by a single vector? • Does it make sense to model a two-word sentence and a thirty-word sentence with the same vector size? • Solution: for each prediction in the decoder phase, pay attention to the entire range of intermediate encoder states 21/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Attention I I am I am watching I am watching television W b2 x V U b1 y je je regarde cherche viens 22/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Attention I I am I am watching I am watching television W b2 x V U b1 y je je regarde cherche viens 1 22/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Attention I I am I am watching I am watching television W b2 x V U b1 y je je regarde cherche viens 1 3 22/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Attention I I am I am watching I am watching television W b2 x V U b1 y je je regarde cherche viens 1 3 5 I am 22/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Attention I I am I am watching I am watching television W b2 x V U b1 y je je regarde cherche viens 1 3 5 I am 1 22/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Attention I I am I am watching I am watching television W b2 x V U b1 y je je regarde cherche viens 0.1 0.3 0.5 I am 0.1 22/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Attention I I am I am watching I am watching television W b2 x V U b1 y je je regarde cherche viens 0.1 0.3 0.5 I am 0.1 22/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Attention in machine translation",
+      "content": "Attention in machine translation 23/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Attention",
+      "content": "Attention The key idea • Attention computes a weighted average of a set of representations (relevance of each representation for the current prediction) • We can use attention within an RNN encoder-decoder framework, as a fix for the bottleneck • But attention is a general mechanism (and can replace recurrence altogether) 24/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Contextualized word embeddings",
+      "content": "Contextualized word embeddings • Standard word embeddings are static: a single embedding for each word • But words are polysemous • And each word occurrence has a slightly different meaning in each different context • contextualized word embeddings • ELMo: Embeddings from Language Models • BERT: Bidirectional Encoder Representations from Transformers 25/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "ELMo",
+      "content": "ELMo • Language models are good at the induction of embeddings • Let’s use the intermediate hidden states of an RNN as contextualized word embeddings • Use contextualized embeddings instead of static embedding in task-specific neural network architecture • Quickly superseded by transformer models, but the idea of contextualized embeddings remains central television W a4 x V U a3 y and but <stop> I am watching television I am watching I I am I am watching I am watching television 26/51 — Computational Linguistics — tim.vandecruys@kuleuven.be Peters et al. (2018)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "ELMo",
+      "content": "ELMo LSTM LSTM LSTM LSTM LSTM LSTM LSTM LSTM I am watching television LSTM LSTM LSTM LSTM LSTM LSTM LSTM LSTM 27/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "ELMo",
+      "content": "ELMo LSTM LSTM LSTM LSTM LSTM LSTM LSTM LSTM I am watching television LSTM LSTM LSTM LSTM LSTM LSTM LSTM LSTM 27/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "ELMo",
+      "content": "ELMo LSTM LSTM LSTM LSTM LSTM LSTM LSTM LSTM I am watching television LSTM LSTM LSTM LSTM LSTM LSTM LSTM LSTM 0.1 x 0.3 x 0.6 x 0.1 x 0.3 x 0.6 x 0.1 x 0.3 x 0.6 x 0.1 x 0.3 x 0.6 x 27/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "ELMo",
+      "content": "ELMo LSTM LSTM LSTM LSTM LSTM LSTM LSTM LSTM I am watching television LSTM LSTM LSTM LSTM LSTM LSTM LSTM LSTM 27/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Attention is all you need",
+      "content": "Attention is all you need • ELMo still relies on recurrence: slow, sequential, limited context • Radical idea: drop the recurrence, keep only the attention • The resulting architecture is called the transformer • originally developed for machine translation • now the basic building block of today’s LLM architectures 28/51 — Computational Linguistics — tim.vandecruys@kuleuven.be Vaswani et al. (2017). Attention is all you need",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Transformer",
+      "content": "Transformer • Basic building block of LLMs • Like a fancy feedforward network, based on attention mechanism • Transformer computes contextualized embeddings for words, based on surrounding words The astronomer watched the star The audience watched the star • Used for left to right language modeling • But first we’ll look at bi-directional language modeling 29/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Transformer",
+      "content": "Transformer • Basic building block of LLMs • Like a fancy feedforward network, based on attention mechanism • Transformer computes contextualized embeddings for words, based on surrounding words The astronomer watched the star through the telescope. The audience watched the star • Used for left to right language modeling • But first we’ll look at bi-directional language modeling 29/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Transformer",
+      "content": "Transformer • Basic building block of LLMs • Like a fancy feedforward network, based on attention mechanism • Transformer computes contextualized embeddings for words, based on surrounding words The astronomer watched the star through the telescope. The audience watched the star in awe. • Used for left to right language modeling • But first we’ll look at bi-directional language modeling 29/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "BERT",
+      "content": "BERT • NLP model that yielded state of the art results • Representations based on bi-directional context • Transformer architecture • General training on language modeling task, finetuning on specific NLP task 30/51 — Computational Linguistics — tim.vandecruys@kuleuven.be Devlin et al. (2019)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Bi-directional encoding",
+      "content": "Bi-directional encoding LSTM LSTM LSTM LSTM I am watching television am watching television <stop> 31/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Bi-directional encoding",
+      "content": "Bi-directional encoding LSTM LSTM LSTM LSTM I am watching television <start> I am watching 31/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "Bi-directional encoding",
+      "content": "Bi-directional encoding transformer I am watching television transformer transformer transformer 31/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "Bi-directional encoding",
+      "content": "Bi-directional encoding transformer I am [MASK] television transformer transformer transformer watching 31/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "Bi-directional encoding",
+      "content": "Bi-directional encoding transformer I am [MASK] television transformer transformer transformer watching • Mask 15% of input words, and predict the masked words 31/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Transformer",
+      "content": "Transformer • Computation of contextualized representations based solely on concept of self-attention • No more sequential processing, allows for efficient parallel computations • Representation of each word is contextualized through application of multiple layers of transformer blocks 32/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Transformer: self-attention",
+      "content": "Transformer: self-attention I am television watching 33/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "Transformer: self-attention",
+      "content": "Transformer: self-attention I am television watching 11 33/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "Transformer: self-attention",
+      "content": "Transformer: self-attention I am television watching 15 11 33/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "Transformer: self-attention",
+      "content": "Transformer: self-attention I am television watching 15 96 11 33/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "Transformer: self-attention",
+      "content": "Transformer: self-attention 15 96 11 64 I am television watching 33/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Transformer: self-attention",
+      "content": "Transformer: self-attention .08 x .52 x .34 x .06 x I am television watching 33/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "Transformer: self-attention",
+      "content": "Transformer: self-attention I am television watching 33/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "Transformer: self-attention",
+      "content": "Transformer: self-attention I am television watching 33/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "BERT",
+      "content": "BERT I am television watching self-attention feed-forward residual connection 34/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "BERT",
+      "content": "BERT I am television watching 34/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 70,
+      "title": "BERT",
+      "content": "BERT I am television watching [CLS] [SEP] 34/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 71,
+      "title": "Transformer",
+      "content": "Transformer Subword units • As a vocabulary, BERT uses subword units, automatically induced using subword segmentation algorithm called WordPiece • Two reasons to use subwords: • Smaller vocabulary = faster computations • No out of vocabulary words: combination of subwords • Note: subword units can be entire words • Algorithm: • Initialize vocabulary with all characters of training corpus • Iteratively merge characters/substrings that are the most likely according to the data • Continue until predefined vocabulary limit is reached • e.g., I am watch ##ing television 35/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 72,
+      "title": "Transformer",
+      "content": "Transformer Positional encodings • Due to self-attention, the order of the words within the sentence is lost • This is solved by including positional encodings • Additional vector that represents position in the sentence • Added to the initial embeddings 36/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 73,
+      "title": "BERT",
+      "content": "BERT Pre-training and finetuning • BERT is pre-trained on the masked language modeling task using a large corpus • Once the model is pretrained for language modeling, it can be finetuned for a special natural language processing task • Special, reserved token <CLS> is added to the start of each sentence • The resulting embedding is considered as a representation of the entire sentence • The representation can be used to perform a final classification task (by adding a softmax classification layer on top) • The representation can be used as is, but the most common practice is to finetune all the parameters of the model to the task at hand 37/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 74,
+      "title": "BERT",
+      "content": "BERT For NLP tasks 38/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 75,
+      "title": "BERT",
+      "content": "BERT Results 39/51 — Computational Linguistics — tim.vandecruys@kuleuven.be Wang et al. (2018): GLUE Multi-Task Benchmark",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 76,
+      "title": "Transformer for Language Generation",
+      "content": "Transformer for Language Generation • Transformer encoder works well for the induction of language representations, but the bi-directional encoding is less suitable for language generation • How can a transformer be used for language generation? • No attention to future positions, only attend to previous positions 40/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 77,
+      "title": "Causal attention",
+      "content": "Causal attention • Attention in causal language modeling (left to right) • When processing xi, we attend to all inputs up to and including xi Jurafsky and Martin (2024) 41/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 78,
+      "title": "Transformer for Language Generation",
+      "content": "Transformer for Language Generation I am television watching <start> [SEP] am television watching . I 42/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 79,
+      "title": "Transformer for Language Generation",
+      "content": "Transformer for Language Generation I am television watching <start> [SEP] am television watching . I 42/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 80,
+      "title": "Transformer for Language Generation",
+      "content": "Transformer for Language Generation I am television watching <start> [SEP] am television watching . I 42/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 81,
+      "title": "Transformer for Language Generation",
+      "content": "Transformer for Language Generation I am television watching <start> [SEP] am television watching . I 42/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 82,
+      "title": "Transformer for Language Generation",
+      "content": "Transformer for Language Generation I am television watching <start> [SEP] am television watching . I 42/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 83,
+      "title": "GPT",
+      "content": "GPT • Generative Pre-trained Transformer • Pre-trained on next-word prediction over large corpora • Different versions: • GPT: 117 million parameters • GPT–2: 1.5 billion parameters • GPT–3: 175 billion parameters • … 43/51 — Computational Linguistics — tim.vandecruys@kuleuven.be Brown et al. (2020). Language models are few-shot learners",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 84,
+      "title": "Conditional generation",
+      "content": "Conditional generation Jurafsky and Martin (2024) 44/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 85,
+      "title": "The power of scale",
+      "content": "The power of scale • LLMs: transformer architecture, applied on a large scale • Lots of parameters, lots of data • Just by predicting words, LLMs learn to solve many tasks • Sentiment analysis • Question answering • Summarization • … 45/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 86,
+      "title": "Examples",
+      "content": "Examples • p(w|The sentiment of the sentence ‘The new Bond movie is fantastic’ is:) • p(w|The capital of France is) 46/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 87,
+      "title": "Summarization",
+      "content": "Summarization The only thing crazier than a guy in snowbound Massachusetts boxing up the powdery white stuff and offering it for sale online? People are actually buying it. For $89, self-styled entrepreneur Kyle Waring will ship you 6 pounds of Boston-area snow in an insulated Styrofoam box – enough for 10 to 15 snowballs, he says. But not if you live in New England or surrounding states. ”We will not ship snow to any states in the northeast!” says Waring’s website, ShipSnowYo.com. “We’re in the business of expunging snow!” His website and social media accounts claim to have filled more than 133 orders for snow – more than 30 on Tuesday alone, his busiest day yet. With more than 45 total inches, Boston has set a record this winter for the snowiest month in its history. According to Boston.com, it all started a few weeks ago, when Waring and his wife were shoveling deep snow from their yard in Manchester-by-the-Sea, a coastal suburb north of Boston. He joked about shipping the stuff to friends and family in warmer states, and an idea was born. Summary: Kyle Waring will ship you 6 pounds of Boston-area snow in an insulated Styrofoam box – enough for 10 to 15 snowballs, he says. But not if you live in New England or surrounding states. 47/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 88,
+      "title": "Three architectures for LLMs",
+      "content": "Three architectures for LLMs • Encoder • BERT: masked language modeling • Predict words based on left and right context • Usually fine-tuned with supervised data • Decoder • GPT • Word prediction (and many tasks that can be framed as word prediction) • Encoder-Decoder • T5 • Map from one sequence to another • machine translation, speech recognition 48/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 89,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder • ‘Original’ transformer architecture, developed in context of machine translation • Encoder builds bi-directional representations of the source; decoder generates the target left to right, with cross-attention to the encoder • Can equally be used for other sequence-to-sequence tasks • NLP tasks can be reframed as sequence-to-sequence tasks 49/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 90,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 91,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 92,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 93,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 94,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 95,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 96,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 97,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 98,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 99,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 100,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . I 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 101,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . I I am 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 102,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . I I am watching am 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 103,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . I I am television watching am watching 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 104,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . I I am television watching am watching television <stop> 50/51 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 105,
+      "title": "T5",
+      "content": "T5 51/51 — Computational Linguistics — tim.vandecruys@kuleuven.be Raffel et al., 2020. Exploring the limits of transfer learning with a unified text-to-text transformer.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 106,
+      "title": "T5",
+      "content": "T5 51/51 — Computational Linguistics — tim.vandecruys@kuleuven.be Raffel et al., 2020. Exploring the limits of transfer learning with a unified text-to-text transformer.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

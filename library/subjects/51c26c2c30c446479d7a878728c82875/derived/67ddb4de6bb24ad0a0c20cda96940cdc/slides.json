@@ -1,0 +1,829 @@
+{
+  "metadata": {
+    "source_file": "Lecture_02_Untitled_Slides.pdf",
+    "created_at": "2026-09-29T19:38:30.043817+00:00",
+    "slide_count": 91,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Levels of linguistic structure",
+      "content": "Levels of linguistic structure • phonology: sounds • morphology: structure of words • syntax: structure of sentences • semantics: the meaning of words, and how they combine to form larger meanings • pragmatics: the meaning of utterances within a discourse context 32/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Ambiguity: phonology",
+      "content": "Ambiguity: phonology • homophones : buy, by, bye • important for speech recognition 33/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Ambiguity: morphology",
+      "content": "Ambiguity: morphology • homonyms/homographs: • flies (noun) / flies (verb) • past (preposition) / past (noun) • like (preposition) / like (verb) • complicates syntactic analysis • complicates semantic analysis • when combined, the ambiguity becomes even more important • Time flies like an arrow. • Fruit flies like a banana. 34/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Ambiguity: syntax",
+      "content": "Ambiguity: syntax Structural ambiguity John hits the ball with a bat NP-SBJ DEP NP-OBJ PP DEP NP John hits the man with a hat NP-SBJ DEP NP-OBJ PP DEP NP 35/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Ambiguity: semantics",
+      "content": "Ambiguity: semantics • Leslie used a pen to write this letter. • We put he pigs in a pen. • The judge sent them to the pen for a decade. • They should pen that letter quickly. 36/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Ambiguity: pragmatics",
+      "content": "Ambiguity: pragmatics • Joe is the husband of Jill. His office is oval. • Joe called Jill . The first lady came in 5 minutes later . • The monkeys did not eat the bananas because they were not hungry. • The monkeys did not eat the bananas because they were not ripe. 37/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • word order in English is modifier-noun word order in French is noun-modifier • English: a red house French: une maison rouge • English: almost double the usual oatmeal biscuits French: presque le double des biscuits à l’avoine habituels 38/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • Word can have different meanings • e.g. French avocat 39/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • Word can have different meanings • e.g. French avocat 39/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • Word can have different meanings • e.g. French avocat 39/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • Word can have different meanings • e.g. French avocat avocado lawyer 39/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation étape leg jambe patte paw pied foot JOURNEY HUMAN ANIMAL CHAIR BIRD HUMAN ANIMAL 40/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • Certain languages, like Spanish, can omit subject pronouns • –o = I • –as = you • –a = he/she/it • –amos = we • –an = they • When should the system use he, she, it? 41/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • The monkeys did not eat the bananas because they were not hungry. • Les singes n’ont pas mangé les bananes parce qu’ils n’avaient pas faim. • The monkeys did not eat the bananas because they were not ripe. • Les singes n’ont pas mangé les bananes parce qu’elles n’étaient pas mûres. 42/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • I saw her yesterday. • Ich habe sie gestern gesehen. • I gave her a present. • Ich habe ihr ein Geschenk gegeben. • I also gave her brother a present. • Ich habe auch ihrem Bruder ein Geschenk gegeben. 43/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • French: je bois du lait 44/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • French: je bois du lait • English: I drink milk ? 44/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • French: je bois du lait • English: I drink milk ? • English: I’m drinking milk ? 44/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • bone of contention • kick the bucket • Don’t sell the bear’s fur before hunting it. 45/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Difficulties",
+      "content": "Difficulties Spell-checking • * This is too hot too drink. • * This is to hot to drink. • * This is to hot too drink. • This is too hot to drink. 46/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Difficulties",
+      "content": "Difficulties Question-Answering 47/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Difficulties",
+      "content": "Difficulties Question-Answering 47/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Difficulties",
+      "content": "Difficulties Speech technology • Speech Recognition • fish vs. ghoti • The system is trained to wreck a nice peach • Speech Synthesis • contént (adjective) vs. cóntent (noun) • addréss (verb) vs. áddress (noun) 48/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Difficulties",
+      "content": "Difficulties Speech technology • Speech Recognition • fish vs. ghoti rough women nation • The system is trained to wreck a nice peach • Speech Synthesis • contént (adjective) vs. cóntent (noun) • addréss (verb) vs. áddress (noun) 48/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Difficulties",
+      "content": "Difficulties Speech technology • Speech Recognition • fish vs. ghoti rough women nation • The system is trained to recognize speech • Speech Synthesis • contént (adjective) vs. cóntent (noun) • addréss (verb) vs. áddress (noun) 48/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "faculty of arts",
+      "content": "faculty of arts Computational Linguistics Lecture 2: Probability and machine learning Tim Van de Cruys Tuesday 29 September 2026",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Classification",
+      "content": "Classification • Classification = automatically assigning an instance to one of a predefined set of categories • Widely used in NLP: • Document/topic classification (e.g. sports, politics, culture) • Sentiment analysis (positive, negative, neutral) • Part-of-speech tagging (noun, verb, adjective, …) • Named entity recognition (person, location, organization, …) • Often a binary task (yes/no, true/false), but can also be multi-class or multi-label 2/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Rule-based",
+      "content": "Rule-based 1 IF exists word in document such that word in ['exciting', 'entertaining', ...] THEN output POSITIVE 2 IF exists word in document such that word in ['hated', 'worst', ...] THEN output NEGATIVE • Easy to interpret and adjust • But: labor-intensive and not generalizable 3/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Rule-based",
+      "content": "Rule-based 1 IF exists word in document such that word in ['soccer', 'tennis', ...] THEN output SPORTS 2 IF exists word in document such that word in ['rainy', temperature', ...] THEN output WEATHER • Easy to interpret and adjust • But: labor-intensive and not generalizable 3/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Supervised learning: statistics",
+      "content": "Supervised learning: statistics • Data-driven approach • Computer determines on its own what is the importance of features • Input: • Set of labels (classes): { +, - } • Set of labeled documents: { (d1,+), (d2,–),(d3, +), …} • Output: • Trained classifier: F : d →c • What form does F take? • How can we learn F? 4/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Supervised classifiers",
+      "content": "Supervised classifiers Naive Bayes logistic regression Support vector machines K-nearest neighbours 5/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Machine learning",
+      "content": "Machine learning supervised and non-supervised • Supervised learning • Train a system on a classification task • We need a training set: a set of manually labeled instances • We equally define important characteristics: features • A machine learning algorithm allows us to associate features with labels • Performance is measured on a separate test set • Unsupervised learning • We induce object representations automatically, in order to generalize without manual intervention 6/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Supervised learning: feature-based learning",
+      "content": "Supervised learning: feature-based learning • Supervised learning is based on the concept of features (descriptors, characteristics) • Elementary indices, that link certain aspects of the observed data (d) to the class that we want to predict (c) • The prediction of the class c depends exclusively on the features f, constructed on the basis of the data d • Each feature has a numerical/categorical/boolean value • We apply machine learning algorithms on the basis of these features 7/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Feature model",
+      "content": "Feature model Examples • Text categorization • Class c: ‘medical’ • Data d: document • Features f: words (boolean/word count) • Author identification • Class c: ‘Charles Dickens’ • Data d: document (book) • Features f: extracted n-grams • Sentiment classification • Class c: ‘negative sentiment’ • Data d: tweet • Features f: words 8/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Feature-based model",
+      "content": "Feature-based model Linear classifier • Classification from a set of features {fi} to a number of classes {c} • Attribute a weight λi,c for each feature fi and each class c • For a certain pair (c, d), the features will vote with their weights • We pick the class c that maximizes the sum of the various features • Different ways for choosing the weights (optimization) 9/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Feature-based model",
+      "content": "Feature-based model Linear classifier: example • Text classification • As features, we take the frequency of lemmas • maxc∈C ! i λi,cfi “The virus predominantly targets Windows computers.” λi,j class cj feature fi computer science biology virus 0.5 0.6 target 0.4 0.2 computer 0.8 -0.6 Windows 0.9 -1.2 • vote(computer science) = 0.5 × 1 + 0.4 × 1 + 0.8 × 1 + 0.9 × 1 = 2.6 • vote(biology) = 0.6 × 1 + 0.2 × 1 + (−0.6) × 1 + (−1.2) × 1 = −1.0 10/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Feature-based model",
+      "content": "Feature-based model Logistic regression • Linear scores (range −∞to ∞) are difficult to interpret, we’d like to have probabilities • We construct a probabilistic model on the basis of the linear model • Transform the values to probabilities using the exponential function + normalization • We choose the parameters λc,i that maximize the likelihood based on the training data P(c | d, λ) = exp(! i λc,ifi) ! c′∈C exp(! i λc′,ifi) • P(computer science | d) = e2.6/(e2.6 + e−1.0) = 0.97 • P(biology | d) = e−1.0/(e2.6 + e−1.0) = 0.03 11/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Exponential function",
+      "content": "Exponential function 12/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Sentiment analysis",
+      "content": "Sentiment analysis • Monitor the opinion about a product • Aggregate opinions • Monitor trends 13/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Sentiment analysis",
+      "content": "Sentiment analysis • Monitor the opinion about a product • Aggregate opinions • Monitor trends 13/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Sentiment analysis",
+      "content": "Sentiment analysis • Monitor the opinion about a product • Aggregate opinions • Monitor trends vs. 13/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Sentiment analysis",
+      "content": "Sentiment analysis Example: movie review It was an exciting, entertaining film. I’m a massive bond fan and I can’t begin to describe how much I hated this movie. One of the worst films I have ever seen. Every single scene was flawed and had errors. From beginning to end the movie had mistake after mistake. This is one of the best Bond movies I have ever seen. The story is superbly put together and has some interesting twists, the action is well done and contains none of the shaky cam which plagued the last film. It’s the Bond film we’ve all been waiting for! 14/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Sentiment analysis",
+      "content": "Sentiment analysis Different degrees of complexity • Simple • Is the attitude of this document positive or negative? • Moderate • Sentiment on a scale from 1 to 5 • Advanced • Detect the target, source, complex type of attitude 15/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "Sentiment analysis",
+      "content": "Sentiment analysis Base algorithm • Tokenization (what is a word? →next lecture) • Feature extraction • Classification • Naive Bayes • Logistic regression • Support vector machines 16/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "Naive Bayes classification",
+      "content": "Naive Bayes classification • Simple classification (‘naive’), based on Bayes’ theorem • Applied to a simple document representation (bag of words) 17/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Bag of words for sentiment analysis",
+      "content": "Bag of words for sentiment analysis γ( This is one of the best Bond movies I have ever seen. The story is superbly put together and has some interesting twists. The actors all do a great job. ) = c 18/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "Bag of words for sentiment analysis",
+      "content": "Bag of words for sentiment analysis γ( This is one of the best Bond movies I have ever seen. The story is superbly put together and has some interesting twists. The actors all do a great job. ) = c 19/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Bag of words for sentiment analysis",
+      "content": "Bag of words for sentiment analysis γ( xxxx xx xxx xx xxx best xxxx xxxxx x xxxx xxxx xxxxx xxx xxxxx xx superbly xxx xxxxxxxx xxx xxx xxxx interesting twists xxx xxx xxxxxx xxx xx x great xxxx ) = c 20/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Bag of words for sentiment analysis",
+      "content": "Bag of words for sentiment analysis γ( best 1 superbly 1 interesting 1 twists 1 great 1 ) = c 21/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Bayes’ theorem for sentiment classification",
+      "content": "Bayes’ theorem for sentiment classification • For document d and class c (positive/negative) P(c | d) = P(d | c)P(c) P(d) 22/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Bayes’ theorem for sentiment classification",
+      "content": "Bayes’ theorem for sentiment classification cMAP = argmax c∈C P(c | d) = argmax c∈C P(d | c)P(c) P(d) ≃argmax c∈C P(d | c)P(c) ≃argmax c∈C P(x1, x2, . . . , xn | c)P(c) 23/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Bayes’ theorem for sentiment classification",
+      "content": "Bayes’ theorem for sentiment classification cMAP = argmax c∈C P(x1, x2, . . . , xn | c)P(c) • What is the probability of a class given that all features appear together in a document • Impossible to estimate this probability, unless we have a gigantic training set 24/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "Independence hypotheses",
+      "content": "Independence hypotheses • Bag of words hypothesis: hypothesis that the order of words is not important • Conditional independence hypothesis: hypothesis that the probability of features (given the class) is independent • P(x1, x2, . . . , xn | c) = P(x1 | c) · P(x2 | c) · . . . · P(xn | c) 25/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Naive Bayes classifier",
+      "content": "Naive Bayes classifier cMAP = argmax c∈C P(x1, x2, . . . , xn | c)P(c) cNB = argmax c∈C P(c) \" xi∈X P(xi | c) 26/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Train a naive Bayes classifier",
+      "content": "Train a naive Bayes classifier • First try: estimate maximum likelihood • We use the frequencies of the data P(cj) = doccount(C = cj) Ndoc P(wi | cj) = count(wi, cj) ! w∈V count(w, cj) 27/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "Train a naive Bayes classifier",
+      "content": "Train a naive Bayes classifier P(wi | cj) = count(wi, cj) ! w∈V count(w, cj) • Fraction of time we see word wi out of all the words in the documents with class cj • How to estimate this quantity efficiently? • We create a large meta-document for a class j by concatenating all the documents of the same class • We use the frequency of w in this document 28/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "Problem with maximum likelihood estimation",
+      "content": "Problem with maximum likelihood estimation • What happens when we don’t have any training documents with the word fantastic, labeled with the class positive ? P(fantastic | positive) = count(fantastic, positive) ! w∈V count(w, positive) = 0 • Problem: if a single probability in our product is zero, the entire probability is zero (even if we have other good evidence) • Zeros have a destructive influence cNB = argmax c∈C P(c) \" xi∈X P(xi | c) 29/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "Laplace smoothing (add-1) for naive Bayes classification",
+      "content": "Laplace smoothing (add-1) for naive Bayes classification P(wi | cj) = count(wi, cj) + 1 ! w∈V(count(w, cj) + 1) = count(wi, cj) + 1 (! w∈V count(w, cj)) + |V| 30/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Naive bayes classifier: algorithm",
+      "content": "Naive bayes classifier: algorithm 1 Extract the vocabulary V from our training corpus 2 Compute the probabilities P(cj) • for each class cj in C do • docsj ←all docs with class = cj • P(cj) ← |docsj| |#documents| 3 Compute the probabilities P(wi | cj) • textj ←concatenation of all docsj • for each word wi in V do • ni ←# occurrences of wi in textj • P(wi | cj) ← ni+1 n+|V| 31/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Other classifiers for sentiment classification",
+      "content": "Other classifiers for sentiment classification • Naive bayes is not the only possibility • Other approaches: • Logistic regression • Support vector machines (SVM) • Neural networks • Good implementations of various classifiers already exist; one just needs to define the features, and provide the training data 32/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "Sentiment classification: difficulties",
+      "content": "Sentiment classification: difficulties • Sentiment classification can be difficult • Subtlety • “she expresses the entire range of emotions, from A to B” • Different expectations • “this movie should have been fantastic” • Opinion on related expectation • “I am disappointed to read all these negative comments” 33/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "Structured prediction: sequences",
+      "content": "Structured prediction: sequences • Many natural language processing tasks take sequences as input • The task is then to label each element of the sequence Charles Michel is the president of the European Council since december 2019 . 34/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "Structured prediction: sequences",
+      "content": "Structured prediction: sequences • Many natural language processing tasks take sequences as input • The task is then to label each element of the sequence POS tagging Charles Michel is the president of the NPP NPP V DET NC P D European Council since december 2019 . ADJ NPP P NC NUM PUNCT 34/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "Structured prediction: sequences",
+      "content": "Structured prediction: sequences • Many natural language processing tasks take sequences as input • The task is then to label each element of the sequence Named entity recognition Charles Michel is the president of the NPP NPP V DET NC P D B-PER I-PER O O O O O European Council since december 2019 . ADJ NPP P NC NUM PUNCT B-ORG I-ORG O B-DAT I-DAT O 34/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Part of speech",
+      "content": "Part of speech • Words can be categorised in classes that behave similarly 1 I can see a . 2 The is on the table. 3 She’s thinking about a . • Part of speech provides information about the context in the sentence • adjective often succeeded by noun • personal pronoun often succeeded by verb • Useful information for language processing applications • Automatically assigning part of speech: part of speech tagging 35/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "Named entity recognition",
+      "content": "Named entity recognition • An important subtask in NLP • Find and classify the names in a text According to a recent survey published by Eurostat on Wednesday 28 October, the gap between the hourly cost of labour in Paris and in Berlin is tightening. 36/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "Named entity recognition",
+      "content": "Named entity recognition • An important subtask in NLP • Find and classify the names in a text According to a recent survey published by Eurostat on Wednesday 28 October, the gap between the hourly cost of labour in Paris and in Berlin is tightening. 36/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "Named entity recognition",
+      "content": "Named entity recognition • An important subtask in NLP • Find and classify the names in a text According to a recent survey published by Eurostat on Wednesday 28 October, the gap between the hourly cost of labour in Paris and in Berlin is tightening. • person • location • date • organization 36/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "Named entity recognition",
+      "content": "Named entity recognition IOB Encoding published O by O Eurostat B-ORG on O Wednesday B-DAT 28 I-DAT October I-DAT • Using a suitable encoding scheme, named entity recognition becomes a sequence labeling task • Inside, Outside, Beginning • B-XX in order to separate adjacent entities of the same type 37/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 70,
+      "title": "Manual definition of features",
+      "content": "Manual definition of features • Words • Current word • Previous/next word (context) • Substring of characters • Word form • Additional linguistic annotations • POS • Context labels • Previous/next label Paramedics treat woman and boy after crash in Stoke-on-Trent . 38/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 71,
+      "title": "Manual definition of features",
+      "content": "Manual definition of features • Words • Current word • Previous/next word (context) • Substring of characters • Word form • Additional linguistic annotations • POS • Context labels • Previous/next label Paramedics treat woman and boy after crash in Stoke-on-Trent . 38/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 72,
+      "title": "Manual definition of features",
+      "content": "Manual definition of features • Words • Current word • Previous/next word (context) • Substring of characters • Word form • Additional linguistic annotations • POS • Context labels • Previous/next label Paramedics treat woman and boy after crash in Stoke-on-Trent . 38/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 73,
+      "title": "Manual definition of features",
+      "content": "Manual definition of features • Words • Current word • Previous/next word (context) • Substring of characters • Word form • Additional linguistic annotations • POS • Context labels • Previous/next label Paramedics treat woman and boy after crash in Stoke-on-Trent . 38/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 74,
+      "title": "Manual definition of features",
+      "content": "Manual definition of features • Words • Current word • Previous/next word (context) • Substring of characters • Word form • Additional linguistic annotations • POS • Context labels • Previous/next label Paramedics treat woman and boy after crash in Xx-x-Xx . 38/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 75,
+      "title": "Manual definition of features",
+      "content": "Manual definition of features • Words • Current word • Previous/next word (context) • Substring of characters • Word form • Additional linguistic annotations • POS • Context labels • Previous/next label Paramedics treat woman and boy NNS VBP NN CC NN after crash in Stoke-on-Trent . IN NN IN NNP PUNCT 38/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 76,
+      "title": "Manual definition of features",
+      "content": "Manual definition of features • Words • Current word • Previous/next word (context) • Substring of characters • Word form • Additional linguistic annotations • POS • Context labels • Previous/next label Paramedics treat woman and boy NNS VBP NN CC NN O O O O O after crash in Stoke-on-Trent . IN NN IN NNP PUNCT O O O ? O 38/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 77,
+      "title": "Manual definition of features",
+      "content": "Manual definition of features • Words • Current word • Previous/next word (context) • Substring of characters • Word form • Additional linguistic annotations • POS • Context labels • Previous/next label Paramedics treat woman and boy NNS VBP NN CC NN O O O O O after crash in Stoke-on-Trent . IN NN IN NNP PUNCT O O O ? O 38/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 78,
+      "title": "Sequence tagging",
+      "content": "Sequence tagging • Labeling a word in a sequence is the same as a simple classification • We have predicted labels for previous words • We use the predicted labels of previous words, as well as observed features (based on current, previous, and future words) in order to predict the best possible label for the current word crash in Stoke-on-Trent . NN IN NNP PUNCT O O ? ? Features w0 Stoke-on-Trent w−1 in w+1 . pos0 NNP pos−1 IN pos+1 PUNCT hasHyphen True label−1 O 39/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 79,
+      "title": "Global optimization",
+      "content": "Global optimization • Problem: we perform a series of local judgements, without taking into account the global optimality • We hope that the local conditions give us a global optimum • To solve our problem: • Instead of emitting a single answer, predict the n best answers • This way, we can compute the best global sequence 40/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 80,
+      "title": "Experiment",
+      "content": "Experiment • We have three sentiment classifiers • a list of hand-written rules (symbolic) • naive Bayes (statistical) • logistic regression (statistical) • Which one is better? how can we find out? • Common procedure in NLP: experiment 41/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 81,
+      "title": "Train, development, test",
+      "content": "Train, development, test training set dev test fit the model make choices report once • A model must be evaluated on data it has never seen: we care about generalization, not memorization • Training set: estimate the parameters (probabilities, weights) • Development (validation) set: for every choice you make (features, smoothing, thresholds, which model to keep: hyperparameters) • Test set: touched once, at the very end, for the number you report • Typical splits: 80/10/10 (train/dev/test) • Little data? Cross-validation on the training part; the test set still stays apart 42/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 82,
+      "title": "Leakage",
+      "content": "Leakage • Leakage: information about the test set finds its way into the model, so the reported score is too optimistic • It rarely looks like cheating: • you tried ten settings and kept the one that was best on the test set • the vocabulary was computed on all the data, before splitting • the same review (or a near-duplicate) occurs in both training and test • texts by the same author are included in both training and test • Everything that is learned or chosen must be learned or chosen without looking at the test set 43/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 83,
+      "title": "Baseline",
+      "content": "Baseline • ‘Our model reaches 95% accuracy’: is that good? • Example: toxic comment detection • about 95% of the comments are not toxic • A model that always answers not toxic scores 95%, while it does not find a single toxic comment • A number only means something next to a baseline • majority class (always predict the most frequent label) • a handful of simple rules, a word list • the simplest model that could possibly work • If your sophisticated model does not beat the simple baseline, you have a negative result 44/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 84,
+      "title": "Upper bound",
+      "content": "Upper bound • Opposite of the baseline: the best score that can be expected • Usually human performance: inter-annotator agreement • two annotators label the same items independently • percentage of agreement, or agreement corrected for chance (e.g. Krippendorff’s α) • The gold standard is only as reliable as the agreement between annotators • e.g. sentiment analysis: annotators often agree on 80–90% of the items • subjective tasks (irony, toxicity): considerably lower • A score is interpreted between baseline and upper bound 45/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 85,
+      "title": "Beyond accuracy",
+      "content": "Beyond accuracy Confusion matrix gold standard toxic not toxic system toxic true positive (TP) false positive (FP) not toxic false negative (FN) true negative (TN) P = TP TP + FP R = TP TP + FN F1 = 2PR P + R • The always-not toxic baseline: accuracy 95%, but recall and F1 for the class toxic: 0% 46/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 86,
+      "title": "Multiple classes",
+      "content": "Multiple classes • With more than two classes: compute P, R, F1 per class, then average • micro-average: pool all decisions →dominated by the frequent classes • macro-average: mean of the per-class scores →every class counts equally • With imbalanced classes, both averages can differ considerably 47/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 87,
+      "title": "Performance on sequences",
+      "content": "Performance on sequences • How to evaluate named entity recognition? • Precision, recall and F-measure, computed over entities rather than words • precision: percentage of entities returned by the system that are correct • recall: percentage of the entities in the test set that are found by the system • An entity is correct if both its boundaries and its type correspond to the test set • Charles Michel as PER, but only Michel tagged: incorrect • European Council tagged as LOC: incorrect • Per-word accuracy would be misleadingly high, as most words are labeled O 48/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 88,
+      "title": "Thresholds",
+      "content": "Thresholds • Naive Bayes and logistic regression output a probability • A decision requires a threshold, e.g. toxic if p > 0.5 • lower threshold: higher recall, lower precision • higher threshold: higher precision, lower recall • The threshold is a hyperparameter: it is set on the development set recall precision p > 0.9 p > 0.5 p > 0.1 49/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 89,
+      "title": "Significance",
+      "content": "Significance • Example: naive Bayes 84.2% accuracy, logistic regression 84.7% accuracy • Is logistic regression better? Not necessarily • the test set is a sample: a different set of 1,000 reviews yields a different score • models with random components (initialization, order of the data) yield different results with different random seeds • Guidelines: • use a sufficiently large test set; report size • repeat with different seeds or folds; report mean and standard deviation • small differences between models are often not significant: use a significance test (e.g. McNemar’s test, paired bootstrap) 50/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 90,
+      "title": "Error analysis",
+      "content": "Error analysis • An evaluation score indicates how often a model makes mistakes, not why • Error analysis: inspection of the errors on the development set • take a sample of errors (e.g. 50) and categorize them • which categories are frequent, and which could be addressed? • Linguistic knowledge is often helpful • Goal: explain a pattern of errors 51/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 91,
+      "title": "Checklist",
+      "content": "Checklist 1 Keep a separate test set, and use it only once 2 Avoid leakage 3 Compare against a baseline 4 Choose metrics that suit the task and the class distribution 5 Make all choices (incl. thresholds) on the development set 6 Report the uncertainty of the results 7 Analyze the errors 8 Support every claim with results 52/52 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

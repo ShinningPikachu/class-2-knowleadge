@@ -1,0 +1,595 @@
+{
+  "metadata": {
+    "source_file": "Lecture_05_Machine_translation_3_Nov_parts_1_2_Slides.pdf",
+    "created_at": "2026-11-03T17:47:01.967211+00:00",
+    "slide_count": 65,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "faculty of arts",
+      "content": "faculty of arts Computational Linguistics Lecture 5: Machine translation Tim Van de Cruys Tuesday 3 November 2026",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Machine translation",
+      "content": "Machine translation • Machine translation is a difficult task • Ultimate test for language understanding • In order to translate correctly, one needs to • understand the source language • understand the target language • have knowledge about the topic of the text to be translated • have knowledge about the culture, values, traditions, expectations of language users in both languages 2/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "A long history",
+      "content": "A long history • Warren Weaver (1949): “I have a text in front of me which is written in Russian, but I am going to pretend that it is really written in English, and that it has been coded in some strange symbols. All I need to do is strip off the code in order to retrieve the information contained in the text.” • First system demonstration by IBM in 1954 (word by word translation) • But machine translation turned out to be much more difficult than expected 3/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Political/commercial interest",
+      "content": "Political/commercial interest • The EU spends more than a billion euros on translation costs each year; (semi-)automation would save a lot of money • The US invested a lot in machine translation for intelligence acquisition • Google Translate is used by more than a billion people every month and supports close to 250 languages • Today, translation is built into browsers, phones, and chat assistants 4/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Different approaches",
+      "content": "Different approaches • Symbolic machine translation • Based on linguistics and logic • Statistical machine translation • Based on Bayes’ theorem • Neural machine translation • Based on neural networks 5/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Different approaches",
+      "content": "Different approaches • Symbolic machine translation • Based on linguistics and logic • Statistical machine translation • Based on Bayes’ theorem • Neural machine translation • Based on neural networks 5/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Symbolic machine translation",
+      "content": "Symbolic machine translation Vauquois triangle morphology syntax meaning analysis production interlingua source language target language 6/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Symbolic machine translation",
+      "content": "Symbolic machine translation Direct transfer direct transfer morphological analysis morphological generation 'word by word' translation source language target language 7/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Symbolic machine translation",
+      "content": "Symbolic machine translation Direct transfer the questions les questions DET NOUNPL DETPL NOUNPL direct transfer 'word by word' translation source language target language 7/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "Symbolic machine translation",
+      "content": "Symbolic machine translation Syntactic transfer syntactic transfer syntactic analysis syntactic generation morphological analysis morphological generation source language target language 8/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Symbolic machine translation",
+      "content": "Symbolic machine translation Syntactic transfer the red house la maison rouge syntactic transfer source language target language 8/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Symbolic machine translation",
+      "content": "Symbolic machine translation Semantic transfer semantic transfer semantic analysis semantic generation syntactic analysis syntactic generation morphological analysis morphological generation source language target language 9/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Symbolic machine translation",
+      "content": "Symbolic machine translation Semantic transfer Tom misses Paris Paris manque à Tom miss(Tom, Paris) manquer_à(Paris, Tom) semantic transfer source language target language 9/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Symbolic machine translation",
+      "content": "Symbolic machine translation Interlingua interlingua semantic analysis semantic generation syntactic analysis syntactic generation morphological analysis morphological generation source language target language 10/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Symbolic machine translation",
+      "content": "Symbolic machine translation Interlingua Mary did not slap the green witch Maria no dió una bofetada a la bruja verde semantic analysis semantic generation syntactic analysis syntactic generation source language target language 10/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Symbolic machine translation",
+      "content": "Symbolic machine translation Inconveniences • Symbolic machine translation works well for applications within a restricted domain • Difficult to generalize to open domain (ambiguities, exceptions, …) • Creation of rules is done by hand • Tedious and costly development process 11/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Different approaches",
+      "content": "Different approaches • Symbolic machine translation • Based on linguistics and logic • Statistical machine translation • Based on Bayes’ theorem • Neural machine translation • Based on neural networks 12/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Probabilities • Find the most likely sentence in English given a sentence in French ˆe = argmax e∈english p(e | f) = argmax e∈english p(f | e)p(e) p(f) = argmax e∈english p(f | e)p(e) 13/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Why Bayes ? • Why don’t we model p(e | f) ? • By using p(f | e)P(e), we can divide the work • p(e) deals with correct usage of English • p(f | e) makes sure that French corresponds to English • We can train both models independently 14/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Analogy of a crime scene • f is a crime scene, and we are looking for a suspect e • p(e | f): ‘Who did it?’ • P(e): Who had a motive? • P(f | e): Could they have done it (crime scene investigation, alibi) ? • Someone can have a good motive but not the means – both are necessary 15/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Example Nous regardons la télévision correct English usage? P(E) good correspondence French/English? P(F | E) We look the television × ✓ It bike nothing bottle × × In television we watch × ✓ That seems fairly reasonable ✓ × We are watching television ✓ ✓ Are watching television we × ✓ He felt relieved ✓ × 16/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Example Nous regardons la télévision correct English usage? P(E) good correspondence French/English? P(F | E) We look the television × ✓ It bike nothing bottle × × In television we watch × ✓ That seems fairly reasonable ✓ × We are watching television ✓ ✓ Are watching television we × ✓ He felt relieved ✓ × 16/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation p(e) – correct usage How to compute p(the,dog,was,running,across,the,green,field) ? • We compute the joint probability by decomposing into conditional probabilities • p(the) × p(dog|the) × p(was|the dog) × p(running|dog was) × p(across|was running) × p(the|running across) × p(green|across the) × p(field|the green) • … using only a limited context 17/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Rosetta stone • During centuries, the Egyptian language was a mystery • In 1799, a stone was discovered with an Egyptian text and its translation in Greek • Enabled humans to learn to translate Egyptian 18/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation p(f | e) – good correspondence • Our algorithms will use the same idea • We use a large collection of parallel texts in two languages: parallel corpus • Today’s Rosetta stone : • Proceedings of European Parliament • Movie subtitles • Multilingual web sites • … • We know which sentences correspond, but not which words 19/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Intuition What is the word for heaven in Vietnamese ? English In the beginning God created the heavens and the earth. Vietnamese Ban dâu Dúc Chúa Tròi dung nên tròi dât. English God called the expanse heaven. Vietnamese Dúc Chúa Tròi dat tên khoang không la tròi. English …you are this day like the stars of heaven in number. Vietnamese …các nguoi dông nhu sao trên tròi. 20/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Intuition What is the word for heaven in Vietnamese ? English In the beginning God created the heavens and the earth. Vietnamese Ban dâu Dúc Chúa Tròi dung nên tròi dât. English God called the expanse heaven. Vietnamese Dúc Chúa Tròi dat tên khoang không la tròi. English …you are this day like the stars of heaven in number. Vietnamese …các nguoi dông nhu sao trên tròi. 20/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Alignment ... la maison ... la maison bleue ... la fleur ... ... the house ... the blue house ... the flower ... 21/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Alignment ... la maison ... la maison bleue ... la fleur ... ... the house ... the blue house ... the flower ... 21/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Alignment ... la maison ... la maison bleue ... la fleur ... ... the house ... the blue house ... the flower ... 21/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Alignment ... la maison ... la maison bleue ... la fleur ... ... the house ... the blue house ... the flower ... 21/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Alignment ... la maison ... la maison bleue ... la fleur ... ... the house ... the blue house ... the flower ... p(la|the) = 0.453 p(le|the) = 0.334 p(maison|house) = 0.876 p(bleue|blue) = 0.563 ... 21/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Alignment • Alignment between units consisting of multiple words 22/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Statistical machine translation",
+      "content": "Statistical machine translation Decoding e: Mary f: *-------- p: .534 e: witch f: -------*- p: .182 e: f: ---------- p: 1 e: ... did f: *-------- p: .122 e: ... slap f: *-***---- p: .043 • Construction of the sentence, from left to right • Reduction by pruning weak hypotheses 23/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Different approaches",
+      "content": "Different approaches • Symbolic machine translation • Based on linguistics and logic • Statistical machine translation • Based on Bayes’ theorem • Neural machine translation • Based on neural networks 24/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Neural machine translation",
+      "content": "Neural machine translation Concept • Model translation process as one big mathematical function: a neural network -0.3 0.2 0.4 0.2 -0.7 1.2 -0.5 input text translated text encoder decoder • Encoder-decoder architecture with attention: an RNN in early systems, a transformer today • Trained end-to-end on parallel corpora: the same data as statistical MT, but a single model instead of a pipeline of components 25/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Encoder-decoder <start> W b1 x V U b0 y je le la television W a4 x U a3 I am watching television 26/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Encoder-decoder W b2 x V U b1 y je je regarde cherche viens 26/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Encoder-decoder W b3 x V U b2 y je regarde regarde le la un 26/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Encoder-decoder W b4 x V U b3 y je regarde la la montre télévision météo 26/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Recurrent neural network",
+      "content": "Recurrent neural network Encoder-decoder W b5 x V U b4 y je regarde la télévision télévision et mais <stop> 26/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . I 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . I I am 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . I I am watching am 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . I I am television watching am watching 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "Encoder-decoder",
+      "content": "Encoder-decoder je regarde télévision la I am television watching <start> am television watching . I I am television watching am watching television <stop> 27/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "Neural machine translation",
+      "content": "Neural machine translation Recent history • Statistical machine translation represented the state of the art until 2015 • 2014: first sequence-to-sequence neural translation models (RNN-based) • 2016: Google Translate switches to neural; NMT widely adopted as the privileged method • 2017: the transformer, originally developed for machine translation, becomes the standard architecture • 2020s: massively multilingual models; translation as one of the many tasks of large language models 28/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "Neural machine translation",
+      "content": "Neural machine translation Translation quality • Two dimensions of translation quality: • adequacy: does the translation preserve the meaning of the source? • fluency: is the output natural, grammatical target language? • Statistical MT: often adequate, less fluent (concatenation of translated phrases) • Neural MT: considerably more fluent; better handling of word order and morphology • One end-to-end model replaces a pipeline of separately trained components (alignment, phrase table, language model, reordering) • Fluent output can conceal adequacy errors (omissions, additions, invented content) 29/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Multilingual machine translation",
+      "content": "Multilingual machine translation • Classical setup: one model per language pair and direction • N languages →N(N −1) translation directions • EU: 24 official languages = 552 directions • For most pairs, hardly any parallel data exists (e.g. Finnish ↔Swahili) • Alternative: a single model trained on many languages at once 30/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Multilingual NMT",
+      "content": "Multilingual NMT • One shared encoder-decoder for many languages • Target language indicated by a special tag • <2nl> How are you? →Hoe gaat het? • <2fr> How are you? →Comment ça va? • All languages share the same parameters and subword vocabulary • Transfer between related languages, in particular towards languages with little parallel data 31/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "Zero-shot translation",
+      "content": "Zero-shot translation • Train on Portuguese↔English and English↔Spanish • The model can translate Portuguese→Spanish without having seen Portuguese–Spanish sentence pairs Portuguese English Spanish training data training data zero-shot • The shared representation acts as a language-independent meaning space • Compare the interlingua of the Vauquois triangle: here the shared representation is learned from data rather than designed by hand 32/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "MT with large language models",
+      "content": "MT with large language models • For a large language model, translation is one instruction among others • Translate into Dutch, keeping the informal tone: “Hey, wanna grab lunch?” • No dedicated translation training: the ability results from multilingual pretraining and instruction tuning • Compared to dedicated MT systems: • document-level context and consistency • control over style and register through the prompt • terminology constraints, explanations, interactive post-editing 33/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "Course evaluation: project",
+      "content": "Course evaluation: project • Model design, implementation, and evaluation for an NLP task or a (computational) linguistic research question • Two models from two different paradigms (symbolic, statistical, neural) • Evaluation of both models, and a comparative discussion of performance and interpretability • Two options: • Toxic Comment Classification (dataset provided) • Choose your own dataset (emotion, news topics, sarcasm, POS, NER, spam, another language, …) 34/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "Project: requirements",
+      "content": "Project: requirements • Fixed train/dev/test split; the test set is used once, at the end • A simple baseline (majority class, rules) next to the two models • Both models are trained (or written) by you, on the same data, with the same metrics; choices (features, thresholds, hyperparameters) are made on the development data • Error analysis with concrete examples from your own test set • Every claim in the discussion is backed by an output in the notebook • Generative AI (coding assistants, chatbots) may be used and must be declared; you are responsible for every line of code and every claim 35/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "4 ECTS vs. 6 ECTS version",
+      "content": "4 ECTS vs. 6 ECTS version • 4 ECTS: as above • 6 ECTS: as above, extended with (choice): • Deeper discussion of linguistic interpretability • Thorough discussion of application for digital humanities research • Deliverables: a notebook that runs, with saved outputs; optionally a separate report • Deadline: Tuesday 12 January 2027 36/36 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

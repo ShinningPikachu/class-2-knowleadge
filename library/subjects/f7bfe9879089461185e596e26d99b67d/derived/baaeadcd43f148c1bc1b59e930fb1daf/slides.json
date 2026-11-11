@@ -1,0 +1,289 @@
+{
+  "metadata": {
+    "source_file": "Lecture_03_Speech_Science_23_Oct_Slides.pdf",
+    "created_at": "2026-11-04T06:58:23.525320+00:00",
+    "slide_count": 31,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Speech Science 3 2026-2027",
+      "content": "Speech Science 3 2026-2027 Astrid van Wieringen Professor Experimental ORL, Dept Neurosciences, KU Leuven",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Spectral and temporal properties of plosives",
+      "content": "2 Spectral and temporal properties of plosives /p, t, k, b, d, g/ Phonetic features – Manner: stop (plosive) – Place (bilabial, alveolar, velar) – Acoustic cues Silence (corresponds to the period of oral constriction = stop gap) – Voiced stops: low energy, also called voice bar Burst: corresponds to the articulatory release of the oral constriciton and to aerodynamic release (due to build-up of pressure). Bursts occur in initial and medial position, rarely found in final position. Place of articulation may be signaled by spectrum of burst, but – Transition is also very important. Transition corresponds to the articulatory movement from oral constriction for the stop to the more open tract for a following sound (usually vowel). Easy to identify for voiced than for voiceless sounds. Most important features: stop gap release burst presence/absence of voice onset time (VOT) transition voicing features Duration stop gap: 50-100 ms Duration burst: 5-40 ms (a ‘transient’ = disappears immediately, shortest event in speech!). In English the burst of voiceless stops are longer than those of voiced stops because of aspiration (turbulent air moving through the glottis delays vocal fold closure) CV (consonant - vowel) and VC (vowel consonant) transitions: 10 - 40 ms. Reflects changes in the vocal tract. Very difficult to measure/analyze such a short event. However, perceptually very important!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Time signals of Dutch",
+      "content": "3 Time signals of Dutch plosives Time (s) 0 0.677007 -0.2109 0.251 0 /aba/ Time (s) 0 0.700023 -0.2187 0.2548 0 /apa/ Time (s) 0 0.704014 -0.2195 0.296 0 /ada/ Time (s) 0 0.675011 -0.2594 0.2924 0 /ata/ Time (s) 0 0.690023 -0.244 0.3234 0 /aka/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Time signals of Dutch plosives: onset of the plosive (in medial position)",
+      "content": "4 Time signals of Dutch plosives: onset of the plosive (in medial position) Time (s) 0 0.0687982 -0.1792 0.1817 0 Onset of /b/ in /aba/ Time (s) 0 0.0817687 -0.2195 0.296 0 Onset of /d/ in /ada/ Time (s) 0 0.111791 -0.2101 0.276 0 Onset of /t/ in /ata/ Time (s) 0 0.0812925 -0.2187 0.221 0 Onset of /p/ in /apa/ Time (s) 0 0.117256 -0.2219 0.3234 0 Onset of /k/ in /aka/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Spectrograms + time signals of 4 Dutch plosives",
+      "content": "5 Spectrograms + time signals of 4 Dutch plosives",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "VOT refers to the time (in ms) between the release of the burst to the beginning of vocal fold vibration for the following vibration. It is an indication",
+      "content": "6 • VOT refers to the time (in ms) between the release of the burst to the beginning of vocal fold vibration for the following vibration. It is an indication of the coordination between the laryngeal and articulatory systems • If negative: vocal folds are vibrating before release. Also called pre-voicing lead (voice bar). Usually 10- 20 ms. • VOT=0 when voice onset and release occur at the same time • Often a short lag: onset of vocal fold vibration follows shortly after release burst Voiced stops in English are produced with no or short delay. Contrary to voiced stop in Dutch (see plot below) Voice onset time (VOT) Figure = Dutch example ! Time (s) 0 0.0666893 -0.2334 0.2827 0 VOT in /ata/ Time (s) 0 0.0777324 -0.2195 0.296 0 VOT in /ada/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "VOT varies with place of articulation. In general it increases as place of articulation moves backward in the oral cavity:",
+      "content": "7 • VOT varies with place of articulation. In general it increases as place of articulation moves backward in the oral cavity: • bilabials: shortest VOT (often prevoicing) • alveolars: intermediate VOTs • velar: longest VOT • VOT is not as important in signaling the voicing distinction in final position as it is in initial position. In final position (of a word) the duration of the vowel preceding the stop is more important for the voiced-voiceless contrast. Vowels are longer before voiced stops and shorter before voiceless ones. • Languages differ in VOT. VOT values for /p,t,k/ in Spanish, Italian and French are similar to those of /b,d,g/ in English. For English-speaking listeners it seems as though speakers of Italian, Spanish and French produce only voiced stops (none of them are aspirated). • Also, VOT has been used as a measure to document developmental changes. Young children do not produce voiced and voiceless stops with clearly separated VOT values. Voice onset time continued",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Experimenta",
+      "content": "8 Experimenta l ORL VOT differs for different languages: pattern for voiced plosive in English = same as pattern of voiceless plosive in Dutch",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Time (s)",
+      "content": "9 Time (s) 0.33 0.55 0 4000 onset of /aba/ Time (s) 0.33 0.55 0 4000 onset of /ada/ Onset of /b/ and /d/, Formant transitions Cues for manner and place of articulation F1 cues manner of articulation. The tighter the VT constriction, the lower F1 (e.g. plosives) F2 cues place of articulation. Related to the length of the oral cavity. Reflects the movement of the tongue and lips in a backward-forward direction. Bilabial: – Burst: most of the energy in the burst spectrum is low in frequency, between 500 Hz- 1500 Hz. Also, the acoustic energy may be spread out over a wide range of frequencies. – F1 increases from nearly zero to the frequency of the vowel (the F1 for vowels is always higher than the F1 of a plosive) – F2 increases from a low frequency (800 Hz) to the F2 of the vowel – F3 increases from a rel. low-freq. (2200 Hz) to the F3 of the vowel",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "10",
+      "content": "10 • 20 - 50 ms from stop to vowel, or vice versa (very rapid articulations) • very important cues for stop identification and place of identification: release burst is often not produced in daily speech, transitions are always produced but very fast and therefore very difficult to measure • F1 cues manner of articulation (degree of constriction). • changes from 0 to F1 of vowel • F2 and F3 cue place of articulation • starting point (locus) • /b/ : 600 - 800 Hz • /d/: 1800 Hz • /g/: different places of articulation (2 loci: 1300 Hz, 3000 Hz) • rate-of-frequency change • slope (between beginning and end frequencies) • linear, exponential? Formant transitions Nooteboom & Cohen, 1983",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "11",
+      "content": "11 • Alveolar: • Burst: the small area in front of the constriction acts as a high-pass filter (emphasizing the higher-frequency components in the noise source). High-intensity and high-frequency energy between 2500 Hz - 4000 Hz (Pickett, 1999) • F1 same as for bilabial (tight constriction) • F2 begins at locus of approx. 1800 Hz (direction depends on following vowel, for context effects see further). Usually F2 has a rising transition for the high front vowels, a flat transition for // and a falling transition for the other vowels. • Velar: • Burst: relatively large area in front of constriction enhances energy in the midrange of frequencies, between 1500 Hz-4000 Hz. Depends partly on the tongue position for the following vowel. • F1 same as for bilabial and alveolar • F2 has two loci!, one at about 1300 Hz, the other near 2300 Hz. At the beginning F2 and F3 are relatively close, but they diverge during the transition. Also depends on following vowel: when followed by a back vowel, a larger cavity is created (resonates lower frequencies). When /k/ is followed by a front vowel the smaller cavity resonates the higher frequencies. • Voicing cues: • fundamental frequency (tends to be higher for vowels following voiceless stops than those following voiced ones) • voice onset time (= the interval between the release of the stop and the onset of voicing) • F1 cutback = a delay in F1 relative to the higher formants Cues to manner and place of articulation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "12",
+      "content": "12 • Stops can be identified solely on the basis of burst! • Spectrum of burst varies with place of articulation • bilabial: flat or falling spectrum • alveolar: a rising spectrum • velar a compact mid-frequency spectrum • Several studies investigated whether a spectral template can be associated with each place of articulation (e.g. Blumstein & Stevens, 1979): using templates to classify naturally produced stops 85% (total = 1800 tokens) were identified correctly! • In summary: important features of the release burst are: • the spectrum at burst onset (falling, rising, steady) • the spectrum at voice onset • voice onset time • burst amplitude can also be a cue in some languages • Temporal changes in spectral shape appear to be very important for classification: dynamic cue! • presence/absence of mid-frequency peak Some more notes on stops: release bursts Kent & Reed, 1992 Sequence of acoustic cues for syllable-initial stops: silence, burst, aspiration (only voiceless sounds), transition Sequence of acoustic cues for medial stops same + transition leading into the silence: transition, silence, burst, aspiration, transition sequence for final stops: transition, silence, burst (only sometimes), aspiration (only sometimes)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "13",
+      "content": "13 Effect of longer transition duration Kent & Read, 1992",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "14",
+      "content": "14 • Phonemes: • voiced /v, ᶞ, z, ʒ/ • voiceless: /f, ɵ , s, sh, h, X/ • Phonetic features: • manner: frication (turbulence) • place: labiodental, linguadental, alveolar, palatal, glottal • Acoustic cues: • voicing • frication noise: noise generated as air is forced through a narrow constriction. Then filtered by the vocal tract: • /f, v, ɵ, ᶞ / are produced most anteriorly. Not much of a front resonating cavity. Therefore, very low intensity spectrum spread over a broad range of frequencies. 4500 Hz - 7000 Hz • /s,z, s,sh/: front cavity is like an open tube open at one end (lips) and closed at the other (constriction behind front cavity is very small). Therefore, a quarter-wave resonator. Front cavity for /s/ is approx. 2.5 cm. Lowest resonance frequency is 3400 Hz (2.5 cm x 4= 10 cm); 34.000cm/s/10=3400 Hz. Also higher formants that are odd multiples of the lowest. Lowest is most important for perception of fricatives. • /s,sh/: longer resonating front cavity than alveolars. Major resonant region therefore somewhat lower. Also often produced with lip rounding (lengthens the VT). Most energy: 2000 Hz • transitions to and from the vowels due to changes in the vocal tract • sibilants/ stridents (/s,z,s,sh/) have intense noise energy • non sibilants (/f, v, ɵ, ᶞ /) weak noise energy Fricatives",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "15",
+      "content": "15 Spectra of /s/, /ʃ / and /f/ Frequency (Hz) 0 10000 -20 0 20 /s/ from /asa/ Frequency (Hz) 0 10000 -20 0 20 /sh/ from /asha/ Frequency (Hz) 0 10000 -20 0 20 /f/ from /f/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "16",
+      "content": "16 Time signals of a few different noises (Dutch recordings). Note that especially /h/ is difficult to segment Time (s) 0 0.738005 -0.2207 0.282 0 /asa/ Time (s) 0 0.728027 -0.1956 0.2784 0 /aza/ Time (s) 0 0.664014 -0.2131 0.2877 0 /aha/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "17",
+      "content": "17 Experimenta l ORL Fricatives – voiced and voiceless",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "18",
+      "content": "18 Spectrograms illustrating typical Dutch frication Time (s) 0 0.684014 0 104 /acha/ Time (s) 0 0.759025 0 104 /aga/ Time (s) 0 0.664014 0 104 /aha/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "19",
+      "content": "19 • Phonemes /ʧ ,ʤ / • Phonetic features • manner: fricative and stop (two phase pattern of production) • place: linguapalatal • Acoustic cues • stop gap (silence or low energy interval) due to articulatory closure or some voice bar. Stop gap not always well defined if it is preceded by silence for pause. • frication is similar as for other fricatives. However, affricates show a relatively rapid increase in noise energy (short rise time). Duration of noise interval is relatively shorter than with fricatives. Some studies have shown that difference between fricative and affricate can be cued on the basis of duration of frication alone. • transitions to and from the preceding and following vowel Affricates",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "20",
+      "content": "20 • in conclusion: frication may be sufficient to cue both place (noise spectrum) and manner (duration of noise) of articulation • note the stop gap before plosives Examples of affricates in Dutch Time (s) 0 0.740023 0 104 /adza/ Time (s) 0 0.775011 0 104 /atza/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "21",
+      "content": "21 • Phonemes: /m, n, ŋ / • Phonetic features: • manner: nasal • place: bilabial, alveolar, velar • Acoustic features: • Due to lowering of the velum the nasal cavities are coupled to the rest of the vocal tract. This introduces anti-resonances (anti-formants, zeroes) and an extra formant (nasal murmur, nasal formant) • Antiformants are bands of frequencies in which the acoustic energy has been damped. On spectrograms they look like extremely weak intensity formants (position depends on how open the velo-pharyngeal passage is). They occur mainly because the nasal cavities are very sound absorbent (due to soft moist lining, cilia, and internal structure). Sound waves traveling through the nose are damped at frequencies of the antiformants. • Note: a VT formant amplifies frequencies in its bandwidth and attenuates those outside the cutoff frequencies. An antiformant attenuates frequencies within its bandwidth and amplifies those outside its bandwidth. • Nasals have both formants (intense) and antiformants (weak)! • Nasal murmur: caused by oral blockage and lowered velum (extra resonances because of 2 branches leading to pharynx). Results in nasal radiation of acoustical energy. The spectrum is dominated by high intensity, low-freq. energy (< 500 Hz). Murmur cues of three different nasals are not exactly alike, but difficult as a distinctive cue • transitions: preceding and following vowels will be nasalized. Cues to place of articulation • voicing is always present (except during whispering) Nasal consonants",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "22",
+      "content": "22 • Nasalize vowels by allowing the velum to remain slightly open • Nasal-non nasal phonemic distinctions occur in many languages (not in English). • Open velum affects filter curve of VT: F1 becomes broader, less peaked (lower amplitude) because of damping of F1 by the loss of energy through nose. Nasalization effects on a vowel depends on the non-nasal formant frequencies determined by the oral tract shape and on the frequencies of the zeroes and poles introduced by nasal tract coupling • Example of French: • Both vowels have well-defined peaks in amplitude • F1 of nasalized vowel is broadened • F2 appears as a hump from 1100-1750 Hz, while it is a relatively narrow peak for the non-nasalized vowel • F1 & F2 of nasalized vowel are 5-8 dB weaker than of non-nasalized vowel • F3 weakened by about 11 dB • The F4-F5 region is lowered by about 20 dB, possibly due to a zero near 3125 Hz Nasal vowels (Pickett, 1998) Pickett, 1998",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "23",
+      "content": "23 Examples of nasals (Dutch) Time (s) 0 0.762018 0 6000 /ama/ Time (s) 0 0.764014 0 6000 /ana/ Time (s) 0 0.749025 0 6000 /anga/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "24",
+      "content": "24 • Also called ‘ approximants ’ and semivowels: • gradual articulatory movement • vocal tract narrowed, not closed • Phonemes: /j/ & /w/ • Phonetic features • Manner: glide or semivowel • Place: palata l or labiovelar • Acoustic cues • A relatively slow transition (75-150 ms) • No steady-state portion as with diphthongs • F1 of both sounds starts at very low value (a little higher than for stops) • F2 of /w/: 800 Hz Compare with /b/!!, F3 of /w/: 2200 Hz. Lower frequencies for all formants due to lengthening of the vocal tract. • F2 of /j/: 2200 Hz (compare wih /d/!!), F3 is 3000 Hz • longer glides: vowel-vowel sequences!: • [bi] - [wi]- [ui] and • [du] - [ju] - [iu] Glides Lass, 1996, Kent & Read, 1992",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "25",
+      "content": "25 Spectrograms of glides Time (s) 0 0.754014 0 5000 /w/ from /awa/ Time (s) 0 0.748027 0 5000 /j/ from /aja/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "26",
+      "content": "26 • Phonemes: /l/ & /r/ • Phonetic features: • Manner: lateral or rhotic • Place: alveolar for /l/, palatal for /r/ • Acoustic cues: rather complex: • both relatively fast formant transitions • similarity with glides: well-defined formant structure (less constriction than stops, fricatives, and affricates) • /l/: energy mainly in the low frequencies. Resonances and anti-resonances due to divided vocal tract. Resembles /n/. F1: 360 Hz, F2: 1300 Hz, F3: 2700 Hz • /r/: similar for F1 • F2 somewhat lower than for /l/ • F3 especially lower (1650 Hz). Durations of formant transitions somewhat longer for /r/ than for /l/ • temporal cues: • /r/: F1 has a short steady-state + relatively long transition • /l/: F1 has a long steady-state + relatively short transition Liquids Lass, 1996; Kent & Read, 1992",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "27",
+      "content": "27 Examples of /l/ and /r/ no clear distinction between vowel and consonant F3 of /r/ lower",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "28",
+      "content": "28 Primary acoustic cues for various consonants Lass, 1996 Bilabial Labiodental Linguadental Alveolar Stop [p] [b] F1 increase F2 increases Burst has flat or falling spectrum [d] [t] F1 increases F2 decreases except for high- front vowels Burst has rising spectrum Nasal [m] F1 increases F2 increases Nasal murmur [n] F1 increases F2 decreases except for high- front vowels Nasal murmur Fricative [v] [f] F1 increases F2 increases except for some back vowels Burst has weak and flat spectrum [ ] [] F1 increases F2 increases except for some back vowels Burst has weak and flat spectrum [z] [s] F1 increases F2 decreases except for high- front vowels Noise segment has intense, high frequency spectrum (> 4k Hz) Glide [w] F1 increases F2 increases",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "29",
+      "content": "29 Primary acoustic cues for various consonants Lass, 1996 Palatal Velar Glottal Stop [g] [k] F1 increases F2 increases or decreases. F2-F3 important [ ] Little formant change Nasal [] F1 increases F2 increases or decreases Nasal murmur Fricative [] [] F1 increases F2 increases or decreases Noise segment has intense, high frequency spectrum (> 3 kHz) [h] Little formant change Burst has weak and flat spectrum Glide [j] F1 increases F2 increases",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "30",
+      "content": "30 • Semivowel glide consonants [w] & [j] are similar to diphthongs when combined with vowels • Constriction of semivowel is greater than than that of closest vowel • Duration of transition from vowel to [w] and vice versa is about 75 ms (see [awa]) • Constriction itself lasts about 100 ms • Acoustical differences between [w] and [u] • More lip constriction for [w], results in lowered intensity of F1 and F2, & great reduction of the intensity of F3 and higher formants • [w] may be formed in front of any tongue position, the [u] requires a narrow back tongue constriction + lip constriction • VT moves faster for [w] than for vowels. Compare the duration of transitions between: • [w] -[a] and • [u] – [a] Semivowels, and differences between glides and diphthongs, Pickett, 1998",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "31",
+      "content": "31 • [w] – [b] same place of articulation (bilabial) • [j] – [d] : (front) palatal and alveolar • Difference in manner of production. Constriction at lips for [b] or at alveolar ridge [d] blocks air stream, release burst, rapid transition • Frequencies and direction of the formant transitions are relatively similar for [b] - [w] and [d]-[w] • Frequency: starting frequency of F1 of [b] can be slightly lower (0) due to complete constriction. Same for [d] • Direction same for stop and semivowel because VT is constricted at similar places • Differences are: • Voice bar and release burst for stop • For [w] strong low-frequency info. Throughout, no burst • duration of stop transition = 40 ms, of glide = 75 ms (note: speaking rate can play an important role: a transition that is heard at as a stop at a slow rate can be heard as a glide at a fast rate, Miller & Baer, 1983) • Steeper onset and offset in intensity changes for stop than for glide Differences between glides and voiced stops: /b-w/ and /d-j/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

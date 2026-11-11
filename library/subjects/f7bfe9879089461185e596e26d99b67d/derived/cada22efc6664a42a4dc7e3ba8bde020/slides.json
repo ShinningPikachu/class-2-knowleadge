@@ -1,0 +1,379 @@
+{
+  "metadata": {
+    "source_file": "Lecture_01_Untitled_Slides.pdf",
+    "created_at": "2026-09-29T12:20:36.285599+00:00",
+    "slide_count": 41,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Speech Science 1 2026-2027",
+      "content": "Speech Science 1 2026-2027 Astrid van Wieringen Professor Experimental ORL, Dept Neurosciences, KU Leuven",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "• Classes: see Toledo (and watch out for changes)",
+      "content": "• Classes: see Toledo (and watch out for changes) • Content: powerpoints (5-6), exercises in Praat, 2 papers • Exam: • For SLT: exercises provided in the ‘blok’, submitted 3 days before exam • For DH: same + assignment for 2 points • For all: closed-book exam. Do not learn by heart, conceptual questions • Keep up with the work Faculteit, departement, dienst … 2 Time (s) 2.13419 4.40146 0 5000 language science and hearing science",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "• What do you hear when you listen to your own language?",
+      "content": "• What do you hear when you listen to your own language? • What do you hear when you listen to a foreign language? • Physical: continuous • Psychological: discrete (groups) of sounds • Dual nature of speech very challenging for computer processing Experimenta l ORL 3 Speech",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Phonetics: the science of speech sounds (language independent.)",
+      "content": "• Phonetics: the science of speech sounds (language independent.) • articulatory phonetics: study of how speech sounds are produced/articulated • acoustic phonetics: description of the physical properties of speech sounds: voicing, aspiration, frication • auditory phonetics: deals with the perception of speech sounds • Computers have no innate capacity to acquire language as do humans. In order to program them we must gain an understanding of the speech signal (physical properties) and how it is produced and perceived • Phonology: the principles and patterns by which sounds are used in a language: language dependent • General content of course: various levels from sound to language, articulation of vowels and consonants, international phonetic alphabet/narrow and broad transcription, articulatory features, acoustic features, distinctive features, dynamic features, suprasegmental features (prosody), phonetic universals, coarticulation, assimilation, segmentation, linearity, dynamic constancy, variability in speech, speaker normalization, perceptual integration of cues, speech synthesis (parameter generation and wave concatenation (diphone, demi-syllables, triphones), elements of TTS system • Phonetics and phonology does not deal with speech understanding or meaning of sounds. It is important to think of the speech sounds as a waveform (like any other sound), caused by a source (lungs, vocal folds, vocal tract), resulting in a disturbance of air molecules. Waveforms have certain physical properties (fundamental freq., amplitude, time, etc.) 4 Definitions of phonetics and phonology and content of course",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "• Difficult not to think of language: From our linguistic knowledge",
+      "content": "• Difficult not to think of language: From our linguistic knowledge • we know which sounds are meaningful and which are not (clicks, coughs) • We can ignore linguistically unimportant sounds • We can segment words into sounds.. • How many sounds does the word ‘not’ have? And ‘knot’? • Lack of actual break between words and sounds -such as when listening to a foreign language- makes us think that people ‘run their words together’….. We do too!! 5",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Text to Speech and Speech to Text",
+      "content": "Text to Speech and Speech to Text",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Speech production",
+      "content": "Speech production • Speaking is a motor skill. Air is moved from the lungs, through the trachea via the pharynx to oral and nasal cavities • During speech some parts of the vocal tract (VT) are constricted. Outward airflow impeded ⭢ pressure rises. Variations in tracheal air pressure provide basis of speech sounds... • Speaking is an alternation of time between a constricted articulation and an open articulation: no gaps! average syllable rate: 2-5 syllables per second, depending of style of speaking 7 From Pickett, The Acoustics of Speech Communication",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "From English Phonetics and phonology, P. Roach",
+      "content": "From English Phonetics and phonology, P. Roach 8 Speech production: The larynx and the vocal folds",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "The larynx sits on top of trachea, a series of horseshoe-shaped cartilages, open at the back (cartilage = kraakbeen). It controls the flow of air in",
+      "content": "• The larynx sits on top of trachea, a series of horseshoe-shaped cartilages, open at the back (cartilage = kraakbeen). It controls the flow of air in and out of the lungs • Thyroid, Cricoid, and Arytenoid cartilages support muscles which bring about changes in voicing • During swallowing the epiglottis covers the entrance to the larynx (food and liquids must pass over the entrance to the lungs) • Vocal folds are inside the larynx • the glottis is the opening between the vocal folds • false and true vocal folds, vocal folds (glottis) are elastic (muscles, membrane) • tension and elasticity can be varied, made thicker or thinner, shorter or longer, open for voiceless consonants, closed for voiced ones, intermediate • note: the vocal folds are activated by the airstream from the lungs, rather than by nerve impulses: myoelastic (muscles) aerodynamic theory of phonation • Aerodynamic theory: vocal folds are parted by subglottal air pressure pushed up from the lungs. Several (hundreds of) ‘pops’ of air per second! For voicing: the air pressure below the vocal folds must exceed the pressure above the folds. Try to prolong a /b/, a voiced stop consonant. Air pressure behind lips must build up. When it equals the subglottal pressure, voicing stops. • Vocal folds are closed due to a pressure drop. Bernoulli principle: an increase in velocity results in a drop in the pressure , the pressure drop being perpendicular to the direction of the flow. So, increase in velocity within a narrow passage ⭢ decrease in pressure against the lateral wall (cf. vocal folds: a sudden drop in pressure against the inner sides of each fold. Vocal folds are sucked together again). 9 Speech production: The Larynx",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "• During production the vocal folds are separated for voiceless speech sounds, such as /s,t/, closed for voiced sounds /a, u,",
+      "content": "• During production the vocal folds are separated for voiceless speech sounds, such as /s,t/, closed for voiced sounds /a, u, I../, and less firmly brought together for voiced consonants, such as /z/, /d/ (because voicing is needed in addition to large air pressure in the oral cavity) 10 Speech production turbulent: breath stream passes through narrow constriction (in VT or pharynx, glottis is open). Produces an aperiodic, turbulent stream (e.g. /s, f/) transient: sudden increase of air flow due to release of air pressure built-up behind a constriction (/p, t, k/)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "11",
+      "content": "11 Speech production: different positions of the glottis From: English phonetics and phonology, P. Roach The vocal folds are wide apart for normal breathing & voiceless consonants Narrow closure: for a whispered vowel (/ahaha/) Opening and closing: vibration for voiced sounds Tightly closed for production of glottal stop",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "The fundamental frequency (F0) is the number of times the vocal folds open and close per second. Speech is a complex signal: consists of F0 and",
+      "content": "• The fundamental frequency (F0) is the number of times the vocal folds open and close per second. Speech is a complex signal: consists of F0 and multiples of it (harmonics). F0 changes constantly during speech (intonation). • nHz= n times per second! • The frequency of vocal fold vibration is determined by the elasticity, tension and mass of the vocal folds. More massive folds (longer and thicker) vibrate at lower f0. More elastic folds vibrate at high frequencies because they bounce back faster (when they are tense (by stretching) than when they are slack). Stretching the vocal folds is brought about by enlarging the distance between the thyroid cartilage and the two arytenoid cartilages (done by the cricothyroid muscles). When vocal folds are lengthened and tensed the effective mass is decreased. Singers are trained to have a range of 2 octaves (each octave is a doubling of frequency). Singers can stretch up to 4 mm. • F0 male: between 80 Hz - 110 Hz (size between 17-24 mm) • F0 female: between 180 Hz - 240 Hz (size between 13 - 17 mm) • F0 children: > 300 Hz 12 Speech production: vocal fold vibration 1=vocal fry (creaky) voice 2= modal (normal) voice 3= falsetto voice 4= breathy voice Childers, 2000",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Increased vocal intensity is due to greater resistance (by the vocal folds) against the increased airflow. The vocal folds are blown wider apart,",
+      "content": "• Increased vocal intensity is due to greater resistance (by the vocal folds) against the increased airflow. The vocal folds are blown wider apart, releasing a larger puff of air which sets up a sound pressure of greater amplitude. The vocal folds not only move farther apart for each vibratory cycle of increased intensity, but they stay adducted for a larger part of each cycle. • Pitch of the sound is controlled by the glottis/vocal folds • The tongue, jaws and lips control the timbre/quality • Monophthong: relatively stationary sound • Diphthong: movement of one vocal-tract position to the other 13 Speech production: Intensity and quality",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Production of any (speech) sound involves the movement of an airstream",
+      "content": "• Production of any (speech) sound involves the movement of an airstream • Most sounds pulmonic egressive: by pushing air through the lungs, through the mouth and sometimes also through the nose. • Glottalic airstream mechanism: implosives and ejectives. However, with implosives the air is sucked in, while it is pushed out for ejectives. Instead of lung air, the air in the mouth is moved. • Velaric airstream mechanism: clicks. Clicks are also ingressive. • 6 possible airstream mechanisms: • pulmonic egressive - used in all languages • pulmonic ingressive - not found • velaric egressive - not found • velaric ingressive - used in e.g. Zulu (South Africa) • glottalic egressive - used in e.g. Navajo (N. America) • glottalic ingressive - used in e.g. Sindhi (India) 14 Speech production: Airstream mechanisms From English Phonetics and phonology, P. Roach",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "15",
+      "content": "15 From English Phonetics and phonology, P. Roach The acoustic signal radiated from the lips consists of a string of sound elements called Phonemes. There are15-50 phonemes for most languages Phonemes are set of units which can be combined to produce distinct word forms (eg man-pan) Role of cognitive/phonetic map (linked to our language) is important: the difference between pot-tot may be as small as between pie-phie, but first are phonemes, second are not.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Vowel and consonant phonemes are classified in terms of",
+      "content": "Vowel and consonant phonemes are classified in terms of • Manner of articulation • concerns how the vocal tract restricts airflow • completely stopping of airflow by an occlusion creates a plosive (stop consonant) • vocal tract constrictions of varying degree occur in liquids, fricatives, glides and vowels • lowering the velum causes nasal sounds (versus oral sounds) • Place of articulation • refers to the location in the vocal tract • Voicing • presence/absence of vocal fold vibration • Note: in linguistic theories there are often hyper-features, and different subdivisions 16 Articulatory phonetics relates linguistic features of sounds to positions and movements of the vocal tract (articulators)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Vowels: air flows without constriction from lungs through pharyngeal and oral cavities to the outside world",
+      "content": "• Vowels: air flows without constriction from lungs through pharyngeal and oral cavities to the outside world • Glides are like vowels, but with narrow constrictions in the vocal tract. Palatal glide: /j/; Labio-velar glide: /w/ • Stop consonants (plosives) involve the complete closure and subsequent release of a vocal tract obstruction. Pressure build-up followed by burst. The closure in the oral tract and the velum must be raised to prevent nasal airflow, except for glottal stop • Liquids are also like vowels, but tongue is used for some degree of obstruction. For /l/ air escapes around the tip of tongue or dorsum. The /r/ has more variable articulation. Generally voiced, but can be ‘devoiced’ as in ‘please’ or ‘price’. Some languages (Welsh) have voiceless ‘L’: Lloyd • Nasals involve a lowering of the velum. Airflow out of the nostrils. In English only nasalized consonants (oral tract completely closed), in French also nasalized vowels (air escapes through oral tract and nasal cavities). Vowels may be nasalized in English, but the distinction is not phonemic (= vowel identity does not change). In French there are pairs of vowels that differ only in the presence or absence of vowel nasalization. 17 Manner of articulation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Fricatives: narrow constriction in the oral tract (for some languages in the pharynx and in the glottis). If the pressure behind the constriction is high",
+      "content": "• Fricatives: narrow constriction in the oral tract (for some languages in the pharynx and in the glottis). If the pressure behind the constriction is high enough and the passage sufficiently narrow, airflow becomes fast enough to generate turbulence at the end of the constriction • Labiodental fricatives: /f,v/: friction created at the lips • Alveolar fricatives: /s,z/: friction created at alveolar ridge • Palatal/alveopalatal fricatives: mesher, measure: friction created as air passes through narrow opening behing alveolar ridge • Dental fricatives: friction occurs between tongue & teeth • Velar fricatives: right, knight, enough, through, Bach • Uvular fricatives: /r/ as in rouge or rose • Voiceless glottal fricatvie: /h/ (however, no constriction) • Pharyngeal fricatives: tongue root is pulled towards pharynx (Arabic) • Affricate= stop + fricative: (gin), or ts (as in church) 18 Manner of articulation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "• Sonorants: continuous, intense, periodic speech sounds: dipthongs, glides, liquids, nasals",
+      "content": "• Sonorants: continuous, intense, periodic speech sounds: dipthongs, glides, liquids, nasals • Obstruents: weak, aperiodic (although sometimes voiced) stop consonants and fricatives. • unvoiced obstruents: tense • voiced obstruents: lax • (due to a general difference in muscle tension) • Vowels, liquids, nasals, fricatives: relatively steady-state: the articulatory position can be sustained (until speaker is out of breath) • Stops are transient consonants, involving a sequence of (rapid) articulatory events (closure followed by release) • Glides are also considered transient phonemes, because they are usually released into an ensuing vowel 19 Manner of articulation continued~linguistic categorization",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "While manner of articulation and voicing partition phonemes into the broad categories used by most languages, place of articulation (= point of",
+      "content": "• While manner of articulation and voicing partition phonemes into the broad categories used by most languages, place of articulation (= point of narrowest vocal tract constriction) enable finer discrimination of phonemes • Languages differ considerably with regard to place of articulation (within the various manner classes). Virtually all languages employ vowels, nasals, stops, and fricatives, but the number and choice of places of articulation within each class are highly variable across languages. Many languages use as few as 3 (Hawaian)-5 (Spanish) vowels, whereas English has 13 and French 15. English and French have only 3 distinct places of articulation for stops, (ignoring glottal stops) whereas other languages employ as many as 6. Even when two languages appear to use the same phoneme, slight variations in tongue positioning between the languages yield different sounds. 20 Place of articulation Consonants: Labials – bilabial: if both lips constrict (/p/, /b/, /m/) – labiodental: if the lower lip contacts the upper teeth (/f/, /v/) Dental: the tongue tip or blade touches the edge or back of upper teeth – interdental: if the tip protrudes between the upper and lower teeth (‘the’) Alveolar: the tongue tip or blade touches the alveolar ridge (/d,n,t,s,z/) Palatals: the front part of the tongue is raised to hard palate: measure – retroflex: if the tongue tip curls up Velar: tongue is raised to soft palate or velum Uvular: the dorsum approaches the uvula Pharyngeal: constriction in the pharynx Glottal: vocal folds close or constrict",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "21",
+      "content": "21 Place of articulation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Vowels are primarily described in terms of",
+      "content": "• Vowels are primarily described in terms of • Tongue position (high, low) (re its neutral position, the ə, or schwa) • What part of the tongue is raised or lowered? (front, middle, back) • What is the position of the lips? (rounded, unrounded) • High front vowels: tongue constriction at hard palate • High back vowels: tongue constriction at soft palate • Low back vowels: constriction in the upper part of pharynx • Low ‘front’ vowels: constriction in the lower part of pharynx • Tense/lax vowels. This classification depends on the duration and on how far the tongue is displaced from a neutral, central, schwa • tense vowels (longer vowels with rel. extreme articulation) • lax vowels (shorter vowels, less extreme) 22 Place of articulation: vowels From Handbook of the International Phonetic Association",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "General",
+      "content": "General • In speech, different letter(s) may represent the same sound (e.g. see, grief, key) or the same letter may represent different sounds (e.g. bad, many, want). In order to be able to express speech sounds of each language known in the world in an unambiguous way, the International Phonetic Association developed a set of symbols known as The International Phonetic Alphabet (IPA). The use of sequences of phonetic symbols to represent speech is known as phonetic transcription. • Concept of a phonetic alphabet is to have one symbol for one sound. Over the years different alphabets with modified IPA symbols have been developed for specific aims (as many symbols are not used), but the IPA is considered the standard. History • In 1886 the International Phonetic Association was founded in Paris by language teachers who wanted phonetic notation to be used in schools, as a method of acquiring a realistic pronunciation of foreign languages. In 1897 it was named L’Association Phonétique des Professeurs de Langues Vivantes or the International Phonetic Association in English. • The IPA is used, among other things • to indicate pronunciation in a dictionary • to record a language • to transcribe speech for automatic speech recognition. • The IPA is based on the Roman alphabet but other symbols have been included to cover the wide variety of sounds found in the languages of the world. 23 International Phonetic Alphabet",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Phonetic transcription is placed between square brackets [ ] and there is not capitalization or punctuation. An overview of the different characters a",
+      "content": "• Phonetic transcription is placed between square brackets [ ] and there is not capitalization or punctuation. An overview of the different characters a symbols of the IPA is given in various charts • Phonetic transcription does not only vary from language to language, but also from speaker to speaker. Depending on dialect, fluency, etc. the sa word can be transcribed differently. • Consonants and vowels are described with reference to how they are produced and their auditory characteristics. • It requires quite a lot of skill to transcribe an unknown language. During speech production the vocal tract varies continuously and the division betwe subsequent speech sounds may not be clear. • Only linguistically relevant speech sounds are transcribed, not personal voice quality. A separate sign exists for each distinctive sound (e.g. /k/ for c track, kite, quick, monarch). • The IPA also provides symbols for suprasegmental information (word boundaries, stress, intonation) and for refining the pronunciation of an utteran (e.g. aspiration) • IPA charts are more than a list of symbols, they show how the different types of sounds can be classified. • Consonants can be distinguished with regard to • voicing • manner • place of articulation. • Some language in the world contain non-pulmonic sounds (= sounds which are not produced through air from the lungs: • clicks and voiced implosives are indicated by special symbols • ejectives are indicated by a plosive and an apostrophe. • From an articulatory point of view vowels can be classified according to the features ‘open’, ‘close’, ‘front’, and ‘back’. Although the vowel space continuous, most vowels are placed in relation to one of the eight cardinal (= reference) vowels 24 International Phonetic Alphabet",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "25",
+      "content": "25 The charts of the International Phonetic Association",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Symbols are foreseen for suprasegmental information, e.g.",
+      "content": "• Symbols are foreseen for suprasegmental information, e.g. • i.e. intonation groups • to distinguish between words in tone languages (e.g. Chinese, Thai). Some of these symbols are iconic: the shape of the line indicates the height and possible movement of pitch. For example, [ma] with falling intonation means “to scold” and [ma] with fixed high intonation means “mother” in standard Chinese • Also possible to transcribe pitch height by adding diacritics to existing segments, e.g. [ó bà] meaning “it perched” in the West African Language Yoruba. In this transcription the symbols are not iconic, i.e. the accent does not indicate a rising or falling pitch, it means “high” or “low”. Diacritics (a set of marks) have been included to further refine the transcription of phonation (to restrict the total number of characters) • diacritics are used to indicate aspiration, e.g. “pie” • to indicate vowel centralization [ə] relative to the cardinal vowels • breathy and/ or creaky voices • nasalization “fin”, meaning “end” in French • and many other features. Broad and narrow phonetic transcription • Speech sounds can be transcribed “broadly” or “narrowly”. • broad transcription is a phonemic transcription • narrow transcription captures more phonetic details of the speech sounds. For instance, the word “toast” can be transcribed phonemically or phonetically. • Both types of transcription require some knowledge of the phonology of the language to solve ambiguities related to the segmentation of utterances. And even when the likeliness of occurrence of certain (combinations of) phonemes is known, the alignment between the physical speech sound and the phonetic transcription can still be problematic. Phonetic transcription has proved to be a very useful skill, but it cannot be done automatically. A proper analysis of the speech signal requires a lot of knowledge of the segmental and suprasegmental aspects of a language. 26 Phonetic transcription continued, see paper Encyclopedia Linguistics (Strazny)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Experimenta",
+      "content": "Experimenta l ORL 27 Vowels /U/ boot /ʋ/ book /o/ boat /ɔ/ bought Back Mid Front /ɑ/ bach /ɚ/ burt /Ʌ/ but /ə/ alone /i/ beet /ɩ/ bik /ɛ/ bet /æ/ bat Diphthongs /aɩ/ buy /ɔɩ/ boy /aʋ/ down",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Experimenta",
+      "content": "Experimenta l ORL 28 Consonants /b/ boot /d/ dye /g/ goat Plosives unvoiced Fricatives /p/pie /t/ tie /t/ key /v/ van /ᶞ/ the /z/ zoo /ʒ / azure Semivowels Nasals Affricates /m/ my /n/ night /ŋ/ rang /ʧ/ chair /ʤ/ judge /w/ why /j/ lie /f/ fix /ɵ/ thick /s/ sat /ʃ/ ship /X/ ch /h/ hat voiced voiced unvoiced",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "• no one-to-one correspondence between physical sound and phoneme, especially if",
+      "content": "• no one-to-one correspondence between physical sound and phoneme, especially if articulation is sloppy • In summary: The IPA designates a single symbol for the same sound, regardless of the spelling. At times the IPA symbol and the spelled or orthographic symbol coincide, sometimes they do not. The IPA is largely based on articulatory properties 29 Remarks phonetic transcription",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "• Write the symbols for the vowels in the following words",
+      "content": "• Write the symbols for the vowels in the following words • bread, rough, foot, hymn, pull, cough, mat, friend • Transcribe the following words • bake, bought, bored, goat, tick, guard, doubt, bough, peak, football, bank, threat(e)ning, gently, usual • ps. phonemic transcription is ok, try to add aspiration • Transcribe the sentence: • Opening the bottle presented no difficulty • All the time 30 Exercises",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "31",
+      "content": "31 Parametric analyses (from Hewlett & Beck 2006) Every language has a finite nr of phonemes to make words with different meanings Phoneme variation -in most English dialects phonemic difference between /u/ (pool) and /ʊ/ (pull), however NOT in Scots English (words are not distinguishable) Phonetic variation -occurs at the level of the individual speaker -anatomical differences -speaking style (more nasal)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Phonology is concerned with",
+      "content": "• Phonology is concerned with • Which speech sounds occur in a language • How they pattern according to regular rules • If you have phonological knowledge of a language, you can • Produce sounds which form meaningful utterances • Recognize foreign words, foreign accents • Make up new words • Add the appropriate segments to form plurals and past tenses • Know when to aspirate plosives and when not • Know whether a sound belongs to your language or not • Know that different phonetic utterances represent the same ‘meaningful unit’ • It is often difficult to pronounce a sound that is not part of your phonological knowledge (cf:for Dutch, French speakers…) • A person must learn the form (pronunciation) and meaning of a language. Knowing the meaning does not tell you the pronuciation and v.v. • Minimal pair: when 2 different forms are identical in every way except for one sound segment (phoneme) that occurs in the same place in the word. Both phonetic form and meaning are changed: • Sink - zink • Junk - chunk • Boy - buy • Teeth - teethe • Seed - soup (not minimal pairs!) • Bar - rad (not minimal pair, although only 1 sound differs, /b/ occurs initially, /d/ occurs finally) • Often difficult to determine the set of contrastive phonemes in a language: • A word is a combination of both a permitted form and a meaning • Some words are nonsense words (or possible words): permissible forms with no meaning 32 Phonology",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Substitution of glottal stop [ʡ] for [t] does not change the meaning of the word. Therefore, the glottal stop is not a phoneme (it is not a distinctive sound).",
+      "content": "• Substitution of glottal stop [ʡ] for [t] does not change the meaning of the word. Therefore, the glottal stop is not a phoneme (it is not a distinctive sound). Buʡer and butter mean the same (not minimal pairs). These sounds are in free variation. Same for unreleased or released plosives at end of word. It can be transcribed phonetically (using diacritics but it is not distinctive phonemically in English. • A distinctive feature (also: phonemic feature) is a feature that distinguishes one phoneme from another • A feature can be thought of as having two values (+ = presence, - = absence) • [b] = [+ voiced] • [p] = [- voiced] • Distinctive features in English: • V: • High • Low • Back • Rounded • Tense/long • C: • Consonant [-consonant]: vowels and glides • Sonorant :air continues to resonate, no obstruction. Versus Stops, fricatives and affricates which are also called Obstruents or [- sonorant] • Syllabic (some nasals and liquids: medal, mutton, listen). Nonsyllabic: read • Nasal • Voiced • Continuant: blockage of air or not • Labial • Alveolar • Palatal • Velar • Coronal: alveolar, palatal, and affricate: Common property: tongue blade toward hard palate • Sibilant 33",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "34",
+      "content": "34 Feature matrix vowels",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "35",
+      "content": "35 Feature matrix consonants In English we automatically lower the velum when producing vowels before nasals in the same syllable: Nasalized vowels always occur before [+nasal] consonants, never before [-nasal] (oral) consonants Bee, bead, bad: oral vowels occur in final position and before nonnasal consonants Bean, lame: nasalized vowels occur only before nasal consonants Nasalization of vowels in English is predictable by a rule: nasalize a vowel or diphthong when it occurs before a nasal consonant",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Redundant versus distinctive",
+      "content": "Redundant versus distinctive • When a feature value is predictable by a general principle or rule, it is not a distinctive or phonemic feature for that class of segments (e.g. [± nasal] is not a distinctive feature for English vowels. It is distinctive for English consonants (/b/ vs /m/). • There is no one-to-one correspondence between phonetic segments and phonemes in a language. Eg. Nasalization rule shows that one phoneme may be pronounced phonetically as more than one segment (oral or nasal, depending on context) • A redundant feature is a feature that is predictable by rule. • Nasality is a redundant feature in English vowels, but it is a nonredundant (distinctive) feature for English consonants. We have to learn that the word ‘bean’ begin with an oral stop, but we don’t have to learn the vowels in this word is nasalized (note: Nasality can be a distinctive feature in vowels in other languages, e.g. in French). • Most knowledge on rules is unconscious knowledge. Language acquisition is -to a large extent- rule construction • Complementary distribution: when 2 sounds never occur in the same phonemic context (when oral vowels occur, nasal vowels do not occur). In English the velar nasal and glottal glide [h] are in complementary distribution, because the velar nasal is not found word initially and [h] is not found word finally. 36 Phonological rules",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Aspiration in English is a redundant feature (not distinctive)",
+      "content": "• Aspiration in English is a redundant feature (not distinctive) • The aspirated and nonaspirated phones are in complementary distribution. • Aspiration rule: aspirated a voiceless stop (/p,t,k/) when it occurs syllably initially before a stressed vowels. • In Thai aspiration is not predictable (presence or absence of aspiration affects meaning of the utterance) • In learning a language a child learns which features are distinctive and which are not. • Vowel length can also be a nonpredictable, distinctive feature (Danish, Finnish, Arabic, Japanese, Korean): • Korean: ‘il’ = day; ‘i:l’= word • Length of consonant can also be phonemic: • Italian: ‘nonno’ = grandfather; ‘nono’ = ninth • In English the /t/ in ‘white’ may be a little longer than the /t/ in ‘why tie’, but length of consonant not a distinctive feature. • Given the presence of certain features, one can predict the value of other features in that segment: • E.g. there are no rounded front vowels in English. If a vowel is specified as [-back] it is also predictably [-round]. Not necessary to specify [-round]. A blank would indicate that the value of that feature is predictable by a phonological rule of the language. Similarly, if a phoneme is [+nasal] it is also [+voiced] in English. Sometimes, the nasal phonemes may be ‘devoiced’ after an initial /s/ (snoop: snụp]. However, in Burmese /ma/ means ‘health’ and /ṃa/ means ‘order’ (therefore different phonemes) . Experimenta l ORL 37 Phonological rules, continued",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "For certain classes of sounds the values of some features are universally implied for all languages: all stops [-continuant] are universally and",
+      "content": "• For certain classes of sounds the values of some features are universally implied for all languages: all stops [-continuant] are universally and predictably [-syllabic], regardless of phonet • Suppose you were given the following phonemes/k,b,l,I/ and asked to form all ‘possible’ words, you might arrange as follows: • /blIk/ • /klIb/ • /bIlk/ • /kIlb/ • Not: /Ilbk/, /lbkI/, etc. • Although /blIk/ and /klIb/ are not existing words, if you heard someone say : ‘I just bought a new ‘blick’, you would ask: ‘what is a blick’? If someone said: ‘I just bought a new bkli’, you would say ‘what did you say’? Our knowledge of English tells us which strings are permissible and which not. • Speakers of all languages have the same kind of knowledge. They know what sounds are part of a language, what the phonemes are, and what phonemic and phonetic sequences may occur. The specific sound and sound sequences may differ, but the phonological systems include similar kind of rules. Experimenta l ORL 38",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "• Phonemes are individual sounds, the smallest meaningful contrastive unit in the phonology of language. Each language has 20-",
+      "content": "• Phonemes are individual sounds, the smallest meaningful contrastive unit in the phonology of language. Each language has 20- 40 phonemes /heed/, /hid/, /ahead/, /hayed/, /had/, /hod/, /hawed/, /hoed/, /hood/, /who’d/, /hide/, /hud/, /howed/, /heard/, /hoyed/. Written between slashes: / /. Determined by linguists, according to their function in differentiating words. They are not defined acoustically by their sound properties, but by their function in a language system. One must know the phonological rules of the language to know how to pronounce a phoneme. A single phoneme may be phonetically realized as 2 or more phones. • Phones are the physical sounds that are produced when a phoneme is articulated. Vocal tract not discrete: each new production by the same speaker of the same phoneme sounds differently. Written between brackets: [ ] • Allophones describe a class of phones of one phoneme. /k/ and /kh/ (aspirated) are significantly different. The variation must be systematic (a predictable phonetic variant; it is rule-governed). Stop consonants tend to have more allophones than other phonemes, depending on context, aspirated, unaspirated, voiced, unvoiced, short, long... Written between slashes: / /. 39 Phones, phonemes, allophones,…",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Lack of naturalness results from",
+      "content": "• Lack of naturalness results from • too few allophones, a few examples: • kh (aspirated): initial in stressed syllables before non-front vowels (e.g. could, because) • k (unaspirated): after /s/ before non-front vowels; syllable initial in unstressed syllables before non-front vowels; syllable final position (sometimes). E.g. skull, scoot, teacup, peak • k= (unreleased): syllable final position (sometimes). E.g. attic • kyh (palatalized, unaspirated): initial in stressed syllables before front vowels (e.g. keep) • g : syllable initial before non-front vowels; sometimes syllable final position (e.g. sheepdop, ago) • g= : syllable final position, sometimes (e.g. rig) • gy (palatalized): before front vowels (e.g. geese, regain)…. • Auditory system is very sensitive to unnatural prosody! 40 Different allophones,…",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "• Syllables are the next larger unit of speech after the phoneme. Usually vowel (= syllable nucleus) and one or more",
+      "content": "• Syllables are the next larger unit of speech after the phoneme. Usually vowel (= syllable nucleus) and one or more consonants. Linguistic, not acoustic units. • Every utterance contains at least one syllable. In English a syllable may consist of a vowel alone, a vowel preceded by one, two, or three consonants, a vowel followed by one, two, three or four consonants, or a combination of these. The following words contain 1 syllable: • Owe: a vowel alone • Me: a vowel preceded by a single consonant • Am: a vowel followed by a single consonant • Strew: a vowel preceded by three consonants • Inks: a vowel followed by three consonants • Strengths: a vowel preceded by three and followed by four consants • People are more aware of syllables than they are of segments (individual consonants and vowels) due to writing system • Morphemes are the smallest unit of linguistic meaning. Baseball: base & ball 41 Phones, phonemes, allophones,…",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

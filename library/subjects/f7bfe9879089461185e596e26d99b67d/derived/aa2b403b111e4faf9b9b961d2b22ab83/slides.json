@@ -1,0 +1,271 @@
+{
+  "metadata": {
+    "source_file": "Lecture_04_Speech_Science_26_Oct_Slides.pdf",
+    "created_at": "2026-11-04T02:19:39.412904+00:00",
+    "slide_count": 29,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Speech Science 4 2026-2027",
+      "content": "Speech Science 4 2026-2027 Astrid van Wieringen Professor Experimental ORL, Dept Neurosciences, KU Leuven",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Context effects",
+      "content": "2 Context effects • Until now examples of carefully articulated speech:necessary to demonstrate spectral and temporal properties of fixed vocal tract shapes. However, in the daily ‘flow of speech’ speech sounds are not produced ‘discretely’: the formant frequencies are usually in transition due to continuously changing shape of VT. Context effects are usually suprasegmental, not segmental: – Segmental features cues phoneme and word identification – Suprasegmental phenomena are not limited to individual speech sounds, but are observed over syllables, words, phrases, sentences… They do not affect the word’s identity. • Primary factors responsible for variation in the signal: – Coarticulation – Assimilation – Context – Different speaking rates – Variations due to different speakers – Speaking style (casual vs. formal) – Dialectal differences – Prosody",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Coarticulation refers to the influences of the articulation of one sound on the articulation of other sounds in the same utterance (both",
+      "content": "• Coarticulation refers to the influences of the articulation of one sound on the articulation of other sounds in the same utterance (both in initial and final position). E.g. ‘sweep’: lip rounding for /w/ begins during production of /s/ . It is more the rule than the exception • Two types of coarticulation • Two main factors behind coarticulatory effects: – The specific vocal tract shapes to be attained – The motor program for performing the sequence of speech units: consonants, vowel, syllables and phrases. • Forward/anticipatory (right-to-left): the articulatory feature for a phonetic segment is apparent during the production of an earlier segment. E.g. nasalization of a vowel preceding the nasal, lip rounding before /u/ is produced • « planning of speech production/ looking ahead ». • Backward/retentive/carryover (left-to-right) coarticulation: coarticulation is apparent in a later segment (especially formant transitions) • « vocal tract movement/ mechanical inertia of articulators » • Effect of coarticulation extends across syllables and syntactic boundaries. • Principle of least effort of moving muscles gradually . 3 Coarticulation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Coarticulation",
+      "content": "4 Coarticulation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "• Assimilation refers to a change in the sound due to the influence of a neighboring sound.",
+      "content": "• Assimilation refers to a change in the sound due to the influence of a neighboring sound. • e.g. the voicing feature is extended to the /s/ in ‘husband’ because of influence of its voiced surrounding • As the normal conversational speech rate in English varies between 10 and 20 segments per seconds (this corresponds to approximately 100 ms per segment), these movements must be made in much less time than is available to complete them. As a result, shortcuts are made and some features are carried over from one segment to another. Direction of assimilation • In progressive or left-to-right assimilation, an ongoing feature is continued to the next sound. For example, the [s] in ‘dogs’ is pronounced voiced, because of the preceding segment, whereas the [s] in ‘cats’ is pronounced voiceless, because the preceding speech segment is voiceless. • In regressive or right-to-left assimilation, the preceding sound is affected. This is illustrated in ‘mish you’ [mish], where the [j] of ‘you’ affects the pronunciation of the preceding [s]. Sometimes, both preceding and following features can affect a segment. For example, the vowel [a] in ‘man’ is likely to be more nasalized than the [a] in ‘mat’, because of the nasalization coming from both directions in the first example. 5 Assimilation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Experimenta",
+      "content": "Experimenta l ORL 6",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "• Assimilation is not the same as coarticulation, although speech sounds are modified by context in both processes.",
+      "content": "• Assimilation is not the same as coarticulation, although speech sounds are modified by context in both processes. • assimilatory processes are language specific, are part of a grammar, and thus can be accounted for by phonological rules. Assimilation usually refers to major phonetic changes and spans across phonemic boundaries • coarticulation refers to changes within phonemic categories. Coarticulatory processes are considered as more universal, as they result from the inertia of the articulators. • In other words, assimilation and coarticulation are distinguished by language specificity versus universality, and by ‘intentional phonetic changes’ versus changes due to articulatory adaptation. • Assimilation can be considered to be a consequence of coarticulation: the language adapts itself to the speech constraints. It is important to realize that these changes are not motivated by laziness! Under normal conditions (no noise) speech would sound very unnatural if every single speech segment is pronounced individually. • Many historical changes in speech sounds in languages can be described as assimilatory. In English, for example, the words ‘mission’, ‘special’, and ‘passion’, were once pronounced with a medial [sj]: the [s] has been retracted in anticipation of the following [j] or [i]. The same applies to the work ‘ship’ that was originally pronounced as ‘skip’. Many changes in speech sounds are part of the speaker’s organization or pronunciation and are relevant to our description of the language (e.g. the prefix ‘un’ is pronounced as [n] in non-velar contexts (untidy) and as [ung] before a velar (unkind). 7 Assimilation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "• Of the different plosives, assimilation occurs most in alveolars, i.e. in [t] and [d]. The closure of the [t] or [d] is usually not",
+      "content": "• Of the different plosives, assimilation occurs most in alveolars, i.e. in [t] and [d]. The closure of the [t] or [d] is usually not alveolar, but occurs at the place of articulation of the following segment. For instance, the closure of a [t] or [d] before a dental will also sound dental e.g. ‘hot thing’, while that before a velar will sound velar, i.e. ‘ho[k k]ake’, ‘hot cake’ or ‘ba[g g]irl, ‘bad girl’. Before a bilabial the [t] or [d] will also sound bilabial, i.e. ‘hot pie’ becomes ‘ho[p p]ie’, ‘bad boy’ becomes ‘ba[b b]oy. Similar, but less extensive changes in place of articulation, occur for [n], [l], [s], and [z]. • Very often function words (‘the’ assimilate completely because of a preceding alveolar sound ‘i[n n]e pub (‘in the pub’), ‘i[z z]ere any beer? (‘is there any beer?’). As mentioned before, alveolars ([s], [z]) are often assimilated to a following palatal glide [j] or palato-alveolar fricative, e.g. the word [misʃ] in ‘I miss you’ or ‘it wa[ʒ j]ellow’ (‘it was yellow’) • In many dialects of English, voiceless stops are often glottalized. Glottalization implies a brief closure of the vocal folds, in addition to the closure in the vocal tract. In IPA the sound is transcribed by [ʡ]. Examples are ‘butter’ ‘bu[ʡ]er’. Sometimes, the closure in the vocal tract is completely replaced by the glottal stop. Often the [ʡ] replaces the [t] before a nasal, as in ‘a[ʡ night] ‘at night’. Word initial vowels may also be preceded by glottal stops, especially when stressed, as in ‘go [ʡ] away!’. 8 Assimilation continued",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "1) phrase-final lengthening:",
+      "content": "1) phrase-final lengthening: • The duration of a vowel preceding a final voiced consonant in a pre-boundary position (= just before the end of a word or phrase) is much longer than that of a voiceless consonant in a similar position (pre-boundary vowel lengthening: 50-100 ms). See below duration of ‘ae’ before ‘b’ and before ‘p’. Not only stops, also fricatives!. Results from a slowing down in speaking rate and it signals phrase and sentence boundaries. 9",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "average syllable duration decreases with increasing nr. of words (may relate to communication efficiency: words with many phonemes are",
+      "content": ": average syllable duration decreases with increasing nr. of words (may relate to communication efficiency: words with many phonemes are easier to identify than short words) c.f: stick > sticky > stickiness 10 2Polysyllabic shortening",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "3) consonantal effects on preceding vowels:",
+      "content": "3) consonantal effects on preceding vowels: • vowels are longer before voiced consonants than before unvoiced ones (has been attributed to “slowing down of speech in anticipation of a pause”, aiding perceptual cues to syntactic boundaries”, “additional time necessary for large F0 movements that often occur in prepausal speech • Sounds in context are shorter than in isolation • Consonants tend to shorten compared to single consonants in syllables (some effects can be attributed to shorter articulatory distances, but there may also be some phonological basis 11 3) Consonantal effects on preceding vowels",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "• Conversational speech: 150-250 words/min",
+      "content": "• Conversational speech: 150-250 words/min • this includes pauses (average 650 ms) • Phone duration depends on speaking style (reading, conversation, ..), stress, locations of pauses, and of word and syllable boundaries, place & manner of articulation, rhythm • average duration of syllable: 200 ms • average duration of stressed vowel: 130 ms • average duration of other phones: 70 ms (45 for /ə/ to 180 ms for diphthongs in conversation) • diphthongs ± 75 ms longer than vowels • vowels ± 30 ms longer than sonorant cons. • sonorant consonants ± 5 ms longer than obstruents • unvoiced stops ± 15 ms longer than voiced ones • In read speech syllable-initial consonants ± 20 ms longer than syllable-final consonants (“bad”) • unvoiced fricatives ± 40 ms longer than voiced ones 12 3) Speaking rate",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "• Speech has special voice features that are inherent to communication.",
+      "content": "• Speech has special voice features that are inherent to communication. • When we talk we want to convey some information, or the WHAT, • and some sort of attitude, or the HOW. • Both aims are accomplished by speaking with special variations of voice pitch and rhythm, by means of tones, and timing of the syllables (= prosodic features). • WHAT, the patterns of rhythms etc. are part of a linguistic code, and are specific (distinguish among among words and signal the grammar of a sentence): • pre-pausal lengthening (see before) • durational differences (see before) 13 Prosody, What and How, Pickett, 1998",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "• HOW can be used :",
+      "content": "• HOW can be used : • linguistically, e.g. tonal variations of ‘yes’: • upward-glide: Ok, it that really true? • shorter upward glide means: Ok, I’m listening • downward gliding yes: Yes, I agree • a long drawn-out one with a steady voice indicates boredom. • and expressively: • moods, emotions, intentions (not a formal part of the language). • Main acoustical properties of suprasegmental features: • fundamental frequency (perceived as vocal pitch) • intensity (perceived as loudness) • duration (perceived as length, also called quantity) 14 Prosody, What and How, Pickett, 1998",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "prosody  intonation",
+      "content": "• prosody  intonation • Intonation (narrower) refers to pitch rises, falls, stress • Prosody includes abovementioned + tempo effects (pauses and lengthening), loudness, and other phenomena (spectral effects) • prosodic patterns span the linguistic levels and serve important functions in daily communication • Note: effect of speech rate is also suprasegmental, but it is not considered to be part of prosodics • Tone languages: pitch variations are used to distinguish between different meanings of words (that have the same pattern of consonants and vowels). Tone features in tone languages are segmental and phonemic in function: the tones for a word are specified in the lexicon, the dictionary of a tone language. Thus, the tones are segmental features and strictly speaking not prosodic or suprasegmental. But tones are produced by the same glottal mechanisms for voice-pitch variation and so can be expected to interact with suprasegmental prosodic variations. • Tonal changes in the pitch are employed to fulfil discriminative and contrastive functions at all levels of speech communication: phonemic, lexical, grammatic, attentional and attitudinal. • Mandarin Chinese: spoken by more than 900 million • English: spoken by 400 million speakers • Spanish 300 million speakers • Russian 300 million speakers 15 Tone languages",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "The role of prosody:",
+      "content": "• The role of prosody: • is to highlight important words • to segment a sentence into smaller units, notify the listener of major syntactic boundaries • to change the meaning of an utterance (not of a speech sound!) • Infant speech: melody comes before phonemes and words in early child speech. • Caretakers often speak with exaggerated intonation • Toddlers often talk nonsens to themselves, make statements, ask questions, make arguments (correct prosody, no “content”) • French babies use more upward intonation than English babies • Word boundaries are not clearly marked in speech, segmentation on basis of prosodic pattern of the utterance (because these are used by adult speaker to differentiate and emphasize words and phrases) • prosodic ‘boot-strapping’ (= to use the intonation of a language to detect phonemic changes that may signal differences between words / group sounds into words) • Think of foreign language learners who know the words of the foreign language, but not the prosody. • Phonemes are not so unique, but prosodic rules are unique in each language (rhythm and intonation). • Think of speech of deaf people or artificial speech: one can be taught to produce good individual speech sounds, but their speech is nearly unintelligible if the sounds are not expressed with the overall rhythmic and tonal rules of the language. 16 The importance of prosody Pickett, 1998, O’Shaughnessy",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Experimenta",
+      "content": "Experimenta l ORL 17 4-5 tones in Mandarin Chinese",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Prosody can serve as a continuity guide in noisy environments. Useful when there are several competing voices",
+      "content": "• Prosody can serve as a continuity guide in noisy environments. Useful when there are several competing voices • Speech can be understood relatively well if segmental information is distorted (through filtering) but suprasegmental information is preserved • Prosody provides cues to the state of the speaker (= attitudes, emotions) • Synthetic speech: often highly intelligible (partly due to correct prosody), but not always natural sounding (more research is needed to improve prosody) • Rules for rhythm and intonation of a language! • Prosodic features are produced by • manipulations of the glottal sound source • source factors operate through actions of the speech breathing muscles and the vocal folds. • by the time of articulatory movements • timing factors operate through the movements of the upper articulators. • by the shape-configuration of the vocal tract 18 The importance of prosody Pickett, 1998, O’Shaughnessy",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "The two main factors in the glottal sources variations for prosodic features are",
+      "content": "The two main factors in the glottal sources variations for prosodic features are • the tension on the vocal folds • subglottal air pressure • Tension of vocal folds • major factor in controlling voice pitch • applied through small muscles in the larynx: • intrinsic laryngeal muscles (responsible for front-back tensioning of vocal folds) • strap muscles (lowers the larynx, producing slackness in vocal folds). At high pitches the larynx-lowering muscle is inactive • tension of muscles is studied by means of EMG (electromyography). Measures electrical activity of muscles through small electrode wires inserted into the muscles. Correlation between electrical activity in muscle and tension • Subglottal air pressure • increases due to increasing expiration (from the lungs) ---> increase in repetition rate of airflow pulses emitted by the glottis ---> increase in pitch (and loudness) • stressed syllables spoken with a higher subglottal pressure (they have longer duration and higher pitch) • In summary: different stress patterns and different intonational patterns are based on an interplay between manipulations of the vocal fold tension, the peaks of subglottal pressure and the durations of the vowels and consonants. 19 Vocal fold tension and subglottal pressure",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "• Intonation contours",
+      "content": "• Intonation contours • for a statement usually shows a down-going pitch, which may be correlated with a decrease in subglottal pressure toward the end of statement. Superimposed on this may be variations in the pitch due to the syllable stress of the utterance and the speaker’s emphasis. • for a questions usually exhibits a rising pitch contour because of increased vocal fold tension. Again, the stressed syllable will have a higher pitch than the other syllables. The stressed syllables generally corresponds to a peak in the subglottal pressures, that, other factors equal, will raise the syllable pitch. • In typical English phrases F0 rises on the first stressed syllables, remains constant for a short while, and falls on the final one: hat patterns (often in synthesis) • Intonation also helps to group words, especially in syntactically ambiguous phrases (e.g. a light house keeper). • However, there is quite a complex interaction between stress, intonation, and duration in the case of syntactic ambiguities. At some word boundaries , such as between 'gray tie' versus 'great eye' duration is the primary cue, although the ambiguity can also be resolved through differentiation in intonation 20 Intonation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "21",
+      "content": "21 Examples of rising and falling pitch",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "22",
+      "content": "22 F0 and intensity declination Time (s) 0 3.47333 -0.6104 0.9026 0 It is because the antler is fully grown that you can tell the deer is male Time (s) 0 3.47333 100 150 200 300 50 500 70 Time (s) 0 3.47333 29.93 82.38",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Note: subglottal pressure does not always fall during statements, nor rise during questions: subglottal pressure does not control this voice",
+      "content": "• Note: subglottal pressure does not always fall during statements, nor rise during questions: subglottal pressure does not control this voice pitch as much as the tension on the vocal folds • Words, phrases, sentences are marked into breath groups. A breath group is (a section of) an utterance that is produced between two respiratory inspirations. • Subglottal air pressure rises at the beginning of breath group, remains fairly constant, and falls during the last part of the breath group • Unmarked breath group: utterance produced with the least amount of muscular effort. Universal for all languages. • F0 and subglottal pressure tend to parallel each other: F0 contour of final syllable falls due to falling subglottal pressure (+ decreasing vocal fold tension) • e.g. Joe ate his soup • Marked breath group (marked for a question) • Rising F0 on the final syllable despite falling subglottal pressure. Rise must have been caused by an increase in vocal fold tension • e.g. Did Joe eat his soup? 23 Marked and unmarked breath groups Pickett, 1998.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "24",
+      "content": "24 Examples of unmarked and marked breath groups Pickett, 1998",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "• Stressed syllables are produced with greater vocal effort than unstressed ones. Slope of source spectrum less steeper for",
+      "content": "• Stressed syllables are produced with greater vocal effort than unstressed ones. Slope of source spectrum less steeper for stressed syllables (check source-filter theory!) • Also, increased subglottal pressure will raise the high frequency part of the source spectrum relative to the low frequency part. Thus, stressed vowels may have a higher amplitude in F2 and the higher formants than unstressed vowels. • In summary: • the F0 is higher in stressed syllables than in unstressed ones (due to increased subglottal pressure and/or vocal fold tension) • voice pitch shows an intonation contour over the syllables of the phrase that corresponds to the grammatical function of the phrase • the intensity of the vowels in stressed syllables is higher than in unstressed syllables • the relative intensity of F2, F3 and higher formants is greater in vowels of stressed syllables. • note: stressed syllables are not necessarily louder! • note: tone is the feature used at the word level • intonation is the feature when it functions at the sentence level 25 Not only voice pitch, also vocal effort",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "• New and given information at the level of discourse",
+      "content": "• New and given information at the level of discourse • “Someone painted the fence” • “Who painted the fence” • “Pete painted the fence” • “Pete” = new info. Made longer and higher in F0 • Somewhat dependent on language • Contrastive stress at the level of discourse: • Can occur in words, phrases, etc • “I’ll GIVE it to you • Juncture and pause phenomena at the level of syntax • Phrase-final lengthening in English = the lengthening of the last stressable syllable in a major syntactic phrase or clause • A) Grapes, melons, and apples are my favorite fruits • B) Apples, grapes, and melon are my favorite fruits The first syllable of apples will be longer in (a) than in (b) because here the word is at the end of the subject noun phrase • Also ‘fruits’ are longer in both sentences than it would be if it stood somewhere in the middle 26 The effect of prosody on several linguistic levels: stress",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "• Prosody at the level of the lexicon",
+      "content": "• Prosody at the level of the lexicon • lexical stress pattern can be major contrast: ‘to digest’ & ‘digest’ or ‘blackboard’ & ‘black board’ • lexical stress is language dependent (speakers with a foreign accent often misplace lexical stress). In French every word is stressed on its final syllable. • Function words (prepositions, articles, pronouns) are rarely stressed • Content words (nouns, verbs, adverbs, adjectives) are stressed • Acoustical parameters for contrastive and lexical stress: • duration: • stressed syllables are longer than unstressed ones (10-20% difference) • vowel duration is affected most by stress • syllable-final consonants affected least by stress • intensity • F0 • Mapping between acoustics and prosody neither linear nor one-to-one mapping 27 Prosody continued: stress Kent & Read, 1992; Pickett, 1998",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "• Stress is not a binary feature but a relative feature along a continuum.",
+      "content": "• Stress is not a binary feature but a relative feature along a continuum. • Small stressed unit = the syllable (not V or C, although role of V is crucial as it is voiced and contains a lot of energy) • The acoustical correlates of stress (especially duration) are language dependent: in Czech there is hardly an increase in duration on stressed syllables. • According to perceptual experiments the ranking of most important acoustical correlates for stress in English is as follows: • F0 • Duration • Amplitude (This was determined by testing the strength of each cue in the presence of conflicting cues (e.g. “export” was heard as a noun when the first syllable had high F0 even though the second syllable was long and loud. Note: be careful with such experiments (synthetic speech). Not possible to generate sound at same duration and amplitude without letting it sound unnatural. • Duration: Quantity is the linguistic term for 'contrastive duration'. 28 Stress and duration",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "• Vowels in stressed syllables are longer than in unstressed ones (Umeda, 1975).Vowels in unstressed function words are also",
+      "content": "• Vowels in stressed syllables are longer than in unstressed ones (Umeda, 1975).Vowels in unstressed function words are also shorter than in stressed function words. The importance of a word also affects its duration: a stressed vowel is longer in words having a high meaning content (nouns, verbs) than in words that carry little context/are predictable from the context (articles and prepositions). Same for consonants • A syllable is longest in final position in a breath group (pre-pausal stressed vowels). • The consonants that follow a vowel have a strong effect on the preceding vowel duration: • vowel are shortened when followed by voiceless consonants (by about 40 ms) • a following nasal consonant lengthens the preceding vowel if it is not prepausal and not one of the lax vowel • Read speech: • unstressed syllables shorten more than stressed ones, • vowels more than consonants, • unvoiced stops more than voiced ones • Some durational contrasts tend to normalize at fast rates 29 Durational prosodic features , Pickett 1988",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

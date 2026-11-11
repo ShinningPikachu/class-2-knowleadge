@@ -1,0 +1,260 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 06: POS tagging (30 Oct)",
+    "source_file": "Slides.pdf",
+    "recording_available": false,
+    "explanation_method": "assistant-authored from slide content",
+    "slide_count": 62,
+    "created_at": "2026-11-11T19:18:47.033086+00:00"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "summary": "Part-of-speech (POS) tagging assigns each token a grammatical category such as noun, verb, determiner, or adjective. The task is sequence labeling: infer one tag for every word using lexical evidence and surrounding context."
+    },
+    {
+      "slide": 2,
+      "summary": "The lecture moves from the tagging problem and tagsets to probabilistic sequence models (HMMs), dynamic programming with Viterbi, conditional random fields (CRFs), and neural models. The progression is from hand-defined probabilities to learned contextual representations."
+    },
+    {
+      "slide": 3,
+      "summary": "Given words x1 through xn, predict tags y1 through yn; the output aligns one label with each input token. Because a decision depends on both the word and its context, the model should choose a coherent tag sequence."
+    },
+    {
+      "slide": 4,
+      "summary": "Open-class words (nouns, verbs, adjectives, adverbs, numerals, and interjections) readily gain new members. Closed-class function words (pronouns, determiners, auxiliaries, conjunctions, prepositions, and particles) form smaller, more stable sets. These classes offer useful clues but do not resolve every ambiguous word."
+    },
+    {
+      "slide": 5,
+      "summary": "The same spelling can take different tags: book is a noun in “I read a book” and a verb in “I will book a flight”. A tagger cannot assign a fixed label to a word type; it must use sentence context."
+    },
+    {
+      "slide": 6,
+      "summary": "Corpus counts reveal an imbalance: most distinct word types occur with only one tag, yet common ambiguous types appear so often that they account for many tokens. A system must handle ambiguity even if it affects a minority of vocabulary entries."
+    },
+    {
+      "slide": 7,
+      "summary": "A baseline labels each word with its most frequent tag in the training data. The cited result reaches about 92% token accuracy on WSJ, but only 55% of sentences are entirely correct; performance also drops in new domains and languages."
+    },
+    {
+      "slide": 8,
+      "summary": "POS tags add lexical categories before a parser builds dependencies. In the example, labels help identify “Who” as the subject, “developed” as the verb, and the object and its modifiers. Parsing can then connect words into grammatical relations."
+    },
+    {
+      "slide": 9,
+      "summary": "French commonly places an adjective after its noun (“la pomme rouge”), while English usually places it before (“the red apple”). POS tags identify nouns and adjectives so a translation system can reorder them appropriately."
+    },
+    {
+      "slide": 10,
+      "summary": "POS tags can support sentiment analysis by locating adjectives in reviews. The example labels evaluative words such as “amazing”, “good”, “bad”, and “cheap”, separating them from nouns, verbs, and function words so downstream analysis can focus on useful cues."
+    },
+    {
+      "slide": 11,
+      "summary": "Text-to-speech needs more than spelling: the pronunciation of words such as “lead”, “resume”, and “report” can depend on their grammatical role and context. POS tags help select the intended pronunciation and prosody."
+    },
+    {
+      "slide": 12,
+      "summary": "POS tagging is one example of sequence tagging: assign a label to each token while preserving token order. The same model ideas can support named entity recognition and other word-level labeling tasks."
+    },
+    {
+      "slide": 13,
+      "summary": "Named entity recognition marks spans such as dates, organizations, people, and works of art. The annotated sentence shows that labels attach to tokens and may span multiple words, making NER another sequence-labeling problem."
+    },
+    {
+      "slide": 14,
+      "summary": "BIO encoding marks the first token of an entity with B, later tokens with I, and tokens outside entities with O. In the example, “New York” is a location span and “Michael Jeffrey Jordan” is a person span. Token labels can therefore represent multiword boundaries."
+    },
+    {
+      "slide": 15,
+      "summary": "Tagsets differ in size and detail. This lecture uses Universal Dependencies, a cross-linguistic set of 17 coarse-grained POS categories. A shared inventory makes comparisons across languages easier, while giving up some fine distinctions."
+    },
+    {
+      "slide": 16,
+      "summary": "This section introduces hidden Markov models as a generative approach to POS tagging, then shows how Viterbi finds the best tag path. Later sections replace the HMM’s limited feature set with CRFs and neural representations."
+    },
+    {
+      "slide": 17,
+      "summary": "Evidence comes from a word’s identity and neighboring tags. “Arrow” strongly suggests a noun; “book” is ambiguous. Tag transitions also help: determiners usually precede adjectives or nouns, while two determiners rarely occur consecutively."
+    },
+    {
+      "slide": 18,
+      "summary": "The HMM generates a sentence by choosing each tag from the preceding tag, then choosing a word from the current tag. This makes tags a first-order Markov chain and treats word emissions as conditionally independent given the tags."
+    },
+    {
+      "slide": 19,
+      "summary": "The joint score for a sentence and tag sequence multiplies each transition P(t_i|t_(i-1)) by each emission P(w_i|t_i), then includes an end transition. Comparing candidate tag paths uses both grammatical sequence likelihood and word-tag compatibility."
+    },
+    {
+      "slide": 20,
+      "summary": "View each tag as a state in a Markov chain. Arcs encode transition probabilities between tags; the path begins at a start state and ends at an end state. The chain captures local grammatical patterns such as likely neighboring categories."
+    },
+    {
+      "slide": 21,
+      "summary": "Rows condition on the previous tag and columns list the next tag. Corpus estimates show patterns such as proper nouns often starting sentences, auxiliaries commonly preceding verbs, and adjectives often followed by nouns. Each complete row should form a probability distribution."
+    },
+    {
+      "slide": 22,
+      "summary": "The teaching table intentionally omits many entries, so a visible row does not sum to one. A valid transition model must include all possible next tags, and the probabilities in each row must sum to one."
+    },
+    {
+      "slide": 23,
+      "summary": "An HMM state also emits an observed word. P(w_i|t_i) is the emission probability: it measures how likely a word is under a tag, complementing the transition model’s probability of moving between tags."
+    },
+    {
+      "slide": 24,
+      "summary": "Emission estimates connect words to tags: “Janet” is likely under PROPN, “will” under AUX, and “the” under DET. Words can still have several possible tags, so the emission distribution is not a deterministic dictionary."
+    },
+    {
+      "slide": 25,
+      "summary": "Maximum-likelihood estimates use corpus counts. Divide a tag-transition count by the count of its previous tag; divide a tag-word count by the count of that tag. These normalized frequencies estimate transition and emission probabilities."
+    },
+    {
+      "slide": 26,
+      "summary": "In the graphical model, shaded nodes are observed words and unshaded nodes are hidden tags. Arrows show conditional dependencies: each tag depends on the previous tag, and each word depends on its tag. This diagram encodes the HMM assumptions."
+    },
+    {
+      "slide": 27,
+      "summary": "To score “Unicorns bring joy” with NOUN-VERB-NOUN, multiply the start-to-NOUN transition, the NOUN-to-VERB and VERB-to-NOUN transitions, each word’s emission under its proposed tag, and the final transition. A single path receives one joint probability."
+    },
+    {
+      "slide": 28,
+      "summary": "At prediction time the words are visible but their tags are hidden. The goal is to find the most probable state path that could have emitted those words. “Hidden” describes unavailable labels; “Markov” describes limited dependence on previous tags."
+    },
+    {
+      "slide": 29,
+      "summary": "This section shifts from scoring a proposed tag sequence to searching for the best sequence. The next slides derive the objective and compare exhaustive search, greedy tagging, and Viterbi dynamic programming."
+    },
+    {
+      "slide": 30,
+      "summary": "Choose T to maximize P(T|W). By Bayes’ rule this is proportional to P(W|T)P(T); P(W) is constant across candidate tag sequences, so it can be dropped for the argmax. The model combines fit to the words with the prior probability of the tag sequence."
+    },
+    {
+      "slide": 31,
+      "summary": "In the HMM, P(T) factors into tag transitions and P(W|T) factors into emissions. Each path score is therefore a product of local transition and emission factors. This factorization makes efficient dynamic programming possible."
+    },
+    {
+      "slide": 32,
+      "summary": "One simple idea is to enumerate every possible tag sequence, score each one, and choose the best. That is correct in principle, but the number of alternatives grows quickly with sentence length, making exhaustive search impractical."
+    },
+    {
+      "slide": 33,
+      "summary": "With c tag choices at each of n positions, there are c^n possible sequences. Even a modest tagset makes this enormous for ordinary sentences. Efficient decoding must reuse partial results instead of exploring every complete path."
+    },
+    {
+      "slide": 34,
+      "summary": "Greedy tagging picks the best current tag from limited context; a locally strong choice can block a better full path. In “One bit me”, “bit” must be a verb in context, even if a local choice favors a noun analysis. Global sequence constraints resolve it."
+    },
+    {
+      "slide": 35,
+      "summary": "The lattice shows candidate tags at each word and the transitions between them. A path through “Janet will back the bill” is scored as a whole; Viterbi keeps the best partial path to each state instead of enumerating every full path."
+    },
+    {
+      "slide": 36,
+      "summary": "Viterbi initializes scores for the first word by multiplying start-state transition probabilities by emission probabilities. For “I”, the PRON path receives the strongest nonzero score; impossible word-tag pairs remain at zero."
+    },
+    {
+      "slide": 37,
+      "summary": "For “want”, compute one score per possible current tag: take the best previous-state score, multiply by the transition into the candidate tag and the word’s emission. Keep the maximizing predecessor so the eventual sequence can be reconstructed."
+    },
+    {
+      "slide": 38,
+      "summary": "The table illustrates the recurrence for the second token. Each candidate tag combines a prior path score with the transition and emission for “want”; the winning score is stored for later positions, not just the locally best tag."
+    },
+    {
+      "slide": 39,
+      "summary": "The next table columns apply the same recurrence to “to” and “race”. For each possible tag, retain only its best incoming path and include the current word’s emission. This compact table carries the evidence from all earlier words forward."
+    },
+    {
+      "slide": 40,
+      "summary": "Backtrace from the highest-scoring final state to recover the chosen tags: PRON, VERB, PART, VERB. Backpointers make the globally best sequence recoverable from the compact dynamic-programming table."
+    },
+    {
+      "slide": 41,
+      "summary": "A bigram HMM only sees the previous tag and struggles to include arbitrary clues such as capitalization (“us” versus “US”). Higher-order tag contexts expand the state space; adding richer features cleanly is a general weakness of generative models."
+    },
+    {
+      "slide": 42,
+      "summary": "Generative HMMs model how tags and words are produced. Discriminative models directly model P(T|W) and can use features of the observed sentence. A conditional random field is a discriminative model designed for structured label sequences."
+    },
+    {
+      "slide": 43,
+      "summary": "This section introduces CRFs as a way to keep sequence-level decoding while using more flexible evidence from the input. The lecture then extends the same tagging task from hand-designed features to neural features."
+    },
+    {
+      "slide": 44,
+      "summary": "A linear-chain CRF assigns a globally normalized conditional probability to a tag sequence given the whole word sequence. It sums weighted feature scores along the path, then normalizes against the scores of all candidate tag sequences."
+    },
+    {
+      "slide": 45,
+      "summary": "CRF features can first mirror a bigram HMM: at each position, score the previous and current tags together with the current word. The chain still enforces dependencies between adjacent tags, but feature weights are learned discriminatively."
+    },
+    {
+      "slide": 46,
+      "summary": "CRFs can use features of the full input W and position i, not just the current token. Capitalization, suffixes, surrounding words, and other evidence can influence a tag while the model still scores a coherent sequence."
+    },
+    {
+      "slide": 47,
+      "summary": "CRFs can still use Viterbi because the sequence score factors along neighboring tags. The dynamic-programming recurrence uses learned feature-based scores instead of HMM transition and emission probabilities, while keeping the same search strategy."
+    },
+    {
+      "slide": 48,
+      "summary": "Neural tagging replaces hand-crafted feature templates with representations learned from data. A network can encode each token in context, and a structured decoder can use those representations to produce a consistent tag sequence."
+    },
+    {
+      "slide": 49,
+      "summary": "A neural network computes features f_k(W,i) for the word at position i in its sentence. These contextual features can represent evidence that is difficult to specify manually, then feed a tagger or CRF."
+    },
+    {
+      "slide": 50,
+      "summary": "An LSTM processes a sequence while carrying a hidden state forward, allowing later token representations to depend on earlier words. Its gates regulate what to retain or update, helping it capture longer context than a fixed window."
+    },
+    {
+      "slide": 51,
+      "summary": "A bidirectional LSTM runs one LSTM left-to-right and another right-to-left. Combining their hidden states gives each token information from preceding and following words, useful when its tag depends on context on either side."
+    },
+    {
+      "slide": 52,
+      "summary": "The BiLSTM produces contextual features for each word; a CRF scores the complete tag sequence and Viterbi decodes the best path. The diagram assigns one label per token, including punctuation, while the CRF coordinates neighboring labels."
+    },
+    {
+      "slide": 53,
+      "summary": "This design separates representation and structured prediction: the BiLSTM supplies features for the sentence and current word, the CRF computes P(T|W), and Viterbi returns the highest-scoring tag sequence."
+    },
+    {
+      "slide": 54,
+      "summary": "Transformer outputs can provide contextual features for each token. One option feeds them to a CRF and uses Viterbi; another applies a softmax independently at each position and chooses the argmax tag, trading sequence-level constraints for simplicity."
+    },
+    {
+      "slide": 55,
+      "summary": "The transformer encoder contextualizes each token, then a tagging head predicts labels such as B-PER, I-PER, O, and B-ORG. The example uses tokenwise argmax over softmax scores; special tokens such as [CLS] are not part of the output entity sequence."
+    },
+    {
+      "slide": 56,
+      "summary": "Pretraining learns general language representations from large text collections. Fine-tuning then adapts the pretrained model to tagged examples, so POS or NER can start from useful language patterns instead of learning everything from scratch."
+    },
+    {
+      "slide": 57,
+      "summary": "Per-word accuracy measures the share of tokens assigned the correct tag. Reported performance varies with language and dataset size; sufficient data can approach human performance. Cross-lingual transfer may help low-resource languages, but cannot remove every difficulty."
+    },
+    {
+      "slide": 58,
+      "summary": "POS tagging is sequence labeling; HMMs provide a generative model, Viterbi decodes the best path, CRFs provide discriminative sequence scores, and neural systems supply richer representations. The remaining slides compare their trade-offs."
+    },
+    {
+      "slide": 59,
+      "summary": "Three approaches stand out: an HMM with Viterbi, a CRF with learned sequence features, and a neural encoder paired with either a CRF or tokenwise softmax. Each balances context, decoding constraints, and flexibility differently."
+    },
+    {
+      "slide": 60,
+      "summary": "The field moves from local to global decoding and from local to global features. Transformers make token representations rich enough that some systems return to local argmax decoding; stronger contextual features can reduce the need for structured decoding."
+    },
+    {
+      "slide": 61,
+      "summary": "This slide credits the sources that shaped the lecture. The introduction draws mainly on Jurafsky and Martin, while the HMM and Viterbi sections adapt material by Nathan Schneider and other cited researchers."
+    },
+    {
+      "slide": 62,
+      "summary": "The references identify sources behind the lecture’s methods, including BERT and the textbook treatment of speech and language processing. They are the place to consult for formal definitions, derivations, and implementation details."
+    }
+  ]
+}

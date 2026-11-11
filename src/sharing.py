@@ -11,6 +11,7 @@ from typing import Any
 from urllib.parse import quote
 
 from .library import LibraryDocument, LibraryStore
+from .lecture_artifacts import artifact_dir
 
 
 GITHUB_WARNING_BYTES = 50 * 1024 * 1024
@@ -143,6 +144,10 @@ def collect_sharing_status(library: LibraryStore, repository_root: str | Path) -
         if path is not None and path.is_file():
             indexed_paths.append(path)
             library_bytes += path.stat().st_size
+    for path in library.subjects_root.glob("*/derived/*/*"):
+        if path.is_file():
+            indexed_paths.append(path)
+            library_bytes += path.stat().st_size
 
     catalog_path = library.database_path.resolve()
     if catalog_path.is_file():
@@ -263,6 +268,18 @@ def write_share_index(library: LibraryStore, repository_root: str | Path) -> Pat
                 target = quote(relative_path, safe="/-_.~")
                 label = _markdown_label(document.original_name)
                 lines.append(f"- [{label}]({target}) · {_display_size(path.stat().st_size)}")
+            if folder_id is not None:
+                derived = artifact_dir(library, folder_documents[0])
+                for filename, label in (
+                    ("slide_summaries.json", "Slide explanations"),
+                    ("alignment.json", "Slide and transcript links"),
+                    ("transcript.json", "Cleaned transcript with timestamps"),
+                    ("transcript.txt", "Transcript text"),
+                ):
+                    path = derived / filename
+                    if path.is_file():
+                        target = quote(path.relative_to(root).as_posix(), safe="/-_.~")
+                        lines.append(f"- [{label}]({target}) · {_display_size(path.stat().st_size)}")
             lines.append("")
 
     loose_files = _shareable_loose_files(root)

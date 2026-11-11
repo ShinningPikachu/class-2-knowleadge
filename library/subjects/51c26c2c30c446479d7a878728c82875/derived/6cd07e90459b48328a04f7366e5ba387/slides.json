@@ -1,0 +1,703 @@
+{
+  "metadata": {
+    "source_file": "Lecture_01_Untitled_Slides.pdf",
+    "created_at": "2026-09-29T16:50:49.442477+00:00",
+    "slide_count": 77,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "faculty of arts",
+      "content": "faculty of arts Computational Linguistics Lecture 1: Introduction Tim Van de Cruys Tuesday, 22 September 2026",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Modeling language with computers",
+      "content": "Modeling language with computers • From a scientific point of view • computational linguistics • study of production, comprehension, and acquisition of linguistic phenomena from a computational perspective • From an engineering point of view • natural language processing • use computers to do useful things with language, e.g. question answering, sentiment analysis, machine translation 2/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Three paradigms",
+      "content": "Three paradigms • symbolic approach • knowledge-based approach to language modeling • handcrafted dictionaries and grammars • statistical approach • statistics and machine learning • large annotated corpora, handcrafted features • neural approach • neural networks • large (un)annotated corpora, no feature engineering 3/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Applications",
+      "content": "Applications Sentiment analysis • Automatically identifying opinions about a product, brand, or social issue 4/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Applications",
+      "content": "Applications Sentiment analysis • Automatically identifying opinions about a product, brand, or social issue 4/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Applications",
+      "content": "Applications Sentiment analysis • Automatically identifying opinions about a product, brand, or social issue versus 4/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Applications",
+      "content": "Applications Translation translate.google.com www.deepl.com 5/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Applications",
+      "content": "Applications Summarization • Synthesis of multiple documents • Simplification 6/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Applications",
+      "content": "Applications Large language models (ChatGPT) 7/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "The role of linguistics",
+      "content": "The role of linguistics • How can linguistic phenomena be modeled computationally within the three aforementioned paradigms? • how to model words? • how to model sentences? • construction of meaning representation • How might linguistic theory be harnessed to improve natural language processing applications? 8/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "Learning Objectives",
+      "content": "Learning Objectives • Theoretical • Fundamental concepts of computational linguistic analysis / natural language processing • Overview of key research questions, approaches, and applications • Practical • Basic programming skills for linguistic applications in Python • Applying existing algorithms and models using existing language processing modules • Critical reflection • Limitations and societal impact of language technology (bias, interpretability) 9/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "Python",
+      "content": "Python • ‘hands on’ • Programming exercises using the Python programming language • Prior programming knowledge is useful • Self-study ‘Introduction to Python for Linguists’ available as an interactive notebook 10/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Notebook",
+      "content": "Notebook • Environment that allows combining text, program code, and results • Code can be executed interactively • Two options: • Installation on your own computer (Jupyter notebook) • Google Colab web interface (Google account required) 11/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Python: installation",
+      "content": "Python: installation • Standard version of Python • Available at http://www.python.org • Can be somewhat cumbersome to use, especially on Windows • Anaconda (recommended) • Available at https://www.anaconda.com/products/individual • User-friendly distribution • Suitable for data science and machine learning • Easy package management • Note: the installation process (which installer to download) depends on your operating system 12/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "Practical Information",
+      "content": "Practical Information • Full course content (slides, additional reading) is available online via Toledo • Lectures are recorded (if infrastructure allows) and made available online 13/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "Evaluation",
+      "content": "Evaluation • No exam • Final project • Applying acquired knowledge and skills to a self-chosen NLP application or (computational) linguistic research question • Note: 4 ECTS and 6 ECTS version 14/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Topics",
+      "content": "Topics • Introduction • Machine learning for language • Neural networks for NLP • Language modeling • Grammar models • Semantics • Attention and transformers • Machine translation, multilinguality, multimodality • Interpretability and bias • The role of linguistics • Applications in linguistics and the humanities (only 6 ECTS) 15/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "Language use: an example",
+      "content": "Language use: an example – Why did the chicken cross the road? – I give up. – To get to the other side. 16/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "Language use: an example",
+      "content": "Language use: an example – Why did the chicken cross the road? – I give up. – To get to the other side. 16/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "Language use: an example",
+      "content": "Language use: an example – Wide id the chicken cross the road? – I give up. – To get to the other side. 16/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Language use: an example",
+      "content": "Language use: an example – Why did the chicken cross the road? – I give up. – To get to the other side. 16/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Language use: an example",
+      "content": "Language use: an example – Why did the chicken cross the road? – I give up. – To get to the other side. 16/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Language use: an example",
+      "content": "Language use: an example – Why did the chicken crossed the road? – I give up. – To get to the other side. 16/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Language use: an example",
+      "content": "Language use: an example – Why the chicken did cross the road? – I give up. – To get to the other side. 16/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Language use: an example",
+      "content": "Language use: an example – Why did the chicken cross the road? – I give up. – To get to the other side. 16/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Language use: an example",
+      "content": "Language use: an example – Why did the chicken cross the road? – I give up. – To get to the other side. 16/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "What is language?",
+      "content": "What is language? • Language is a communication system • What is the key element in a communication system? 17/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "What is language?",
+      "content": "What is language? • Language is a communication system • What is the key element in a communication system? • A sign • pairing of a form and a meaning • can be iconic, indexical, or symbolic 17/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Slide 29",
+      "content": "",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Slide 30",
+      "content": "",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Slide 31",
+      "content": "",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "apple",
+      "content": "apple",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "penguin",
+      "content": "penguin",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "hypothesis",
+      "content": "hypothesis",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "What is language?",
+      "content": "What is language? • Language is a communication system • What is the key element in a communication system? • A sign • pairing of a form and a meaning • can be iconic, indexical, or symbolic 17/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "What is language?",
+      "content": "What is language? • Language is a communication system • What is the key element in a communication system? • A sign • pairing of a form and a meaning • can be iconic, indexical, or symbolic • Language is a means of communication based on a system of signs 17/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Animal vs. human communication",
+      "content": "Animal vs. human communication • Features of human language • Interchangeability • Cultural transmission • Arbitrariness • Discreteness • Displacement • Productivity • Some are shared with animal communication systems, while others are (as far as we know) exclusively human 18/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Vervet monkey",
+      "content": "Vervet monkey • Uses arbitrary signs in order to signal predators • Not just utterances of stress or excitement • Signs have stable external reference and serve the purpose of communication • Three signs for different predators: • short, two syllable coughing sound • barking/peeping sound • continuous clicking, ‘chutter’ sound 19/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Vervet monkey",
+      "content": "Vervet monkey • Uses arbitrary signs in order to signal predators • Not just utterances of stress or excitement • Signs have stable external reference and serve the purpose of communication • Three signs for different predators: • short, two syllable coughing sound presence of an eagle →looking up and seeking shelter • barking/peeping sound presence of a leopard →escape in the trees • continuous clicking, ‘chutter’ sound presence of a snake →stand up and look down 19/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Human language: discreteness",
+      "content": "Human language: discreteness • Signs are composed of discrete, meaningless units, which can be combined in various ways to create new signs with different meanings stop [s·t·o·p] →spot tops opts • Animal communication systems mostly make use of signs that are indivisible units • This feature of human language is also called duality of patterning or double articulation 20/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Human language: displacement",
+      "content": "Human language: displacement • Humans can talk about things not present in space or time last night, a man on the moon, a unicorn, in September 2037, … • Animal communication systems are restricted to the present, the here and now 21/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "Human language: productivity",
+      "content": "Human language: productivity • Humans can produce (and understand) an infinite amount of utterances apple, the apple, the green apple, the green apple that I ate last night, the green apple that I ate last night when I was… • in novel and creative ways e-mail, brexit, tiktokification, … • phonemes →morphemes →words →phrases → sentences • Animal communication: one utterance, one sign (vervet monkey) 22/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Compositionality",
+      "content": "Compositionality • Principle of compositionality (Frege): the meaning of an utterance is derived from the meaning of the signs and the way those signs are combined (1) Jim drives the car. (2) The car drives Jim. • Co-compositionality: the influence that signs exert on each other when they are combined (3) red rose (4) red wine (5) red hair 23/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "How to make sense of human speech?",
+      "content": "How to make sense of human speech? • Segmenting the utterance in terms of the basic units of sound and meaning • Recognizing how the basic units are composed into larger units (syntax) • Deriving the meanings of complex signs (compositional semantics) • Contextualizing the meanings so that full interpretations arise 24/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "Linguistics",
+      "content": "Linguistics • Linguistics is the study of language • Linguistics is concerned with all aspects of how humans use language, and what they must know in order to do so • Linguistics asks different types of questions: • How are languages structured? • How are languages used? • How do languages change? 25/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Linguistics",
+      "content": "Linguistics • Linguistics is the study of language • Linguistics is concerned with all aspects of how humans use language, and what they must know in order to do so • Linguistics asks different types of questions: • How are languages structured? • How are languages used? • How do languages change? 25/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "A brief history of linguistics",
+      "content": "A brief history of linguistics • India: description of Sanskrit (Panini) • Greece/Rome: description of ancient Greek (Latin) for rhetorical purposes • Middle ages: 7 arts – trivium (grammar, logic, and rhetorics) & quadrivium (arithmetic, geometry, astronomy and music) • Renaissance: attention for other languages than Greek and Latin; standardization of speech and writing 26/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "Birth of linguistics as a science",
+      "content": "Birth of linguistics as a science • 1786: William Jones hints at common root of Sanskrit, Greek, and Latin, and other European languages • 19th century : historical and comparative linguistics (Brothers Grimm) Indo-European *ph2ter Sanskrit pitar Latin pater FR père SP padre IT padre West-Germanic DE Vater NL vader EN father 27/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "The Indo-European Language Family",
+      "content": "The Indo-European Language Family Proto-Indo-European Celtic Brythonic Welsh Gaelic Irish Gaelic Balto-Slavic Slavic Polish Russian Romance Latin French Italian Proto-Germanic East-Germanic Gothic West-Germanic Dutch English North-Germanic Danish Swedish 28/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "First half of the 20th century",
+      "content": "First half of the 20th century • Structuralism • Ferdinand de Saussure • signifiant vs. signifié, arbitrariness of the sign • the meaning of signs is determined by the other signs within the language structure • Descriptive linguistics • Edward Sapir, Benjamin Whorf, Leonard Bloomfield • study of native American languages, with emphasis on the differences • linguistic relativity: grammatical systems and language use affect perception 29/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "Noam Chomsky",
+      "content": "Noam Chomsky • Generative grammar • Grammar as a system of rules that generates the grammatical sentences (and only those) for a given language • competence vs. performance • linguistic universals • need for formalization and full explicitness • Language acquisition device • discrepancy between • apparent complexity of natural languages • ease with which children acquire them • language is innate 30/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "Relevance for our course",
+      "content": "Relevance for our course • Computational linguistics has been greatly influenced by Chomskyan formalization • More recently: implicit revisiting of earlier theories (structuralism) • What is it that makes language difficult for computers? • A complex phenomenon that involves the interaction of various types of knowledge and skills • Language understanding has to cope with an ubiquitous property of natural languages: ambiguity 31/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "Levels of linguistic structure",
+      "content": "Levels of linguistic structure • phonology: sounds • morphology: structure of words • syntax: structure of sentences • semantics: the meaning of words, and how they combine to form larger meanings • pragmatics: the meaning of utterances within a discourse context 32/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "Ambiguity: phonology",
+      "content": "Ambiguity: phonology • homophones : buy, by, bye • important for speech recognition 33/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Ambiguity: morphology",
+      "content": "Ambiguity: morphology • homonyms/homographs: • flies (noun) / flies (verb) • past (preposition) / past (noun) • like (preposition) / like (verb) • complicates syntactic analysis • complicates semantic analysis • when combined, the ambiguity becomes even more important • Time flies like an arrow. • Fruit flies like a banana. 34/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "Ambiguity: syntax",
+      "content": "Ambiguity: syntax Structural ambiguity John hits the ball with a bat NP-SBJ DEP NP-OBJ PP DEP NP John hits the man with a hat NP-SBJ DEP NP-OBJ PP DEP NP 35/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "Ambiguity: semantics",
+      "content": "Ambiguity: semantics • Leslie used a pen to write this letter. • We put he pigs in a pen. • The judge sent them to the pen for a decade. • They should pen that letter quickly. 36/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "Ambiguity: pragmatics",
+      "content": "Ambiguity: pragmatics • Joe is the husband of Jill. His office is oval. • Joe called Jill . The first lady came in 5 minutes later . • The monkeys did not eat the bananas because they were not hungry. • The monkeys did not eat the bananas because they were not ripe. 37/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • word order in English is modifier-noun word order in French is noun-modifier • English: a red house French: une maison rouge • English: almost double the usual oatmeal biscuits French: presque le double des biscuits à l’avoine habituels 38/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • Word can have different meanings • e.g. French avocat 39/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • Word can have different meanings • e.g. French avocat 39/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • Word can have different meanings • e.g. French avocat 39/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • Word can have different meanings • e.g. French avocat avocado lawyer 39/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation étape leg jambe patte paw pied foot JOURNEY HUMAN ANIMAL CHAIR BIRD HUMAN ANIMAL 40/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • Certain languages, like Spanish, can omit subject pronouns • –o = I • –as = you • –a = he/she/it • –amos = we • –an = they • When should the system use he, she, it? 41/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • The monkeys did not eat the bananas because they were not hungry. • Les singes n’ont pas mangé les bananes parce qu’ils n’avaient pas faim. • The monkeys did not eat the bananas because they were not ripe. • Les singes n’ont pas mangé les bananes parce qu’elles n’étaient pas mûres. 42/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • I saw her yesterday. • Ich habe sie gestern gesehen. • I gave her a present. • Ich habe ihr ein Geschenk gegeben. • I also gave her brother a present. • Ich habe auch ihrem Bruder ein Geschenk gegeben. 43/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • French: je bois du lait 44/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • French: je bois du lait • English: I drink milk ? 44/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 70,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • French: je bois du lait • English: I drink milk ? • English: I’m drinking milk ? 44/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 71,
+      "title": "Difficulties",
+      "content": "Difficulties Machine translation • bone of contention • kick the bucket • Don’t sell the bear’s fur before hunting it. 45/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 72,
+      "title": "Difficulties",
+      "content": "Difficulties Spell-checking • * This is too hot too drink. • * This is to hot to drink. • * This is to hot too drink. • This is too hot to drink. 46/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 73,
+      "title": "Difficulties",
+      "content": "Difficulties Question-Answering 47/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 74,
+      "title": "Difficulties",
+      "content": "Difficulties Question-Answering 47/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 75,
+      "title": "Difficulties",
+      "content": "Difficulties Speech technology • Speech Recognition • fish vs. ghoti • The system is trained to wreck a nice peach • Speech Synthesis • contént (adjective) vs. cóntent (noun) • addréss (verb) vs. áddress (noun) 48/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 76,
+      "title": "Difficulties",
+      "content": "Difficulties Speech technology • Speech Recognition • fish vs. ghoti rough women nation • The system is trained to wreck a nice peach • Speech Synthesis • contént (adjective) vs. cóntent (noun) • addréss (verb) vs. áddress (noun) 48/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 77,
+      "title": "Difficulties",
+      "content": "Difficulties Speech technology • Speech Recognition • fish vs. ghoti rough women nation • The system is trained to recognize speech • Speech Synthesis • contént (adjective) vs. cóntent (noun) • addréss (verb) vs. áddress (noun) 48/48 — Computational Linguistics — tim.vandecruys@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

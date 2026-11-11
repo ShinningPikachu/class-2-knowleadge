@@ -1,0 +1,1081 @@
+{
+  "metadata": {
+    "source_file": "Lecture_02_Untitled_Slides.pdf",
+    "created_at": "2026-10-01T17:01:21.655553+00:00",
+    "slide_count": 119,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Lecture 2: Supervised",
+      "content": "Lecture 2: Supervised learning and kNN Machine learning and inductive inference Sieben Bocklandt Slides based on slidedecks from Jesse Davis’ lectures in Principles of Machine Learning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "- Understand the basic goal of inductive supervised learning",
+      "content": "- Understand the basic goal of inductive supervised learning - Understand the use of feature construction - Know and understand what a hypothesis is - Understand the components of a learning algorithm - Understand why kNN is an important algorithm - Know how kNN, distance and similarity measures and decision surfaces work - Know how kNN forms a decision surface - Understand pitfalls with kNN and how to address them Faculteit, departement, dienst … 2 Goals of this lecture",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Supervised learning",
+      "content": "Supervised learning Faculteit, departement, dienst … 3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 4 Example problem Positive examples Negative examples",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 5 Example problem Positive examples Negative examples How do we classify following example?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 6 Example problem Positive examples Negative examples How do we classify following example? + Solid red circle in a polygon",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 7 Example problem Positive examples Negative examples How do we classify following example? + Solid red circle in a polygon - Solid red circle in a regular polygon",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 8 Example problem Positive examples Negative examples How do we classify following example? + Solid red circle in a polygon - Solid red circle in a regular polygon …",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "Traditional programming",
+      "content": "Traditional programming Machine learning Faculteit, departement, dienst … 9 Programming vs Supervised learning Computer Computer Data Program Output Data Program Output",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "- Given a set of data consisting of < x , y > with",
+      "content": "- Given a set of data consisting of < x , y > with - x a set of features - y a label associated with x Faculteit, departement, dienst … 10 Supervised learning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "- Given a set of data consisting of < x , y > with",
+      "content": "- Given a set of data consisting of < x , y > with - x a set of features - y a label associated with x - Learn a model / program / hypothesis that - for a new set of features x’ - says how to map x’ to an output y’ Faculteit, departement, dienst … 11 Supervised learning Label = Label =",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "How to do supervised",
+      "content": "How to do supervised learning Faculteit, departement, dienst … 12",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "- Music playlist consisting of songs used as background music",
+      "content": "- Music playlist consisting of songs used as background music Faculteit, departement, dienst … 13 Running example",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "- Music playlist consisting of songs used as background music",
+      "content": "- Music playlist consisting of songs used as background music - We want to automatically add new songs Faculteit, departement, dienst … 14 Running example ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "- Music playlist consisting of songs used as background music",
+      "content": "- Music playlist consisting of songs used as background music - We want to automatically add new songs - What do we need to do to to solve this problem? Faculteit, departement, dienst … 15 Running example ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "- Music playlist consisting of songs used as background music",
+      "content": "- Music playlist consisting of songs used as background music - We want to automatically add new songs - What do we need to do to to solve this problem? 1. Data collection 2. Data preprocessing 3. Feature construction 4. Model building 5. Model evaluation Faculteit, departement, dienst … 16 Running example ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "- Music playlist consisting of songs used as background music",
+      "content": "- Music playlist consisting of songs used as background music - We want to automatically add new songs - What do we need to do to to solve this problem? 1. Data collection 2. Data preprocessing 3. Feature construction 4. Model building 5. Model evaluation Faculteit, departement, dienst … 17 Running example Focus of this class / academic research Focus in practice ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "- What to collect? (Images, Sensor readings, Documents, …) → Structured?",
+      "content": "- What to collect? (Images, Sensor readings, Documents, …) → Structured? - Where to collect? (Websites, IoT sensors, Databases, …) → Primary data / third party? - How to collect? (Scraping, API’s, Queries, Document processing, …) → Allowed? - How much to collect? (Memory, #Examples, Regulations, …) → Needed vs practical? - Where to store the collected data? (Data warehouse, Data lake, Data mart) → Speed? Faculteit, departement, dienst … 18 Data collection",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "- Evaluating, filtering, manipulating and encoding data to make sure the ML model",
+      "content": "- Evaluating, filtering, manipulating and encoding data to make sure the ML model can work with it - Examples: - Missing data (Remove example, add mean value, …) - Scaling/normalizing (Multiple variables can have different scales) - Outliers (Remove examples, alter variable value, …) - Encode data (non-numerical → numerical) - Divide into train-validation-test (Train the model, tune the model, evaluate the model) Faculteit, departement, dienst … 19 Data Preprocessing",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "- Which features can describe a song?",
+      "content": "- Which features can describe a song? Faculteit, departement, dienst … 20 Feature construction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "- Which features can describe a song?",
+      "content": "- Which features can describe a song? - Genre - Duration - Tempo (BPM) - Key - Loudness (dB) - Acousticness - Energy - Instrumental - … Faculteit, departement, dienst … 21 Feature construction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "- Features describe the problem",
+      "content": "- Features describe the problem - Called many different names - Features (Machine learning) - Attributes (Machine learning / databases) - Covariates (Statistical learning) - Variables (Probabilistic learning) - KPIs (Business / applications) - Defining features is an art and skill (no ground truth) Faculteit, departement, dienst … 22 Defining features",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "- Boolean (1/0 ; True/False)",
+      "content": "- Boolean (1/0 ; True/False) - E.g. Instrumental={True, False} - Nominal: No relationship between values - E.g. Genre = {Pop, Rock, Blues, Jazz, Punk} - Linear/Ordered: Feature values are ordered - E.g. Energy = {Low,Medium,High} - Numerical - E.g. BPM= 1..250 - Hierarchical: Partial ordering with an IS-A relationship Faculteit, departement, dienst … 23 Types of Features Continent Europe Africa Benelux Baltics Subsaharan Southern",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Features: properties that describe the problem",
+      "content": "Features: properties that describe the problem - Given a new data point d (song, image, document, …) Faculteit, departement, dienst … 24 Fixed length feature vector",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Features: properties that describe the problem",
+      "content": "Features: properties that describe the problem - Given a new data point d (song, image, document, …) - Define m features Faculteit, departement, dienst … 25 Fixed length feature vector Title Genre BPM Key … Instrumental",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Features: properties that describe the problem",
+      "content": "Features: properties that describe the problem - Given a new data point d (song, image, document, …) - Define m features - Each feature has vi possible values (domain based on type) Faculteit, departement, dienst … 26 Fixed length feature vector Title Genre BPM Key … Instrumental Belongs to playlist String Nominal Numerical Nominal Boolean Boolean",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "Features: properties that describe the problem",
+      "content": "Features: properties that describe the problem - Given a new data point d (song, image, document, …) - Define m features - Each feature has vi possible values (domain based on type) - Each example is represented by a vector of m feature values and (possibly) a class label Faculteit, departement, dienst … 27 Fixed length feature vector Title Genre BPM Key … Instrumental Belongs to playlist String Nominal Numerical Nominal Boolean Boolean Mamma mia Pop 137 D major … No No",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "- Each axis is a feature with its own domain. This example is simplified (only 2 features)",
+      "content": "- Each axis is a feature with its own domain. This example is simplified (only 2 features) Faculteit, departement, dienst … 28 Feature Space Visually BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "- Each axis is a feature with its own domain. This example is simplified (only 2 features)",
+      "content": "- Each axis is a feature with its own domain. This example is simplified (only 2 features) - A new song (BPM=125, Energy=2.7) belongs in the feature space Faculteit, departement, dienst … 29 Feature Space Visually BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - - ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Representing models",
+      "content": "Representing models Faculteit, departement, dienst … 30",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 31 Hypothesis space BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 32 Hypothesis space BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - - Hypothesis 1 Label = Label = - +",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 33 Hypothesis space BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - - ? ? ? ? ? Hypothesis 1 Label = Label = - +",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Set of legal hypotheses: in this example only straight lines",
+      "content": "Set of legal hypotheses: in this example only straight lines Faculteit, departement, dienst … 34 Hypothesis space BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - - ? ? ? ? ? Hypothesis 1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "Set of legal hypotheses: in this example only straight lines",
+      "content": "Set of legal hypotheses: in this example only straight lines Faculteit, departement, dienst … 35 Hypothesis space BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - - ? ? ? ? ? Hypothesis 1 Hypothesis 2",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Set of legal hypotheses: in this example only straight lines",
+      "content": "Set of legal hypotheses: in this example only straight lines Faculteit, departement, dienst … 36 Hypothesis space BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + + - - - - - - - - - - ? ? ? ? ? Hypothesis 1 Hypothesis 2 Hypothesis 3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "- Assume a fixed form for the relationship between the features and the target",
+      "content": "- Assume a fixed form for the relationship between the features and the target prior to seeing data Faculteit, departement, dienst … 37 Fixed size hypothesis classes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "- Assume a fixed form for the relationship between the features and the target",
+      "content": "- Assume a fixed form for the relationship between the features and the target prior to seeing data - Canonical examples include - Linear regression: - Logistic regression: - Naïve Bayes: Faculteit, departement, dienst … 38 Fixed size hypothesis classes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "- Structure and form of the model changes during learning, often becoming more",
+      "content": "- Structure and form of the model changes during learning, often becoming more complex when you have more data - Canonical examples include - Rule sets - Decision trees Faculteit, departement, dienst … 39 Variable size hypothesis classes BPM Genre= Jazz Energy ≤ 100 > 100 True False >3 ≤3 + - + -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "Learning a model",
+      "content": "Learning a model Faculteit, departement, dienst … 40",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "- Given",
+      "content": "- Given - Set of positive examples - Set of negative examples Faculteit, departement, dienst … 41 Overall learning objective for binary classification Drawn independently at random from some unknown probability distribution",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "- Given",
+      "content": "- Given - Set of positive examples - Set of negative examples - Learn: A model that applies to - All/most of the positive examples - None/few of the negative examples - Correctly labels most future examples Note: easy to extend this definition to general classification (#classes > 2) Faculteit, departement, dienst … 42 Overall learning objective for binary classification Drawn independently at random from some unknown probability distribution",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "- Suppose I have a problem with 4 binary features and 2 classes",
+      "content": "- Suppose I have a problem with 4 binary features and 2 classes - Possible examples = 2 x 2 x 2 x 2 = 16 - Possible ways to label= 2 x 2 x … x 2 = 216 = 65536 - Observing part of the data does not rule out much - E.g. We observe 7 labeled examples, this leaves 9 unobserved examples →29 possible labelings still left - How can we decide which model is best? Faculteit, departement, dienst … 43 Fundamental challenge of learning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "- We need to make assumptions: experience alone doesn’t allow us to make",
+      "content": "- We need to make assumptions: experience alone doesn’t allow us to make conclusions about unseen data instances - Two types of bias - Restriction: Limit the hypothesis space (Rules, straight lines, parabolas, …) - Preference: Impose an ordering on the hypothesis space (e.g. Simpler models) Faculteit, departement, dienst … 44 Solution: Inductive Bias",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "- At high-level, algorithms learn one of these:",
+      "content": "- At high-level, algorithms learn one of these: - Function that predicts class or real value (e.g. decision tree, linear regression) - Conditional probability distribution P(Y|X) (e.g. logistic regression, neural network) - Joint probability distribution P(X,Y) (e.g. Naïve Bayes) Faculteit, departement, dienst … 45 Goals of learning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "- At high-level, algorithms learn one of these:",
+      "content": "- At high-level, algorithms learn one of these: - Function that predicts class or real value (e.g. decision tree, linear regression) - Conditional probability distribution P(Y|X) (e.g. logistic regression, neural network) - Joint probability distribution P(X,Y) (e.g. Naïve Bayes) - Learning a model involves a 2-step approach - Searching through the hypothesis space - Evaluating candidate hypotheses (and stop the search when good enough) Faculteit, departement, dienst … 46 Goals of learning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "- Discrete:",
+      "content": "- Discrete: - What model should I build? - Combinatorial search (e.g. best first, depth first, beam-search, …) - Hyperparameter choices, architecture, … - E.g. Decision tree, feature selection, rule learning,… Faculteit, departement, dienst … 47 Searching through the hypothesis space BPM Genre= Jazz Energy ≤ 100 > 100 True False >3 + - + -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "- Discrete:",
+      "content": "- Discrete: - What model should I build? - Combinatorial search (e.g. best first, depth first, beam-search, …) - Hyperparameter choices, architecture, … - E.g. Decision tree, feature selection, rule learning,… - Continuous: - What numbers should this model contain? - Optimization (e.g. gradient descent) - Weight tuning, parameter tuning, … - E.g. Neural networks Faculteit, departement, dienst … 48 Searching through the hypothesis space BPM Genre= Jazz Energy ≤ 100 > 100 True False >3 + - + -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "- Typically we have two high-level components:",
+      "content": "- Typically we have two high-level components: - How well does the model fit the data? - How “complex” is the model? Faculteit, departement, dienst … 49 Evaluating candidate models",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "- Typically we have two high-level components:",
+      "content": "- Typically we have two high-level components: - How well does the model fit the data? - How “complex” is the model? - Tradeoff fit (good) for complexity (bad) - In an ideal case: perfect fit without complexity - E.g. rule learning: #positives covered - #negatives covered - #literals - 𝑥1 ∨𝑥2 ∨𝑥3 ⟹𝑌 #P = 20 #N = 10 - 𝑥1 ∨𝑥3 ∧𝑥2 ∨𝑥4 ∧𝑥1 ∨𝑥2 ⟹𝑌 #P = 21 #N = 9 Faculteit, departement, dienst … 50 Evaluating candidate models",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "- A loss function quantifies the impact or consequence of an error (incorrect prediction)",
+      "content": "- A loss function quantifies the impact or consequence of an error (incorrect prediction) - E.g. 0/1-loss is 0 if correct, 1 if incorrect. The average 0/1-loss over a dataset is the classification error rate. - Goal is to find - a hypothesis h in hypothesis space ℋ - that minimizes some loss ℓ on the data - with r(h) the model size and 𝜆 the weight of this model size Faculteit, departement, dienst … 51 Evaluation of a model often framed in terms of loss",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "- Lazy learners: there is no explicit model",
+      "content": "- Lazy learners: there is no explicit model - A new model is built on demand per query - Pushes all the work to prediction time Faculteit, departement, dienst … 52 Lazy vs Eager learners ? ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "- Lazy learners: there is no explicit model",
+      "content": "- Lazy learners: there is no explicit model - A new model is built on demand per query - Pushes all the work to prediction time - Eager learners: Build explicit model - Build a global model that works for all examples - Work done at training time Faculteit, departement, dienst … 53 Lazy vs Eager learners ? ? ? ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "A real example of learning a model:",
+      "content": "A real example of learning a model: k nearest neighbors (kNN) Faculteit, departement, dienst … 54",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 55 Example by Josh Tenenbaum",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "Tufa",
+      "content": "Tufa Can you pick Out the other Tufa’s? Faculteit, departement, dienst … 56 Example by Josh Tenenbaum",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 57 Example by Josh Tenenbaum",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "- If it walks like a duck and quacks like a duck, then it’s probably a duck",
+      "content": "- If it walks like a duck and quacks like a duck, then it’s probably a duck Faculteit, departement, dienst … 58 Instance-based learning intuitively BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - ? Probably a positive",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "- If it walks like a duck and quacks like a duck, then it’s probably a duck",
+      "content": "- If it walks like a duck and quacks like a duck, then it’s probably a duck Faculteit, departement, dienst … 59 Instance-based learning intuitively BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - ? ? Probably a positive Probably a negative",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "- If it walks like a duck and quacks like a duck, then it’s probably a duck",
+      "content": "- If it walks like a duck and quacks like a duck, then it’s probably a duck Faculteit, departement, dienst … 60 Instance-based learning intuitively BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - ? ? ? Probably a positive Probably a negative",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "- Recommender systems",
+      "content": "- Recommender systems - Medical case comparison - Web and image search - News articles - Plagiarism detection - Weather forecasting - Retrieval augmented generation (RAG) Faculteit, departement, dienst … 61 Even though it seems trivial, why should you care about nearest neighbors?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "Let T={(xi, yi)} where i ∈ {1,..,n}",
+      "content": "Let T={(xi, yi)} where i ∈ {1,..,n} Classify example e if there exists xi ∈ T such that e1==xi,1 ∧ e2==xi,2 ∧⋯∧ ed==xi,d → Return yi else return ? Faculteit, departement, dienst … 62 First attempt: Memorize the data",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "Let T={(xi, yi)} where i ∈ {1,..,n}",
+      "content": "Let T={(xi, yi)} where i ∈ {1,..,n} Classify example e if there exists xi ∈ T such that e1==xi,1 ∧ e2==xi,2 ∧⋯∧ ed==xi,d → Return yi else return ? Problems: - Cannot generalize beyond the training data - Exact match is very restrictive Faculteit, departement, dienst … 63 First attempt: Memorize the data",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "- Find the k nearest labelled examples and return their combined decision",
+      "content": "- Find the k nearest labelled examples and return their combined decision Let T = {(xj ,yj)} where j ∊{1,…,n} Classify Example e priority queue pq of size k forall (xj ,yj)∊T if (dist(e, xj) < pq.max) then pq.enqueue(xj ,yj) prediction = combine(yj ∊pq) return prediction Faculteit, departement, dienst … 64 K Nearest Neighbors (kNN)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 65 Example of 1-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - -",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 66 Example of 1-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - ? Queue a b c d e f g h i j k l m n o p q r s t u v w x y z",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 67 Example of 1-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist a 10 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 68 Example of 1-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist b 8 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 69 Example of 1-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist c 3 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 70,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 70 Example of 1-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist e 2 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 71,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 71 Example of 1-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist e 2 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 72,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 72 Example of 1-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist e 2 ? ➔ Take the label of ‘e’ ➔-",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 73,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 73 Example of 3-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - ? Queue a b c d e f g h i j k l m n o p q r s t u v w x y z",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 74,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 74 Example of 3-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist a 10 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 75,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 75 Example of 3-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist b 8 a 10 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 76,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 76 Example of 3-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist c 3 b 8 a 10 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 77,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 77 Example of 3-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist c 3 d 3 b 8 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 78,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 78 Example of 3-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist e 2 c 3 d 3 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 79,
+      "title": "Faculteit, departement, dienst …",
+      "content": "? Faculteit, departement, dienst … 79 Example of 3-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist e 2 f 3 d 3",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 80,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 80 Example of 3-NN BPM Energy 0 50 100 150 200 1 2 3 4 + + + + + + + + + - - - - - - + - - - - - - - - - - Queue a b c d e f g h i j k l m n o p q r s t u v w x y z Example Dist e 2 c 3 d 4 ? ➔Combine the labels of ‘e’,’f’,’d’ ➔ +",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 81,
+      "title": "- Find the k nearest labelled examples and return their combined decision",
+      "content": "- Find the k nearest labelled examples and return their combined decision 1. What distance functions are possible? 2. How expressive is kNN? 3. How can we combine a test example’s neighbors to make a prediction? 4. What should we worry about when using kNN? Faculteit, departement, dienst … 81 K Nearest Neighbors (kNN)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 82,
+      "title": "What distances are possible?",
+      "content": "What distances are possible? Faculteit, departement, dienst … 82",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 83,
+      "title": "- Similarities: Higher number = more similar → neighbors are most similar",
+      "content": "- Similarities: Higher number = more similar → neighbors are most similar - Distances: Higher number = farther apart → Neighbors are closest Constraints: 1. Dist(i,j)≥0 2. Dist(i,i) = 0 3. Dist(i,j) = Dist(j,i) 4. Dist(i,j) ≤ Dist(i,k) + Dist(k,j) - Easy to convert distance to similarity, but not vice versa 𝑠𝑖𝑚𝑖, 𝑗= 1 1 + 𝐷𝑖𝑠𝑡(𝑖, 𝑗) Faculteit, departement, dienst … 83 Similarities and distances",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 84,
+      "title": "- All discrete features: Hamming distance counts the number of features",
+      "content": "- All discrete features: Hamming distance counts the number of features examples differ on 𝐻𝑎𝑚𝑚𝑖𝑛𝑔𝑥𝑖, 𝑥𝑗= Σ𝑘=1 𝑑 𝕀(𝑥𝑖,𝑘≠𝑥𝑗,𝑘) - All real-valued features - Manhattan 𝑥𝑖, 𝑥𝑗= Σ𝑘=1 𝑑 𝑥𝑖,𝑘−𝑥𝑗,𝑘 - Euclidean 𝑥𝑖, 𝑥𝑗= Σk=1 d 𝑥𝑖,𝑘−𝑥𝑗,𝑘 2 Faculteit, departement, dienst … 84 Classic distance measures ? ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 85,
+      "title": "- Value difference metric: attribute values are close if they make similar",
+      "content": "- Value difference metric: attribute values are close if they make similar predictions - Mixed continuous and discrete attributes Faculteit, departement, dienst … 85 More advanced measures",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 86,
+      "title": "- Jaccard similarity:",
+      "content": "- Jaccard similarity: - Jaccard distance: - Example - Sim(S1,S2)=0.3 - Dist(S1,S2)=0.7 Faculteit, departement, dienst … 86 Jaccard: Set comparisons",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 87,
+      "title": "- Edit distance for strings: the number of required edits to transform a string into another",
+      "content": "- Edit distance for strings: the number of required edits to transform a string into another string - Edit_distance(learning, leaning)=1 (remove ‘r’) - Edit_distance(learning, carving)=3 (remove ‘l’, replace ‘e’ with ‘c’, replace ‘n’ with ‘v’) - Cosine similarity of two vectors Faculteit, departement, dienst … 87 Structured objects",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 88,
+      "title": "How can we combine",
+      "content": "How can we combine neighbors’ labels? Faculteit, departement, dienst … 88",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 89,
+      "title": "- Majority vote",
+      "content": "- Majority vote - What about this for 5-NN? -Solution: distance weighted kNN 𝑓𝑥𝑞= 𝑎𝑟𝑔𝑚𝑎𝑥𝑦Σ𝑖=1 𝑘𝑤𝑖𝕝𝑦𝑖= 𝑦 𝑤𝑖= 1 𝑑𝑖𝑠𝑡𝑥𝑞, 𝑥𝑖 2 Faculteit, departement, dienst … 89 Predicting classes from neighbors labels ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 90,
+      "title": "- Average of the nearest neighbors",
+      "content": "- Average of the nearest neighbors Faculteit, departement, dienst … 90 Predicting real values with kNN",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 91,
+      "title": "- Average of the nearest neighbors",
+      "content": "- Average of the nearest neighbors - What about this? Faculteit, departement, dienst … 91 Predicting real values with kNN",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 92,
+      "title": "- Average of the nearest neighbors",
+      "content": "- Average of the nearest neighbors - What about this? - Solution: Local regression model - Learn model on k nearest neighbors - Use the local model to make the prediction Faculteit, departement, dienst … 92 Predicting real values with kNN",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 93,
+      "title": "How expressive is kNN?",
+      "content": "How expressive is kNN? Faculteit, departement, dienst … 93",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 94,
+      "title": "- Expressive = expressiveness of kNN’s hypothesis space",
+      "content": "- Expressive = expressiveness of kNN’s hypothesis space - In other words - How complex are the concepts that kNN can represent? - How does kNN partition the feature space? Faculteit, departement, dienst … 94 What do we mean by expressive?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 95,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 95 Let’s look at this geometrically",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 96,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 96 Let’s look at this geometrically",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 97,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 97 Let’s look at this geometrically",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 98,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 98 Let’s look at this geometrically",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 99,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 99 Let’s look at this geometrically",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 100,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 100 Let’s look at this geometrically",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 101,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 101 Let’s look at this geometrically Voronoi diagram",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 102,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 102 Let’s look at this geometrically Voronoi diagram Decision surface for 1-NN",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 103,
+      "title": "• Voronoi diagram: neighboring cells may make the same prediction",
+      "content": "• Voronoi diagram: neighboring cells may make the same prediction • Decision surface: separates regions that make different predictions Faculteit, departement, dienst … 103 From voronoi diagrams to decision surfaces",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 104,
+      "title": "- Small k: each example can have a large effect on prediction → scattered",
+      "content": "- Small k: each example can have a large effect on prediction → scattered surfaces → risk of overfitting - Large k: averaging effect so each example has a more limited effect → smoother surfaces → risk of underfitting Faculteit, departement, dienst … 104 Effect of varying value of k",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 105,
+      "title": "- Iterate over different ‘k’ values, different distance measures, …",
+      "content": "- Iterate over different ‘k’ values, different distance measures, … - Use the training set as neighbors - Use the validation set to find the best ‘k’, best distance measure, … - Use the test set to evaluate against other models Faculteit, departement, dienst … 105 How to choose the parameters?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 106,
+      "title": "What should we worry",
+      "content": "What should we worry about when using kNN? Faculteit, departement, dienst … 106",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 107,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 107 Is this a correct example?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 108,
+      "title": "Faculteit, departement, dienst …",
+      "content": "Faculteit, departement, dienst … 108 Problem 1: distances for multiple scales - Which distance is used in this case? - BPM and Energy have a different domain / scale (BPM higher than Energy)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 109,
+      "title": "- Min-max normalization: Map between 0 and 1 →",
+      "content": "- Min-max normalization: Map between 0 and 1 → Faculteit, departement, dienst … 109 Solution: Normalization BPM Energy 50 1.5 170 3 175 2.5 BPM Energy 0 0 0.96 1 1 0.66",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 110,
+      "title": "- Min-max normalization: Map between 0 and 1 →",
+      "content": "- Min-max normalization: Map between 0 and 1 → - Standardize each attribute value → Faculteit, departement, dienst … 110 Solution: Normalization BPM Energy 50 1.5 170 3 175 2.5 BPM Energy 0 0 0.96 1 1 0.66 BPM Energy 50 1.5 170 3 175 2.5 BPM Energy -1.413 -1.336 0.663 1.069 0.75 0.267",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 111,
+      "title": "Duration",
+      "content": "Duration Key BPM Class 210s D Major 137 Disco-pop Faculteit, departement, dienst … 111 Problem 2: Illustration Duration Key BPM Class 174s A-flat major 186 Punk",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 112,
+      "title": "Duration",
+      "content": "Duration Key BPM Class 210s D Major 137 Disco-pop Faculteit, departement, dienst … 112 Problem 2: Illustration Duration Key BPM Class 174s A-flat major 186 Punk Duration Key BPM Class 174s A-flat major 160 ?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 113,
+      "title": "Duration",
+      "content": "Duration Key BPM Class 210s D Major 137 Disco-pop Faculteit, departement, dienst … 113 Problem 2: Illustration Duration Key BPM Class 174s A-flat major 186 Punk Duration Key BPM Class 174s A-flat major 160 PUNK Hamming distance = 2 Hamming distance = 1",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 114,
+      "title": "- Irrelevant features dominate distance",
+      "content": "- Irrelevant features dominate distance - Solutions - Carefully think about the feature space → Domain knowledge - Weigh the features in some way - Reduce the dimensionality → Automatically select only relevant features Faculteit, departement, dienst … 114 Problem 2: Irrelevant features",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 115,
+      "title": "- Weird things happen in high dimensions because our intuitions from low-",
+      "content": "- Weird things happen in high dimensions because our intuitions from low- dimensions do not translate - Generally, adding dimensions (features) creates many problems for learners - One big problem: with lots of features, one can end up with spurious correlations - kNNs are easily misled with high-dimensional spaces - Density lowers → distances flatten and all examples become equidistant - Not the case when the distribution of positives has low variance Faculteit, departement, dienst … 115 Problem 3: Curse of dimensionality",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 116,
+      "title": "- kNN is very slow",
+      "content": "- kNN is very slow - Complexity is O(nd) with n the number of examples and d the dimension - All training examples should be in memory - Solutions (see course on Big Data Analytics Programming for more details) - Efficient retrieval structures (KD trees, …) - Locality sensitive hashing (use hashing to identify neighbors) - Product quantization (Compress data, approximate distance based on embedding) Faculteit, departement, dienst … 116 Problem 4",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 117,
+      "title": "- Advantages",
+      "content": "- Advantages - Training is fast - Learns complex target functions easily - Can predict discrete, real values, probabilities (dependent on distance measure) - Online or incremental learning is possible - Shares elements of human reasoning - Disadvantages - Test time is very slow - Large memory cost - No explicit model to inspect Faculteit, departement, dienst … 117 Pros and Cons of kNN",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 118,
+      "title": "Data: (X,Y) examples",
+      "content": "Data: (X,Y) examples → Representation: choose features → Inductive bias: nearby examples have similar outputs → Model/learner: lazy, instance-based → Choices: k, distance measure, feature scaling/weighting → Prediction: find k nearest examples + combine labels → Evaluation: validation/test performance → Pitfalls: scaling, irrelevant features, dimensionality, computational cost Faculteit, departement, dienst … 118 Supervised learning with kNN",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 119,
+      "title": "Questions?",
+      "content": "Questions? Faculteit, departement, dienst … 119",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

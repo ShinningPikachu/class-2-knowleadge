@@ -1,0 +1,479 @@
+{
+  "metadata": {
+    "lecture_title": "Lecture 5: Constraint Satisfaction Problems (19 Oct)",
+    "section_label": "Slide",
+    "completed": 52,
+    "total": 52,
+    "is_partial": false
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Fundamentals of Artificial Intelligence",
+      "summary": "This lecture introduces the fundamentals of artificial intelligence, specifically focusing on constraint satisfaction problems. Presented by Professor Tias Guns as Lecture 05 for the 2026-27 academic year, the session utilizes foundational material adapted from the CS188 course at Berkeley.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 2,
+      "title": "FAI: Reasoning & decisions",
+      "summary": "The \"FAI: Reasoning & decisions\" course schedule outlines ten lectures covering algorithmic search fundamentals, constraint satisfaction, game trees, Markov decision processes, and logic-based planning. Key milestones include two project hackerspaces for practical application, a guest lecture on AI ethics, and a final exam information session. The curriculum progresses from deterministic search applications to stochastic environments, culminating in an analysis of broader AI implications.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 3,
+      "title": "RECAP: Designing Rational Agents",
+      "summary": "An agent is defined as an entity that perceives its environment through sensors and acts via actuators, while a rational agent specifically selects actions to maximize expected utility. The techniques used to determine these rational actions depend on the characteristics of the percepts, environment, and action space. Consequently, this course focuses on general AI search techniques for various problem types, emphasizing the ability to recognize when existing methods can solve new problems.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 4,
+      "title": "What is Search For?",
+      "summary": "Search operates under assumptions of a single agent with deterministic actions in a fully observed, discrete state space. It distinguishes between planning, where the specific sequence of actions and their varying costs or depths are critical, and identification problems, where only the final variable assignments matter. While heuristics provide problem-specific guidance for finding paths, some formulations treat all paths at the same depth as equivalent regardless of cost.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 5,
+      "title": "CSP Examples",
+      "summary": "Slide 5 introduces practical Constraint Satisfaction Problem (CSP) examples, specifically directing students to an interactive notebook demonstrating map coloring. The provided link accesses a CPMpy environment where users can explore this classic problem instance directly in a browser-based lab setting.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 6,
+      "title": "Example: Map Coloring",
+      "summary": "The map coloring problem defines variables as regions, domains as available colors, and constraints requiring adjacent regions to have different colors. While explicit representations checking validity only upon full assignment are inefficient, a proactive approach immediately removes invalid colors from neighboring domains once a region is assigned. This forward-checking strategy detects inconsistencies earlier than standard backtracking, preventing the search from exploring paths that will inevitably fail due to shared constraints between unassigned variables.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 7,
+      "title": "Constraint Satisfaction Problems",
+      "summary": "While generic search problems treat states as arbitrary \"black boxes\" with flexible goal and successor functions, Constraint Satisfaction Problems (CSPs) represent a specialized subset where states are explicitly defined by variables $X_i$ taking values from domains $D$. In CSPs, the goal test consists of constraints specifying allowable value combinations for variable subsets, a structured representation that enables general-purpose algorithms more powerful than standard search methods.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 8,
+      "title": "Example: N-Queens",
+      "summary": "Slide 8 introduces the N-Queens problem as a concrete example of constraint satisfaction formulation. It outlines \"Formulation 1\" by identifying the necessary components: the variables representing queen positions, their respective domains, and the constraints required to ensure no two queens attack each other. The slide lists these structural elements but does not provide specific definitions or detailed examples for them in this section.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 9,
+      "title": "Example: N-Queens",
+      "summary": "Slide 9 introduces the N-Queens problem as a concrete example of Constraint Satisfaction Problem formulation, specifically outlining \"Formulation 2\". This approach structures the problem by defining specific variables, their corresponding domains, and distinguishing between implicit and explicit constraints.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 10,
+      "title": "Constraint Graphs",
+      "summary": "Constraint Graphs",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 11,
+      "title": "Constraint Graphs",
+      "summary": "A binary constraint satisfaction problem involves constraints relating at most two variables, which can be visualized as a binary constraint graph where nodes represent variables and arcs denote constraints. This graphical representation allows general-purpose algorithms to exploit the structure for faster search by identifying independent subproblems, such as treating Tasmania as a separate component in a map-coloring scenario.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 12,
+      "title": "Example: Cryptarithmetic",
+      "summary": "Slide 12 introduces the cryptarithmetic problem as a constraint satisfaction example, structuring it around three core components: variables, domains, and constraints. The slide explicitly lists these categories but does not provide specific values or definitions for them in this view, instead indicating the presence of variables labeled X1, X2, and X3 within the constraints section.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 13,
+      "title": "Example: Sudoku",
+      "summary": "In the Sudoku example, variables correspond to each open square with a domain of integers from 1 to 9. Constraints are defined as 9-way `alldiff` requirements ensuring all values in every row, column, and block are distinct. Alternatively, these global constraints can be decomposed into numerous pairwise inequality constraints between individual squares.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 14,
+      "title": "Varieties of CSPs and Constraints",
+      "summary": "Slide 14 introduces the topic \"Varieties of CSPs and Constraints,\" serving as a section header to categorize different types of Constraint Satisfaction Problems and their associated constraints.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 15,
+      "title": "Varieties of CSPs",
+      "summary": "Constraint Satisfaction Problems (CSPs) vary by variable type and domain size. Discrete CSPs with finite domains involve $O(d^n)$ complete assignments, exemplified by Boolean satisfiability, which is NP-complete. Infinite domains include integers or strings used in job scheduling, where linear constraints are solvable but nonlinear ones are undecidable. Continuous variables also appear in applications such as scheduling Hubble Telescope observations.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 16,
+      "title": "Varieties of Constraints",
+      "summary": "Constraints are categorized by the number of variables they involve: unary constraints affect a single variable (equivalent to domain reduction), binary constraints link pairs of variables, and higher-order constraints involve three or more variables, such as alldiff or scheduling requirements. Additionally, soft constraints represent preferences where one assignment is better than another, often modeled as costs that transform the problem into a constrained optimization task.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 17,
+      "title": "Real-World CSPs",
+      "summary": "Real-world Constraint Satisfaction Problems (CSPs) encompass diverse applications including assignment problems like allocating instructors to classes, and timetabling challenges determining when and where courses are offered. Additional critical domains involve hardware configuration, transportation and factory scheduling, circuit layout design, and fault diagnosis, with further demonstrations planned for the end of the class.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 18,
+      "title": "Solving CSPs",
+      "summary": "Solving CSPs",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 19,
+      "title": "Standard Search Formulation",
+      "summary": "The standard search formulation for Constraint Satisfaction Problems (CSPs) defines states as partial assignments of values to variables. The process begins with an empty initial state, uses a successor function that assigns a value to any unassigned variable, and applies a goal test requiring the assignment to be both complete and constraint-satisfying. This straightforward, naïve approach serves as the baseline before introducing subsequent improvements.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 20,
+      "title": "Search Methods",
+      "summary": "Slide 20 introduces the topic of Search Methods by posing a specific inquiry into the behavior of Breadth-First Search (BFS). The slide illustrates this concept using a sequence of state representations, including empty sets and configurations labeled with parameters such as WA=g, WA=r, and NT=g.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 21,
+      "title": "Search Methods",
+      "summary": "Slide 21 introduces the topic of search methods by posing two specific questions regarding the behavior of Breadth-First Search (BFS) and Depth-First Search (DFS). The slide serves as a transition point, prompting an exploration of how these distinct algorithms would operate in the upcoming demonstration.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 22,
+      "title": "Demo",
+      "summary": "This section presents a demonstration of Constraint Satisfaction Problem (CSP) backtracking, accessible via the provided CMU course link. The demo visually illustrates how the backtracking algorithm explores variable assignments and handles constraint violations during the search process. Students are directed to this external resource to observe the dynamic execution of the algorithm in action.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 23,
+      "title": "Backtracking Search",
+      "summary": "Backtracking Search",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 24,
+      "title": "Backtracking Search",
+      "summary": "Backtracking search improves depth-first search by considering only one variable per node, fixing an ordering to eliminate redundant permutations since assignments are commutative. It employs an incremental goal test that checks constraints immediately, ignoring inconsistent values before expanding branches rather than waiting for a full assignment. This approach requires some computation but significantly reduces the branching factor and avoids exploring invalid states early in the search tree.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 25,
+      "title": "Backtracking Example",
+      "summary": "Slide 25: Backtracking Example.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 26,
+      "title": "Demo",
+      "summary": "This section presents a demonstration of Constraint Satisfaction Problem (CSP) backtracking, accessible via the provided CMU course link.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 27,
+      "title": "Backtracking Search",
+      "summary": "Backtracking search is defined as a combination of Depth-First Search (DFS), value-consistency checks, and an immediate failure mechanism upon constraint violation. This formulation highlights that while the core traversal and consistency logic are established, significant algorithm design choices remain regarding how these components are specifically implemented or ordered.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 28,
+      "title": "Improving Backtracking",
+      "summary": "General-purpose improvements to backtracking yield significant speed gains through strategic ordering and filtering. Ordering decisions involve selecting the next variable to assign and determining the sequence for trying its values, such as prioritizing variables with the most impact or choosing values that rule out the fewest options in other variables. Additionally, filtering techniques aim to detect inevitable failure early by targeting bottlenecks first, a \"fail-fast\" approach that often eliminates the need for further search once difficult constraints are resolved.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 29,
+      "title": "Filtering",
+      "summary": "Filtering is the process of maintaining the domains of unassigned variables by systematically eliminating invalid values. This technique involves identifying and crossing off \"bad options\" that violate constraints, thereby narrowing the search space to only feasible assignments for the remaining variables in the problem.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 30,
+      "title": "Filtering: Forward Checking",
+      "summary": "Forward checking is a filtering technique designed to avoid dead ends by explicitly tracking the domains of unassigned variables. As each variable is assigned a value, this method immediately crosses off any remaining options in other variables that would violate constraints with the current assignment. By eagerly removing these impossible combinations, forward checking detects inconsistencies early before they propagate further into the search process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 31,
+      "title": "Demo",
+      "summary": "Slide 31 presents a demonstration of Constraint Satisfaction Problem (CSP) backtracking, accessible via the provided CMU course link.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 32,
+      "title": "Filtering: Constraint Propagation",
+      "summary": "While forward checking propagates information from assigned to unassigned variables, it fails to detect all inconsistencies early, such as when NT and SA cannot both be blue. Constraint propagation addresses this limitation by reasoning about the consistency of every constraint rather than just immediate neighbors. By removing invalid values like blue or red from the domains of neighboring decision variables immediately upon assignment, this method ensures the early detection of all failures that forward checking might miss.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 33,
+      "title": "Consistency of A Single Arc",
+      "summary": "An arc $X \\to Y$ is consistent if every value in the tail ($X$) has at least one compatible value in the head ($Y$) that satisfies the constraint; otherwise, the inconsistent values are deleted from the tail's domain. While forward checking enforces this property only for arcs pointing to a new assignment, full arc consistency checks all arcs in both directions. For example, if assigning Western Australia red leaves no valid color for Northern Territories, that specific value is removed from Northern Territories' domain to maintain consistency.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 34,
+      "title": "Arc Consistency of an Entire CSP",
+      "summary": "Arc consistency for an entire CSP involves propagating constraints to ensure all arcs are consistent, requiring that neighbors of any variable losing a value be rechecked. This method detects failures earlier than forward checking and can function as a preprocessor or after each assignment. The process specifically requires deleting values from the tail of the domain list.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 35,
+      "title": "Enforcing Arc Consistency in a CSP",
+      "summary": "Enforcing arc consistency in a Constraint Satisfaction Problem (CSP) typically requires a runtime of $O(n^2d^3)$, where $n$ represents the number of variables and $d$ the domain size. However, this computational complexity can be optimized to $O(n^2d^2)$ using more efficient algorithms. This reduction in time complexity is significant for improving the performance of constraint propagation in larger problem instances.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 36,
+      "title": "Demo",
+      "summary": "Slide 36 presents a demonstration of Constraint Satisfaction Problem (CSP) backtracking, accessible via the provided CMU course link.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 37,
+      "title": "Limitations of Arc Consistency",
+      "summary": "Enforcing arc consistency does not guarantee a unique solution, as it may leave one, multiple, or even no solutions while failing to detect the latter. Because arc consistency only verifies pairwise constraints on edges rather than global satisfiability, it cannot identify inconsistencies that require deeper search. Consequently, arc consistency must be integrated within a backtracking search algorithm to fully resolve these limitations and find valid assignments.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 38,
+      "title": "K-Consistency",
+      "summary": "K-consistency defines increasing degrees of constraint satisfaction where 1-consistency (node consistency) ensures a single node's domain satisfies unary constraints, and 2-consistency (arc consistency) guarantees any assignment to one node in a pair can extend to the other. Generalizing this, k-consistency requires that any consistent assignment to $k-1$ nodes can be extended to a $k$th node. While higher values of $k$ provide stronger consistency guarantees, they become progressively more expensive to compute.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 39,
+      "title": "Strong K-Consistency",
+      "summary": "Strong k-consistency implies that a problem is also (k-1), (k-2), down to 1-consistent, with strong n-consistency guaranteeing a solution without backtracking by ensuring any partial assignment can be extended. While higher-order consistency like path consistency (k=3) offers a middle ground between arc consistency and full n-consistency, modern solvers typically combine efficient arc consistency propagation with smart search strategies that intelligently select the next variable to check.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 40,
+      "title": "Ordering",
+      "summary": "Slide 40: Ordering.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 41,
+      "title": "Ordering: Minimum Remaining Values",
+      "summary": "The Minimum Remaining Values (MRV) heuristic, also known as the \"most constrained variable\" strategy, selects the variable with the fewest legal values remaining in its domain. This approach implements a \"fail-fast\" ordering by prioritizing variables with the least flexibility, which helps the algorithm quickly identify inconsistencies or find a solution rather than exploring paths with many available options.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 42,
+      "title": "Ordering: Least Constraining Value",
+      "summary": "The Least Constraining Value heuristic selects the value for a chosen variable that rules out the fewest options for remaining variables, acting as an optimistic strategy rather than a \"fail-fast\" approach. Although determining this value requires additional computation, such as rerunning filtering, it maximizes future flexibility by preserving more possibilities. This value ordering can be effectively combined with different variable ordering strategies to optimize the search process.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 43,
+      "title": "Demo",
+      "summary": "This section presents a demonstration of Constraint Satisfaction Problem (CSP) backtracking, accessible via the provided CMU course link.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 44,
+      "title": "Value Symmetry",
+      "summary": "Value symmetry in Constraint Satisfaction Problems occurs when permuting values, such as swapping colors in map-coloring, generates multiple equivalent solutions without changing validity. To reduce the search space, symmetry breaking constraints are added by assigning numeric values to domains and enforcing an ordering, such as requiring Western Australia's color value to be lower than Northern Territory's. This optimization is critical because it prevents the algorithm from redundantly exploring symmetric infeasible branches of the search tree where no solution exists, not just avoiding duplicate valid solutions.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 45,
+      "title": "Constraint Optimisation?",
+      "summary": "Most real-world problems are framed as optimization challenges involving variables with finite domains, specific constraints, and an objective function. These elements collectively define a Constrained Optimization Problem (COP), which serves as the formal structure for addressing such complex scenarios where solutions must satisfy restrictions while optimizing a target value.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 46,
+      "title": "Modeling",
+      "summary": "Modeling a problem involves defining variables with specific domains, establishing constraints over those variables, and optionally specifying an objective function to optimize. The knapsack example illustrates this by assigning binary domains to item variables, constraining their total weight to 15, and maximizing total value. Once these components are defined, the model is executed using a solve method to find the optimal solution.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 47,
+      "title": "Optimisation: branch-and-bound",
+      "summary": "Branch-and-bound is a meta-algorithm for optimization that maintains the best objective value found so far as a dynamic bound. For maximization, it initializes this bound at negative infinity and adds a constraint requiring new solutions to exceed it during backtracking search. Whenever a valid solution is discovered, its value updates the bound, forcing subsequent searches to find strictly better results until no further improvements are possible.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": true
+      }
+    },
+    {
+      "slide": 48,
+      "title": "https://cpmpy.readthedocs.io/",
+      "summary": "https://cpmpy.readthedocs.io/",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 49,
+      "title": "Modeling",
+      "summary": "Modeling a problem like the Knapsack example involves defining binary variables (e.g., gr, bl), establishing constraints on their combinations (such as a weight limit of 15), and optionally specifying an objective function to maximize. A complete model consists of these variables with defined domains, the governing constraints, and the optional optimization goal, which is then executed using a solve method.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 50,
+      "title": "Integrated constraint solving",
+      "summary": "Integrated constraint solving highlights the numerous ways constraint solving techniques are combined with machine learning. A specific illustration of this synergy is provided by Visual Sudoku, an interactive demonstration available at visualsudoku.cs.kuleuven.be that showcases how these methods work together in practice.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 51,
+      "title": "CPMpy demo",
+      "summary": "CPMpy is a modern Constraint Satisfaction and Optimization library available at cpmpy.readthedocs.io. The slide highlights key demonstrations, including a graph coloring example for Australia, an N-queens problem solver capable of handling up to 1000 queens, and various industrial examples featuring visualizations on toy data. All these practical implementations are accessible via the provided GitHub repository links within the CPMpy examples directory.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    },
+    {
+      "slide": 52,
+      "title": "Summary",
+      "summary": "Constraint Satisfaction Problems (CSPs) are a specialized form of search problem where states represent partial assignments and the goal test is defined by constraints. The fundamental solution approach is backtracking search, which can be significantly accelerated through filtering, variable/value ordering, exploiting problem structure, and symmetry breaking. These techniques enable CSPs to address numerous practical applications effectively.",
+      "sources": {
+        "slide": true,
+        "teacher_audio": false
+      }
+    }
+  ]
+}

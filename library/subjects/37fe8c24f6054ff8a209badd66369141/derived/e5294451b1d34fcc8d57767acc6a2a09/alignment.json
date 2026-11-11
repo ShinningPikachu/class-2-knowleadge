@@ -1,0 +1,2035 @@
+{
+  "metadata": {
+    "paragraph_count": 32,
+    "method_counts": {
+      "semantic": 32
+    },
+    "semantic_threshold": 0.2
+  },
+  "paragraph_alignment": [
+    {
+      "paragraph_id": 1,
+      "slide": 60,
+      "start": 0.4,
+      "end": 87.84,
+      "start_time": "00:00:00",
+      "end_time": "00:01:28",
+      "confidence": 0.8176,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 3,
+      "slide": 10,
+      "start": 184.88,
+      "end": 267.88,
+      "start_time": "00:03:05",
+      "end_time": "00:04:28",
+      "confidence": 0.8412,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 4,
+      "slide": 10,
+      "start": 267.88,
+      "end": 358.38,
+      "start_time": "00:04:28",
+      "end_time": "00:05:58",
+      "confidence": 0.7392,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 5,
+      "slide": 13,
+      "start": 358.38,
+      "end": 448.91,
+      "start_time": "00:05:58",
+      "end_time": "00:07:29",
+      "confidence": 0.7642,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 6,
+      "slide": 11,
+      "start": 448.91,
+      "end": 535.56,
+      "start_time": "00:07:29",
+      "end_time": "00:08:56",
+      "confidence": 0.6979,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 9,
+      "slide": 17,
+      "start": 793.95,
+      "end": 868.85,
+      "start_time": "00:13:14",
+      "end_time": "00:14:29",
+      "confidence": 0.7757,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 10,
+      "slide": 18,
+      "start": 868.85,
+      "end": 945.83,
+      "start_time": "00:14:29",
+      "end_time": "00:15:46",
+      "confidence": 0.7872,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 12,
+      "slide": 60,
+      "start": 1003.59,
+      "end": 1063.19,
+      "start_time": "00:16:44",
+      "end_time": "00:17:43",
+      "confidence": 0.8184,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 13,
+      "slide": 22,
+      "start": 1063.27,
+      "end": 1142.95,
+      "start_time": "00:17:43",
+      "end_time": "00:19:03",
+      "confidence": 0.7419,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 14,
+      "slide": 23,
+      "start": 1143.67,
+      "end": 1184.23,
+      "start_time": "00:19:04",
+      "end_time": "00:19:44",
+      "confidence": 0.7153,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 15,
+      "slide": 22,
+      "start": 1184.23,
+      "end": 1242.26,
+      "start_time": "00:19:44",
+      "end_time": "00:20:42",
+      "confidence": 0.6679,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 16,
+      "slide": 24,
+      "start": 1253.99,
+      "end": 1333.8,
+      "start_time": "00:20:54",
+      "end_time": "00:22:14",
+      "confidence": 0.736,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 17,
+      "slide": 25,
+      "start": 1335.16,
+      "end": 1411.51,
+      "start_time": "00:22:15",
+      "end_time": "00:23:32",
+      "confidence": 0.7743,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 18,
+      "slide": 25,
+      "start": 1411.51,
+      "end": 1470.85,
+      "start_time": "00:23:32",
+      "end_time": "00:24:31",
+      "confidence": 0.7436,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 19,
+      "slide": 26,
+      "start": 1470.85,
+      "end": 1557.52,
+      "start_time": "00:24:31",
+      "end_time": "00:25:58",
+      "confidence": 0.8174,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 20,
+      "slide": 60,
+      "start": 1557.52,
+      "end": 1634.8,
+      "start_time": "00:25:58",
+      "end_time": "00:27:15",
+      "confidence": 0.8668,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 21,
+      "slide": 41,
+      "start": 1634.8,
+      "end": 1716.27,
+      "start_time": "00:27:15",
+      "end_time": "00:28:36",
+      "confidence": 0.8075,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 22,
+      "slide": 20,
+      "start": 1716.27,
+      "end": 1793.96,
+      "start_time": "00:28:36",
+      "end_time": "00:29:54",
+      "confidence": 0.7579,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 23,
+      "slide": 35,
+      "start": 1793.96,
+      "end": 1866.0,
+      "start_time": "00:29:54",
+      "end_time": "00:31:06",
+      "confidence": 0.7534,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 24,
+      "slide": 35,
+      "start": 1866.0,
+      "end": 1935.0,
+      "start_time": "00:31:06",
+      "end_time": "00:32:15",
+      "confidence": 0.805,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 25,
+      "slide": 38,
+      "start": 1935.0,
+      "end": 2028.42,
+      "start_time": "00:32:15",
+      "end_time": "00:33:48",
+      "confidence": 0.7555,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 26,
+      "slide": 38,
+      "start": 2028.42,
+      "end": 2105.42,
+      "start_time": "00:33:48",
+      "end_time": "00:35:05",
+      "confidence": 0.7446,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 27,
+      "slide": 39,
+      "start": 2105.42,
+      "end": 2189.71,
+      "start_time": "00:35:05",
+      "end_time": "00:36:30",
+      "confidence": 0.7866,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 28,
+      "slide": 41,
+      "start": 2189.71,
+      "end": 2272.9,
+      "start_time": "00:36:30",
+      "end_time": "00:37:53",
+      "confidence": 0.8408,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 29,
+      "slide": 56,
+      "start": 2272.9,
+      "end": 2392.2,
+      "start_time": "00:37:53",
+      "end_time": "00:39:52",
+      "confidence": 0.8566,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 30,
+      "slide": 56,
+      "start": 2392.2,
+      "end": 2465.2,
+      "start_time": "00:39:52",
+      "end_time": "00:41:05",
+      "confidence": 0.7189,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 31,
+      "slide": 44,
+      "start": 2465.2,
+      "end": 2544.77,
+      "start_time": "00:41:05",
+      "end_time": "00:42:25",
+      "confidence": 0.8871,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 32,
+      "slide": 44,
+      "start": 2544.77,
+      "end": 2619.84,
+      "start_time": "00:42:25",
+      "end_time": "00:43:40",
+      "confidence": 0.8188,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 33,
+      "slide": 46,
+      "start": 2619.84,
+      "end": 2686.84,
+      "start_time": "00:43:40",
+      "end_time": "00:44:47",
+      "confidence": 0.8375,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 34,
+      "slide": 47,
+      "start": 2686.84,
+      "end": 2758.76,
+      "start_time": "00:44:47",
+      "end_time": "00:45:59",
+      "confidence": 0.7878,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 35,
+      "slide": 46,
+      "start": 2758.76,
+      "end": 2781.76,
+      "start_time": "00:45:59",
+      "end_time": "00:46:22",
+      "confidence": 0.6855,
+      "method": "semantic"
+    },
+    {
+      "paragraph_id": 36,
+      "slide": 52,
+      "start": 2787.81,
+      "end": 2880.54,
+      "start_time": "00:46:28",
+      "end_time": "00:48:01",
+      "confidence": 0.6974,
+      "method": "semantic"
+    }
+  ],
+  "slides": [
+    {
+      "slide": 1,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 2,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 3,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 4,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 5,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 6,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 7,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 8,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 9,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 10,
+      "slide_time": "00:03:05",
+      "paragraph_ids": [
+        3,
+        4
+      ],
+      "paragraphs": [
+        {
+          "id": 3,
+          "start": 184.88,
+          "end": 267.88,
+          "start_time": "00:03:05",
+          "end_time": "00:04:28",
+          "text": "There is variation in how they are referred. There's two terms, woodchuck and groundhog, to refer to this animal, and there's the plural version, or the singular, the capitalized version, and non-capitalized version, etc. And so regular expressions allow to capture these various forms efficiently. So one important system is part of regular expressions is these junctions, where we use these brackets to specify that we can have either of these two options, either lowercase or uppercase W. So this captures one variation, and these brackets can include any number of, can include an entire list of symbols, like for example this expression here matches any digit. Now this is not efficient, right? So a more efficient way of representing this pattern is using this range. So the range says here that we want to match any single digit that goes between 0 and 9.",
+          "segment_ids": [
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50
+          ],
+          "alignment": {
+            "paragraph_id": 3,
+            "slide": 10,
+            "start": 184.88,
+            "end": 267.88,
+            "start_time": "00:03:05",
+            "end_time": "00:04:28",
+            "confidence": 0.8412,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 4,
+          "start": 267.88,
+          "end": 358.38,
+          "start_time": "00:04:28",
+          "end_time": "00:05:58",
+          "text": "So for example this pattern here matches the number 1 here. And similarly for letters, A to Z signifies uppercase letters, and so in this example match the capital D, and this is the equivalent for lowercase letters. In fact, in these brackets you can have an indication indicated by this caret here, saying I do not want to match what's in the pattern. So what this pattern does is that it's going to match the first character that is not an uppercase letter. So here it doesn't match D, it matches R. Here it matches neither big S nor small s, so here it matches the first character that is neither the uppercase or lowercase s, or not a period here. So inside, we'll see that there are special characters in regex, and the caret is one such special character, and they'll lose their special meaning inside this junction. So in the case of the caret,",
+          "segment_ids": [
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69
+          ],
+          "alignment": {
+            "paragraph_id": 4,
+            "slide": 10,
+            "start": 267.88,
+            "end": 358.38,
+            "start_time": "00:04:28",
+            "end_time": "00:05:58",
+            "confidence": 0.7392,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 11,
+      "slide_time": "00:07:29",
+      "paragraph_ids": [
+        6
+      ],
+      "paragraphs": [
+        {
+          "id": 6,
+          "start": 448.91,
+          "end": 535.56,
+          "start_time": "00:07:29",
+          "end_time": "00:08:56",
+          "text": "That we wanted in the beginning. It doesn't include the plurals, but you can easily think about how this can be added. So additional special characters are so here the period here matches any character, so here we have a pattern that includes this period, and it matches all of the strings here. So here, that's one way to add this plural to the pattern before. So the question mark here says that the previous character appears S is optional, so the expression here then matches both of these word variations. The star says that the last character appears zero or more times, so here this pattern matches all of these examples, and the plus is a variation where this character all needs to appear at least one time, but can appear more. So for the same sequence, it doesn't match the T, but matches everything else. And then, so the caret has another meaning outside of these brackets,",
+          "segment_ids": [
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106
+          ],
+          "alignment": {
+            "paragraph_id": 6,
+            "slide": 11,
+            "start": 448.91,
+            "end": 535.56,
+            "start_time": "00:07:29",
+            "end_time": "00:08:56",
+            "confidence": 0.6979,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 12,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 13,
+      "slide_time": "00:05:58",
+      "paragraph_ids": [
+        5
+      ],
+      "paragraphs": [
+        {
+          "id": 5,
+          "start": 358.38,
+          "end": 448.91,
+          "start_time": "00:05:58",
+          "end_time": "00:07:29",
+          "text": "It only has its meaning when it's in the first position. If it's anywhere else in the brackets, it just means the character, the caret. So this example here would then match the caret character in this example. Other special characters are this D here, that means a digit, and then the uppercase version is a non-digit, and then the W, an alphanumeric, and the uppercase, the negation of this. So here we have the equivalent expression, and then this is any white space, and this means anything that is not a white space. And so with these tools, we already can capture quite a lot about this groundhog and woodchuck variation, and to capture the fact that we have two words for this, we can use the pipe, saying you match either groundhog or woodchuck. And you can use the pipe at the word level or at the character level. So now we have an expression that captures most of the variation",
+          "segment_ids": [
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88
+          ],
+          "alignment": {
+            "paragraph_id": 5,
+            "slide": 13,
+            "start": 358.38,
+            "end": 448.91,
+            "start_time": "00:05:58",
+            "end_time": "00:07:29",
+            "confidence": 0.7642,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 14,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 15,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 16,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 17,
+      "slide_time": "00:13:14",
+      "paragraph_ids": [
+        9
+      ],
+      "paragraphs": [
+        {
+          "id": 9,
+          "start": 793.95,
+          "end": 868.85,
+          "start_time": "00:13:14",
+          "end_time": "00:14:29",
+          "text": "You'll have also time to play around with this in the lab. So what are the, so the process of defining regular expression looks like this. It's quite iterative. Say you want to find all instances of the word the in text, you might start the first easy simple solution, just write the, and then you look at the results, and you realize that you're missing all the capitalized examples, right? And so you modify your expression to say you want to match the, both the capital and the lowercase version of T. And then you try again, and then you realize, okay, now you get all the examples that you wanted, but you still, you're getting examples that you don't like, that you don't want. So you say you're matching patterns that you don't want to match, like other or theology. And so the final expression then says that you, the third needs to be the full word, right?",
+          "segment_ids": [
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            176,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193
+          ],
+          "alignment": {
+            "paragraph_id": 9,
+            "slide": 17,
+            "start": 793.95,
+            "end": 868.85,
+            "start_time": "00:13:14",
+            "end_time": "00:14:29",
+            "confidence": 0.7757,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 18,
+      "slide_time": "00:14:29",
+      "paragraph_ids": [
+        10
+      ],
+      "paragraphs": [
+        {
+          "id": 10,
+          "start": 868.85,
+          "end": 945.83,
+          "start_time": "00:14:29",
+          "end_time": "00:15:46",
+          "text": "You cannot have an alphanumeric character before or after this expression. And so this iterative process of defining this regular expression, the process is based on fixing two kinds of errors. One error is not matching things that we should have matched. What is that called? What's the term for this? Okay, I hear not very loud, the correct answer is false linear case, right? And the other type of error is matching strings that we should not have matched, and that is a false positive. Correct. And, uh, this is, this is characteristic of a lot of work in anatomy. Uh, and this is a, this can be, uh, an antagonistic, uh, process. You're minimizing the, um, the false negatives, you increasing the coverage, but then you might also increase. So you, you increase the number of matches and might reduce the precision or the, the, the accuracy. Uh, so you might, uh,",
+          "segment_ids": [
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211,
+            212,
+            213,
+            214,
+            215,
+            216,
+            217,
+            218,
+            219,
+            220,
+            221,
+            222,
+            223,
+            224,
+            225,
+            226,
+            227,
+            228,
+            229
+          ],
+          "alignment": {
+            "paragraph_id": 10,
+            "slide": 18,
+            "start": 868.85,
+            "end": 945.83,
+            "start_time": "00:14:29",
+            "end_time": "00:15:46",
+            "confidence": 0.7872,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 19,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 20,
+      "slide_time": "00:28:36",
+      "paragraph_ids": [
+        22
+      ],
+      "paragraphs": [
+        {
+          "id": 22,
+          "start": 1716.27,
+          "end": 1793.96,
+          "start_time": "00:28:36",
+          "end_time": "00:29:54",
+          "text": "URLs, abbreviations like PHD, you might not want to split PHD into P.H.D., prices, or email addresses. These are common problems that you have to deal with when you're writing your regex tokenization. Other difficulties are clitics. So for example, in 'we're', the 're' part is a clitic. It's a word, right? It means 'are', but it doesn't stand on its own. It's attached to 'we'. And then the other question is if multi-word expressions, like for example New York, they consist of two words, but should they be represented as one word, or as New and York? It can be impractical to represent as New and York. So in practice, this is what regex tokenization might look like, and again, as you were asking, this can be quite language specific, especially the abbreviations. So often, this is insufficient. This only captures some patterns, so you might want to actually include a list of abbreviations.",
+          "segment_ids": [
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            429,
+            430,
+            431,
+            432,
+            433,
+            434,
+            435,
+            436,
+            437,
+            438,
+            439,
+            440,
+            441,
+            442,
+            443,
+            444,
+            445,
+            446,
+            447,
+            448,
+            449,
+            450,
+            451,
+            452,
+            453,
+            454,
+            455,
+            456
+          ],
+          "alignment": {
+            "paragraph_id": 22,
+            "slide": 20,
+            "start": 1716.27,
+            "end": 1793.96,
+            "start_time": "00:28:36",
+            "end_time": "00:29:54",
+            "confidence": 0.7579,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 21,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 22,
+      "slide_time": "00:17:43",
+      "paragraph_ids": [
+        13,
+        15
+      ],
+      "paragraphs": [
+        {
+          "id": 13,
+          "start": 1063.27,
+          "end": 1142.95,
+          "start_time": "00:17:43",
+          "end_time": "00:19:03",
+          "text": "By this pattern, so for example, if you want to convert American English to British English, you want to modify all the instances of 'color' to 'colour'. Of course, you have to do that for every word that has a different spelling in both variations of English. For whatever reason, you might want to put boxes around numbers. For this, you need an additional mechanism which is called group capturing. So you capture a pattern into a numbered register and then you use this number to refer to the contents of the register. So here, this expression does this use case. What does it say? It says substitute any pattern that has any number, at least one digit, and this is put around these parentheses which correspond to register one. Then the replacement pattern has these brackets around the registered number. Now you might want to capture multiple",
+          "segment_ids": [
+            299,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309
+          ],
+          "alignment": {
+            "paragraph_id": 13,
+            "slide": 22,
+            "start": 1063.27,
+            "end": 1142.95,
+            "start_time": "00:17:43",
+            "end_time": "00:19:03",
+            "confidence": 0.7419,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 15,
+          "start": 1184.23,
+          "end": 1242.26,
+          "start_time": "00:19:44",
+          "end_time": "00:20:42",
+          "text": "You can write down your second set of code to size but a non-capturing symbol. If I call the second change word or one verse number of first digit number and another if I chose [unclear] to if I distant the right West of torpedo position to the left the House of nth place standing here next. This is not non-capturing in humanities usually which is unnecessarily [unclear]. Parentheses can quickly explode and this becomes difficult to keep track of what parentheses correspond to what number. So you might want to not put the content of your parentheses in a register, and you do that by adding a question mark just after the parentheses. So what that does is that here we're going to not put this in a register, the content of this parentheses, and so the content of this parentheses will then be captured as one. So which expression does this match then? Who says the first?",
+          "segment_ids": [
+            317,
+            318,
+            319,
+            320,
+            321,
+            322,
+            323
+          ],
+          "alignment": {
+            "paragraph_id": 15,
+            "slide": 22,
+            "start": 1184.23,
+            "end": 1242.26,
+            "start_time": "00:19:44",
+            "end_time": "00:20:42",
+            "confidence": 0.6679,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 23,
+      "slide_time": "00:19:04",
+      "paragraph_ids": [
+        14
+      ],
+      "paragraphs": [
+        {
+          "id": 14,
+          "start": 1143.67,
+          "end": 1184.23,
+          "start_time": "00:19:04",
+          "end_time": "00:19:44",
+          "text": "registers. This is done so this is the first item in a register and the second. So this expression here matches: 'fast' is put in register one and then 'ran' is put in register two. And so the expression matches 'the faster they ran, the faster we ran', but it does not match 'the faster they ran, the faster we ate' because 'ran' and 'ate' do not match. Now you might know that if you have experience with this, the number of parentheses can start to reduce or go up to eight rather than seven. If you bunch attachment of NV when the number of parentheses no longer matches, you might have to [unclear].",
+          "segment_ids": [
+            310,
+            311,
+            312,
+            313,
+            314,
+            315,
+            316
+          ],
+          "alignment": {
+            "paragraph_id": 14,
+            "slide": 23,
+            "start": 1143.67,
+            "end": 1184.23,
+            "start_time": "00:19:04",
+            "end_time": "00:19:44",
+            "confidence": 0.7153,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 24,
+      "slide_time": "00:20:54",
+      "paragraph_ids": [
+        16
+      ],
+      "paragraphs": [
+        {
+          "id": 16,
+          "start": 1253.99,
+          "end": 1333.8,
+          "start_time": "00:20:54",
+          "end_time": "00:22:14",
+          "text": "What part did I use? The number of the registers or the registers themselves? Does anyone have an answer to this? Yes? Yeah exactly. So the expression matches 'some' or 'a few', so it matches both cases, and then 'people' or 'cats'. So here it matches and then 'like some', it matches both here. But then the number register corresponds to the number of cases, and the number of cases matches the number of cases to 'people' or 'cats' because this is in a group that is not registered. So it matches the expression with 'cats' but not with 'some' because 'some' is not 'people' or 'cats'. Did that help or are we still confused? Okay all right, now consider another use case where we want to match the letter 'q' but only if it's not followed by the letter 'u'. So we want to match the 'q' in 'faqir' but not in 'question'. For this we need another mechanism which is called the look-ahead assertion.",
+          "segment_ids": [
+            324,
+            325,
+            326,
+            327,
+            328,
+            329,
+            330,
+            331,
+            332,
+            333,
+            334
+          ],
+          "alignment": {
+            "paragraph_id": 16,
+            "slide": 24,
+            "start": 1253.99,
+            "end": 1333.8,
+            "start_time": "00:20:54",
+            "end_time": "00:22:14",
+            "confidence": 0.736,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 25,
+      "slide_time": "00:22:15",
+      "paragraph_ids": [
+        17,
+        18
+      ],
+      "paragraphs": [
+        {
+          "id": 17,
+          "start": 1335.16,
+          "end": 1411.51,
+          "start_time": "00:22:15",
+          "end_time": "00:23:32",
+          "text": "And so we add a question mark and an exclamation mark at the beginning of parentheses, which means that this is called a negative look-ahead. So it evaluates as true if the pattern does not match. So completely, what does this look like? The expression to match 'q' in 'faqir' but not in 'question' looks like this: we have 'q', then we have this look-ahead saying do not match 'u'. And the positive look-ahead version is the opposite: you want to match 'q' in 'question' but not in 'faqir'. Then you use the equal sign, so question mark equal sign. So here if you replace the exclamation mark with equal, then you will match the 'q' in 'question' but not in 'faqir'. I know that this can be a little bit confusing especially if you've never seen it before, and the textbook does not really help. So I included in the slides a video which hopefully helps a little bit more if this is confusing or interesting.",
+          "segment_ids": [
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
+            341,
+            342,
+            343,
+            344,
+            345,
+            346
+          ],
+          "alignment": {
+            "paragraph_id": 17,
+            "slide": 25,
+            "start": 1335.16,
+            "end": 1411.51,
+            "start_time": "00:22:15",
+            "end_time": "00:23:32",
+            "confidence": 0.7743,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 18,
+          "start": 1411.51,
+          "end": 1470.85,
+          "start_time": "00:23:32",
+          "end_time": "00:24:31",
+          "text": "So here is a look-ahead expression. So if you replace the exclamation mark with equal, then you will match the 'q' in 'question' but not in 'faqir'. Is it confusing? Yes, I see a lot of nods. In my experience, I remember two years ago I spent 10 to 20 minutes of the lecture trying to explain this and it felt like it was not a good use of the time because it didn't really help. So my recommendation is to check the video if the video is not clear or do the exercises. You'll have examples in the exercise in the labs. But my experience is actually that with regular expressions, it's really you learn by doing because just explaining this is not always helpful. But if it's still confusing, don't hesitate to write in the forum and if the video is not helping, I can try to find other ways to help with this. So finally, what's an actual application of this?",
+          "segment_ids": [
+            347,
+            348,
+            349,
+            350,
+            351,
+            352,
+            353,
+            354,
+            355,
+            356,
+            357,
+            358
+          ],
+          "alignment": {
+            "paragraph_id": 18,
+            "slide": 25,
+            "start": 1411.51,
+            "end": 1470.85,
+            "start_time": "00:23:32",
+            "end_time": "00:24:31",
+            "confidence": 0.7436,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 26,
+      "slide_time": "00:24:31",
+      "paragraph_ids": [
+        19
+      ],
+      "paragraphs": [
+        {
+          "id": 19,
+          "start": 1470.85,
+          "end": 1557.52,
+          "start_time": "00:24:31",
+          "end_time": "00:25:58",
+          "text": "Regular expressions as an actual application beyond what we've seen so far. Actually, I don't know if you know about ELIZA, the ancestor of ChatGPT. It was a chatbot that acted as a therapist called ELIZA. And it would ask, 'Is something troubling you?' You would say, for example, 'ELIZA, what is the connection you suppose?' And then 'Can you think of a specific example?' And so on. And so ELIZA was basically pretty much a giant regular expression where it would take the input of the user and then replace it, for example, based on patterns. So for example, if the user says, 'I'm depressed', it would reply with, 'I'm sorry that you are depressed'. Or if it said, 'I'm sad', it would say, 'I'm sorry to hear that you are sad'. And like always, 'Can you think of a specific example', etc. So ELIZA, one of the early chatbots, was basically just a giant regular expression.",
+          "segment_ids": [
+            359,
+            360,
+            361,
+            362,
+            363,
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375
+          ],
+          "alignment": {
+            "paragraph_id": 19,
+            "slide": 26,
+            "start": 1470.85,
+            "end": 1557.52,
+            "start_time": "00:24:31",
+            "end_time": "00:25:58",
+            "confidence": 0.8174,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 27,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 28,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 29,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 30,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 31,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 32,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 33,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 34,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 35,
+      "slide_time": "00:29:54",
+      "paragraph_ids": [
+        23,
+        24
+      ],
+      "paragraphs": [
+        {
+          "id": 23,
+          "start": 1793.96,
+          "end": 1866.0,
+          "start_time": "00:29:54",
+          "end_time": "00:31:06",
+          "text": "And that's obviously language specific. Because this pattern, it does not fully work. This pattern does not fully work, I can't think of examples right now, but it's not working. And so that tokenizer, based on this long regex here, tokenizes this text into this sequence here of tokens. Now, once you have these tokens, comes the question of if you really want to make each text string in this sequence its own token. Should it be? Should each of these items have their own embeddings? Ah, I should come to that. After, I first should mention how we tokenize language which does not use white spaces to differentiate words. Like, for example, Chinese. This is not my example, I don't speak Chinese. I only know English. So this is secondhand.",
+          "segment_ids": [
+            457,
+            458,
+            459,
+            460,
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467,
+            468,
+            469,
+            470
+          ],
+          "alignment": {
+            "paragraph_id": 23,
+            "slide": 35,
+            "start": 1793.96,
+            "end": 1866.0,
+            "start_time": "00:29:54",
+            "end_time": "00:31:06",
+            "confidence": 0.7534,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 24,
+          "start": 1866.0,
+          "end": 1935.0,
+          "start_time": "00:31:06",
+          "end_time": "00:32:15",
+          "text": "But I think this is in the textbook that this sequence of words, sorry, this sentence can be split. Arguably linguists do not agree how to split this. It can be, there are arguments for splitting into three words, five, or just at the character level. Each character becomes its own word. And in practice, in Chinese, it's common to do this last one, just to treat these characters or hanzi as a token. So that's easy, right? But for other languages that don't use white space, it's not so straightforward, and you need a more complex tool for word segmentation, which typically uses supervised neural sequence models. And we'll see about neural, sorry, neural sequence labeling later in the course. So this is what I was getting at. So when we have this tokenized text, do we want to create an embedding for each of these words?",
+          "segment_ids": [
+            471,
+            472,
+            473,
+            474,
+            475,
+            476,
+            477,
+            478,
+            479,
+            480
+          ],
+          "alignment": {
+            "paragraph_id": 24,
+            "slide": 35,
+            "start": 1866.0,
+            "end": 1935.0,
+            "start_time": "00:31:06",
+            "end_time": "00:32:15",
+            "confidence": 0.805,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 36,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 37,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 38,
+      "slide_time": "00:32:15",
+      "paragraph_ids": [
+        25,
+        26
+      ],
+      "paragraphs": [
+        {
+          "id": 25,
+          "start": 1935.0,
+          "end": 2028.42,
+          "start_time": "00:32:15",
+          "end_time": "00:33:48",
+          "text": "What could be potential issues in doing that? Can you identify them? Yeah, exactly. So there are questions about: do we want to create a separate word vector for the text? For the lowercase or uppercase version of that? Or do I say with or without the dots? Or like you said, costs in the plural or in singular? And do we want to have an embedding that represents the number 12.40 and a different one for 12.41? And this is still kind of an unresolved problem because depending on the application, you might want to do different things here. So normalization is the step of making this decision to, for example, represent the lowercase or uppercase words. We'll come back to that. Yeah, like I said, this is application dependent: if it's a good thing to do this normalization or not, and what type of normalization you want to do. Yeah, so just completely lowercase,",
+          "segment_ids": [
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488,
+            489,
+            490,
+            491,
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498,
+            499
+          ],
+          "alignment": {
+            "paragraph_id": 25,
+            "slide": 38,
+            "start": 1935.0,
+            "end": 2028.42,
+            "start_time": "00:32:15",
+            "end_time": "00:33:48",
+            "confidence": 0.7555,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 26,
+          "start": 2028.42,
+          "end": 2105.42,
+          "start_time": "00:33:48",
+          "end_time": "00:35:05",
+          "text": "your lowercase in your entire text can be bad, especially in information retrieval. Queries in search engine tend to... no, sorry, this is useful, because queries in information retrieval systems tend to use lowercase in any way. So you want to match what the user language is. But there might be exceptions. For example, for a text search about Apple, it matters if they're the uppercase or the lowercase version, right? Because these typically represent very different concepts. And in applications like machine translation or information extraction, it's more useful to keep casing information. Consider, for example, distinguishing the U.S. with us. You probably want to make a distinction in your text. So again, lowercasing is one normalization you might want to do. Another type is where you want to represent all words as their lemma, which is their shared root. So for example,",
+          "segment_ids": [
+            500,
+            501,
+            502,
+            503,
+            504,
+            505,
+            506,
+            507,
+            508,
+            509,
+            510,
+            511,
+            512,
+            513,
+            514,
+            515,
+            516,
+            517,
+            518,
+            519
+          ],
+          "alignment": {
+            "paragraph_id": 26,
+            "slide": 38,
+            "start": 2028.42,
+            "end": 2105.42,
+            "start_time": "00:33:48",
+            "end_time": "00:35:05",
+            "confidence": 0.7446,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 39,
+      "slide_time": "00:35:05",
+      "paragraph_ids": [
+        27
+      ],
+      "paragraphs": [
+        {
+          "id": 27,
+          "start": 2105.42,
+          "end": 2189.71,
+          "start_time": "00:35:05",
+          "end_time": "00:36:30",
+          "text": "am, are, and is are all forms of the same verb to be. And these are also variants of the word car. In English, English uses quite a few inflections, but other languages like Spanish use different inflected words for the same verb. For example, here the word cat or wanting, it has different inflections depending on the person. So a lemmatized sentence, 'he is reading detective stories,' would then look like 'he reads detective stories.' All right? Question about word normalization. Right? And so a final application that is useful for... sorry, where regular expressions are partially useful is sentence segmentation, where sentences are typically a unit we want to work with in an NLP system. We'll see why later in the course. So based on this, so based on running text, you want to identify which are the sentences. And you might say it's easy: you just use punctuation.",
+          "segment_ids": [
+            520,
+            521,
+            522,
+            523,
+            524,
+            525,
+            526,
+            527,
+            528,
+            529,
+            530,
+            531,
+            532,
+            533,
+            534,
+            535,
+            536,
+            537,
+            538,
+            539,
+            540,
+            541,
+            542,
+            543,
+            544
+          ],
+          "alignment": {
+            "paragraph_id": 27,
+            "slide": 39,
+            "start": 2105.42,
+            "end": 2189.71,
+            "start_time": "00:35:05",
+            "end_time": "00:36:30",
+            "confidence": 0.7866,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 40,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 41,
+      "slide_time": "00:27:15",
+      "paragraph_ids": [
+        21,
+        28
+      ],
+      "paragraphs": [
+        {
+          "id": 21,
+          "start": 1634.8,
+          "end": 1716.27,
+          "start_time": "00:27:15",
+          "end_time": "00:28:36",
+          "text": "Tokenize this text by adding spaces between punctuations, so that punctuations are their own word, right, as opposed to being stuck to whatever is the last word of the sentence. Or you can remove it entirely, which some tokenization types might do. And so this is the simplest way. This is the simple expression: match any period or comma and add a space between what you match, the period or the comma, sorry, before and after. And so that's the result then. Easy peasy. In practice, so this is called widespread tokenization, and it's a good baseline for English, but even for English, you quickly run into issues if you split only based on punctuation. This is an example where splitting on punctuation might do the wrong thing, because it's going to split here based on the hashtag potentially, it's going to split here in the website, and generally, hashtags can be a problem. Dates, the slash,",
+          "segment_ids": [
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            403,
+            404,
+            405,
+            406,
+            407,
+            408,
+            409,
+            410,
+            411,
+            412,
+            413,
+            414,
+            415,
+            416,
+            417,
+            418,
+            419,
+            420,
+            421
+          ],
+          "alignment": {
+            "paragraph_id": 21,
+            "slide": 41,
+            "start": 1634.8,
+            "end": 1716.27,
+            "start_time": "00:27:15",
+            "end_time": "00:28:36",
+            "confidence": 0.8075,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 28,
+          "start": 2189.71,
+          "end": 2272.9,
+          "start_time": "00:36:30",
+          "end_time": "00:37:53",
+          "text": "And for some punctuation, like exclamation and question marks, it's quite straightforward, right? When they're there, they typically do represent the end of a sentence. But periods, as we saw, are very ambiguous and can appear as a sentence boundary, but they can also be part of abbreviations or numbers and so on. So typically you have a two-step procedure where periods are classified as being a binary classification: if it indicates sentence boundary or not. And how to do this classification can be done using rules, using regular expressions, or using machine learning methods. And then based on this, the sentences are segmented by rules. All right. That's it for the first part about regular expressions. Are there questions at this point? Then let's move on to sub-word tokenization. As I mentioned last week,",
+          "segment_ids": [
+            545,
+            546,
+            547,
+            548,
+            549,
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568,
+            569,
+            570
+          ],
+          "alignment": {
+            "paragraph_id": 28,
+            "slide": 41,
+            "start": 2189.71,
+            "end": 2272.9,
+            "start_time": "00:36:30",
+            "end_time": "00:37:53",
+            "confidence": 0.8408,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 42,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 43,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 44,
+      "slide_time": "00:41:05",
+      "paragraph_ids": [
+        31,
+        32
+      ],
+      "paragraphs": [
+        {
+          "id": 31,
+          "start": 2465.2,
+          "end": 2544.77,
+          "start_time": "00:41:05",
+          "end_time": "00:42:25",
+          "text": "between these character-level models and these word-level models. You have a smaller vocabulary, but then in principle the characters are included in the vocabulary, as we'll see in a moment. And so that means that you don't have this out-of-vocabulary problem. You can recognize any sequence of characters, but you do represent most... most words as at least partial words. So here, 'this' is tokenizing. This is split. Sorry. 'This' is frequent enough as a sequence of characters that it emerges as its own subword token, while 'tokenizing' here is split into two meaningful tokens: 'token' and 'izing'. So how do we do subword tokenization? This is done in a data-driven way, using the compression algorithm. And the most common ones are byte-pair encoding, unigram language model, and word-piece. And we'll see BPE and how it works. And the main idea is that we're going to",
+          "segment_ids": [
+            617,
+            618,
+            619,
+            620,
+            621,
+            622,
+            623,
+            624,
+            625,
+            626,
+            627,
+            628,
+            629,
+            630,
+            631,
+            632,
+            633,
+            634,
+            635,
+            636,
+            637,
+            638,
+            639,
+            640
+          ],
+          "alignment": {
+            "paragraph_id": 31,
+            "slide": 44,
+            "start": 2465.2,
+            "end": 2544.77,
+            "start_time": "00:41:05",
+            "end_time": "00:42:25",
+            "confidence": 0.8871,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 32,
+          "start": 2544.77,
+          "end": 2619.84,
+          "start_time": "00:42:25",
+          "end_time": "00:43:40",
+          "text": "make decisions about what our subword is based only on the frequency of co-occurring characters. Unigram and word-piece are slightly different. They include variations of this, but also more complex. They use a slightly more complex probabilistic model to decide what are subwords. But the core principle is similar. And so we'll see how byte-pair encoding works in a moment. But in the three cases, you have two main components. You have what's called a token learner, which induces a vocabulary from a training corpus. And then you have a segmenter, which tokenizes a word sentence, or a test sentence, typically based on that vocabulary. So how does BPE work? We start with a vocabulary that consists of all the individual characters, so the letters of our alphabet. And then, so we represent the text as these sequences of characters and count the pairs of characters,",
+          "segment_ids": [
+            641,
+            642,
+            643,
+            644,
+            645,
+            646,
+            647,
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            654,
+            655,
+            656,
+            657,
+            658,
+            659,
+            660,
+            661,
+            662,
+            663,
+            664,
+            665
+          ],
+          "alignment": {
+            "paragraph_id": 32,
+            "slide": 44,
+            "start": 2544.77,
+            "end": 2619.84,
+            "start_time": "00:42:25",
+            "end_time": "00:43:40",
+            "confidence": 0.8188,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 45,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 46,
+      "slide_time": "00:43:40",
+      "paragraph_ids": [
+        33,
+        35
+      ],
+      "paragraphs": [
+        {
+          "id": 33,
+          "start": 2619.84,
+          "end": 2686.84,
+          "start_time": "00:43:40",
+          "end_time": "00:44:47",
+          "text": "and then merge the... so we find the two symbols that are most frequently adjacent, and merge these, and add this merge symbol to the vocabulary. And bear with me, I'll show an application of BPE just after this general explanation, and then we'll do an exercise. So you will apply BPE yourself in a moment, so try to bear with me, but if it's not clear now, it should become clear later on. So we choose the most frequent sequence of pairs of characters, add this new merge symbol, and then replace all adjacent a, b's in the corpus. And then you do this until you've done k merges. So k is predefined: what you want, the number of iterations that our algorithm is going to do, and it determines the size of the vocabulary, right? Since it determines the number of merges to do, and the result of the merge",
+          "segment_ids": [
+            666,
+            667,
+            668,
+            669,
+            670,
+            671,
+            672,
+            673,
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            680,
+            681,
+            682,
+            683,
+            684,
+            685,
+            686,
+            687,
+            688,
+            689,
+            690,
+            691,
+            692,
+            693,
+            694
+          ],
+          "alignment": {
+            "paragraph_id": 33,
+            "slide": 46,
+            "start": 2619.84,
+            "end": 2686.84,
+            "start_time": "00:43:40",
+            "end_time": "00:44:47",
+            "confidence": 0.8375,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 35,
+          "start": 2758.76,
+          "end": 2781.76,
+          "start_time": "00:45:59",
+          "end_time": "00:46:22",
+          "text": "and so on, and so our initial vocabulary consists of characters. And so the first step then is going to be to merge the two characters that appear most frequently together. Can you identify what is the first merge?",
+          "segment_ids": [
+            722,
+            723,
+            724,
+            725,
+            726,
+            727,
+            728
+          ],
+          "alignment": {
+            "paragraph_id": 35,
+            "slide": 46,
+            "start": 2758.76,
+            "end": 2781.76,
+            "start_time": "00:45:59",
+            "end_time": "00:46:22",
+            "confidence": 0.6855,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 47,
+      "slide_time": "00:44:47",
+      "paragraph_ids": [
+        34
+      ],
+      "paragraphs": [
+        {
+          "id": 34,
+          "start": 2686.84,
+          "end": 2758.76,
+          "start_time": "00:44:47",
+          "end_time": "00:45:59",
+          "text": "is an additional symbol in your vocabulary. So some practical notes: you run these algorithms inside space-separated tokens for efficiency, so remember that the words are first split into their characters, so you need to keep track of where a word ends, and so you add a special end-of-word symbol. And this is just an example; different tokenizers do different things, as you might have noticed if you've played around with language models before. Typically they can be funny characters, and you can see that. And then so, after you've added this symbol, you separate your words into letters, and we're only going to do the counting of adjacent characters inside word boundaries, because otherwise it would explode. So let's consider quite a dumb and stupid corpus that consists of just a few words that are repeated; we can represent it like this for efficiency: we have five times this word 'low',",
+          "segment_ids": [
+            695,
+            696,
+            697,
+            698,
+            699,
+            700,
+            701,
+            702,
+            703,
+            704,
+            705,
+            706,
+            707,
+            708,
+            709,
+            710,
+            711,
+            712,
+            713,
+            714,
+            715,
+            716,
+            717,
+            718,
+            719,
+            720,
+            721
+          ],
+          "alignment": {
+            "paragraph_id": 34,
+            "slide": 47,
+            "start": 2686.84,
+            "end": 2758.76,
+            "start_time": "00:44:47",
+            "end_time": "00:45:59",
+            "confidence": 0.7878,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 48,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 49,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 50,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 51,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 52,
+      "slide_time": "00:46:28",
+      "paragraph_ids": [
+        36
+      ],
+      "paragraphs": [
+        {
+          "id": 36,
+          "start": 2787.81,
+          "end": 2880.54,
+          "start_time": "00:46:28",
+          "end_time": "00:48:01",
+          "text": "This is not the highest; 'LO' has seven, right? Five plus two, there are two. So 'ER', right? 'ER' has nine. Technically you could also take 'R' and 'N' of a word, right? Also appear nine times. Normally you just take the one that you see first in the sequence to break the tie, and in practice it doesn't really matter which one you pick. If you're not convinced of this, we can come back to this later. So this is the first merge, and then obviously the second merge then is 'ER' and this symbol. And then what is the next one? Is it already 'low'? No, it's 'f' and 'E', right? Appears eight times. And then you continue; let's say that we have eight merges, so k equals eight, then we are done after eight merges. And then how do we actually use... so with train or learner, how do we now segment test data? We take this merge list and run it in a sequence; we do it in the order in which we did it now.",
+          "segment_ids": [
+            729,
+            730,
+            731,
+            732,
+            733,
+            734,
+            735,
+            736,
+            737,
+            738,
+            739,
+            740,
+            741,
+            742,
+            743,
+            744,
+            745,
+            746,
+            747,
+            748,
+            749,
+            750,
+            751,
+            752,
+            753,
+            754,
+            755,
+            756,
+            757,
+            758,
+            759
+          ],
+          "alignment": {
+            "paragraph_id": 36,
+            "slide": 52,
+            "start": 2787.81,
+            "end": 2880.54,
+            "start_time": "00:46:28",
+            "end_time": "00:48:01",
+            "confidence": 0.6974,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 53,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 54,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 55,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 56,
+      "slide_time": "00:37:53",
+      "paragraph_ids": [
+        29,
+        30
+      ],
+      "paragraphs": [
+        {
+          "id": 29,
+          "start": 2272.9,
+          "end": 2392.2,
+          "start_time": "00:37:53",
+          "end_time": "00:39:52",
+          "text": "NLP systems used to work with words as the main unit of our representation. But now for 10 years, this has changed and the main unit of our representation is the sub-word. And what is the motivation for this? Let's consider how we want to tokenize this sentence: 'This is tokenizing.' Let's consider that there are kind of two extreme views on how to tokenize it. You could split it at the character level, where each character is its own token, or at the word level. Can you identify what are advantages and disadvantages of each of these? Yes. So the sequence length here is longer, right? What can be an advantage? Not what I was thinking. Another advantage, yes? Exactly. The vocabulary is small. It's just the letters of our alphabet. Particularly for English, it's small. Obviously for Chinese, it's bigger. But this one is really mainly for Latin-based languages.",
+          "segment_ids": [
+            571,
+            572,
+            573,
+            574,
+            575,
+            576,
+            577,
+            578,
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585,
+            586,
+            587,
+            588,
+            589,
+            590,
+            591,
+            592,
+            593,
+            594,
+            595
+          ],
+          "alignment": {
+            "paragraph_id": 29,
+            "slide": 56,
+            "start": 2272.9,
+            "end": 2392.2,
+            "start_time": "00:37:53",
+            "end_time": "00:39:52",
+            "confidence": 0.8566,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 30,
+          "start": 2392.2,
+          "end": 2465.2,
+          "start_time": "00:39:52",
+          "end_time": "00:41:05",
+          "text": "So character level has a small vocabulary, long sequences, and word levels have... But the issue is that the vocabulary explodes, right? So if you put all the... If you take a huge amount of text, remember Zipf's law, where there's a long tail of very intricate words. If you want to include that long tail, your vocabulary increases with data size, and as we know, large language models are based on massive amounts of data. So you don't want to have such a large vocabulary. And so what is typically done is that then you represent low-frequency words as unknown tokens. So what this means is then that you have what's called an out-of-vocabulary word. So at this time, if a term has not been seen enough in the training set, you don't know anything about it. And you say that this is an unknown token. And so that's why some words have emerged as a good trade-off",
+          "segment_ids": [
+            596,
+            597,
+            598,
+            599,
+            600,
+            601,
+            602,
+            603,
+            604,
+            605,
+            606,
+            607,
+            608,
+            609,
+            610,
+            611,
+            612,
+            613,
+            614,
+            615,
+            616
+          ],
+          "alignment": {
+            "paragraph_id": 30,
+            "slide": 56,
+            "start": 2392.2,
+            "end": 2465.2,
+            "start_time": "00:39:52",
+            "end_time": "00:41:05",
+            "confidence": 0.7189,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 57,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 58,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 59,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    },
+    {
+      "slide": 60,
+      "slide_time": "00:00:00",
+      "paragraph_ids": [
+        1,
+        12,
+        20
+      ],
+      "paragraphs": [
+        {
+          "id": 1,
+          "start": 0.4,
+          "end": 87.84,
+          "start_time": "00:00:00",
+          "end_time": "00:01:28",
+          "text": "And so remember how it all starts with the corpus, right? Before we do anything, we need to have a corpus that's going to represent the language that we want to model. And so the first step, as we saw last week, is to determine what constitutes the vocabulary. And so the question of tokenization is partially how we determine this. And when we see text clean like this, it might look like a straightforward question, but when we're faced with text like this that includes these emojis and hashtags and abbreviations, this adds some challenges. So we might need to normalize. So this is also something we'll deal with today. And what's a tool that we can use for text normalization to activate your brain a little bit? And I know that regular expressions can seem a little bit like an outdated topic, but I'll argue how they are still useful.",
+          "segment_ids": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "alignment": {
+            "paragraph_id": 1,
+            "slide": 60,
+            "start": 0.4,
+            "end": 87.84,
+            "start_time": "00:00:00",
+            "end_time": "00:01:28",
+            "confidence": 0.8176,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 12,
+          "start": 1003.59,
+          "end": 1063.19,
+          "start_time": "00:16:44",
+          "end_time": "00:17:43",
+          "text": "Now it's called pre-tokenization because tokenization typically refers to what is called a subtext. Uh, so, and as you can see here, is, some word tokenization which we'll deal with at the end of the lecture and so to exemplify this these are different regular expressions used by our friends GPT-2 and GPT-4 and I don't know which one is this one so it is used actually in practice even for large language models can also be used for data analysis so generally it is widely used in academia and industry so what's a use case of a regular expression beyond LLMs for example you might want to convert a text from American English to British English for this you need substitution and so a Python or Unix common looks like this you say I want to substitute this regular expression this pattern of regular expression",
+          "segment_ids": [
+            286,
+            287,
+            288,
+            289,
+            290,
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298
+          ],
+          "alignment": {
+            "paragraph_id": 12,
+            "slide": 60,
+            "start": 1003.59,
+            "end": 1063.19,
+            "start_time": "00:16:44",
+            "end_time": "00:17:43",
+            "confidence": 0.8184,
+            "method": "semantic"
+          }
+        },
+        {
+          "id": 20,
+          "start": 1557.52,
+          "end": 1634.8,
+          "start_time": "00:25:58",
+          "end_time": "00:27:15",
+          "text": "So this shows that regular expressions have a history of being used as an actual application. Now they're relegated to really pre-processing, but it shows how powerful they can be. Alright, questions about regular expressions? Yeah? Do these language works also for language-based language? Yeah, exactly. So that's a good question. So the regular expressions tend to be language-specific. And we'll see it now because we'll see how regular expressions are applied to tokenization, and we'll see that it can make typically language-specific assumptions. So it's very hard to design a regular expression that is valid for all languages. So that's a good point. So let's see how regular expressions can be applied in practice, still relevant to today's LLMs. In word tokenization, as I said, if we have a corpus like this, it's quite easy to tokenize. For example, here you can just simply tokenize it.",
+          "segment_ids": [
+            376,
+            377,
+            378,
+            379,
+            380,
+            381,
+            382,
+            383,
+            384,
+            385,
+            386,
+            387,
+            388,
+            389,
+            390,
+            391,
+            392,
+            393,
+            394
+          ],
+          "alignment": {
+            "paragraph_id": 20,
+            "slide": 60,
+            "start": 1557.52,
+            "end": 1634.8,
+            "start_time": "00:25:58",
+            "end_time": "00:27:15",
+            "confidence": 0.8668,
+            "method": "semantic"
+          }
+        }
+      ]
+    },
+    {
+      "slide": 61,
+      "slide_time": null,
+      "paragraph_ids": [],
+      "paragraphs": []
+    }
+  ]
+}

@@ -1,0 +1,631 @@
+{
+  "metadata": {
+    "source_file": "Lecture_01_Untitled_Slides.pdf",
+    "created_at": "2026-09-27T10:22:09.791474+00:00",
+    "slide_count": 69,
+    "format": "pdf"
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "title": "Warm-up: http://PollEv.com/tias",
+      "content": "Warm-up: http://PollEv.com/tias Fundamentals of Artificial Intelligence",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 2,
+      "title": "Fundamentals of Artificial Intelligence",
+      "content": "Fundamentals of Artificial Intelligence Based on the slides of CS188 @ Berkeley and Prof. De Raedt's AI course Prof. Tias Guns Chapter 01, 2024-25 Introduction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 3,
+      "title": "Artificial Intelligence",
+      "content": "Artificial Intelligence AI is changing rapidly…  Real world impact!  Real world money…  Real world politics",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 4,
+      "title": "AI is having real-world impact",
+      "content": "AI is having real-world impact Public imagination Text assistants",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 5,
+      "title": "AI is having real-world impact",
+      "content": "AI is having real-world impact Public imagination Text assistants Image generation",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 6,
+      "title": "AI is having real-world impact",
+      "content": "AI is having real-world impact Public imagination Economy 454 Billion USD globally https://www.precedenceresearch.com/artificial-intelligence-market",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 7,
+      "title": "AI is having real-world impact",
+      "content": "AI is having real-world impact Public imagination Economy Politics",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 8,
+      "title": "AI is having real-world impact",
+      "content": "AI is having real-world impact Public imagination Economy Politics Law Bloomberg Law, 2023",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 9,
+      "title": "AI is having real-world impact",
+      "content": "AI is having real-world impact Public imagination Economy Politics Law Labor The Economist, 2021 New York Times, 2023 MarketWatch, 2023",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 10,
+      "title": "AI is having real-world impact",
+      "content": "AI is having real-world impact Public imagination Economy Politics Law Labor Sciences",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 11,
+      "title": "AI is having real-world impact",
+      "content": "AI is having real-world impact Public imagination Economy Politics Law Labor Sciences Education Forbes, 2023",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 12,
+      "title": "AI is having real-world impact",
+      "content": "AI is having real-world impact Public imagination Economy Politics Law Labor Sciences Education Social Interaction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 13,
+      "title": "Artificial Intelligence",
+      "content": "Artificial Intelligence AI is changing rapidly…  Real world impact!  Real world money…  Real world politics OK, so what is AI?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 14,
+      "title": "Sci-Fi AI?",
+      "content": "Sci-Fi AI?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 15,
+      "title": "What is AI?",
+      "content": "What is AI? The science of making machines that: Think like people Act like people Think rationally Act rationally",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 16,
+      "title": "What is AI?",
+      "content": "What is AI? The science of making machines that: Think like people Act like people Think rationally Act rationally Recommended reading: A.I. M.A. section 1.2 (Foundations of AI)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 17,
+      "title": "Today",
+      "content": "Today o What is artificial intelligence? o Course setup? o Where did it come from/What can AI do?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 18,
+      "title": "AI: Designing Rational Agents",
+      "content": "AI: Designing Rational Agents o An agent is an entity that perceives and acts. o An agentic AI system nowadays is an example of an LLM-based agent: it perceives text (and possibly images) its actions are to print text and run tools Agent ? Sensors Actuators Environment Percepts Actions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 19,
+      "title": "AI: Designing Rational Agents",
+      "content": "AI: Designing Rational Agents o An agent is an entity that perceives and acts. o An agentic AI system nowadays is an example of an LLM-based agent: it perceives text (and possibly images) its actions are to print text and run tools o A rational agent selects actions that maximize its (expected) utility. Q: is an Agentic LLM system a rational agent? Agent ? Sensors Actuators Environment Percepts Actions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 20,
+      "title": "AI: Designing Rational Agents",
+      "content": "AI: Designing Rational Agents o An agent is an entity that perceives and acts. o An agentic AI system nowadays is an example of an LLM-based agent: it perceives text (and possibly images) its actions are to print text and run tools o A rational agent selects actions that maximize its (expected) utility. Q: is an Agentic LLM system a rational agent? (yes: it maximizes next-token probability) Agent ? Sensors Actuators Environment Percepts Actions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 21,
+      "title": "Rational Agents",
+      "content": "Rational Agents We’ll use the term rational in a very specific, technical way:  Rational: maximally achieving pre-defined goals  Rationality only concerns what decisions are made (not the thought process behind them)  Goals are expressed in terms of the utility of outcomes  Being rational means maximizing your expected utility Alternative title for this course would be: Computational Rationality or… Automated Intelligence",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 22,
+      "title": "Maximize Your",
+      "content": "Maximize Your Expected Utility",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 23,
+      "title": "Maximize Your",
+      "content": "Maximize Your Expected Utility",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 24,
+      "title": "Maximize Your",
+      "content": "Maximize Your Expected Utility",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 25,
+      "title": "Maximize Your",
+      "content": "Maximize Your Expected Utility",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 26,
+      "title": "Maximize Your",
+      "content": "Maximize Your Expected Utility",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 27,
+      "title": "What About the Brain?",
+      "content": "What About the Brain? Brains (human minds) are very good at making rational decisions, but not perfect Brains aren’t as modular as software, so hard to reverse engineer! “Brains are to intelligence as wings are to flight” We can’t build AI at the scale of the brain (~100T synapsis on a lunchbox) Still, the brain can be a great inspiration for AI!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 28,
+      "title": "Designing Rational Agents",
+      "content": "Designing Rational Agents o An agent is an entity that perceives and acts. o A rational agent selects actions that maximize its (expected) utility. o Characteristics of the percepts, environment, and action space dictate techniques for selecting rational actions o This course is about: o General AI search techniques for a variety of problem types o Learning to recognize when and how a new problem can be solved with an existing technique Agent ? Sensors Actuators Environment Percepts Actions",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 29,
+      "title": "Pac-Man as an Agent",
+      "content": "Pac-Man as an Agent Agent ? Sensors Actuators Environment Percepts Actions Pac-Man is a registered trademark of Namco-Bandai Games, used here for educational purposes",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 30,
+      "title": "Demo",
+      "content": "Demo time python3 pacman.py -l mediumMaze -p SearchAgent -a fn=bfs",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 31,
+      "title": "Course Setup",
+      "content": "Course Setup",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 32,
+      "title": "AI",
+      "content": "AI Rational Agents [reasoning & decisions] Robots [physically embodied] Machine Learning [learning decisions; sometimes independent] NLP Computer Vision Human-AI Interaction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 33,
+      "title": "AI",
+      "content": "AI Rational Agents [reasoning & decisions] Robots [physically embodied] Machine Learning [learning decisions; sometimes independent] NLP Computer Vision Human-AI Interaction Not in this course Mach. Learning & Ind. Inf. H02C1A (ML&II is MAI mandatory) ANN & Deep Learning H02C4A Support Vector Machines H02D3A Data Mining H02C6A Reinforcement Learning H0O23A This course (MAI mandatory) reasoning by search Knowledge Representation H02C3A Decl. Probl. Solving P in AI H02A3A Analysis of LS Social Netw. H02T6A Inf. Retrieval & Search Eng. H02C8A Robotics H02A4A Computer Vision H02A5A Natural Language Processing H02B1A Speech Recognition H02A6A Speech Science H02C9A Linguistics and Artificial Intelligence H02B6A Language Engineering Applications H0T29A Cognitive Science H02B2A Privacy and Big Data H00Y2A Philosophy of Mind and Artificial Intelligence H02D5A AI Ethics & Regulation H0P05A",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 34,
+      "title": "Course Components",
+      "content": "Course Components Lectures, by Prof. Guns 11 lectures 8/20 points, closed-book written exam Exercises, by teaching assistants (T.A.’s) 6 sessions, starting in 3rd week 10/20 points, closed-book written exam with formula sheet  Projects Pacman P0, P1, P2, P3 2/20 points, Python, semi-autograded Alone. No LLMs, no cheating, pure brainpower, we support you!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 35,
+      "title": "FAI: Reasoning & decisions",
+      "content": "FAI: Reasoning & decisions L01: Mon 21/09, 10:35 -- 12:30, Intro AI L02: Mon 28/09, 10:35 -- 12:30, Agents + Search (1/2) HS1: Wed 30/09, 10:35 -- 12:00, #Project hackerspace 1: get rollin’ L03: Mon 05/10, 10:35 -- 12:30, Search (2/2) L04: Mon 12/10, 10:35 -- 12:30, Informed Search L05: Mon 19/10, 10:35 -- 12:30, Constraint Satisfaction Problems L06: Mon 26/10, 10:35 -- 12:30, Game trees L07: Mon 09/11, 10:35 -- 12:30, Uncertainty in Game Trees HS2: Wed 11/11, 10:35 -- 12:00, #Project hackerspace 2: last resort L08: Mon 16/11, 10:35 -- 12:30, Markov Decision Processes L09: Mon 23/11, 10:35 -- 12:30, SAT Solving + Logic L10: Mon 30/11, 10:35 -- 12:30, 1st order Logic + Planning LXX: Mon 07/12, 10:35 -- 12:30, Exam info + Q&A Algorithmic fundamentals of search Applications of search in deterministic environments Applications of search in stochastic env.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 36,
+      "title": "Academic honesty",
+      "content": "Academic honesty Projects 2/20 points, Python, autograded Brainpower! Alone, no shortcuts, we support you! Separate Toledo module with instruction/submissions (available later this week) Learning Python: see ‘Practical Info’ on the project-Toledo Hackerspace lectures: talk to us! + Discussion forum on the project-Toledo (no spoilers) What can you discuss with colleagues, search on the internet, ask an LLM? Ask yourself “Would I ask this to a teaching assistant?” => If no: don’t do it, you are crossing the line.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 37,
+      "title": "Academic honesty",
+      "content": "Academic honesty What can you discuss with colleagues, search on the internet, ask an LLM? Ask yourself “Would I ask this to a teaching assistant?” => If no: don’t do it, you are crossing the line. How Novices Use LLM-based Code Generators to Solve CS1 Coding Tasks in a Self-Paced Learning Environment, Int. Conf. Computing Education Research, 2024",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 38,
+      "title": "Study Material",
+      "content": "Study Material Prior knowledge:  Basic math (especially MDP part)  Basic familiarity with algorithms and data structures => tell me when I assume too much! Course material:  Slides + lecture recordings  Exercises  All available on Toledo, incl. discussion forum  Optional: book 'AI, A Modern Approach' by Russell and Norvig very dense, the reference AI book 'global edition' (green) is equivalent but much cheaper than US edition (blue)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 39,
+      "title": "Course construction at KU Leuven,",
+      "content": "Course construction at KU Leuven, an ECTS reminder 1 ECTS point corresponds to about 25-30 hours of study. Lectures: 3 ECTS points = 75-90 hours 11 lectures covering 20 hours -> 55-70 hours remaining let's say you will study 4 days of 8 hours for the exam = 32 hours -> still 23-38 hours of study expected to understand the material! Same for exercises: 1 ECTS = 25-30 hours expected; only 15 hours of guided sessions Project: 25-30 hours expected (remove/add based on programming experience)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 40,
+      "title": "In-person and online arrangements",
+      "content": "In-person and online arrangements Lectures, by Prof. Guns  in person, in auditorium – student life = campus life!  recordings and slides available on Toledo afterwards Exercises, by T.A.’s  in person, in study rooms (3 parallel sessions per week, register for a session on Toledo)  exercise questions available on Toledo, solutions with delay ‘Discussions’ at top of Toledo: sharing of questions and answers Come talk to me and the T.A.'s during the break and after the lecture!",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 41,
+      "title": "Build a great community",
+      "content": "Build a great community o Help out your peers on Toledo and in person! (academic honesty, don’t help cheating) o Be mindful of the tone you use – be respectful and supportive, help everyone feel at home. o Also, please don’t interrupt your peers or instructors. o Watch out for implicit bias – catch yourself before acting on it. o Someone’s gender, race, ethnicity, sexual orientation, etc. have NOTHING to do with how they will perform in this course.",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 42,
+      "title": "peter.claes@kuleuven.be",
+      "content": "peter.claes@kuleuven.be",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 43,
+      "title": "Today",
+      "content": "Today o What is artificial intelligence? o Course setup? o Where did it come from/What can AI do?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 44,
+      "title": "A (Short) History of AI",
+      "content": "A (Short) History of AI",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 45,
+      "title": "A (Short) History of AI",
+      "content": "A (Short) History of AI o 1940---1950: Early days, thinking meets computer science o 1943: McCulloch & Pitts: Boolean circuit model of brain o 1950: Turing's “Computing Machinery and Intelligence” o 1950—1970: Excitement! Logic-driven o 1950s: Early AI programs, including Samuel's checkers program, Newell & Simon's Logic Theorist, Gelernter's Geometry Engine o 1956: Dartmouth meeting: “Artificial Intelligence” adopted o 1965: Robinson's complete algorithm for logical reasoning",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 46,
+      "title": "Shakey the robot",
+      "content": "Shakey the robot (SRI International, 1966-1972) Computer Vision (Hough Transf) A* search STRIPS planning ... Declared IEEE Milestone https://ethw.org/Milestones:SHAKEY:_The_World%E2%80%99s_First_Mobile_Intelligent_Robot,_1972",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 47,
+      "title": "A (Short) History of AI",
+      "content": "A (Short) History of AI o 1970—1990: Knowledge-based approaches o 1969—79: Early development of knowledge-based systems o 1980—88: Expert systems industry booms o 1988—93: Expert systems industry busts: “AI Winter” o 1990—2000: Statistical approaches o Resurgence of probability, focus on uncertainty o General increase in technical depth o Agents and learning systems… “AI Spring”?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 48,
+      "title": "o 2000—2022: Big data, data science and machine learning",
+      "content": "o 2000—2022: Big data, data science and machine learning o Big data, big compute o Data science as an overarching theme o Some re-unification of sub-fields o Task-specific AI used in many industries o 2022—: ChatGPT and Generative AI o Nov 22: ChatGPT with GPT3.5 unleashed o Neural networks with transformer architecture are everywhere o AI Research companies, e.g. DeepMind, OpenAI, Anthropic, Mistral, ... o Generative AI: Dall-E, Segment Anything, SeamlessM4T, ... o Public access: ChatGPT, Bing Search/Co-pilot, Gemini on Pixel9, ... A (Short) History of AI",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 49,
+      "title": "What Can AI Do?",
+      "content": "What Can AI Do? Quiz: Which of the following can be done at present? Win against any human at chess? Win against the best humans at Go? Play a decent game of tennis? Unload any dishwasher in any home? Drive safely along the highway? Drive safely along streets of Leuven? Buy a week's worth of groceries on the web? Buy a week's worth of groceries at Colruyt? Discover and prove a new mathematical theorem? Perform a surgical operation? Translate spoken Chinese into spoken English in real time? Win an art competition? Write an intentionally funny story? Construct a building?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 50,
+      "title": "What Can AI Do?",
+      "content": "What Can AI Do? Win against any human at chess? Win against the best humans at Go? Play a decent game of tennis? Unload any dishwasher in any home? Drive safely along the highway? Drive safely along streets of San Francisco? Buy a week's worth of groceries on the web? Buy a week's worth of groceries at Colruyt? Discover and prove a new mathematical theorem? Perform a surgical operation? Translate spoken Chinese into spoken English in real time? Win an art competition? Write an intentionally funny story? Construct a building? Google’s AlphaGo beats Lee Sedol at Go in 2016 But … a tiny plot twist in 2023 Quiz: Which of the following can be done at present?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 51,
+      "title": "What Can AI Do?",
+      "content": "What Can AI Do? Win against any human at chess? Win against the best humans at Go? Play a decent game of tennis? Unload any dishwasher in any home? Drive safely along the highway? Drive safely along streets of San Francisco? Buy a week's worth of groceries on the web? Discover and prove a new mathematical theorem? Perform a surgical operation? Translate spoken Chinese into spoken English in real time? Win an art competition? Write an intentionally funny story? Construct a building? Quiz: Which of the following can be done at present? Buy a week's worth of groceries at Colruyt?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 52,
+      "title": "What Can AI Do?",
+      "content": "What Can AI Do? Win against any human at chess? Win against the best humans at Go? Play a decent game of tennis? Unload any dishwasher in any home? Drive safely along the highway? Drive safely along streets of San Francisco? Buy a week's worth of groceries on the web? Discover and prove a new mathematical theorem? Perform a surgical operation? Translate spoken Chinese into spoken English in real time? Win an art competition? Write an intentionally funny story? Construct a building? Quiz: Which of the following can be done at present? Buy a week's worth of groceries at Colruyt?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 53,
+      "title": "Human-AI Interaction",
+      "content": "Human-AI Interaction",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 54,
+      "title": "What Can AI Do?",
+      "content": "What Can AI Do? Win against any human at chess? Win against the best humans at Go? Play a decent game of tennis? Unload any dishwasher in any home? Drive safely along the highway? Drive safely along streets of San Francisco? Buy a week's worth of groceries on the web? Discover and prove a new mathematical theorem? Perform a surgical operation? Translate spoken Chinese into spoken English in real time? Win an art competition? Write an intentionally funny story? Construct a building? Quiz: Which of the following can be done at present? Buy a week's worth of groceries at Colruyt?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 55,
+      "title": "What Can AI Do?",
+      "content": "What Can AI Do? Win against any human at chess? Win against the best humans at Go? Play a decent game of tennis? Unload any dishwasher in any home? Drive safely along the highway? Drive safely along streets of San Francisco? Buy a week's worth of groceries on the web? Discover and prove a new mathematical theorem? Perform a surgical operation? Translate spoken Chinese into spoken English in real time? Win an art competition? Write an intentionally funny story? Construct a building? Quiz: Which of the following can be done at present? Buy a week's worth of groceries at Colruyt?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 56,
+      "title": "What Can AI Do?",
+      "content": "What Can AI Do? Win against any human at chess? Win against the best humans at Go? Play a decent game of tennis? Unload any dishwasher in any home? Drive safely along the highway? Drive safely along streets of San Francisco? Buy a week's worth of groceries on the web? Discover and prove a new mathematical theorem? Perform a surgical operation? Translate spoken Chinese into spoken English in real time? Win an art competition? Write an intentionally funny story? Construct a building? Quiz: Which of the following can be done at present? Buy a week's worth of groceries at Colruyt?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 57,
+      "title": "Singularity?",
+      "content": "Singularity? Ultra-intelligent machines “The last invention humanity ever needs to make” Typically two possible outcomes are sketched: Utopia (no war, no disease, no hunger) Dystopia (extermination or subjugation of humans)",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 58,
+      "title": "Ultra-intelligent machines, myth buster",
+      "content": "Ultra-intelligent machines, myth buster https://futureoflife.org/resource/aimyths/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 59,
+      "title": "Misalignment example",
+      "content": "Misalignment example From OpenAI o1 model card: https://cdn.openai.com/o1-system-",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 60,
+      "title": "Ultra-intelligent machines, myth buster",
+      "content": "Ultra-intelligent machines, myth buster",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 61,
+      "title": "Bias in algorithms, in data, in use...",
+      "content": "Bias in algorithms, in data, in use...",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 62,
+      "title": "What would an ‘unbiased’ algorithm be?",
+      "content": "What would an ‘unbiased’ algorithm be?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 63,
+      "title": "What would an ‘unbiased’ algorithm be?",
+      "content": "What would an ‘unbiased’ algorithm be? Different societies have different norms! So: AI Alignment is hard Determining what to align to is even harder Goes back to root of what it means to be human… What “expected utility” is right?",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 64,
+      "title": "Maximize Your",
+      "content": "Maximize Your Expected Utility",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 65,
+      "title": "Utility?",
+      "content": "Utility? Clear utility function Not so clear utility function",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 66,
+      "title": "Slide 66",
+      "content": "",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 67,
+      "title": "What expected utility is right?",
+      "content": "What expected utility is right? In this course, everything will be unambiguous toy-ish often even But the implications of AI in the world are real Think about them, talk about them...",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 68,
+      "title": "Further reading on implications of AI",
+      "content": "Further reading on implications of AI  Website Stuart Russell, The Long Term Future of AI, also on Lethal Autonomous Weapons.  Book Stuart Russell “Human Compatible” (2019) Nick Bostrom “Superintelligence” (2014)  Moshe Vardi on jobs  Slides from Asilomar panel on Long Term AI futures at IJCAI 2009;  Research priorities for robust and beneficial artificial intelligence @ futureoflife.org  AI and Life in 2030, https://ai100.stanford.edu/sites/default/files/ai_100_report_0831fnl.pdf  EU High Level Expert Group https://ec.europa.eu/digital-single-market/en/news/ethics-guidel ines-trustworthy-ai  Preparing for the future of AI; https://obamawhitehouse.archives.gov/sites/default/files/white house_files/microsites/ostp/NSTC/preparing_for_the_future_of_ai.pdf  Beneficial ai — 23 Asilomar AI principles https://futureoflife.org/bai-2017/",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    },
+    {
+      "slide": 69,
+      "title": "AI",
+      "content": "AI Rational Agents [reasoning & decisions] Robots [physically embodied] Machine Learning [learning decisions; sometimes independent] NLP Computer Vision Human-AI Interaction Not in this course Mach. Learning & Ind. Inf. H02C1A (ML&II is MAI mandatory) ANN & Deep Learning H02C4A Support Vector Machines H02D3A Data Mining H02C6A Reinforcement Learning H0O23A This course (MAI mandatory) reasoning by search Knowledge Representation H02C3A Advanced Prog. Lang. for AI H02A8A Analysis of LS Social Netw. H02T6A Inf. Retrieval & Search Eng. H02C8A Robotics H02A4A Computer Vision H02A5A Natural Language Processing H02B1A Speech Recognition H02A6A Speech Science H02C9A Linguistics and Artificial Intelligence H02B6A Language Engineering Applications Cognitive Science H02B2A Privacy and Big Data H00Y2A Philosophy of Mind and Artificial Intelligence H02D5A AI Ethics & Regulation H0P05A",
+      "notes": "",
+      "images": [],
+      "visual_text": [],
+      "preview_image": ""
+    }
+  ]
+}

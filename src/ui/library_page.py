@@ -325,9 +325,10 @@ def _lecture_slide_bundle(
         return None
     related = _related_documents(library, document)
     source_job = _matching_lecture_job(manager, document)
-    slides_path = _find_related_artifact(related, ("slides", "extracted")) or _result_path(
-        source_job, "slides_path"
-    )
+    from ..lecture_artifacts import artifact_dir
+
+    portable = artifact_dir(library, document)
+    slides_path = (portable / "slides.json" if (portable / "slides.json").is_file() else None) or _find_related_artifact(related, ("slides", "extracted")) or _result_path(source_job, "slides_path")
     slide_payload = _load_json_file(slides_path)
     slides = [item for item in slide_payload.get("slides", []) if isinstance(item, dict)]
     normalized_name = re.sub(r"[^a-z0-9]+", "_", document.original_name.casefold())
@@ -354,9 +355,7 @@ def _lecture_slide_bundle(
     if not slides or not _is_slide_deck(document, slides, source_job):
         return None
 
-    summaries_path = _find_related_artifact(related, ("slide", "summaries")) or _result_path(
-        source_job, "slide_summaries_path"
-    )
+    summaries_path = (portable / "slide_summaries.json" if (portable / "slide_summaries.json").is_file() else None) or _find_related_artifact(related, ("slide", "summaries")) or _result_path(source_job, "slide_summaries_path")
     if summaries_path is None:
         artifact_key = document.folder_id or document.id
         manual_summaries = (
@@ -373,9 +372,7 @@ def _lecture_slide_bundle(
         for item in summaries_payload.get("slides", [])
         if isinstance(item, dict) and str(item.get("slide", "")).isdigit()
     }
-    alignment_path = _find_related_artifact(related, ("alignment",)) or _result_path(
-        source_job, "alignment_path"
-    )
+    alignment_path = (portable / "alignment.json" if (portable / "alignment.json").is_file() else None) or _find_related_artifact(related, ("alignment",)) or _result_path(source_job, "alignment_path")
     alignment_payload = _load_json_file(alignment_path)
     alignment = {
         int(item["slide"]): [value for value in item.get("paragraphs", []) if isinstance(value, dict)]
@@ -394,6 +391,9 @@ def _lecture_audio_bundle(
         return None
     related = _related_documents(library, document)
     source_job = _matching_lecture_job(manager, document)
+    from ..lecture_artifacts import artifact_dir
+
+    portable_transcript = artifact_dir(library, document) / "transcript.json"
     transcript_path = next(
         (
             item.stored_path
@@ -404,7 +404,7 @@ def _lecture_audio_bundle(
             and item.stored_path.suffix.lower() == ".json"
         ),
         None,
-    ) or _result_path(source_job, "transcript_path")
+    ) or (portable_transcript if portable_transcript.is_file() else None) or _result_path(source_job, "transcript_path")
     payload = _load_json_file(transcript_path)
     metadata = payload.get("metadata", {}) if isinstance(payload.get("metadata"), dict) else {}
     transcript_kind = str(metadata.get("transcript_kind", "")).casefold()
