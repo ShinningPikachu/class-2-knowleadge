@@ -1816,11 +1816,24 @@ def _render_audio_document(
     if not paragraphs:
         _render_transcript_fallback(document, paragraphs)
         return
+    from ..config import project_path
+    raw_path = project_path(
+        "library", "subjects", document.subject_id, "derived",
+        document.folder_id or document.id, "transcript.raw.json",
+    )
+    if not raw_path.is_file() and bundle is not None:
+        raw_path = _result_path(bundle.source_job, "raw_transcript_path") or raw_path
+    raw_payload = _load_json_file(raw_path)
+    raw_paragraphs = [
+        item for item in raw_payload.get("paragraphs", [])
+        if isinstance(item, dict)
+    ]
     rendered = render_audio_transcript(
         document.stored_path,
         document.media_type,
         paragraphs,
         key=document.id,
+        raw_paragraphs=raw_paragraphs,
         height=790 if full_page else INLINE_PREVIEW_CONTENT_HEIGHT,
         focus_text=focus_text,
     )
