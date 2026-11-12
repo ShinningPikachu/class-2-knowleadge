@@ -621,8 +621,53 @@ class LibraryStore:
             raise LibraryError(f"Could not rename '{document.original_name}': {exc}") from exc
         return self.get_document(document.id)
 
+    def _copy_related_artifacts(
+        self,
+        document: LibraryDocument,
+        target_subject_id: str,
+        target_folder_id: str | None,
+    ) -> Path | None:
+        """Preserve lecture data when a deck or recording changes folder.
+
+        An existing target collection is never silently overwritten. Source
+        artifacts remain available to any files still in the old folder.
+        Return the newly created path so failed moves can roll it back.
+        """
+        previous_key = document.folder_id or document.id
+        next_key = target_folder_id or document.id
+        source = self.subjects_root / document.subject_id / "derived" / previous_key
+        target = self.subjects_root / target_subject_id / "derived" / next_key
+        if source == target or not source.is_dir():
+            return None
+        if target.exists():
+            source_files = {
+                p.relative_to(source): p
+                for p in source.rglob("*") if p.is_file()
+            }
+            target_files = {
+                p.relative_to(target): p
+                for p in target.rglob("*") if p.is_file()
+            }
+            if source_files.keys() != target_files.keys() or any(
+                source_files[key].read_bytes() != target_files[key].read_bytes()
+                for key in source_files
+            ):
+                raise LibraryError(
+                    "The destination already has different lecture artifacts. "
+                    "Choose an empty folder or resolve the conflicting lecture."
+                )
+            return None
+        try:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(source, target)
+        except OSError as exc:
+            if target.exists():
+                shutil.rmtree(target, ignore_errors=True)
+            raise LibraryError(f"Could not preserve lecture artifacts: {exc}") from exc
+        return target
+
     def move_document(self, document_id: str, target_subject_id: str) -> LibraryDocument:
-        """Move a document and its search ownership to another subject."""
+        """Move a document and preserve its portable slide, audio and notes links."""
         document = self.get_document(document_id)
         target = self.get_subject(target_subject_id)
         if target.id == document.subject_id:
@@ -645,6 +690,7 @@ class LibraryStore:
 
         relative_path = self._document_relative_path(target.id, document.id, document.original_name, None)
         destination = self.root / relative_path
+        copied_artifacts = self._copy_related_artifacts(document, target.id, None)
         try:
             document.stored_path.replace(destination)
             with self._connect() as connection:
@@ -655,22 +701,24 @@ class LibraryStore:
         except (OSError, sqlite3.Error) as exc:
             if destination.exists() and not document.stored_path.exists():
                 destination.replace(document.stored_path)
+            if copied_artifacts:
+                shutil.rmtree(copied_artifacts, ignore_errors=True)
             raise LibraryError(f"Could not move '{document.original_name}' to {target.name}: {exc}") from exc
         return self.get_document(document.id)
 
     def move_document_to_folder(self, document_id: str, folder_id: str | None) -> LibraryDocument:
-        """Move a document within its subject, using ``None`` for the subject root."""
+        """Move a document within its subject without losing its lecture links."""
         document = self.get_document(document_id)
         folder = self._folder_for_subject(document.subject_id, folder_id)
         target_folder_id = folder.id if folder else None
         if target_folder_id == document.folder_id:
             return document
-
         relative_path = self._document_relative_path(
             document.subject_id, document.id, document.original_name, target_folder_id
         )
         destination = self.root / relative_path
         destination.parent.mkdir(parents=True, exist_ok=True)
+        copied_artifacts = self._copy_related_artifacts(document, document.subject_id, target_folder_id)
         try:
             document.stored_path.replace(destination)
             with self._connect() as connection:
@@ -681,6 +729,8 @@ class LibraryStore:
         except (OSError, sqlite3.Error) as exc:
             if destination.exists() and not document.stored_path.exists():
                 destination.replace(document.stored_path)
+            if copied_artifacts:
+                shutil.rmtree(copied_artifacts, ignore_errors=True)
             raise LibraryError(f"Could not move '{document.original_name}' into the folder: {exc}") from exc
         return self.get_document(document.id)
 
@@ -707,6 +757,24 @@ class LibraryStore:
             # The catalog and search index are already safely deleted. A hidden
             # tombstone is preferable to restoring an unregistered source file.
             pass
+        # Derived artifacts no longer belong to a document once its last
+        # source has been deleted. Shared lecture folders keep their artifacts
+        # until all source documents are gone.
+        if document.folder_id:
+            with self._connect() as connection:
+                remaining = connection.execute(
+                    "SELECT COUNT(*) FROM documents WHERE folder_id = ?", (document.folder_id,)
+                ).fetchone()[0]
+            if remaining == 0:
+                shutil.rmtree(
+                    self.subjects_root / document.subject_id / "derived" / document.folder_id,
+                    ignore_errors=True,
+                )
+        else:
+            shutil.rmtree(
+                self.subjects_root / document.subject_id / "derived" / document.id,
+                ignore_errors=True,
+            )
         return document
 
     def delete_folder(self, folder_id: str, delete_documents: bool = False) -> LibraryFolder:
@@ -737,6 +805,11 @@ class LibraryStore:
                 shutil.rmtree(tombstone)
         except OSError:
             pass
+        # Clean up portable artifacts after the catalog update has committed.
+        shutil.rmtree(
+            self.subjects_root / folder.subject_id / "derived" / folder.id,
+            ignore_errors=True,
+        )
         return folder
 
     def search_documents(
