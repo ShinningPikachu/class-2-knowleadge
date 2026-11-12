@@ -654,6 +654,10 @@ class LibraryStore:
         suffix = document.stored_path.suffix
         staged = document.stored_path.with_name(f".{document.id}.replacing{suffix}")
         backup = document.stored_path.with_name(f".{document.id}.previous{suffix}")
+        if backup.exists():
+            raise LibraryError(
+                "An older replacement backup still exists. Inspect and recover it before replacing this file."
+            )
         try:
             shutil.copy2(source, staged)
             sections = self._extract_sections(staged)
