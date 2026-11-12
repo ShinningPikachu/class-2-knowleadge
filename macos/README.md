@@ -14,6 +14,21 @@ On first launch, choose the project folder containing `app.py`, `src/`, and `.ve
 
 In **Settings → App startup**, enable **Open Class Knowledge when I sign in** to register the installed app as a macOS login item. macOS opens it after sign-in; it does not run before a user signs in. Processing runs while the app is open, and unfinished tasks are recovered into **Later** if the app quits or macOS restarts.
 
+## Local text-to-speech
+
+Piper is part of `requirements.txt`. With the project's Python environment installed, open a processed lecture's slide, click **Speak**, and select **Install English voice** in the popover (one-time model download). Choose an installed voice and click **Generate and play**. The PDF reader offers the same controls. Speech synthesis itself is offline, and the voice files remain in the local ignored `models/piper/` directory.
+
+You can also install voices manually from the repository root:
+
+```sh
+source .venv/bin/activate
+python -m piper.download_voices en_US-lessac-medium --data-dir models/piper
+# View the available models and pick a matching voice for translated notes:
+python -m piper.download_voices
+```
+
+Each voice must have both its `.onnx` weights and matching `.onnx.json` configuration file. Models appear in the picker when the popover is reopened. The first voice download needs internet; subsequent speech generation uses local computation and no remote API. For a fresh clone, install the Python requirements and download the voice again because the `models/` directory is excluded from Git.
+
 ## Build and run from this checkout
 
 To build a checkout `.app` in the temporary build cache without installing it, run:
