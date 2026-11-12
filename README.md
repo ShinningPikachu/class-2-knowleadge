@@ -160,6 +160,29 @@ git status --short
 
 Review the changed files, then commit and push the repository as usual. Friends who clone it should have Git LFS enabled to download the media. For invited friends, set the GitHub repository to private and invite them. Files above 100 MiB are blocked in ordinary Git and need Git LFS; GitHub Free currently includes 10 GiB of LFS storage and 10 GiB of monthly download bandwidth. See [GitHub's large-file guidance](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github) and [Git LFS billing](https://docs.github.com/en/billing/concepts/product-billing/git-lfs) for current limits and usage.
 
+## Validate and regenerate older lecture notes
+
+After cloning the repository, install Git LFS and the Python environment, then validate the downloaded material:
+
+```bash
+git lfs pull
+python3 scripts/validate_library.py --hashes
+python3 scripts/migrate_source_provenance.py
+python3 scripts/rebuild_legacy_lectures.py
+```
+
+The first command downloads actual recordings. The validator detects missing originals, incomplete LFS checkouts, inconsistent slide links, missing source coverage and suspicious chronology. The migration and rebuild commands start as **dry runs**.
+
+Older summaries and alignments were created before sequence-aware slide matching. To repair metadata only, run `python3 scripts/migrate_source_provenance.py --apply`. This reconstructs evidence-availability flags and retains a private backup, but does not improve the underlying text or fix a misaligned recording.
+
+To regenerate the actual notes for a chosen lecture, first install the local Ollama and Whisper models listed above. Copy the lecture folder ID shown by the dry run, and execute:
+
+```bash
+python3 scripts/rebuild_legacy_lectures.py --folder YOUR_FOLDER_ID --execute
+```
+
+An explicit `--all --execute` option processes every detected legacy recorded lecture. The rebuild runs the full audio, slide extraction, chronological alignment, explanation and PDF pipeline. Existing derived artifacts and PDFs are backed up under ignored `runs/rebuild_backups/`. Updated Notes.pdf and Summary.pdf keep their library document IDs. This process uses local compute resources and is **not performed by a Git clone or a pull request merge**. Inspect results and privacy-sensitive transcript text before committing the newly regenerated artifacts.
+
 ## Native macOS app
 
 The SwiftUI macOS app presents the Library, Agent, Lecture Notes, Job Queue, Share, and Settings in a native window without starting a browser. It uses the same Python services, local models, and project data through a private child process. Use the expand button in any Library preview to open that file full screen. Slide decks show slides on the left and their lecture explanation or extracted text on the right; scroll the slide column and the text follows the slide that is mostly visible. Full-screen explanation text is larger; other file types open in their full-window preview. Build a checkout app in the temporary build cache and open it from the repository root:
