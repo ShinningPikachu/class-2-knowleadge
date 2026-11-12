@@ -32,6 +32,7 @@ def render_audio_transcript(
     paragraphs: list[dict[str, Any]],
     *,
     key: str,
+    raw_paragraphs: list[dict[str, Any]] | None = None,
     height: int = 650,
     focus_text: str = "",
 ) -> bool:
@@ -40,8 +41,15 @@ def render_audio_transcript(
     if not audio_url:
         return False
 
+    raw_by_id = {
+        str(item.get("id")): str(item.get("text", "")).strip()
+        for item in (raw_paragraphs or [])
+        if item.get("id") is not None
+    }
     cues = [
         {
+            "paragraph_id": item.get("id"),
+            "raw": raw_by_id.get(str(item.get("id")), ""),
             "start": float(item.get("start", 0.0) or 0.0),
             "end": float(item.get("end", item.get("start", 0.0)) or 0.0),
             "start_time": str(item.get("start_time", "")),
@@ -81,6 +89,13 @@ def render_audio_transcript(
     .cue.active {{ background:var(--active); box-shadow:inset 3px 0 0 var(--accent); }}
     .time {{ color:var(--muted); font-size:.72rem; font-weight:700; font-variant-numeric:tabular-nums; }}
     .copy {{ font-size:.87rem; line-height:1.48; }}
+    .raw {{ display:none; margin-top:7px; color:var(--muted); font-size:.78rem; white-space:pre-wrap; }}
+    .viewer.audit .raw {{ display:block; }}
+    .audit-tools {{ display:flex; flex-wrap:wrap; gap:7px; align-items:center; padding:2px 3px; }}
+    .audit-tools[hidden] {{ display:none; }}
+    .audit-tools button {{ padding:6px 10px; border:1px solid var(--border); border-radius:7px; background:var(--soft); color:var(--text); cursor:pointer; }}
+    .audit-tools button:focus-visible {{ outline:2px solid var(--accent); }}
+    .cue.flagged {{ outline:1px solid var(--accent); }}
     .empty {{ padding:24px; color:var(--muted); text-align:center; }}
     @media (max-width:720px) {{
       .viewer {{ height:auto; }}
@@ -99,6 +114,11 @@ def render_audio_transcript(
       <div class="eyebrow">Recording</div>
       <audio id="audio" controls preload="metadata"></audio>
     </section>
+    <section id="audit-tools" class="audit-tools" hidden>
+      <button id="audit-toggle" type="button">Compare original ASR</button>
+      <button id="audit-mark" type="button">Flag current passage</button>
+      <button id="audit-export" type="button">Export flagged passages</button>
+    </section>
     <section id="timeline" class="timeline" aria-label="Cleaned transcript timeline"></section>
   </main>
   <script>
@@ -107,7 +127,14 @@ def render_audio_transcript(
     const focusText = {focus};
     const audio = document.getElementById("audio");
     const timeline = document.getElementById("timeline");
+    const viewer = document.querySelector(".viewer");
+    const auditTools = document.getElementById("audit-tools");
+    const auditToggle = document.getElementById("audit-toggle");
+    const auditMark = document.getElementById("audit-mark");
+    const auditExport = document.getElementById("audit-export");
+    const flagged = new Set();
     audio.src = source;
+    if (cues.some((cue) => cue.raw)) auditTools.hidden = false;
 
     function formatTime(seconds) {{
       const safe = Math.max(0, Math.floor(Number(seconds) || 0));
@@ -130,7 +157,12 @@ def render_audio_transcript(
       const copy = document.createElement("span");
       copy.className = "copy";
       copy.textContent = cue.text;
-      button.append(time, copy);
+      const raw = document.createElement("span");
+      raw.className = "raw";
+      raw.textContent = cue.raw ? "Whisper original: " + cue.raw : "No raw transcript available for this passage.";
+      const content = document.createElement("span");
+      content.append(copy, raw);
+      button.append(time, content);
       button.addEventListener("click", () => {{
         audio.currentTime = cue.start;
         audio.play().catch(() => undefined);
@@ -169,6 +201,27 @@ def render_audio_transcript(
     }}
 
     let activeIndex = -1;
+    auditToggle.addEventListener("click", () => {{
+      const enabled = viewer.classList.toggle("audit");
+      auditToggle.textContent = enabled ? "Hide original ASR" : "Compare original ASR";
+    }});
+    auditMark.addEventListener("click", () => {{
+      if (activeIndex < 0) return;
+      if (flagged.has(activeIndex)) flagged.delete(activeIndex);
+      else flagged.add(activeIndex);
+      nodes[activeIndex].classList.toggle("flagged", flagged.has(activeIndex));
+      auditMark.textContent = "Flag current passage (" + flagged.size + ")";
+    }});
+    auditExport.addEventListener("click", () => {{
+      const report = [...flagged].sort((a, b) => a - b).map((index) => ({{ ...cues[index], audit_status: "needs_review" }}));
+      const blob = new Blob([JSON.stringify({{ flagged_passages: report }}, null, 2)], {{ type: "application/json" }});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "transcript_audit.json";
+      link.click();
+      URL.revokeObjectURL(url);
+    }});
     function update() {{
       const current = audio.currentTime || 0;
       let next = -1;
