@@ -621,6 +621,72 @@ class LibraryStore:
             raise LibraryError(f"Could not rename '{document.original_name}': {exc}") from exc
         return self.get_document(document.id)
 
+    def replace_document_contents(self, document_id: str, source_path: str | Path) -> LibraryDocument:
+        """Replace one generated note in-place, retaining catalog and document IDs.
+
+        Extract/index a staged file first; restore the original source on failure.
+        Callers should additionally keep a durable run-level backup.
+        """
+        document = self.get_document(document_id)
+        source = Path(source_path).resolve()
+        if not source.is_file() or source == document.stored_path.resolve():
+            raise LibraryError("Select a separate, existing replacement document.")
+        if source.suffix.lower() != document.stored_path.suffix.lower():
+            raise LibraryError("The replacement must have the same file extension.")
+        size = source.stat().st_size
+        if size == 0:
+            raise LibraryError("The replacement document is empty.")
+        digest = hashlib.sha256()
+        with source.open("rb") as stream:
+            for block in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(block)
+        checksum = digest.hexdigest()
+        if checksum == document.sha256:
+            return document
+        with self._connect() as connection:
+            duplicate = connection.execute(
+                "SELECT 1 FROM documents WHERE subject_id = ? AND sha256 = ? AND id != ?",
+                (document.subject_id, checksum, document.id),
+            ).fetchone()
+        if duplicate:
+            raise DuplicateDocumentError("Replacement duplicates an existing file in this subject.")
+
+        suffix = document.stored_path.suffix
+        staged = document.stored_path.with_name(f".{document.id}.replacing{suffix}")
+        backup = document.stored_path.with_name(f".{document.id}.previous{suffix}")
+        try:
+            shutil.copy2(source, staged)
+            sections = self._extract_sections(staged)
+            chunks = self._chunk_sections(sections)
+            document.stored_path.replace(backup)
+            staged.replace(document.stored_path)
+            with self._connect() as connection:
+                connection.execute(
+                    "UPDATE documents SET size_bytes = ?, sha256 = ?, status = ?, extraction_error = '' WHERE id = ?",
+                    (size, checksum, "indexed" if chunks else "stored", document.id),
+                )
+                connection.execute(
+                    "DELETE FROM document_chunks WHERE document_id = ?", (document.id,)
+                )
+                connection.executemany(
+                    "INSERT INTO document_chunks(id, document_id, ordinal, locator, content) VALUES (?, ?, ?, ?, ?)",
+                    [
+                        (f"{document.id}:{ordinal}", document.id, ordinal, locator, text)
+                        for ordinal, (locator, text) in enumerate(chunks, start=1)
+                    ],
+                )
+        except Exception as exc:
+            if backup.is_file():
+                if document.stored_path.exists():
+                    document.stored_path.unlink()
+                backup.replace(document.stored_path)
+            if staged.exists():
+                staged.unlink()
+            raise LibraryError(f"Could not replace document; original restored: {exc}") from exc
+        if backup.is_file():
+            backup.unlink()
+        return self.get_document(document.id)
+
     def _copy_related_artifacts(
         self,
         document: LibraryDocument,
