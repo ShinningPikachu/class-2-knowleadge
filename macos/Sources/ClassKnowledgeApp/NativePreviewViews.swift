@@ -34,8 +34,6 @@ struct LectureSlidesPreview: View {
     @State private var slideIndex = 0
     @State private var language = "English"
     @State private var translationSlide: NativeLectureSlide?
-    @State private var narrationPlayer: AVPlayer?
-    @State private var isNarrating = false
     @State private var currentSlideArtwork: NSImage?
     @State private var artworkCache: [Int: NSImage] = [:]
     @State private var slidePDFDocument: PDFDocument?
@@ -137,13 +135,11 @@ struct LectureSlidesPreview: View {
             } label: { Image(systemName: "chevron.right") }
             .disabled(slideIndex >= bundle.slides.count - 1)
             Spacer()
-            Button {
-                Task { await narrate() }
-            } label: {
-                if isNarrating { ProgressView().controlSize(.small) }
-                else { Label("Speak", systemImage: "speaker.wave.2") }
-            }
-            .disabled(isNarrating || noteContent.isEmpty)
+            LocalVoiceControl(
+                contentID: "\(document.id):\(slide.slide):\(language):\(noteContent)",
+                buttonTitle: "Speak",
+                text: { "Slide \(slide.slide). \(slide.title). \(noteContent)" }
+            )
             Button("Translate…") { translationSlide = slide }
                 .disabled(bundle.sourceJob == nil || slide.summary.isEmpty)
             Button {
@@ -290,10 +286,6 @@ struct LectureSlidesPreview: View {
                 }
                 .font(.caption)
             }
-            if let narrationPlayer {
-                NativeMediaPlayer(player: narrationPlayer)
-                    .frame(height: 82)
-            }
         }
     }
 
@@ -324,13 +316,6 @@ struct LectureSlidesPreview: View {
         }
     }
 
-    private func narrate() async {
-        isNarrating = true
-        defer { isNarrating = false }
-        let spoken = "Slide \(slide.slide). \(slide.title). \(noteContent)"
-        do { narrationPlayer = AVPlayer(url: try await model.synthesizeVoice(spoken)) }
-        catch { model.errorMessage = error.localizedDescription }
-    }
 }
 
 private struct SlideTranslationSheet: View {
@@ -452,43 +437,25 @@ struct AudioTranscriptView: View {
 }
 
 struct PDFVoiceControl: View {
-    @EnvironmentObject private var model: AppModel
     let document: LibraryDocument
-    @State private var isGenerating = false
-    @State private var narrationPlayer: AVPlayer?
 
     var body: some View {
-        VStack(spacing: 8) {
-            HStack {
-                Text("Local narration")
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Button {
-                    Task { await generate() }
-                } label: {
-                    if isGenerating { ProgressView().controlSize(.small) }
-                    else { Label("Read PDF aloud", systemImage: "speaker.wave.2") }
+        HStack {
+            Text("Local narration")
+                .font(.caption.weight(.medium))
+                .foregroundStyle(.secondary)
+            Spacer()
+            LocalVoiceControl(
+                contentID: "\(document.id):\(document.fileURL.path)",
+                buttonTitle: "Read PDF aloud",
+                text: {
+                    guard let pdf = PDFDocument(url: document.fileURL) else { return "" }
+                    return (0..<pdf.pageCount)
+                        .compactMap { pdf.page(at: $0)?.string }
+                        .joined(separator: "\n\n")
                 }
-                .disabled(isGenerating)
-            }
-            if let narrationPlayer {
-                NativeMediaPlayer(player: narrationPlayer)
-                    .frame(height: 72)
-            }
+            )
         }
         .padding(9)
-    }
-
-    private func generate() async {
-        isGenerating = true
-        defer { isGenerating = false }
-        guard let pdf = PDFDocument(url: document.fileURL) else {
-            model.errorMessage = "Could not read this PDF."
-            return
-        }
-        let text = (0..<pdf.pageCount).compactMap { pdf.page(at: $0)?.string }.joined(separator: "\n\n")
-        do { narrationPlayer = AVPlayer(url: try await model.synthesizeVoice(text, maximumCharacters: 20_000)) }
-        catch { model.errorMessage = error.localizedDescription }
     }
 }
