@@ -18,7 +18,7 @@ class FileManagerIconTest(unittest.TestCase):
     def test_previews_embed_image_data_instead_of_transient_media_urls(self) -> None:
         from io import BytesIO
         from PIL import Image
-        from streamlit.testing.v1 import AppTest
+        from src.ui.common import render_preview_image
 
         for image_format in ("PNG", "JPEG", "GIF", "WEBP"):
             with self.subTest(image_format=image_format), TemporaryDirectory() as directory:
@@ -27,17 +27,16 @@ class FileManagerIconTest(unittest.TestCase):
                 data = buffer.getvalue()
                 path = Path(directory) / "preview"
                 path.write_bytes(data)
-                app = AppTest.from_string(
-                    "from src.ui.common import render_preview_image\n"
-                    f"render_preview_image({data!r})\n"
-                    f"render_preview_image({str(path)!r})\n"
-                ).run()
 
-                self.assertFalse(app.exception)
-                images = app.get("imgs")
-                self.assertEqual(len(images), 2)
-                for image in images:
-                    url = image.proto.imgs[0].url
+                # Capture the public Streamlit call. AppTest's private image
+                # element type changed across Streamlit releases.
+                with patch("src.ui.common.st.image") as image_mock:
+                    render_preview_image(data)
+                    render_preview_image(str(path))
+
+                self.assertEqual(image_mock.call_count, 2)
+                for call in image_mock.call_args_list:
+                    url = call.args[0]
                     self.assertTrue(url.startswith(f"data:image/{image_format.lower()};base64,"))
                     self.assertEqual(base64.b64decode(url.split(",", 1)[1]), data)
 
