@@ -147,6 +147,12 @@ struct LocalVoiceControl: View {
             errorMessage = "This document has no readable text to narrate."
             return
         }
+        // A single huge WAV would overwhelm the JSON bridge and macOS player.
+        // Reject oversized requests explicitly instead of silently clipping speech.
+        guard spoken.count <= 20_000 else {
+            errorMessage = "This document contains \(spoken.count) characters. For reliable local playback, narrate a shorter section (up to 20,000 characters)."
+            return
+        }
         guard !chosenVoice.isEmpty else {
             errorMessage = "Install and select a Piper voice first."
             return
