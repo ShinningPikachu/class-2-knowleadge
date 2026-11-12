@@ -119,6 +119,48 @@ class VoiceNarrationTest(unittest.TestCase):
         self.assertGreater(len(calls), 2)
         self.assertGreater(wav_duration_seconds(audio), 2.0)
 
+    def test_native_voice_setup_returns_downloaded_voice_options(self) -> None:
+        from src.native_backend import NativeBackend
+
+        backend = NativeBackend.__new__(NativeBackend)
+        with patch("src.voice.install_default_voice") as download, patch(
+            "src.voice.local_voice_options", return_value=(DEFAULT_PIPER_VOICE,)
+        ), patch("src.voice.neural_voice_setup_message", return_value=None):
+            options = backend.dispatch("voice.install_default", {})
+
+        download.assert_called_once_with()
+        self.assertEqual(options, {
+            "voices": [DEFAULT_PIPER_VOICE],
+            "setup_message": "",
+        })
+
+    def test_native_synthesis_reads_entire_text_unless_limit_is_explicit(self) -> None:
+        from src.native_backend import NativeBackend
+
+        backend = NativeBackend.__new__(NativeBackend)
+        narration = ("This is an explanation for a lecture slide. " * 220).strip()
+        with patch("src.voice.synthesize_speech", return_value=_wav(5)) as synth:
+            response = backend.dispatch("voice.synthesize", {
+                "text": narration,
+                "voice": DEFAULT_PIPER_VOICE,
+            })
+        self.assertFalse(response["truncated"])
+        self.assertEqual(response["characters"], len(narration))
+        synth.assert_called_once_with(narration, DEFAULT_PIPER_VOICE)
+
+        with patch("src.voice.synthesize_speech", return_value=_wav(5)) as synth:
+            response = backend.dispatch("voice.synthesize", {
+                "text": narration,
+                "maximum_chars": 100,
+                "voice": DEFAULT_PIPER_VOICE,
+            })
+        self.assertTrue(response["truncated"])
+        self.assertLessEqual(response["characters"], 101)
+        self.assertTrue(synth.called)
+
+        with self.assertRaisesRegex(ValueError, "positive integer"):
+            backend.dispatch("voice.synthesize", {"text": narration, "maximum_chars": 0})
+
     def test_missing_neural_voice_model_is_explained(self) -> None:
         with patch("src.voice._installed_voice_models", return_value={}):
             with self.assertRaisesRegex(VoiceNarrationError, "not installed"):
