@@ -185,6 +185,9 @@ An explicit `--all --execute` option processes every detected legacy recorded le
 
 ## Native macOS app
 
+The native Library's **Speak** control on a lecture slide and **Read PDF aloud** control open an offline Piper voice picker. If no voice is installed, select **Install English voice** to download the default voice into the ignored `models/piper/` directory. Select an installed model, then **Generate and play**; a standard macOS audio player provides playback controls. Playback stops when you switch slides or leave the reader. The current slide's displayed translation is used for speech, so select a Piper voice appropriate for its language. The same picker is available for PDFs; large documents take longer to synthesize. No API keys or hosted speech services are involved. This requires the existing project's Python `.venv` with `piper-tts` installed.
+
+
 The SwiftUI macOS app presents the Library, Agent, Lecture Notes, Job Queue, Share, and Settings in a native window without starting a browser. It uses the same Python services, local models, and project data through a private child process. Use the expand button in any Library preview to open that file full screen. Slide decks show slides on the left and their lecture explanation or extracted text on the right; scroll the slide column and the text follows the slide that is mostly visible. Full-screen explanation text is larger; other file types open in their full-window preview. Build a checkout app in the temporary build cache and open it from the repository root:
 
 ```bash
