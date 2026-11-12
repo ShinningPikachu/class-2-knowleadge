@@ -73,9 +73,10 @@ class LectureLibraryHandoffTest(unittest.TestCase):
             derived = store.subjects_root / subject.id / "derived" / folder.id
             self.assertEqual(
                 {path.name for path in derived.iterdir()},
-                {"slides.json", "slide_summaries.json", "alignment.json", "transcript.json", "transcript.txt"},
+                {"slides.json", "slide_summaries.json", "alignment.json", "transcript.json", "transcript.txt", "transcript.raw.json"},
             )
             self.assertEqual((derived / "transcript.json").read_text(encoding="utf-8"), transcript.read_text(encoding="utf-8"))
+            self.assertEqual((derived / "transcript.raw.json").read_text(encoding="utf-8"), raw_transcript.read_text(encoding="utf-8"))
 
         self.assertEqual(
             names,
