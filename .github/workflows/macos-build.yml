@@ -1,0 +1,19 @@
+name: macOS native build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  swift-build:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - name: Swift toolchain
+        run: swift --version
+      - name: Build native macOS application
+        run: swift build --package-path macos --configuration debug

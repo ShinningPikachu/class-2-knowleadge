@@ -687,9 +687,17 @@ class NativeBackend:
         if method == "voice.options":
             from src.voice import local_voice_options, neural_voice_setup_message
             return {"voices": list(local_voice_options()), "setup_message": neural_voice_setup_message() or ""}
+        if method == "voice.install_default":
+            from src.voice import install_default_voice, local_voice_options, neural_voice_setup_message
+            install_default_voice()
+            return {"voices": list(local_voice_options()), "setup_message": neural_voice_setup_message() or ""}
         if method == "voice.synthesize":
             from src.voice import prepare_narration, synthesize_speech, wav_duration_seconds
-            text, truncated = prepare_narration(str(params.get("text", "")), int(params.get("maximum_chars", 8_000)))
+            raw_limit = params.get("maximum_chars")
+            limit = int(raw_limit) if raw_limit is not None else None
+            if limit is not None and limit <= 0:
+                raise ValueError("maximum_chars must be a positive integer.")
+            text, truncated = prepare_narration(str(params.get("text", "")), limit)
             audio = synthesize_speech(text, str(params.get("voice", "en_US-lessac-medium")))
             return {
                 "audio_base64": base64.b64encode(audio).decode("ascii"),

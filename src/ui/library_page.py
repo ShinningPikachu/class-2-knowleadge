@@ -1750,9 +1750,10 @@ def _render_slide_document(
         if explanation:
             summary = html.escape(explanation)
             st.markdown(f'<div class="lecture-slide-summary">{summary}</div>', unsafe_allow_html=True)
-        # The language display choice is independent of speech generation.
+        # Narrate the language currently shown to the reader.
+        # The user can select a Piper voice that matches that language.
         narration = "\n\n".join(part for part in (
-            str(slide.get("title", "")).strip(), explanations["English"]
+            str(slide.get("title", "")).strip(), explanation or ""
         ) if part)
         _render_voice_narration(
             narration,
