@@ -227,13 +227,34 @@ final class AppModel: ObservableObject {
         }
     }
 
-    func synthesizeVoice(_ text: String, maximumCharacters: Int = 8_000) async throws -> URL {
-        let options: VoiceOptions = try await backend.call("voice.options")
-        let voice = options.voices.first ?? "en_US-lessac-medium"
-        let audio: VoiceAudio = try await backend.call(
-            "voice.synthesize",
-            params: ["text": text, "maximum_chars": maximumCharacters, "voice": voice]
-        )
+    func availableVoices() async throws -> VoiceOptions {
+        try await backend.call("voice.options")
+    }
+
+    func installDefaultVoice() async throws -> VoiceOptions {
+        try await backend.call("voice.install_default")
+    }
+
+    func synthesizeVoice(
+        _ text: String,
+        voice requestedVoice: String? = nil,
+        maximumCharacters: Int? = nil
+    ) async throws -> URL {
+        let voice: String
+        if let requestedVoice {
+            voice = requestedVoice
+        } else {
+            let options = try await availableVoices()
+            guard let first = options.voices.first else {
+                throw NativeBackendError.processFailed(
+                    options.setupMessage.isEmpty ? "Install a Piper voice before narrating." : options.setupMessage
+                )
+            }
+            voice = first
+        }
+        var params: [String: Any] = ["text": text, "voice": voice]
+        if let maximumCharacters { params["maximum_chars"] = maximumCharacters }
+        let audio: VoiceAudio = try await backend.call("voice.synthesize", params: params)
         guard let data = Data(base64Encoded: audio.audioBase64) else {
             throw NativeBackendError.malformedResponse
         }
