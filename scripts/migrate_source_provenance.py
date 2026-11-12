@@ -10,9 +10,14 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import sys
 from pathlib import Path
 
-from src.quality import section_source_coverage
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.quality import section_source_coverage  # noqa: E402
 
 
 def migrate(root: Path, *, apply: bool = False) -> list[tuple[str, int]]:
