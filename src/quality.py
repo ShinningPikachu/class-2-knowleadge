@@ -51,6 +51,12 @@ def validate_evidence_quality(
     assignments = alignment.get("paragraph_alignment", [])
     temporal_fallbacks = sum(item.get("method") == "temporal_fallback" for item in assignments)
     fallback_ratio = temporal_fallbacks / len(assignments) if assignments else 0.0
+    unexpected_backtracks = [
+        (previous.get("slide"), current.get("slide"))
+        for previous, current in zip(assignments, assignments[1:])
+        if int(current.get("slide", 0)) < int(previous.get("slide", 0))
+        and current.get("method") != "spoken_reference"
+    ]
     mapped_slide_numbers = {
         int(item["slide"])
         for item in alignment.get("slides", [])
@@ -70,6 +76,10 @@ def validate_evidence_quality(
     ]
     warnings: list[str] = []
     errors: list[str] = []
+    if unexpected_backtracks:
+        errors.append(
+            f"{len(unexpected_backtracks)} transcript paragraphs jump backward without a spoken slide reference."
+        )
     if fallback_ratio > 0.35:
         warnings.append(
             f"{fallback_ratio:.0%} of transcript paragraphs required temporal fallback alignment."
@@ -97,6 +107,7 @@ def validate_evidence_quality(
             "alignment_count": len(assignments),
             "temporal_fallback_count": temporal_fallbacks,
             "temporal_fallback_ratio": round(fallback_ratio, 4),
+            "unexpected_backtrack_count": len(unexpected_backtracks),
             "slides_with_aligned_speech": len(mapped_slide_numbers),
             "slides_without_any_evidence": source_empty_slides,
         },

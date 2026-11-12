@@ -58,23 +58,21 @@ class SlideAligner:
             )
 
         duration = max(float(paragraph.get("end", 0.0)) for paragraph in paragraphs) or 1.0
+        indices, references = self._sequence_path(
+            slide_numbers, slide_vectors, paragraphs, paragraph_vectors, duration,
+        )
         assignments: list[dict[str, Any]] = []
         grouped: dict[int, list[dict[str, Any]]] = defaultdict(list)
         method_counts: Counter[str] = Counter()
-        for paragraph, vector in zip(paragraphs, paragraph_vectors):
-            reference = self._spoken_slide_reference(paragraph.get("text", ""), set(slide_numbers))
+        for paragraph, vector, index, reference in zip(paragraphs, paragraph_vectors, indices, references):
+            slide_number = slide_numbers[index]
+            similarity = self._cosine(vector, slide_vectors[index])
             if reference is not None:
-                slide_number, confidence, method = reference, 1.0, "spoken_reference"
+                confidence, method = 1.0, "spoken_reference"
+            elif similarity >= self.config.semantic_alignment_threshold:
+                confidence, method = similarity, "semantic"
             else:
-                scores = [self._cosine(vector, slide_vector) for slide_vector in slide_vectors]
-                best_index = max(range(len(scores)), key=scores.__getitem__)
-                score = scores[best_index]
-                if score >= self.config.semantic_alignment_threshold:
-                    slide_number, confidence, method = slide_numbers[best_index], score, "semantic"
-                else:
-                    # This keeps every timestamp accessible, but identifies low-confidence alignment.
-                    position = min(len(slide_numbers) - 1, int((float(paragraph.get("start", 0.0)) / duration) * len(slide_numbers)))
-                    slide_number, confidence, method = slide_numbers[position], max(score, 0.0), "temporal_fallback"
+                confidence, method = max(similarity, 0.0), "temporal_fallback"
             record = {
                 "paragraph_id": int(paragraph["id"]),
                 "slide": slide_number,
@@ -106,12 +104,72 @@ class SlideAligner:
                 "paragraph_count": len(paragraphs),
                 "method_counts": dict(method_counts),
                 "semantic_threshold": self.config.semantic_alignment_threshold,
+                "alignment_version": 2,
+                "strategy": "monotonic_semantic_with_spoken_anchors",
             },
             "paragraph_alignment": assignments,
             "slides": slide_alignment,
         }
         dump_json(Path(output_path), payload)
         return payload
+
+    def _sequence_path(
+        self,
+        slide_numbers: list[int],
+        slide_vectors: list[list[float]],
+        paragraphs: list[dict[str, Any]],
+        paragraph_vectors: list[list[float]],
+        duration: float,
+    ) -> tuple[list[int], list[int | None]]:
+        """Align speech in slide order, permitting explicit spoken revisits.
+
+        Global best-match embeddings alone can jump from late to early slides.
+        Dynamic programming uses semantic fit, relative time and slide-order
+        constraints; only a spoken slide reference permits a backward jump.
+        """
+        n = len(slide_numbers)
+        allowed = set(slide_numbers)
+        references = [
+            self._spoken_slide_reference(str(item.get("text", "")), allowed)
+            for item in paragraphs
+        ]
+        prior = [0.0] * n
+        predecessors: list[list[int]] = []
+        jump_cost = 0.025
+        time_cost = 0.14
+        for paragraph, vector, reference in zip(paragraphs, paragraph_vectors, references):
+            midpoint = (float(paragraph.get("start", 0.0)) + float(paragraph.get("end", 0.0))) / 2
+            relative_time = min(1.0, max(0.0, midpoint / duration))
+            emission = [
+                self._cosine(vector, slide_vector)
+                - time_cost * abs(index / max(1, n - 1) - relative_time)
+                for index, slide_vector in enumerate(slide_vectors)
+            ]
+            current = [float("-inf")] * n
+            previous_indices = [-1] * n
+            if reference is not None:
+                index = slide_numbers.index(reference)
+                previous = max(range(n), key=prior.__getitem__)
+                current[index] = prior[previous] + emission[index]
+                previous_indices[index] = previous
+            else:
+                best_value = float("-inf")
+                best_index = 0
+                for index in range(n):
+                    candidate = prior[index] + jump_cost * index
+                    if candidate > best_value:
+                        best_value, best_index = candidate, index
+                    current[index] = best_value - jump_cost * index + emission[index]
+                    previous_indices[index] = best_index
+            prior = current
+            predecessors.append(previous_indices)
+        position = max(range(n), key=prior.__getitem__)
+        path = []
+        for step in range(len(predecessors) - 1, -1, -1):
+            path.append(position)
+            position = predecessors[step][position]
+        path.reverse()
+        return path, references
 
     @staticmethod
     def _slide_text(slide: dict[str, Any]) -> str:
