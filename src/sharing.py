@@ -274,6 +274,7 @@ def write_share_index(library: LibraryStore, repository_root: str | Path) -> Pat
                     ("slide_summaries.json", "Slide explanations"),
                     ("alignment.json", "Slide and transcript links"),
                     ("transcript.json", "Cleaned transcript with timestamps"),
+                    ("transcript.raw.json", "Original ASR transcript for verification"),
                     ("transcript.txt", "Transcript text"),
                 ):
                     path = derived / filename

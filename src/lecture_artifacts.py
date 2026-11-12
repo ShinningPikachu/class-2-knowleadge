@@ -9,7 +9,7 @@ import shutil
 from .library import LibraryStore
 
 
-ARTIFACT_NAMES = ("slides.json", "slide_summaries.json", "alignment.json", "transcript.json", "transcript.txt")
+ARTIFACT_NAMES = ("slides.json", "slide_summaries.json", "alignment.json", "transcript.json", "transcript.txt", "transcript.raw.json")
 
 
 def artifact_dir(library: LibraryStore, document: object) -> Path:
