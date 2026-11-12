@@ -213,8 +213,8 @@ def render_audio_transcript(
       auditMark.textContent = "Flag current passage (" + flagged.size + ")";
     }});
     auditExport.addEventListener("click", () => {{
-      const report = [...flagged].sort((a, b) => a - b).map((index) => ({ ...cues[index], audit_status: "needs_review" }));
-      const blob = new Blob([JSON.stringify({ flagged_passages: report }, null, 2)], { type: "application/json" });
+      const report = [...flagged].sort((a, b) => a - b).map((index) => ({{ ...cues[index], audit_status: "needs_review" }}));
+      const blob = new Blob([JSON.stringify({{ flagged_passages: report }}, null, 2)], {{ type: "application/json" }});
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
