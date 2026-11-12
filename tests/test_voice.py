@@ -174,9 +174,10 @@ class VoiceNarrationTest(unittest.TestCase):
             (root / "valid.onnx").write_bytes(b"model")
             (root / "valid.onnx.json").write_text("{}", encoding="utf-8")
             (root / "missing-config.onnx").write_bytes(b"model")
-            local_voice_options.cache_clear()
             self.assertEqual(local_voice_options(), ("valid",))
-            local_voice_options.cache_clear()
+            (root / "second.onnx").write_bytes(b"model")
+            (root / "second.onnx.json").write_text("{}", encoding="utf-8")
+            self.assertEqual(local_voice_options(), ("second", "valid"))
 
 
 if __name__ == "__main__":
