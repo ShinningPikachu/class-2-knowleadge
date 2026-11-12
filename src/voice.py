@@ -40,9 +40,8 @@ def _installed_voice_models() -> dict[str, Path]:
     return dict(sorted(models.items(), key=lambda item: item[0].casefold()))
 
 
-@lru_cache(maxsize=1)
 def local_voice_options() -> tuple[str, ...]:
-    """Return fully downloaded Piper voice-model names."""
+    """Return current Piper voice-model names, including models added manually."""
     return tuple(_installed_voice_models())
 
 
@@ -95,7 +94,6 @@ def install_default_voice() -> Path:
     config_path = model_path.with_suffix(model_path.suffix + ".json")
     if not model_path.is_file() or not config_path.is_file():
         raise VoiceNarrationError("Piper finished without saving a complete voice model. Try the download again.")
-    local_voice_options.cache_clear()
     _load_piper_voice.cache_clear()
     return model_path
 
